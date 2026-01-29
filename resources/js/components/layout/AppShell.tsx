@@ -1,0 +1,13 @@
+import type { ReactNode } from 'react';
+
+type Props = {
+    children: ReactNode;
+};
+
+export function AppShell({ children }: Props) {
+    return (
+        <div className="mx-auto flex min-h-screen max-w-480 flex-col px-3.5 pb-22 sm:px-10 sm:pb-20.5 lg:px-30 lg:pb-25 xl:px-55 xl:pb-28">
+            {children}
+        </div>
+    );
+}
