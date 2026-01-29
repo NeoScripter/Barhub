@@ -16,7 +16,7 @@
     /* --radius-sm: calc(var(--radius) - 4px); */
 
     /* --color-background: var(--background); */
-    /* --color-foreground: var(--foreground); */
+    --color-foreground: oklch(0.2273 0.0038 286.09);
 
     /* --color-card: var(--card); */
     /* --color-card-foreground: var(--card-foreground); */
@@ -24,19 +24,20 @@
     /* --color-popover: var(--popover); */
     /* --color-popover-foreground: var(--popover-foreground); */
 
-    /* --color-primary: var(--primary); */
+    --color-primary: oklch(0.6596 0.2082 355.62);
     /* --color-primary-foreground: var(--primary-foreground); */
 
-    /* --color-secondary: var(--secondary); */
+    --color-secondary: oklch(0.4256 0.0768 173.6);
     /* --color-secondary-foreground: var(--secondary-foreground); */
 
-    /* --color-muted: var(--muted); */
-    /* --color-muted-foreground: var(--muted-foreground); */
+    /* --color-muted: var(--muted-foreground); */
+    --color-muted-foreground: oklch(0.6032 0 0);
 
-    /* --color-accent: var(--accent); */
+    --color-accent: oklch(0.9761 0 0);
     /* --color-accent-foreground: var(--accent-foreground); */
 
-    /* --color-destructive: var(--destructive); */
+    --color-destructive: oklch(0.5911 0.2045 26.13);
+    --color-warning: oklch(0.7166 0.1496 66.56);
     /* --color-destructive-foreground: var(--destructive-foreground); */
 
     /* --color-border: var(--border); */
