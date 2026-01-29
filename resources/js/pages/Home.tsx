@@ -1,13 +1,14 @@
 import { Button } from '@/components/ui/Button';
-import AppLayout from '@/layouts/app/AppLayout';
-import { NodeProps } from '@/types/ui';
-import { FC } from 'react';
+import AppLayout from '@/layouts/app/AdminLayout';
 
-const Home: FC<NodeProps> = ({ className }) => {
+const Home = () => {
     return (
         <AppLayout>
             Привет мир
-            <Button variant="muted">
+            <Button
+                className="self-start"
+                variant="muted"
+            >
                 {/* <Trash2 /> */}
                 This is a button
             </Button>

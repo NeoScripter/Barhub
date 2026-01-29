@@ -4,10 +4,10 @@ type Props = React.ComponentProps<'main'> & {
     variant?: 'header' | 'sidebar';
 };
 
-export function AppContent({  children, ...props }: Props) {
+export function AppContent({ children, ...props }: Props) {
     return (
         <main
-            className="flex h-full flex-1 flex-col"
+            className="flex h-full flex-1 flex-col overflow-x-hidden"
             {...props}
         >
             {children}

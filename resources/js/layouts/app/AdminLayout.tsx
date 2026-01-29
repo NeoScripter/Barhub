@@ -3,11 +3,11 @@ import AppHeader from '@/components/layout/AppHeader';
 import { AppShell } from '@/components/layout/AppShell';
 import type { AppLayoutProps } from '@/types';
 
-export default function AppLayout({ children }: AppLayoutProps) {
+export default function AdminLayout({ children }: AppLayoutProps) {
     return (
         <AppShell>
             <AppHeader />
-            <AppContent className="overflow-x-hidden">{children}</AppContent>
+            <AppContent>{children}</AppContent>
         </AppShell>
     );
 }
