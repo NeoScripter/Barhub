@@ -1,5 +1,5 @@
 import { Button } from '@/components/ui/Button';
-import AppLayout from '@/layouts/app/AdminLayout';
+import AppLayout from '@/layouts/app/UserLayout';
 
 const Home = () => {
     return (
