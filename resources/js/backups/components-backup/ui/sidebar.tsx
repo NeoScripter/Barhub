@@ -4,8 +4,8 @@ import { cva } from 'class-variance-authority';
 import { PanelLeftCloseIcon, PanelLeftOpenIcon } from 'lucide-react';
 import * as React from 'react';
 
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/Button';
+import { Input } from '@/components/ui/Input';
 import { Separator } from '@/components/ui/separator';
 import {
     Sheet,
