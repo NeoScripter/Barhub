@@ -20,9 +20,9 @@ type NavDrawer = {
     type: 'drawer';
     links: NavLink[];
 };
-export type NavItem = NavLink | NavDrawer;
+export type NavItemType = NavLink | NavDrawer;
 
-export const navItems = [
+export const navItems: NavItemType[] = [
     {
         id: crypto.randomUUID(),
         type: 'link',
