@@ -60,6 +60,9 @@
     /* --color-sidebar-ring: var(--sidebar-ring); */
 }
 
+button {
+    @apply cursor-pointer;
+}
 
 .burger {
     transform-origin: center;

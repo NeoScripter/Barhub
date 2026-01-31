@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui/Button';
-import AppLayout from '@/layouts/app/UserLayout';
+import AppLayout from '@/layouts/app/AdminLayout';
 
-const Home = () => {
+const HomePage = () => {
     return (
         <AppLayout>
             Привет мир
@@ -16,4 +16,4 @@ const Home = () => {
     );
 };
 
-export default Home;
+export default HomePage;

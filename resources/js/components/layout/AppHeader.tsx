@@ -1,17 +1,12 @@
 import { cn } from '@/lib/utils';
 import { NodeProps } from '@/types/ui';
-import { ChevronDown, LogOut } from 'lucide-react';
-import { FC, useState } from 'react';
+import { FC } from 'react';
 import AccentHeading from '../ui/AccentHeading';
-import BurgerMenu from '../ui/BurgerMenu';
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuPortal,
-    DropdownMenuTrigger,
-} from '../ui/DropdownMenu';
+import BurgerMenuIcon from '../ui/BurgerMenuIcon';
+import { Dialog, DialogContent, DialogTrigger } from '../ui/Dialog';
+import AccountDropdown from './AccountDropdown';
 import AppLogo from './AppLogo';
+import NavMenu from './NavMenu';
 
 type Props = NodeProps & {
     variant?: 'user' | 'admin';
@@ -45,47 +40,19 @@ const AppHeader: FC<Props> = ({ variant = 'admin' }) => {
 
 export default AppHeader;
 
-const AccountDropdown: FC<{ email: string; className?: string }> = ({
-    email,
-    className,
-}) => {
-    return (
-        <div className={className}>
-            <DropdownMenu>
-                <DropdownMenuTrigger className="flex cursor-pointer items-center gap-[0.5em] font-medium text-primary xl:text-xl">
-                    {email}
-                    <ChevronDown
-                        className="w-[1em]"
-                        strokeWidth={3}
-                    />
-                </DropdownMenuTrigger>
-
-                <DropdownMenuPortal>
-                    <DropdownMenuContent
-                        align="end"
-                        side="bottom"
-                    >
-                        <DropdownMenuItem>
-                            <LogOut />
-                            Выйти
-                        </DropdownMenuItem>
-                    </DropdownMenuContent>
-                </DropdownMenuPortal>
-            </DropdownMenu>
-        </div>
-    );
-};
-
 const AccountMenuControls = () => {
-    const [show, setShow] = useState(false);
     return (
         <>
-            <BurgerMenu
-                show={show}
-                onClick={() => setShow((prev) => !prev)}
-                className="z-5 mr-2 size-8 sm:size-9 lg:hidden"
-            />
-
+            <Dialog>
+                <DialogTrigger asChild>
+                    <button className="mr-2 size-8 sm:size-9 lg:hidden">
+                        <BurgerMenuIcon className="size-full" />
+                    </button>
+                </DialogTrigger>
+                <DialogContent className="top-0 right-0 left-auto h-full translate-0 sm:h-max sm:rounded-bl-3xl lg:hidden">
+                    <NavMenu />
+                </DialogContent>
+            </Dialog>
             <AccountDropdown
                 className="hidden lg:block"
                 email="admin@gmail.com"
