@@ -22,8 +22,8 @@ const NavDrawer: FC<NavDrawerProps> = ({ item, className, expanded }) => {
     return (
         <li className={className}>
             <DropdownMenu onOpenChange={setIsOpen}>
-                <DropdownMenuTrigger className="flex cursor-pointer whitespace-nowrap items-center gap-2 font-medium text-primary xl:text-xl">
-                    <item.icon className="size-4.5 shrink-0" />
+                <DropdownMenuTrigger className="flex cursor-pointer whitespace-nowrap items-center gap-2 xl:gap-3">
+                    <item.icon className="size-4.5 shrink-0 xl:size-5.5" />
                     {expanded && item.label}
                     {expanded && (
                         <ChevronDown

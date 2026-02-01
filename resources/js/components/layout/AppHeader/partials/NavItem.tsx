@@ -8,7 +8,7 @@ const NavItem: FC<{ item: NavItemType; expanded: boolean }> = ({
     item,
     expanded,
 }) => {
-    const baseClass = 'inline-flex text-secondary items-center gap-2';
+    const baseClass = 'inline-flex text-secondary items-center gap-2 xl:gap-3';
 
     if (item.type === 'link') {
         return (
@@ -20,7 +20,7 @@ const NavItem: FC<{ item: NavItemType; expanded: boolean }> = ({
                     )}
                     href={item.url}
                 >
-                    <item.icon className="size-4.5 shrink-0" />
+                    <item.icon className="size-4.5 shrink-0 xl:size-5.5" />
                     {expanded && item.label}
                 </Link>
             </li>

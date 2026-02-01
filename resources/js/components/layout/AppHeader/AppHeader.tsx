@@ -22,7 +22,7 @@ const AppHeader: FC<Props> = ({ variant = 'admin' }) => {
             <AppLogo />
             <AccentHeading
                 asChild
-                className={cn({
+                className={cn('sm:align-baseline', {
                     'hidden lg:block': isAdmin,
                     'text-right': !isAdmin,
                 })}

@@ -13,7 +13,7 @@ const NavMenu: FC<NodeProps> = ({ className }) => {
     return (
         <div
             className={cn(
-                'px-7.5 duration-300 ease-in-out sm:transition-all lg:fixed lg:top-24 lg:left-10 lg:z-10 lg:rounded-xl lg:bg-white lg:shadow-xl xl:top-36.5 xl:left-31',
+                'px-7.5 duration-300 ease-in-out sm:pb-8 sm:transition-all lg:fixed lg:top-24 lg:left-10 lg:z-10 lg:rounded-xl lg:bg-white lg:shadow-2xl xl:top-36.5 xl:left-31',
                 {
                     'lg:max-w-81 lg:pt-7.5 lg:pr-12 lg:pb-9 lg:pl-7.5':
                         expanded,
@@ -78,10 +78,13 @@ const CollapseBtn: FC<{ expanded: boolean; handleClick: () => void }> = ({
         <div className="mb-6 hidden lg:block">
             <button
                 onClick={handleClick}
-                className="flex items-center gap-3 text-sm text-secondary"
+                className="flex items-center gap-3 text-sm text-secondary xl:text-base"
             >
                 <ArrowLeftToLine
-                    className={cn('size-5', !expanded && 'rotate-180')}
+                    className={cn(
+                        'size-4.5 xl:size-5.5',
+                        !expanded && 'rotate-180',
+                    )}
                 />
                 {expanded && 'Свернуть'}
             </button>
