@@ -1,12 +1,14 @@
 import { AppContent } from '@/components/layout/AppContent';
 import AppHeader from '@/components/layout/AppHeader';
 import { AppShell } from '@/components/layout/AppShell';
+import NavMenu from '@/components/layout/NavMenu';
 import type { AppLayoutProps } from '@/types';
 
 export default function AdminLayout({ children }: AppLayoutProps) {
     return (
         <AppShell>
             <AppHeader />
+            <NavMenu className='hidden lg:block' />
             <AppContent>{children}</AppContent>
         </AppShell>
     );

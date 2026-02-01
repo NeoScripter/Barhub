@@ -4,7 +4,6 @@ import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
-    DropdownMenuPortal,
     DropdownMenuTrigger,
 } from '../ui/DropdownMenu';
 
@@ -23,17 +22,15 @@ const AccountDropdown: FC<{ email: string; className?: string }> = ({
                     />
                 </DropdownMenuTrigger>
 
-                <DropdownMenuPortal>
-                    <DropdownMenuContent
-                        align="end"
-                        side="bottom"
-                    >
-                        <DropdownMenuItem>
-                            <LogOut />
-                            Выйти
-                        </DropdownMenuItem>
-                    </DropdownMenuContent>
-                </DropdownMenuPortal>
+                <DropdownMenuContent
+                    align="end"
+                    side="bottom"
+                >
+                    <DropdownMenuItem>
+                        <LogOut />
+                        Выйти
+                    </DropdownMenuItem>
+                </DropdownMenuContent>
             </DropdownMenu>
         </div>
     );

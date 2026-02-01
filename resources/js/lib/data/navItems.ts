@@ -4,6 +4,7 @@ import {
     House,
     LucideIcon,
     Martini,
+    Star,
     UserCheck,
 } from 'lucide-react';
 
@@ -14,13 +15,14 @@ type NavLink = {
     url: string;
     type: 'link';
 };
-type NavDrawer = {
+export type NavDrawerType = {
     id: string;
     label: string;
+    icon: LucideIcon;
     type: 'drawer';
-    links: NavLink[];
+    links: Omit<NavLink, 'icon'>[];
 };
-export type NavItemType = NavLink | NavDrawer;
+export type NavItemType = NavLink | NavDrawerType;
 
 export const navItems: NavItemType[] = [
     {
@@ -55,7 +57,7 @@ export const navItems: NavItemType[] = [
         id: crypto.randomUUID(),
         type: 'drawer',
         label: 'Работа с партнерами',
-        url: '/',
+        icon: Star,
         links: [
             {
                 id: crypto.randomUUID(),

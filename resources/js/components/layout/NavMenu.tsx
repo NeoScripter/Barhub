@@ -1,18 +1,23 @@
-import { navItems, NavItemType } from '@/lib/data/navItems';
+import { NavDrawerType, navItems, NavItemType } from '@/lib/data/navItems';
 import { cn } from '@/lib/utils';
 import { NodeProps } from '@/types/ui';
 import { Link } from '@inertiajs/react';
-import { FC } from 'react';
-import AccentHeading from '../ui/AccentHeading';
+import { ChevronDown } from 'lucide-react';
+import { FC, useState } from 'react';
 import AccountDropdown from './AccountDropdown';
 
 const NavMenu: FC<NodeProps> = ({ className }) => {
     return (
-        <div className={cn('px-7.5 sm:px-19 sm:pb-17', className)}>
-            <Header />
+        <div
+            className={cn(
+                'px-7.5 sm:pb-10 lg:max-w-81 lg:shadow-xl lg:pt-7.5 lg:rounded-xl lg:fixed lg:z-10 lg:bg-white lg:top-24 lg:left-10 lg:pl-7.5 lg:pr-12 lg:pb-9 xl:left-31 xl:top-36.5',
+                className,
+            )}
+        >
+            <Header className="lg:hidden" />
 
             <nav>
-                <ul className="grid gap-8">
+                <ul className="grid gap-6">
                     {navItems.map((item) => (
                         <NavItem
                             key={item.id}
@@ -27,38 +32,83 @@ const NavMenu: FC<NodeProps> = ({ className }) => {
 
 export default NavMenu;
 
-const Header = () => {
+const Header: FC<NodeProps> = ({ className }) => {
     return (
-        <header>
+        <header className={className}>
             {' '}
             <AccountDropdown
-                className="mb-8"
+                className="mb-12"
                 email="admin@gmail.com"
             />
-            <AccentHeading
-                asChild
-                className="mb-6 text-xl"
-            >
-                <p>Название выставки</p>
-            </AccentHeading>
         </header>
     );
 };
 
 const NavItem: FC<{ item: NavItemType }> = ({ item }) => {
-    const baseClass = 'inline-flex items-center gap-1';
+    const baseClass = 'inline-flex text-secondary items-center gap-2';
 
     if (item.type === 'link') {
         return (
-            <Link
-                className={baseClass}
-                href={item.url}
-            >
-                <item.icon className="size-3.5 shrink-0" />
-                {item.label}
-            </Link>
+            <li>
+                <Link
+                    className={cn(
+                        baseClass,
+                        '0.25s w-fit transition-opacity hover:animate-jump hover:opacity-75',
+                    )}
+                    href={item.url}
+                >
+                    <item.icon className="size-4.5 shrink-0" />
+                    {item.label}
+                </Link>
+            </li>
         );
     }
 
-    return null;
+    return (
+        <NavDrawer
+            item={item}
+            className={baseClass}
+        />
+    );
+};
+
+const NavDrawer: FC<{ item: NavDrawerType; className?: string }> = ({
+    item,
+    className,
+}) => {
+    const [show, setShow] = useState(false);
+
+    return (
+        <li>
+            <button
+                onClick={() => setShow((p) => !p)}
+                type="button"
+                className={className}
+            >
+                <item.icon className="size-4.5 shrink-0" />
+                {item.label}
+                <ChevronDown
+                    className={cn(
+                        '0.3s size-5 transition-transform',
+                        show ? 'rotate-180' : 'rotate-0',
+                    )}
+                />
+            </button>
+            <ul
+                className={cn(
+                    'grid gap-6 overflow-hidden text-secondary transition-[max-height,margin] duration-300 ease-in-out',
+                    show ? 'mt-6 ml-10 max-h-250' : 'mt-0 ml-0 max-h-0',
+                )}
+            >
+                {item.links.map((link) => (
+                    <li
+                        key={link.id}
+                        className="0.25s w-fit transition-opacity hover:animate-jump hover:opacity-75"
+                    >
+                        <Link href={link.url}>{item.label}</Link>{' '}
+                    </li>
+                ))}
+            </ul>
+        </li>
+    );
 };

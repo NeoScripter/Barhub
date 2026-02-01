@@ -49,7 +49,10 @@ const AccountMenuControls = () => {
                         <BurgerMenuIcon className="size-full" />
                     </button>
                 </DialogTrigger>
-                <DialogContent className="top-0 right-0 left-auto h-full translate-0 sm:h-max sm:rounded-bl-3xl lg:hidden">
+                <DialogContent
+                    overlayStyles="lg:hidden"
+                    className="top-0 max-w-95 right-0 left-auto h-full translate-0 sm:h-max sm:rounded-bl-3xl lg:hidden"
+                >
                     <NavMenu />
                 </DialogContent>
             </Dialog>

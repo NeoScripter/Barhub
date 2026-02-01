@@ -56,7 +56,7 @@ function DialogOverlay({
         <DialogPrimitive.Overlay
             data-slot="dialog-overlay"
             className={cn(
-                'fixed inset-0 z-50 bg-black/80 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:animate-in data-[state=open]:fade-in-0',
+                'fixed inset-0 z-50 backdrop-blur-sm data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:animate-in data-[state=open]:fade-in-0',
                 className,
             )}
             {...props}
@@ -66,16 +66,19 @@ function DialogOverlay({
 
 function DialogContent({
     className,
+    overlayStyles,
     children,
     ...props
-}: React.ComponentProps<typeof DialogPrimitive.Content>) {
+}: React.ComponentProps<typeof DialogPrimitive.Content> & {
+    overlayStyles?: string;
+}) {
     return (
         <DialogPortal data-slot="dialog-portal">
-            <DialogOverlay />
+            <DialogOverlay className={overlayStyles} />
             <DialogPrimitive.Content
                 data-slot="dialog-content"
                 className={cn(
-                    'bg-background fixed top-[50%] left-1/2 -translate-x-1/2 z-50 w-full max-w-md translate-y-[-50%] gap-4 bg-white p-6 shadow-lg duration-400 ease-in-out data-[state=closed]:animate-out data-[state=closed]:zoom-out-95 data-[state=closed]:slide-out-to-right data-[state=open]:animate-in data-[state=open]:zoom-in-95 data-[state=open]:slide-in-from-right',
+                    'bg-background fixed top-[50%] left-1/2 z-50 w-full -translate-x-1/2 translate-y-[-50%] gap-4 bg-white p-6 shadow-lg duration-400 ease-in-out data-[state=closed]:animate-out data-[state=closed]:zoom-out-95 data-[state=closed]:slide-out-to-right data-[state=open]:animate-in data-[state=open]:zoom-in-95 data-[state=open]:slide-in-from-right',
                     className,
                 )}
                 {...props}
