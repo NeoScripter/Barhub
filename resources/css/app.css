@@ -43,7 +43,8 @@
     /* --color-input: var(--input); */
     /* --color-ring: var(--ring); */
 
-    /* --color-chart-1: var(--chart-1); */
+    --color-badge-success: oklch(0.5765 0.1256 158.08);
+    --color-badge-danger: oklch(0.5911 0.2045 26.13);
     /* --color-chart-2: var(--chart-2); */
     /* --color-chart-3: var(--chart-3); */
     /* --color-chart-4: var(--chart-4); */

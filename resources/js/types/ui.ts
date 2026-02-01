@@ -11,7 +11,7 @@ export type AuthLayoutProps = {
     description?: string;
 };
 
-export type NodeProps = {
-    children?: ReactNode;
+export type NodeProps<P = {}> = P & {
+    children?: ReactNode | string;
     className?: string;
 };

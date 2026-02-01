@@ -1,3 +1,4 @@
+import Badge from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
 import AppLayout from '@/layouts/app/AdminLayout';
 
@@ -12,6 +13,9 @@ const HomePage = () => {
                 {/* <Trash2 /> */}
                 This is a button
             </Button>
+            <Badge variant='danger'>
+                Off
+            </Badge>
         </AppLayout>
     );
 };
