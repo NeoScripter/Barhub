@@ -5,7 +5,7 @@ import {
     DropdownMenuContent,
     DropdownMenuItem,
     DropdownMenuTrigger,
-} from '../ui/DropdownMenu';
+} from '@/components/ui/DropdownMenu';
 
 const AccountDropdown: FC<{ email: string; className?: string }> = ({
     email,
@@ -25,6 +25,7 @@ const AccountDropdown: FC<{ email: string; className?: string }> = ({
                 <DropdownMenuContent
                     align="end"
                     side="bottom"
+                    className='bg-white'
                 >
                     <DropdownMenuItem>
                         <LogOut />
