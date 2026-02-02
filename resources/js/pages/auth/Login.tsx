@@ -28,7 +28,6 @@ export default function Login({
             description="Введите ваш email и пароль для входа"
         >
             <Head title="Вход" />
-            <Head title="Log in" />
 
             <Form
                 {...store.form()}
