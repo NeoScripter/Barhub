@@ -81,8 +81,8 @@ const CollapseBtn: FC<{ expanded: boolean; handleClick: () => void }> = ({
             >
                 <ArrowLeftToLine
                     className={cn(
-                        'size-4.5 xl:size-5.5',
-                        !expanded && 'lg:-translate-x-0.5 xl:-translate-x-1 rotate-180',
+                        'size-4.5 transition-transform duration-300 ease-in-out xl:size-5.5',
+                        !expanded && 'lg:-translate-x-0.5 xl:-translate-x-1 rotate-y-180',
                     )}
                 />
                 {expanded && 'Свернуть'}
