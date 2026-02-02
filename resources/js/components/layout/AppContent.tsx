@@ -7,7 +7,7 @@ type Props = React.ComponentProps<'main'> & {
 export function AppContent({ children, ...props }: Props) {
     return (
         <main
-            className="flex h-full flex-1 flex-col overflow-x-hidden"
+            className="flex h-full flex-1 flex-col"
             {...props}
         >
             {children}
