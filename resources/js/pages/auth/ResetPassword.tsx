@@ -1,0 +1,93 @@
+import InputError from '@/components/form/InputError';
+import { Button } from '@/components/ui/Button';
+import { Input } from '@/components/ui/Input';
+import { Label } from '@/components/ui/Label';
+import { Spinner } from '@/components/ui/Spinner';
+import AuthLayout from '@/layouts/auth/AuthLayout';
+import { update } from '@/routes/password';
+import { Form, Head } from '@inertiajs/react';
+
+type Props = {
+    token: string;
+    email: string;
+};
+
+export default function ResetPassword({ token, email }: Props) {
+    return (
+        <AuthLayout
+            title="Сброс пароля"
+            description="Пожалуйста, введите новый пароль ниже"
+        >
+            <Head title="Сброс пароля" />
+
+            <Form
+                {...update.form()}
+                transform={(data) => ({ ...data, token, email })}
+                resetOnSuccess={['password', 'password_confirmation']}
+            >
+                {({ processing, errors }) => (
+                    <div className="grid gap-6">
+                        <div className="grid gap-2">
+                            <Label htmlFor="email">Электронная почта</Label>
+                            <Input
+                                id="email"
+                                type="email"
+                                name="email"
+                                autoComplete="email"
+                                value={email}
+                                className="mt-1 block w-full"
+                                readOnly
+                            />
+                            <InputError
+                                message={errors.email}
+                                className="mt-2"
+                            />
+                        </div>
+
+                        <div className="grid gap-2">
+                            <Label htmlFor="password">Пароль</Label>
+                            <Input
+                                id="password"
+                                type="password"
+                                name="password"
+                                autoComplete="new-password"
+                                className="mt-1 block w-full"
+                                autoFocus
+                                placeholder="Пароль"
+                            />
+                            <InputError message={errors.password} />
+                        </div>
+
+                        <div className="grid gap-2">
+                            <Label htmlFor="password_confirmation">
+                                Подтвердите пароль
+                            </Label>
+                            <Input
+                                id="password_confirmation"
+                                type="password"
+                                name="password_confirmation"
+                                autoComplete="new-password"
+                                className="mt-1 block w-full"
+                                placeholder="Подтвердите пароль"
+                            />
+                            <InputError
+                                message={errors.password_confirmation}
+                                className="mt-2"
+                            />
+                        </div>
+
+                        <Button
+                            type="submit"
+                            className="mt-4 w-full"
+                            disabled={processing}
+                            data-test="reset-password-button"
+                        >
+                            {processing && <Spinner />}
+                            Сбросить пароль
+                        </Button>
+                    </div>
+                )}
+            </Form>
+        </AuthLayout>
+    );
+}

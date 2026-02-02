@@ -3,27 +3,27 @@ import { NodeProps } from '@/types/ui';
 import { FC, ReactNode } from 'react';
 import CardLayout from '../layout/CardLayout';
 
-interface TaskCardComposition {
+type TaskCardComposition = {
     Badge: typeof TaskCardBadge;
     Digit: typeof TaskCardDigit;
     Label: typeof TaskCardLabel;
-}
+};
 
-interface BadgeProps {
+type BadgeProps = {
     children: ReactNode;
     className?: string;
     variant?: 'default' | 'success' | 'warning' | 'danger';
-}
+};
 
-interface DigitProps {
+type DigitProps = {
     value: number;
     className?: string;
-}
+};
 
-interface LabelProps {
+type LabelProps = {
     children: ReactNode;
     className?: string;
-}
+};
 
 const TaskCard: FC<NodeProps> & TaskCardComposition = ({
     className,

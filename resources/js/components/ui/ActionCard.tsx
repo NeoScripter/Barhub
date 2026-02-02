@@ -1,10 +1,9 @@
 import { cn } from '@/lib/utils';
 import { NodeProps } from '@/types/ui';
 import { LucideIcon, Plus } from 'lucide-react';
-import { FC } from 'react';
 import CardLayout from '../layout/CardLayout';
 
-const ActionCard: FC<NodeProps> = ({ className, children }) => {
+function ActionCard({ className, children }: NodeProps) {
     return (
         <CardLayout
             className={cn(
@@ -15,24 +14,20 @@ const ActionCard: FC<NodeProps> = ({ className, children }) => {
             {children}
         </CardLayout>
     );
-};
+}
 
 export default ActionCard;
 
-type ActionCardIconProps = { icon: LucideIcon; className?: string };
+type IconProps = { icon: LucideIcon; className?: string };
 
-export function ActionCardIcon({ icon, className }: ActionCardIconProps) {
+function Icon({ icon, className }: IconProps) {
     const Icon = icon;
     return <Icon className={cn('size-9 sm:size-10 xl:size-12', className)} />;
 }
 
-type ActionCardBtnProps = NodeProps<{ onClick: () => void }>;
+type BtnProps = NodeProps<{ onClick: () => void }>;
 
-export function ActionCardBtn({
-    children,
-    className,
-    onClick,
-}: ActionCardBtnProps) {
+function Btn({ children, className, onClick }: BtnProps) {
     return (
         <button
             onClick={onClick}
@@ -47,7 +42,7 @@ export function ActionCardBtn({
     );
 }
 
-export function ActionCardTitle({ children, className }: NodeProps) {
+function Title({ children, className }: NodeProps) {
     return (
         <p
             className={cn(
@@ -59,3 +54,7 @@ export function ActionCardTitle({ children, className }: NodeProps) {
         </p>
     );
 }
+
+ActionCard.Icon = Icon;
+ActionCard.Btn = Btn;
+ActionCard.Title = Title;

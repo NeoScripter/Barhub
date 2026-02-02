@@ -1,7 +1,7 @@
 import TaskCard from '@/components/ui/TaskCard';
 import AppLayout from '@/layouts/app/AdminLayout';
 
-const HomePage = () => {
+const Home = () => {
     return (
         <AppLayout>
             <div className="ml-auto max-w-100">Привет мир</div>
@@ -14,4 +14,4 @@ const HomePage = () => {
     );
 };
 
-export default HomePage;
+export default Home;
