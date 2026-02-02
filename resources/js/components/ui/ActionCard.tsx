@@ -2,6 +2,15 @@ import { cn } from '@/lib/utils';
 import { NodeProps } from '@/types/ui';
 import { LucideIcon, Plus } from 'lucide-react';
 import { FC } from 'react';
+import {
+    Select,
+    SelectContent,
+    SelectGroup,
+    SelectItem,
+    SelectLabel,
+    SelectTrigger,
+    SelectValue,
+} from './Select';
 
 const ActionCard: FC<NodeProps> = ({ className, children }) => {
     return (
@@ -36,7 +45,7 @@ export function ActionCardBtn({
         <button
             onClick={onClick}
             className={cn(
-                'inline-flex items-center justify-center gap-1.5 rounded-full bg-primary py-2 pr-6 pl-4 text-xs text-white hover:opacity-75 sm:text-sm xl:py-2.5 [&>svg]:size-3.5 sm:[&>svg]:size-4.5',
+                'inline-flex w-full items-center justify-center gap-1.5 rounded-full bg-primary py-2 pr-6 pl-4 text-xs text-white hover:opacity-75 sm:text-sm xl:py-2.5 [&>svg]:size-3.5 sm:[&>svg]:size-4.5',
                 className,
             )}
         >
@@ -58,3 +67,4 @@ export function ActionCardTitle({ children, className }: NodeProps) {
         </p>
     );
 }
+
