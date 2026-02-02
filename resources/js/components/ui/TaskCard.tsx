@@ -3,11 +3,12 @@ import { NodeProps } from '@/types/ui';
 import { FC, ReactNode } from 'react';
 import CardLayout from '../layout/CardLayout';
 
-type TaskCardComposition = {
-    Badge: typeof TaskCardBadge;
-    Digit: typeof TaskCardDigit;
-    Label: typeof TaskCardLabel;
-};
+const BADGE_VARIANTS = {
+    default: 'bg-gray-500',
+    success: 'bg-green-600',
+    warning: 'bg-amber-600',
+    danger: 'bg-red-800',
+} as const;
 
 type BadgeProps = {
     children: ReactNode;
@@ -25,10 +26,7 @@ type LabelProps = {
     className?: string;
 };
 
-const TaskCard: FC<NodeProps> & TaskCardComposition = ({
-    className,
-    children,
-}) => {
+function TaskCard({ className, children }: NodeProps) {
     return (
         <CardLayout
             className={cn(
@@ -39,16 +37,7 @@ const TaskCard: FC<NodeProps> & TaskCardComposition = ({
             {children}
         </CardLayout>
     );
-};
-
-TaskCard.displayName = 'TaskCard';
-
-const BADGE_VARIANTS = {
-    default: 'bg-gray-500',
-    success: 'bg-green-600',
-    warning: 'bg-amber-600',
-    danger: 'bg-red-800',
-} as const;
+}
 
 const TaskCardBadge: FC<BadgeProps> = ({
     children,
@@ -64,14 +53,11 @@ const TaskCardBadge: FC<BadgeProps> = ({
                 className,
             )}
             role="status"
-            aria-label="Task badge"
         >
             {children}
         </div>
     );
 };
-
-TaskCardBadge.displayName = 'TaskCard.Badge';
 
 const TaskCardDigit: FC<DigitProps> = ({ value, className }) => {
     return (
@@ -82,14 +68,11 @@ const TaskCardDigit: FC<DigitProps> = ({ value, className }) => {
                 className,
             )}
             role="status"
-            aria-label={`Count: ${value}`}
         >
             {value.toLocaleString()}
         </div>
     );
 };
-
-TaskCardDigit.displayName = 'TaskCard.Digit';
 
 const TaskCardLabel: FC<LabelProps> = ({ children, className }) => {
     return (
