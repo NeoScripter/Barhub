@@ -13,7 +13,7 @@ class ExhibitionController extends Controller
         /** @var array<int, Exhibition> $exhibitions */
         $expos = Exhibition::all();
 
-        return Inertia::render('admin/Dashboard', [
+        return Inertia::render('admin/Exhibitions', [
             'exhibitions' => $expos
         ]);
     }

@@ -14,11 +14,7 @@ class DashboardController extends Controller
      */
     public function __invoke(Request $request)
     {
-        /** @var array<int, Exhibition> $exhibitions */
-        $expos = Exhibition::all();
 
-        return Inertia::render('admin/Dashboard', [
-            'exhibitions' => $expos
-        ]);
+        return Inertia::render('admin/Dashboard');
     }
 }

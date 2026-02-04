@@ -1,3 +1,4 @@
+import ExhibitionController from '@/wayfinder/App/Http/Controllers/Admin/ExhibitionController';
 import {
     BriefcaseBusiness,
     CalendarDays,
@@ -15,6 +16,7 @@ type NavLink = {
     url: string;
     type: 'link';
 };
+
 export type NavDrawerType = {
     id: string;
     label: string;
@@ -22,69 +24,70 @@ export type NavDrawerType = {
     type: 'drawer';
     links: Omit<NavLink, 'icon'>[];
 };
+
 export type NavItemType = NavLink | NavDrawerType;
 
 export const navItems: NavItemType[] = [
     {
-        id: crypto.randomUUID(),
+        id: 'home',
         type: 'link',
         label: 'Главная',
         url: '/',
         icon: House,
     },
     {
-        id: crypto.randomUUID(),
+        id: 'program-events',
         type: 'link',
         label: 'События программы',
         url: '/',
         icon: CalendarDays,
     },
     {
-        id: crypto.randomUUID(),
+        id: 'people',
         type: 'link',
         label: 'Люди',
         url: '/',
         icon: UserCheck,
     },
     {
-        id: crypto.randomUUID(),
+        id: 'companies',
         type: 'link',
         label: 'Компании',
         url: '/',
         icon: BriefcaseBusiness,
     },
     {
-        id: crypto.randomUUID(),
+        id: 'partners-work',
         type: 'drawer',
         label: 'Работа с партнерами',
         icon: Star,
         links: [
             {
-                id: crypto.randomUUID(),
+                id: 'partner-review-tasks',
                 type: 'link',
                 label: 'Задачи на проверке',
                 url: '/',
             },
             {
-                id: crypto.randomUUID(),
+                id: 'partner-all-tasks',
                 type: 'link',
                 label: 'Общие задачи',
                 url: '/',
             },
             {
-                id: crypto.randomUUID(),
+                id: 'partner-services',
                 type: 'link',
                 label: 'Услуги',
                 url: '/',
             },
             {
-                id: crypto.randomUUID(),
+                id: 'partner-company-tags',
                 type: 'link',
                 label: 'Теги компаний',
                 url: '/',
             },
             {
-                id: crypto.randomUUID(),
+                id: 'partner-materials',
                 type: 'link',
                 label: 'Информация и материалы',
                 url: '/',
@@ -92,10 +95,10 @@ export const navItems: NavItemType[] = [
         ],
     },
     {
-        id: crypto.randomUUID(),
+        id: 'exhibitions',
         type: 'link',
         label: 'Выставки',
-        url: '/',
+        url: ExhibitionController.index.url(),
         icon: Martini,
     },
 ];

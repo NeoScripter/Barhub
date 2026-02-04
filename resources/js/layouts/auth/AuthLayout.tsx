@@ -1,6 +1,6 @@
 import AppLogo from '@/components/layout/AppLogo';
-import { home } from '@/routes';
 import type { AuthLayoutProps } from '@/old-types';
+import { home } from '@/wayfinder/routes';
 import { Link } from '@inertiajs/react';
 import { Briefcase } from 'lucide-react';
 
