@@ -1,7 +1,7 @@
 import AccentHeading from '@/components/ui/AccentHeading';
 import { navItems } from '@/lib/data/navItems';
 import { cn } from '@/lib/utils';
-import { NodeProps } from '@/old-types/ui';
+import { NodeProps } from '@/types/shared';
 import { ArrowLeftToLine } from 'lucide-react';
 import { FC, useState } from 'react';
 import AccountDropdown from './AccountDropdown';

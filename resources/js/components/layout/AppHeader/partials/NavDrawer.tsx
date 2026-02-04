@@ -53,7 +53,7 @@ const NavDrawer: FC<NavDrawerProps> = ({ item, className, expanded }) => {
                                         prefetch
                                         preserveState
                                         className={cn(
-                                            'text-base transition-opacity duration-250 group-hover:animate-jump group-hover:opacity-75',
+                                            'text-base transition-opacity duration-250 select-none group-hover:animate-jump group-hover:opacity-75',
                                             whenCurrentUrl(
                                                 link.url,
                                                 'text-primary',

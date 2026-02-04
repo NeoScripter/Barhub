@@ -1,5 +1,5 @@
 import { cn } from '@/lib/utils';
-import { NodeProps } from '@/old-types/ui';
+import { NodeProps } from '@/types/shared';
 import { cva, VariantProps } from 'class-variance-authority';
 import { FC } from 'react';
 

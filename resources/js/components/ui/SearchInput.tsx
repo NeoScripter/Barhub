@@ -1,5 +1,5 @@
 import { cn } from '@/lib/utils';
-import { NodeProps } from '@/old-types';
+import { NodeProps } from '@/types/shared';
 import { Search } from 'lucide-react';
 import { ChangeEvent, FC } from 'react';
 import { Input } from './Input';

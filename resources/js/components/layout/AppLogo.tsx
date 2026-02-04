@@ -1,6 +1,6 @@
 import Logo from '@/assets/svgs/logo.svg';
 import { cn } from '@/lib/utils';
-import { NodeProps } from '@/old-types/ui';
+import { NodeProps } from '@/types/shared';
 import { FC } from 'react';
 
 const AppLogo: FC<NodeProps> = ({ className }) => {

@@ -1,5 +1,5 @@
 import { cn } from '@/lib/utils';
-import { NodeProps } from '@/old-types';
+import { NodeProps } from '@/types/shared';
 
 export default function CardLayout({ className, children }: NodeProps) {
     return (
