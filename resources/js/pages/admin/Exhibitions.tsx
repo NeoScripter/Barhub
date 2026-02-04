@@ -16,7 +16,6 @@ const HEADER_ROWS = [
 
 const Exhibitions = ({ exhibitions }: Inertia.Pages.Admin.Exhibitions) => {
     return (
-        <AppLayout>
             <Table>
                 <Table.Header>
                     <Table.Row>
@@ -57,7 +56,6 @@ const Exhibitions = ({ exhibitions }: Inertia.Pages.Admin.Exhibitions) => {
                     ))}
                 </Table.Body>
             </Table>
-        </AppLayout>
     );
 };
 

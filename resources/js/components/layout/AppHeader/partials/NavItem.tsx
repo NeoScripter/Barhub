@@ -22,6 +22,8 @@ const NavItem: FC<{ item: NavItemType; expanded: boolean }> = ({
                         '0.25s w-fit transition-opacity hover:animate-jump hover:opacity-75',
                         whenCurrentUrl(item.url, 'text-primary'),
                     )}
+                    prefetch
+                    preserveState
                     href={item.url}
                 >
                     <item.icon className="size-4.5 shrink-0 xl:size-5.5" />

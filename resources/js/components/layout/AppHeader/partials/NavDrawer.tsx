@@ -1,14 +1,15 @@
-import { NavDrawerType } from '@/lib/data/navItems';
-import { cn } from '@/lib/utils';
-import { Link } from '@inertiajs/react';
-import { ChevronDown } from 'lucide-react';
-import { FC, useState } from 'react';
 import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from '@/components/ui/DropdownMenu';
+import { useCurrentUrl } from '@/hooks/useCurrentUrl';
+import { NavDrawerType } from '@/lib/data/navItems';
+import { cn } from '@/lib/utils';
+import { Link } from '@inertiajs/react';
+import { ChevronDown } from 'lucide-react';
+import { FC, useState } from 'react';
 
 interface NavDrawerProps {
     item: NavDrawerType;
@@ -18,11 +19,12 @@ interface NavDrawerProps {
 
 const NavDrawer: FC<NavDrawerProps> = ({ item, className, expanded }) => {
     const [isOpen, setIsOpen] = useState(false);
+    const { whenCurrentUrl } = useCurrentUrl();
 
     return (
         <li className={className}>
             <DropdownMenu onOpenChange={setIsOpen}>
-                <DropdownMenuTrigger className="flex cursor-pointer whitespace-nowrap items-center gap-2 xl:gap-3">
+                <DropdownMenuTrigger className="flex cursor-pointer items-center gap-2 whitespace-nowrap xl:gap-3">
                     <item.icon className="size-4.5 shrink-0 xl:size-5.5" />
                     {expanded && item.label}
                     {expanded && (
@@ -48,7 +50,15 @@ const NavDrawer: FC<NavDrawerProps> = ({ item, className, expanded }) => {
                                 <li className="group w-fit text-secondary">
                                     <Link
                                         href={link.url}
-                                        className="text-base transition-opacity duration-250 group-hover:animate-jump group-hover:opacity-75"
+                                        prefetch
+                                        preserveState
+                                        className={cn(
+                                            'text-base transition-opacity duration-250 group-hover:animate-jump group-hover:opacity-75',
+                                            whenCurrentUrl(
+                                                link.url,
+                                                'text-primary',
+                                            ),
+                                        )}
                                     >
                                         {link.label}
                                     </Link>

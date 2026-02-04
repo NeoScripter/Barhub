@@ -1,7 +1,7 @@
 import AppLayout from '@/layouts/app/AdminLayout';
 
 const Dashboard = () => {
-    return <AppLayout>This is dashboard</AppLayout>;
+    return 'This is dashboard';
 };
 
 export default Dashboard;
