@@ -6,7 +6,7 @@ enum UserRole: string
 {
     // case NAMEINAPP = 'name-in-database';
 
-    case SUPERADMIN = 'super-admin';
+    case SUPER_ADMIN = 'super-admin';
     case ADMIN = 'admin';
     case EXPONENT = 'exponent';
     case USER = 'user';
@@ -15,7 +15,7 @@ enum UserRole: string
     public function label(): string
     {
         return match ($this) {
-            static::SUPERADMIN => 'Руководитель',
+            static::SUPER_ADMIN => 'Руководитель',
             static::ADMIN => 'Администратор',
             static::EXPONENT => 'Экспонент',
             static::USER => 'Пользователь',
