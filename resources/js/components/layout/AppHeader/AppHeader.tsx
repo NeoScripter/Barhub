@@ -1,11 +1,11 @@
 import { cn } from '@/lib/utils';
 import { NodeProps } from '@/types/shared';
+import { App } from '@/wayfinder/types';
+import { usePage } from '@inertiajs/react';
 import { FC } from 'react';
 import AccentHeading from '../../ui/AccentHeading';
 import AppLogo from '../AppLogo';
 import AccountMenuControls from './partials/AccountMenuControls';
-import { usePage } from '@inertiajs/react';
-import { App } from '@/wayfinder/types';
 
 type Props = NodeProps & {
     variant?: 'user' | 'admin';
@@ -13,7 +13,9 @@ type Props = NodeProps & {
 
 const AppHeader: FC<Props> = ({ variant = 'admin' }) => {
     const isAdmin = variant === 'admin';
-    const {exhibition, user} = usePage<{exhibition?: App.Models.Exhibition,  }>().props;
+    const { exhibition } = usePage<{
+        exhibition?: App.Models.Exhibition;
+    }>().props;
 
     return (
         <header
@@ -23,15 +25,17 @@ const AppHeader: FC<Props> = ({ variant = 'admin' }) => {
             )}
         >
             <AppLogo />
-            <AccentHeading
-                asChild
-                className={cn('sm:align-baseline', {
-                    'hidden lg:block': isAdmin,
-                    'text-right': !isAdmin,
-                })}
-            >
-                <h1>Название выставки</h1>
-            </AccentHeading>
+            {exhibition && (
+                <AccentHeading
+                    asChild
+                    className={cn('sm:align-baseline', {
+                        'hidden lg:block': isAdmin,
+                        'text-right': !isAdmin,
+                    })}
+                >
+                    <h1>{exhibition.name}</h1>
+                </AccentHeading>
+            )}
 
             {isAdmin && <AccountMenuControls />}
         </header>

@@ -2,9 +2,9 @@ import { AppContent } from '@/components/layout/AppContent';
 import AppHeader from '@/components/layout/AppHeader/AppHeader';
 import { AppShell } from '@/components/layout/AppShell';
 import NavMenu from '@/components/layout/AppHeader/partials/NavMenu';
-import type { AppLayoutProps } from '@/old-types';
+import { NodeProps } from '@/types/shared';
 
-export default function AdminLayout({ children }: AppLayoutProps) {
+export default function AdminLayout({ children }: NodeProps) {
     return (
         <AppShell>
             <AppHeader />

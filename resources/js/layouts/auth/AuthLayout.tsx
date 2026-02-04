@@ -1,8 +1,14 @@
 import AppLogo from '@/components/layout/AppLogo';
-import type { AuthLayoutProps } from '@/old-types';
 import { home } from '@/wayfinder/routes';
 import { Link } from '@inertiajs/react';
-import { Briefcase } from 'lucide-react';
+import { ReactNode } from 'react';
+
+type AuthLayoutProps = {
+    children?: ReactNode;
+    name?: string;
+    title?: string;
+    description?: string;
+};
 
 export default function AuthLayout({
     children,
@@ -10,7 +16,7 @@ export default function AuthLayout({
     description,
 }: AuthLayoutProps) {
     return (
-        <div className="bg-background flex min-h-svh flex-col items-center justify-center gap-6 p-6 md:p-10">
+        <div className="bg-background flex h-full flex-col items-center justify-center gap-6 p-6 md:p-10">
             <div className="w-full max-w-sm">
                 <div className="flex flex-col gap-8">
                     <div className="flex flex-col items-center gap-4">
@@ -19,7 +25,7 @@ export default function AuthLayout({
                             className="flex flex-col items-center gap-2 font-medium"
                         >
                             <div className="mb-1 flex h-9 w-9 items-center justify-center rounded-md">
-                                <AppLogo/>
+                                <AppLogo />
                             </div>
                             <span className="sr-only">{title}</span>
                         </Link>

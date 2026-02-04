@@ -6,7 +6,7 @@ import { Label } from '@/components/ui/Label';
 import { Spinner } from '@/components/ui/Spinner';
 import AuthLayout from '@/layouts/auth/AuthLayout';
 import RegisteredUserController from '@/wayfinder/Laravel/Fortify/Http/Controllers/RegisteredUserController';
-import { Form, Head } from '@inertiajs/react';
+import { Form, Head, router } from '@inertiajs/react';
 
 export default function Register() {
     return (
@@ -18,6 +18,7 @@ export default function Register() {
             <Form
                 {...RegisteredUserController.store()}
                 resetOnSuccess={['password', 'password_confirmation']}
+                onSuccess={() => router.flushAll()}
                 disableWhileProcessing
                 className="flex flex-col gap-6"
             >

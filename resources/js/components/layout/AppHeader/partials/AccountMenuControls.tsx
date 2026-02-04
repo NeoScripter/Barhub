@@ -1,9 +1,14 @@
 import BurgerMenuIcon from '@/components/ui/BurgerMenuIcon';
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/Dialog';
+import { usePage } from '@inertiajs/react';
 import AccountDropdown from './AccountDropdown';
 import NavMenu from './NavMenu';
 
 const AccountMenuControls = () => {
+    const { auth } = usePage<{
+        auth: ShareData;
+    }>().props;
+
     return (
         <>
             <Dialog>
@@ -19,10 +24,12 @@ const AccountMenuControls = () => {
                     <NavMenu />
                 </DialogContent>
             </Dialog>
-            <AccountDropdown
-                className="hidden lg:block"
-                email="admin@gmail.com"
-            />
+            {auth?.user && (
+                <AccountDropdown
+                    className="hidden lg:block"
+                    email={auth.user.email}
+                />
+            )}
         </>
     );
 };

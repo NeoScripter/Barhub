@@ -1,9 +1,9 @@
 import { AppContent } from '@/components/layout/AppContent';
 import AppHeader from '@/components/layout/AppHeader/AppHeader';
 import { AppShell } from '@/components/layout/AppShell';
-import type { AppLayoutProps } from '@/old-types';
+import { NodeProps } from '@/types/shared';
 
-export default function UserLayout({ children }: AppLayoutProps) {
+export default function UserLayout({ children }: NodeProps) {
     return (
         <AppShell>
             <AppHeader variant="user" />

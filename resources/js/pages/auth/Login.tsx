@@ -9,7 +9,7 @@ import AuthLayout from '@/layouts/auth/AuthLayout';
 import AuthenticatedSessionController from '@/wayfinder/Laravel/Fortify/Http/Controllers/AuthenticatedSessionController';
 import { register } from '@/wayfinder/routes';
 import { request } from '@/wayfinder/routes/password';
-import { Form, Head } from '@inertiajs/react';
+import { Form, Head, router } from '@inertiajs/react';
 
 type Props = {
     status?: string;
@@ -32,15 +32,14 @@ export default function Login({
             <Form
                 {...AuthenticatedSessionController.store()}
                 resetOnSuccess={['password']}
+                onSuccess={() => router.flushAll()}
                 className="flex flex-col gap-6"
             >
                 {({ processing, errors }) => (
                     <>
                         <div className="grid gap-6">
                             <div className="grid gap-2">
-                                <Label htmlFor="email">
-                                    Электронная почта
-                                </Label>
+                                <Label htmlFor="email">Электронная почта</Label>
                                 <Input
                                     id="email"
                                     type="email"

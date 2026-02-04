@@ -1,11 +1,13 @@
-import { ChevronDown, LogOut } from 'lucide-react';
-import { FC } from 'react';
 import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from '@/components/ui/DropdownMenu';
+import { logout } from '@/wayfinder/routes';
+import { Link, router } from '@inertiajs/react';
+import { ChevronDown, LogOut } from 'lucide-react';
+import { FC } from 'react';
 
 const AccountDropdown: FC<{ email: string; className?: string }> = ({
     email,
@@ -25,11 +27,16 @@ const AccountDropdown: FC<{ email: string; className?: string }> = ({
                 <DropdownMenuContent
                     align="end"
                     side="bottom"
-                    className='bg-white'
+                    className="bg-white"
                 >
-                    <DropdownMenuItem>
-                        <LogOut />
-                        Выйти
+                    <DropdownMenuItem asChild>
+                        <Link
+                            href={logout()}
+                            onSuccess={() => router.flushAll()}
+                        >
+                            <LogOut />
+                            Выйти
+                        </Link>
                     </DropdownMenuItem>
                 </DropdownMenuContent>
             </DropdownMenu>
