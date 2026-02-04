@@ -1,3 +1,4 @@
+import { useCurrentUrl } from '@/hooks/useCurrentUrl';
 import { NavItemType } from '@/lib/data/navItems';
 import { cn } from '@/lib/utils';
 import { Link } from '@inertiajs/react';
@@ -8,6 +9,8 @@ const NavItem: FC<{ item: NavItemType; expanded: boolean }> = ({
     item,
     expanded,
 }) => {
+    const { whenCurrentUrl } = useCurrentUrl();
+
     const baseClass = 'inline-flex text-secondary items-center gap-2 xl:gap-3';
 
     if (item.type === 'link') {
@@ -17,6 +20,7 @@ const NavItem: FC<{ item: NavItemType; expanded: boolean }> = ({
                     className={cn(
                         baseClass,
                         '0.25s w-fit transition-opacity hover:animate-jump hover:opacity-75',
+                        whenCurrentUrl(item.url, 'text-primary'),
                     )}
                     href={item.url}
                 >

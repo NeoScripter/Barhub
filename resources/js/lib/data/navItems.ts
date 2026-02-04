@@ -1,3 +1,4 @@
+import DashboardController from '@/wayfinder/App/Http/Controllers/Admin/DashboardController';
 import ExhibitionController from '@/wayfinder/App/Http/Controllers/Admin/ExhibitionController';
 import {
     BriefcaseBusiness,
@@ -32,7 +33,7 @@ export const navItems: NavItemType[] = [
         id: 'home',
         type: 'link',
         label: 'Главная',
-        url: '/',
+        url: DashboardController.url(),
         icon: House,
     },
     {
