@@ -9,3 +9,11 @@ export function cn(...inputs: ClassValue[]) {
 export function toUrl(url: NonNullable<InertiaLinkProps['href']>): string {
     return typeof url === 'string' ? url : url.url;
 }
+
+export function formatDateShort(date: Date, options?: Intl.DateTimeFormatOptions) {
+    return new Intl.DateTimeFormat('ru', {
+        day: 'numeric',
+        month: 'short',
+        year: 'numeric',
+    }).format(date);
+}

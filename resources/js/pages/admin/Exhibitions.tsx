@@ -1,15 +1,15 @@
 import Badge from '@/components/ui/Badge';
 import Table from '@/components/ui/Table';
 import AppLayout from '@/layouts/app/AdminLayout';
+import { formatDateShort } from '@/lib/utils';
 import { Inertia } from '@/wayfinder/types';
 import { PencilLine } from 'lucide-react';
 
 const HEADER_ROWS = [
     'Название',
-    // 'Спикеры',
-    'Дата начала',
+    'Начало',
+    'Конец',
     'Площадка',
-    // 'Направления',
     'Статус',
     'Действия',
 ];
@@ -31,7 +31,12 @@ const Exhibitions = ({ exhibitions }: Inertia.Pages.Admin.Exhibitions) => {
                     {exhibitions.map((expo) => (
                         <Table.Row>
                             <Table.Cell width={2}>{expo.name}</Table.Cell>
-                            <Table.Cell>{expo.starts_at}</Table.Cell>
+                            <Table.Cell>
+                                {formatDateShort(new Date(expo.starts_at))}
+                            </Table.Cell>
+                            <Table.Cell>
+                                {formatDateShort(new Date(expo.ends_at))}
+                            </Table.Cell>
                             <Table.Cell>{expo.location}</Table.Cell>
                             <Table.Cell width={0.5}>
                                 <Badge
