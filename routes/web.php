@@ -24,5 +24,34 @@ Route::prefix('/admin')
     ])
     ->group(function () {
         Route::get('/dashboard', DashboardController::class)->name('dashboard');
-        Route::resource('/exhibitions', ExhibitionController::class)->only(['index']);
+
+        Route::resource('/exhibitions', ExhibitionController::class)
+            ->middleware(['permission:' . UserPermission::MANAGE_EXHIBITIONS->value])
+            ->only('index');
+
+        /*
+        |--------------------------------------------------------------------------
+        | Single Exhibition Context
+        |--------------------------------------------------------------------------
+        */
+
+        Route::prefix('exhibitions/{exhibition}')
+            ->name('exhibitions.')
+            ->middleware('permission:' . UserPermission::MANAGE_EXHIBITION->value)
+            ->group(function () {
+
+                Route::get('/', [ExhibitionController::class, 'show'])
+                    ->name('show');
+
+                /*
+                |--------------------------------------------------------------------------
+                | Models Belonging To Exhibition
+                |--------------------------------------------------------------------------
+                */
+
+                // Route::resource('events', ExhibitionEventController::class);
+                // Route::resource('speakers', ExhibitionSpeakerController::class);
+                // Route::resource('tickets', ExhibitionTicketController::class);
+                // Route::resource('partners', ExhibitionPartnerController::class);
+            });
     });
