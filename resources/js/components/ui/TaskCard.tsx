@@ -1,5 +1,5 @@
 import { cn } from '@/lib/utils';
-import { NodeProps } from '@/types/ui';
+import { NodeProps } from '@/old-types/ui';
 import { FC, ReactNode } from 'react';
 import CardLayout from '../layout/CardLayout';
 

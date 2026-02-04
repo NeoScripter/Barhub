@@ -5,8 +5,7 @@ import { Input } from '@/components/ui/Input';
 import { Label } from '@/components/ui/Label';
 import { Spinner } from '@/components/ui/Spinner';
 import AuthLayout from '@/layouts/auth/AuthLayout';
-import { login } from '@/routes';
-import { store } from '@/routes/register';
+import RegisteredUserController from '@/wayfinder/Laravel/Fortify/Http/Controllers/RegisteredUserController';
 import { Form, Head } from '@inertiajs/react';
 
 export default function Register() {
@@ -17,7 +16,7 @@ export default function Register() {
         >
             <Head title="Регистрация" />
             <Form
-                {...store.form()}
+                {...RegisteredUserController.store()}
                 resetOnSuccess={['password', 'password_confirmation']}
                 disableWhileProcessing
                 className="flex flex-col gap-6"
@@ -43,9 +42,7 @@ export default function Register() {
                                 />
                             </div>
                             <div className="grid gap-2">
-                                <Label htmlFor="email">
-                                    Электронная почта
-                                </Label>
+                                <Label htmlFor="email">Электронная почта</Label>
                                 <Input
                                     id="email"
                                     type="email"

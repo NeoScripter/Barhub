@@ -1,11 +1,11 @@
 import { cn } from '@/lib/utils';
 import { ComponentPropsWithoutRef, FC, ReactNode } from 'react';
 
-type TableProps = ComponentPropsWithoutRef<'div'> & {
+type TableProps = ComponentPropsWithoutRef<'table'> & {
     children: ReactNode;
 };
 
-type TablePartProps = ComponentPropsWithoutRef<'table'> & {
+type TablePartProps = ComponentPropsWithoutRef<'thead' | 'tbody'> & {
     children: ReactNode;
 };
 
@@ -25,34 +25,36 @@ type TableHeaderCellProps = ComponentPropsWithoutRef<'th'> & {
 
 function Table({ className, children, ...props }: TableProps) {
     return (
-        <div
-            className={cn('w-full overflow-x-auto', className)}
-            {...props}
-        >
-            {children}
+        <div className="w-full overflow-x-auto">
+            <table
+                className={cn('w-full border-collapse', className)}
+                {...props}
+            >
+                {children}
+            </table>
         </div>
     );
 }
 
 const TableHeader: FC<TablePartProps> = ({ className, children, ...props }) => {
     return (
-        <table
-            className={cn('w-full border-collapse bg-muted/10', className)}
+        <thead
+            className={cn('bg-muted/10', className)}
             {...props}
         >
-            <thead>{children}</thead>
-        </table>
+            {children}
+        </thead>
     );
 };
 
 const TableBody: FC<TablePartProps> = ({ className, children, ...props }) => {
     return (
-        <table
-            className={cn('w-full border-collapse', className)}
+        <tbody
+            className={className}
             {...props}
         >
-            <tbody>{children}</tbody>
-        </table>
+            {children}
+        </tbody>
     );
 };
 
@@ -79,10 +81,10 @@ const TableHeaderCell: FC<TableHeaderCellProps> = ({
     return (
         <th
             className={cn(
-                'px-4 py-3 text-left text-sm font-semibold text-secondary',
+                'min-w-30 px-4 py-3 text-left text-sm font-semibold text-secondary',
                 className,
             )}
-            style={{ width: `${width * 100}px` }}
+            style={{ minWidth: `${width * 120}px` }}
             {...props}
         >
             {children}
@@ -98,15 +100,17 @@ const TableCell: FC<TableCellProps> = ({
 }) => {
     return (
         <td
-            className={cn('px-4 py-3 text-sm text-gray-600', className)}
-            style={{ width: `${width * 100}px` }}
+            className={cn(
+                'min-w-30 px-4 py-3 text-sm text-gray-600',
+                className,
+            )}
+            style={{ minWidth: `${width * 120}px` }}
             {...props}
         >
             {children}
         </td>
     );
 };
-
 Table.Header = TableHeader;
 Table.Body = TableBody;
 Table.Row = TableRow;

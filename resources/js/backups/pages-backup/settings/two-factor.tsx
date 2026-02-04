@@ -10,7 +10,7 @@ import { useTwoFactorAuth } from '@/hooks/use-two-factor-auth';
 import AppLayout from '@/layouts/app-layout';
 import SettingsLayout from '@/layouts/settings/layout';
 import { disable, enable, show } from '@/routes/two-factor';
-import type { BreadcrumbItem } from '@/types';
+import type { BreadcrumbItem } from '@/old-types';
 
 type Props = {
     requiresConfirmation?: boolean;

@@ -1,14 +1,14 @@
 import AccentHeading from '@/components/ui/AccentHeading';
 import { navItems } from '@/lib/data/navItems';
 import { cn } from '@/lib/utils';
-import { NodeProps } from '@/types/ui';
+import { NodeProps } from '@/old-types/ui';
 import { ArrowLeftToLine } from 'lucide-react';
 import { FC, useState } from 'react';
 import AccountDropdown from './AccountDropdown';
 import NavItem from './NavItem';
 
 const NavMenu: FC<NodeProps> = ({ className }) => {
-    const [expanded, setExpanded] = useState(true);
+    const [expanded, setExpanded] = useState(false);
 
     return (
         <div

@@ -13,7 +13,7 @@ import {
     SidebarMenuItem,
 } from '@/components/ui/Sidebar';
 import { dashboard } from '@/routes';
-import type { NavItem } from '@/types';
+import type { NavItem } from '@/old-types';
 import AppLogo from './app-logo';
 
 const mainNavItems: NavItem[] = [

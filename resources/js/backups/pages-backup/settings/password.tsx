@@ -10,7 +10,7 @@ import { Label } from '@/components/ui/Label';
 import AppLayout from '@/layouts/app-layout';
 import SettingsLayout from '@/layouts/settings/layout';
 import { edit } from '@/routes/user-password';
-import type { BreadcrumbItem } from '@/types';
+import type { BreadcrumbItem } from '@/old-types';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {

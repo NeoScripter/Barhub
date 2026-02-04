@@ -1,5 +1,5 @@
 import { cn } from '@/lib/utils';
-import { NodeProps } from '@/types/ui';
+import { NodeProps } from '@/old-types/ui';
 import { LucideIcon, Plus } from 'lucide-react';
 import CardLayout from '../layout/CardLayout';
 

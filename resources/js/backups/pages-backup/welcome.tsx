@@ -1,6 +1,6 @@
 import { Head, Link, usePage } from '@inertiajs/react';
 import { dashboard, login, register } from '@/routes';
-import type { SharedData } from '@/types';
+import type { SharedData } from '@/old-types';
 
 export default function Welcome({
     canRegister = true,

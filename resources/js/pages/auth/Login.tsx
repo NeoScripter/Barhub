@@ -9,6 +9,7 @@ import AuthLayout from '@/layouts/auth/AuthLayout';
 import { register } from '@/routes';
 import { store } from '@/routes/login';
 import { request } from '@/routes/password';
+import AuthenticatedSessionController from '@/wayfinder/Laravel/Fortify/Http/Controllers/AuthenticatedSessionController';
 import { Form, Head } from '@inertiajs/react';
 
 type Props = {
@@ -30,7 +31,7 @@ export default function Login({
             <Head title="Вход" />
 
             <Form
-                {...store.form()}
+                {...AuthenticatedSessionController.store()}
                 resetOnSuccess={['password']}
                 className="flex flex-col gap-6"
             >

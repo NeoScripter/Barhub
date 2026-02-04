@@ -4,8 +4,7 @@ import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { Label } from '@/components/ui/Label';
 import AuthLayout from '@/layouts/auth/AuthLayout';
-import { login } from '@/routes';
-import { email } from '@/routes/password';
+import EmailVerificationNotificationController from '@/wayfinder/Laravel/Fortify/Http/Controllers/EmailVerificationNotificationController';
 import { Form, Head } from '@inertiajs/react';
 import { LoaderCircle } from 'lucide-react';
 
@@ -24,7 +23,7 @@ export default function ForgotPassword({ status }: { status?: string }) {
             )}
 
             <div className="space-y-6">
-                <Form {...email.form()}>
+                <Form {...EmailVerificationNotificationController.store()}>
                     {({ processing, errors }) => (
                         <>
                             <div className="grid gap-2">

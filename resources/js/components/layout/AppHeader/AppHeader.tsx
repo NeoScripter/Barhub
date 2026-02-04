@@ -1,5 +1,5 @@
 import { cn } from '@/lib/utils';
-import { NodeProps } from '@/types/ui';
+import { NodeProps } from '@/old-types/ui';
 import { FC } from 'react';
 import AccentHeading from '../../ui/AccentHeading';
 import AppLogo from '../AppLogo';
