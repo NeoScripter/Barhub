@@ -25,7 +25,7 @@ type TableHeaderCellProps = ComponentPropsWithoutRef<'th'> & {
 
 function Table({ className, children, ...props }: TableProps) {
     return (
-        <div className="w-full overflow-x-auto">
+        <div className="w-full overflow-x-auto pb-4">
             <table
                 className={cn('w-full border-collapse', className)}
                 {...props}
@@ -81,7 +81,7 @@ const TableHeaderCell: FC<TableHeaderCellProps> = ({
     return (
         <th
             className={cn(
-                'min-w-30 px-4 py-3 text-left text-sm font-semibold text-secondary',
+                'min-w-30 px-4 py-3 text-left text-sm font-semibold text-secondary 2xl:text-base',
                 className,
             )}
             style={{ minWidth: `${width * 120}px` }}
@@ -101,7 +101,7 @@ const TableCell: FC<TableCellProps> = ({
     return (
         <td
             className={cn(
-                'min-w-30 px-4 py-3 text-sm text-gray-600',
+                'min-w-30 px-4 py-3 text-sm text-gray-600 2xl:text-base',
                 className,
             )}
             style={{ minWidth: `${width * 120}px` }}

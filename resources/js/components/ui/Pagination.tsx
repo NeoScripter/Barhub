@@ -46,14 +46,14 @@ const Pagination = <T,>({ data, label, className }: PaginationProps<T>) => {
             <div className="mx-auto flex max-w-8/10 flex-1 justify-between sm:hidden">
                 <PaginationButton
                     link={links[0]}
-                    className="size-16"
+                    className="size-12"
                 >
                     <ChevronLeftIcon className="size-16 text-foreground" />
                 </PaginationButton>
 
                 <PaginationButton
                     link={links[links.length - 1]}
-                    className="size-16"
+                    className="size-12"
                 >
                     <ChevronRightIcon className="size-16 text-foreground" />
                 </PaginationButton>
@@ -84,9 +84,9 @@ const Pagination = <T,>({ data, label, className }: PaginationProps<T>) => {
                                 link={link}
                             >
                                 {isFirst ? (
-                                    <ChevronLeftIcon className="size-6 text-foreground 2xl:size-10" />
+                                    <ChevronLeftIcon className="size-6 text-foreground 2xl:size-8" />
                                 ) : isLast ? (
-                                    <ChevronRightIcon className="size-6 text-foreground 2xl:size-10" />
+                                    <ChevronRightIcon className="size-6 text-foreground 2xl:size-8" />
                                 ) : (
                                     link.label
                                 )}
@@ -111,9 +111,9 @@ const PaginationButton: React.FC<PaginationButtonProps> = ({
     className,
 }) => {
     const baseClasses = cn(
-        'relative inline-flex size-8 items-center justify-center rounded-sm font-medium ring-1 transition duration-200 ease-in ring-inset 2xl:size-12 2xl:text-2xl',
+        'relative inline-flex size-8 items-center justify-center rounded-sm font-medium ring-1 transition duration-200 ease-in ring-inset 2xl:size-10 2xl:text-xl',
         {
-            'text-background bg-foreground ring-muted-foreground': link.active,
+            'bg-primary text-white ring-muted-foreground': link.active,
             'text-foreground ring-inherit hover:scale-110':
                 !link.active && link.url,
             'opacity-50': !link.url,
@@ -137,6 +137,7 @@ const PaginationButton: React.FC<PaginationButtonProps> = ({
             href={link.url}
             className={baseClasses}
             preserveScroll
+            preserveState
         >
             {children}
         </Link>
