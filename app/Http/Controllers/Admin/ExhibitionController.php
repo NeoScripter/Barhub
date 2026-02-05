@@ -12,11 +12,11 @@ final class ExhibitionController extends Controller
 {
     public function index()
     {
-        /** @var array<int, Exhibition> $expos */
-        $expos = Exhibition::all();
+        /** @var \Illuminate\Pagination\LengthAwarePaginator<Exhibition> $expos */
+        $expos = Exhibition::paginate();
 
-        return Inertia::render('admin/Exhibitions', [
-            'exhibitions' => $expos,
+        return Inertia::render('admin/Exhibitions/Exhibitions', [
+            'expos' => $expos,
         ]);
     }
 }
