@@ -49,6 +49,7 @@ export default function Login({
                                     autoFocus
                                     tabIndex={1}
                                     autoComplete="email"
+                                    defaultValue="super-admin@gmail.com"
                                     placeholder="email@example.com"
                                 />
                                 <InputError message={errors.email} />
@@ -71,6 +72,7 @@ export default function Login({
                                     id="password"
                                     type="password"
                                     name="password"
+                                    defaultValue="password"
                                     required
                                     tabIndex={2}
                                     autoComplete="current-password"

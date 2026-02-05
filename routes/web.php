@@ -28,7 +28,7 @@ Route::prefix('/admin')
         Route::get('/dashboard', DashboardController::class)->name('dashboard');
 
         Route::resource('/exhibitions', ExhibitionController::class)
-            ->middleware(['permission:'.UserPermission::MANAGE_EXHIBITIONS->value])
+            ->middleware(['permission:'.UserPermission::VIEW_EXHIBITIONS->value])
             ->only('index');
 
         /*
@@ -39,7 +39,7 @@ Route::prefix('/admin')
 
         Route::prefix('exhibitions/{exhibition}')
             ->name('exhibitions.')
-            ->middleware('permission:'.UserPermission::MANAGE_EXHIBITION->value)
+            ->middleware('permission:'.UserPermission::VIEW_EXHIBITIONS->value)
             ->group(function () {
 
                 Route::get('/', [ExhibitionController::class, 'show'])

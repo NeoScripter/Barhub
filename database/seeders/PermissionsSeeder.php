@@ -23,14 +23,16 @@ final class PermissionsSeeder extends Seeder
 
         Permission::create(['name' => UserPermission::ACCESS_ADMIN_PANEL->value]);
         Permission::create(['name' => UserPermission::MANAGE_EXHIBITIONS->value]);
-        Permission::create(['name' => UserPermission::MANAGE_EXHIBITION->value]);
+        Permission::create(['name' => UserPermission::VIEW_EXHIBITIONS->value]);
 
         $superAdminRole = Role::create(['name' => UserRole::SUPER_ADMIN->value]);
         $superAdminRole->givePermissionTo(UserPermission::ACCESS_ADMIN_PANEL);
         $superAdminRole->givePermissionTo(UserPermission::MANAGE_EXHIBITIONS);
+        $superAdminRole->givePermissionTo(UserPermission::VIEW_EXHIBITIONS);
 
         $adminRole = Role::create(['name' => UserRole::ADMIN->value]);
         $adminRole->givePermissionTo(UserPermission::ACCESS_ADMIN_PANEL);
+        $adminRole->givePermissionTo(UserPermission::VIEW_EXHIBITIONS);
 
         $exponentRole = Role::create(['name' => UserRole::EXPONENT->value]);
         $userRole = Role::create(['name' => UserRole::USER->value]);
