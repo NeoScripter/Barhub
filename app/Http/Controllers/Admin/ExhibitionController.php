@@ -1,12 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Exhibition;
 use Inertia\Inertia;
 
-class ExhibitionController extends Controller
+final class ExhibitionController extends Controller
 {
     public function index()
     {
@@ -14,7 +16,7 @@ class ExhibitionController extends Controller
         $expos = Exhibition::all();
 
         return Inertia::render('admin/Exhibitions', [
-            'exhibitions' => $expos
+            'exhibitions' => $expos,
         ]);
     }
 }

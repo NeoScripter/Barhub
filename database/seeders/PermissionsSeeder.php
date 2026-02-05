@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Database\Seeders;
 
 use App\Enums\UserPermission;
@@ -10,7 +12,7 @@ use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\PermissionRegistrar;
 
-class PermissionsSeeder extends Seeder
+final class PermissionsSeeder extends Seeder
 {
     /**
      * Create the initial roles and permissions.

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Database\Factories;
 
 use Carbon\Carbon;
@@ -8,7 +10,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Exhibition>
  */
-class ExhibitionFactory extends Factory
+final class ExhibitionFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -18,6 +20,7 @@ class ExhibitionFactory extends Factory
     public function definition(): array
     {
         $faker = \Faker\Factory::create('ru_RU');
+
         return [
             'name' => $faker->words(random_int(4, 10), true),
             'starts_at' => $faker->date('Y-m-d'),

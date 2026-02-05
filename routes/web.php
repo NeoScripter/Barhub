@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use App\Enums\UserPermission;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\ExhibitionController;
@@ -20,13 +22,13 @@ Route::prefix('/admin')
     ->name('admin.')
     ->middleware([
         'auth',
-        'permission:' . UserPermission::ACCESS_ADMIN_PANEL->value
+        'permission:'.UserPermission::ACCESS_ADMIN_PANEL->value,
     ])
     ->group(function () {
         Route::get('/dashboard', DashboardController::class)->name('dashboard');
 
         Route::resource('/exhibitions', ExhibitionController::class)
-            ->middleware(['permission:' . UserPermission::MANAGE_EXHIBITIONS->value])
+            ->middleware(['permission:'.UserPermission::MANAGE_EXHIBITIONS->value])
             ->only('index');
 
         /*
@@ -37,7 +39,7 @@ Route::prefix('/admin')
 
         Route::prefix('exhibitions/{exhibition}')
             ->name('exhibitions.')
-            ->middleware('permission:' . UserPermission::MANAGE_EXHIBITION->value)
+            ->middleware('permission:'.UserPermission::MANAGE_EXHIBITION->value)
             ->group(function () {
 
                 Route::get('/', [ExhibitionController::class, 'show'])

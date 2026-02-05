@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 test('all pages open and have no javascript errors', function () {
 
     $routes = [
@@ -13,9 +15,8 @@ test('all pages open and have no javascript errors', function () {
         '/reset-password/{token}',
         '/storage/{path}',
         '/user/confirm-password',
-        '/user/confirmed-password-status'
+        '/user/confirmed-password-status',
     ];
 
     visit($routes)->assertNoSmoke();
 });
-

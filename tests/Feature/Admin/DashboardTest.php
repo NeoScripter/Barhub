@@ -1,17 +1,19 @@
 <?php
 
+declare(strict_types=1);
+
 use App\Enums\UserRole;
 use App\Models\User;
 use Database\Seeders\PermissionsSeeder;
 use Spatie\Permission\Models\Role;
 
-beforeEach(fn() => $this->seed(PermissionsSeeder::class));
+beforeEach(fn () => $this->seed(PermissionsSeeder::class));
 
 describe('Admin Panel Access Control', function () {
 
     test('guest users cannot access admin panel', function () {
         $this->get(route('admin.dashboard'))
-        ->assertRedirect(route('login'));
+            ->assertRedirect(route('login'));
     });
 
     test('users with USER role cannot access admin panel', function () {
@@ -46,7 +48,7 @@ describe('Admin Panel Access Control', function () {
 
         $response->assertOk();
         $response->assertInertia(
-            fn($page) => $page
+            fn ($page) => $page
                 ->component('admin/Dashboard')
         );
     });
@@ -61,7 +63,7 @@ describe('Admin Panel Access Control', function () {
 
         $response->assertOk();
         $response->assertInertia(
-            fn($page) => $page
+            fn ($page) => $page
                 ->component('admin/Dashboard')
         );
     });
