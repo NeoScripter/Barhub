@@ -6,8 +6,9 @@ use App\Enums\UserRole;
 use App\Models\User;
 use Database\Seeders\PermissionsSeeder;
 use Spatie\Permission\Models\Role;
+use Tests\TestCase;
 
-beforeEach(fn () => $this->seed(PermissionsSeeder::class));
+beforeEach(fn() => $this->seed(PermissionsSeeder::class));
 
 describe('Admin Panel Access Control', function () {
 
@@ -48,7 +49,7 @@ describe('Admin Panel Access Control', function () {
 
         $response->assertOk();
         $response->assertInertia(
-            fn ($page) => $page
+            fn($page) => $page
                 ->component('admin/Dashboard')
         );
     });
@@ -63,7 +64,7 @@ describe('Admin Panel Access Control', function () {
 
         $response->assertOk();
         $response->assertInertia(
-            fn ($page) => $page
+            fn($page) => $page
                 ->component('admin/Dashboard')
         );
     });

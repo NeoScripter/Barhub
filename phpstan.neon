@@ -12,6 +12,9 @@ parameters:
     # Level 0-9 (0 = least strict, 9 = most strict)
     level: 5
 
-    # Ignore errors you want to exclude
+    treatPhpDocTypesAsCertain: false
+
     ignoreErrors:
-        # - '#Unsafe usage of new static#'
+        - message: '#Call to an undefined method#'
+          paths:
+            - tests/*

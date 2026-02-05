@@ -12,7 +12,7 @@ final class ExhibitionController extends Controller
 {
     public function index()
     {
-        /** @var array<int, Exhibition> $exhibitions */
+        /** @var array<int, Exhibition> $expos */
         $expos = Exhibition::all();
 
         return Inertia::render('admin/Exhibitions', [

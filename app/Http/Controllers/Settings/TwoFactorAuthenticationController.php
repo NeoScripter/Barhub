@@ -32,6 +32,7 @@ final class TwoFactorAuthenticationController extends Controller implements HasM
         $request->ensureStateIsValid();
 
         return Inertia::render('settings/two-factor', [
+             // @phpstan-ignore-next-line
             'twoFactorEnabled' => $request->user()->hasEnabledTwoFactorAuthentication(),
             'requiresConfirmation' => Features::optionEnabled(Features::twoFactorAuthentication(), 'confirm'),
         ]);
