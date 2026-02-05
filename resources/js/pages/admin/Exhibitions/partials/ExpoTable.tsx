@@ -6,10 +6,9 @@ import { App } from '@/wayfinder/types';
 import { PencilLine } from 'lucide-react';
 import { FC } from 'react';
 
-const ExpoTable: FC<NodeProps<{ expos: App.Models.Exhibition[] }>> = ({
-    className,
-    expos,
-}) => {
+const ExpoTable: FC<
+    NodeProps<{ expos: App.Models.Exhibition[]; isSuperAdmin: boolean }>
+> = ({ className, expos, isSuperAdmin = true }) => {
     return (
         <Table.Body className={className}>
             {expos.map((expo) => (
@@ -30,11 +29,13 @@ const ExpoTable: FC<NodeProps<{ expos: App.Models.Exhibition[] }>> = ({
                             {expo.is_active ? 'on' : 'off'}
                         </Badge>
                     </Table.Cell>
-                    <Table.Cell width={0.5}>
-                        <button>
-                            <PencilLine />
-                        </button>
-                    </Table.Cell>
+                    {isSuperAdmin && (
+                        <Table.Cell width={0.5}>
+                            <button>
+                                <PencilLine />
+                            </button>
+                        </Table.Cell>
+                    )}
                 </Table.Row>
             ))}
         </Table.Body>

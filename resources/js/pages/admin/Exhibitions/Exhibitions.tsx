@@ -6,7 +6,7 @@ import { App } from '@/wayfinder/types';
 import { Plus } from 'lucide-react';
 import ExpoTable from './partials/ExpoTable';
 
-const HEADER_ROWS = [
+const HEADER_COLS = [
     'Название',
     'Начало',
     'Конец',
@@ -21,6 +21,7 @@ type Props = {
 };
 
 const Exhibitions = ({ expos, isSuperAdmin }: Props) => {
+    const columns = isSuperAdmin ? HEADER_COLS : HEADER_COLS.slice(0, -1);
     return (
         <>
             <div className="flex flex-wrap items-center justify-between gap-4 py-6.5 sm:py-8 xl:py-9.5">
@@ -34,14 +35,19 @@ const Exhibitions = ({ expos, isSuperAdmin }: Props) => {
             <Table>
                 <Table.Header>
                     <Table.Row>
-                        {HEADER_ROWS.map((label, idx) => (
+                        {columns.map((label, idx) => (
                             <Table.HeaderCell width={idx === 0 ? 2 : 1}>
                                 {label}
                             </Table.HeaderCell>
                         ))}
                     </Table.Row>
                 </Table.Header>
-                {expos.data ? <ExpoTable expos={expos.data} /> : null}
+                {expos.data ? (
+                    <ExpoTable
+                        expos={expos.data}
+                        isSuperAdmin={isSuperAdmin}
+                    />
+                ) : null}
             </Table>
             <Pagination data={expos} />
         </>
