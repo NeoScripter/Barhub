@@ -6,7 +6,8 @@ import { Input } from '@/components/ui/Input';
 import { Label } from '@/components/ui/Label';
 import { Spinner } from '@/components/ui/Spinner';
 import AuthLayout from '@/layouts/auth/AuthLayout';
-import AuthenticatedSessionController from '@/wayfinder/Laravel/Fortify/Http/Controllers/AuthenticatedSessionController';
+import { store } from '@/wayfinder/Laravel/Fortify/Http/Controllers/AuthenticatedSessionController';
+
 import { register } from '@/wayfinder/routes';
 import { request } from '@/wayfinder/routes/password';
 import { Form, Head, router } from '@inertiajs/react';
@@ -30,7 +31,7 @@ export default function Login({
             <Head title="Вход" />
 
             <Form
-                {...AuthenticatedSessionController.store()}
+                {...store()}
                 resetOnSuccess={['password']}
                 onSuccess={() => router.flushAll()}
                 className="flex flex-col gap-6"

@@ -1,8 +1,7 @@
 import { createInertiaApp } from '@inertiajs/react';
 import createServer from '@inertiajs/react/server';
 import ReactDOMServer from 'react-dom/server';
-import UserLayout from './layouts/app/UserLayout';
-import AdminLayout from './layouts/app/AdminLayout';
+import { getLayout } from './lib/consts/layoutMap';
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
@@ -16,11 +15,13 @@ createServer((page) =>
         resolve: (name) => {
             const page: any = pages[`./pages/${name}.tsx`];
 
-            const Layout = name.startsWith('user/') ? UserLayout : AdminLayout;
+            const Layout = getLayout(name);
 
-            page.default.layout ??= (p: React.ReactNode) => (
-                <Layout>{p}</Layout>
-            );
+            if (Layout) {
+                page.default.layout ??= (p: React.ReactNode) => (
+                    <Layout>{p}</Layout>
+                );
+            }
 
             return page;
         },

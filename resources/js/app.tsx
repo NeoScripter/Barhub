@@ -2,8 +2,7 @@ import { createInertiaApp } from '@inertiajs/react';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import '../css/app.css';
-import AdminLayout from './layouts/app/AdminLayout';
-import UserLayout from './layouts/app/UserLayout';
+import { getLayout } from './lib/consts/layoutMap';
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
@@ -14,9 +13,11 @@ createInertiaApp({
     resolve: async (name) => {
         const mod: any = await pages[`./pages/${name}.tsx`]();
 
-        const Layout = name.startsWith('user/') ? UserLayout : AdminLayout;
+        const Layout = getLayout(name);
 
-        mod.default.layout ??= (p: React.ReactNode) => <Layout>{p}</Layout>;
+        if (Layout) {
+            mod.default.layout ??= (p: React.ReactNode) => <Layout>{p}</Layout>;
+        }
 
         return mod;
     },

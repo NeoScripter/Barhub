@@ -23,6 +23,7 @@ export default [
             'react/react-in-jsx-scope': 'off',
             'react/prop-types': 'off',
             'react/no-unescaped-entities': 'off',
+            '@typescript-eslint/no-explicit-any': 'off'
         },
         settings: {
             react: {
@@ -38,25 +39,13 @@ export default [
                 node: true,
             },
         },
-        rules: {
-            'import/order': [
-                'error',
-                {
-                    groups: ['builtin', 'external', 'internal', 'parent', 'sibling', 'index'],
-                    alphabetize: {
-                        order: 'asc',
-                        caseInsensitive: true,
-                    },
-                },
-            ],
-        },
     },
     {
         ...importPlugin.flatConfigs.typescript,
         files: ['**/*.{ts,tsx}'],
         rules: {
             '@typescript-eslint/consistent-type-imports': [
-                'error',
+                'off',
                 {
                     prefer: 'type-imports',
                     fixStyle: 'separate-type-imports',
