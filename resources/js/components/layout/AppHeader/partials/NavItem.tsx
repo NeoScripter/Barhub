@@ -1,4 +1,5 @@
 import { useCurrentUrl } from '@/hooks/useCurrentUrl';
+import { useIsTablet } from '@/hooks/useMobile';
 import { NavItemType } from '@/lib/data/navItems';
 import { cn } from '@/lib/utils';
 import { Link } from '@inertiajs/react';
@@ -10,6 +11,7 @@ const NavItem: FC<{ item: NavItemType; expanded: boolean }> = ({
     expanded,
 }) => {
     const { whenCurrentUrl } = useCurrentUrl();
+    const isTablet = useIsTablet();
 
     const baseClass = 'inline-flex text-secondary items-center gap-2 xl:gap-3';
 
@@ -19,7 +21,7 @@ const NavItem: FC<{ item: NavItemType; expanded: boolean }> = ({
                 <Link
                     className={cn(
                         baseClass,
-                        '0.25s w-fit select-none transition-opacity hover:animate-jump hover:opacity-75',
+                        '0.25s w-fit transition-opacity select-none hover:animate-jump hover:opacity-75',
                         whenCurrentUrl(item.url, 'text-primary'),
                     )}
                     prefetch
@@ -27,7 +29,7 @@ const NavItem: FC<{ item: NavItemType; expanded: boolean }> = ({
                     href={item.url}
                 >
                     <item.icon className="size-4.5 shrink-0 xl:size-5.5" />
-                    {expanded && item.label}
+                    {(expanded || isTablet) && item.label}
                 </Link>
             </li>
         );

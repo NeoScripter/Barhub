@@ -5,6 +5,7 @@ import {
     DropdownMenuTrigger,
 } from '@/components/ui/DropdownMenu';
 import { useCurrentUrl } from '@/hooks/useCurrentUrl';
+import { useIsTablet } from '@/hooks/useMobile';
 import { NavDrawerType } from '@/lib/data/navItems';
 import { cn } from '@/lib/utils';
 import { Link } from '@inertiajs/react';
@@ -20,13 +21,14 @@ interface NavDrawerProps {
 const NavDrawer: FC<NavDrawerProps> = ({ item, className, expanded }) => {
     const [isOpen, setIsOpen] = useState(false);
     const { whenCurrentUrl } = useCurrentUrl();
+    const isTablet = useIsTablet();
 
     return (
         <li className={className}>
             <DropdownMenu onOpenChange={setIsOpen}>
                 <DropdownMenuTrigger className="flex cursor-pointer items-center gap-2 whitespace-nowrap xl:gap-3">
                     <item.icon className="size-4.5 shrink-0 xl:size-5.5" />
-                    {expanded && item.label}
+                    {(expanded || isTablet) && item.label}
                     {expanded && (
                         <ChevronDown
                             className={cn(
