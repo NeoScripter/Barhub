@@ -33,7 +33,10 @@ type PaginationProps<T> = {
 const Pagination = <T,>({ data, label, className }: PaginationProps<T>) => {
     const { links, from, to, total } = data;
 
-    if (!links || links.length === 0) return null;
+    const onePage = !links || links.length === 0;
+    const emptyList = data?.data?.length === 0;
+
+    if (onePage || emptyList) return null;
 
     return (
         <div

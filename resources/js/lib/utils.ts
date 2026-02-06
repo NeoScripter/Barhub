@@ -10,10 +10,28 @@ export function toUrl(url: NonNullable<InertiaLinkProps['href']>): string {
     return typeof url === 'string' ? url : url.url;
 }
 
-export function formatDateShort(date: Date, options?: Intl.DateTimeFormatOptions) {
+export function formatDateShort(
+    date: Date,
+    options?: Intl.DateTimeFormatOptions,
+) {
     return new Intl.DateTimeFormat('ru', {
         day: 'numeric',
         month: 'short',
         year: 'numeric',
     }).format(date);
 }
+
+export const getSortUrl = (query: string): string => {
+    const params = new URLSearchParams(window.location.search);
+    const currentSort = params.get('sort');
+
+    // Determine new sort direction
+    const isCurrentlyDesc = currentSort === `-${query}`;
+    const newSort = isCurrentlyDesc ? query : `-${query}`;
+
+    params.set('sort', newSort);
+
+    params.set('page', '1');
+
+    return window.location.pathname + '?' + params.toString();
+};

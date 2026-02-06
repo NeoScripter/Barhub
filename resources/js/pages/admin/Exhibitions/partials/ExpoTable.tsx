@@ -7,8 +7,13 @@ import { PencilLine } from 'lucide-react';
 import { FC } from 'react';
 
 const ExpoTable: FC<
-    NodeProps<{ expos: App.Models.Exhibition[]; isSuperAdmin: boolean }>
+    NodeProps<{ expos: App.Models.Exhibition[] | undefined; isSuperAdmin: boolean }>
 > = ({ className, expos, isSuperAdmin = true }) => {
+
+    if (!expos) {
+        return null;
+    }
+
     return (
         <Table.Body className={className}>
             {expos.map((expo) => (

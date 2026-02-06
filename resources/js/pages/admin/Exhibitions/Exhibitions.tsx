@@ -5,15 +5,7 @@ import Table from '@/components/ui/Table';
 import { App } from '@/wayfinder/types';
 import { Plus } from 'lucide-react';
 import ExpoTable from './partials/ExpoTable';
-
-const HEADER_COLS = [
-    'Название',
-    'Начало',
-    'Конец',
-    'Площадка',
-    'Статус',
-    'Действия',
-];
+import ExpoTableHeader from './partials/ExpoTableHeader';
 
 type Props = {
     expos: LaravelPaginator<App.Models.Exhibition>;
@@ -21,7 +13,6 @@ type Props = {
 };
 
 const Exhibitions = ({ expos, isSuperAdmin }: Props) => {
-    const columns = isSuperAdmin ? HEADER_COLS : HEADER_COLS.slice(0, -1);
     return (
         <>
             <div className="flex flex-wrap items-center justify-between gap-4 py-6.5 sm:py-8 xl:py-9.5">
@@ -33,21 +24,11 @@ const Exhibitions = ({ expos, isSuperAdmin }: Props) => {
                 )}
             </div>
             <Table>
-                <Table.Header>
-                    <Table.Row>
-                        {columns.map((label, idx) => (
-                            <Table.HeaderCell width={idx === 0 ? 2 : 1}>
-                                {label}
-                            </Table.HeaderCell>
-                        ))}
-                    </Table.Row>
-                </Table.Header>
-                {expos.data ? (
-                    <ExpoTable
-                        expos={expos.data}
-                        isSuperAdmin={isSuperAdmin}
-                    />
-                ) : null}
+                <ExpoTableHeader />
+                <ExpoTable
+                    expos={expos.data}
+                    isSuperAdmin={isSuperAdmin}
+                />
             </Table>
             <Pagination data={expos} />
         </>
