@@ -4,16 +4,13 @@ declare(strict_types=1);
 
 namespace App\Enums;
 
-enum UserRole: string
+enum UserRole: int
 {
-    // case NAMEINAPP = 'name-in-database';
+    case SUPER_ADMIN = 1;
+    case ADMIN = 2;
+    case EXPONENT = 3;
+    case USER = 4;
 
-    case SUPER_ADMIN = 'super-admin';
-    case ADMIN = 'admin';
-    case EXPONENT = 'exponent';
-    case USER = 'user';
-
-    // extra helper to allow for greater customization of displayed values, without disclosing the name/value data directly
     public function label(): string
     {
         return match ($this) {

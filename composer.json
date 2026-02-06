@@ -15,7 +15,6 @@
         "laravel/framework": "^12.0",
         "laravel/tinker": "^2.10.1",
         "laravel/wayfinder": "dev-next",
-        "spatie/laravel-permission": "^6.24",
         "spatie/laravel-query-builder": "^6.4"
     },
     "require-dev": {

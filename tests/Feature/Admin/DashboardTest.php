@@ -4,77 +4,61 @@ declare(strict_types=1);
 
 use App\Enums\UserRole;
 use App\Models\User;
-use Database\Seeders\PermissionsSeeder;
-use Spatie\Permission\Models\Role;
-use Tests\TestCase;
 
-beforeEach(fn() => $this->seed(PermissionsSeeder::class));
+use function Pest\Laravel\actingAs;
+use function Pest\Laravel\get;
 
 describe('Admin Panel Access Control', function () {
 
-    test('guest users cannot access admin panel', function () {
-        $this->get(route('admin.dashboard'))
+    it('redirects guest users to login', function () {
+        get(route('admin.dashboard'))
             ->assertRedirect(route('login'));
     });
 
-    test('users with USER role cannot access admin panel', function () {
-        $role = Role::findOrCreate(UserRole::USER->value);
+    it('forbids USER role from accessing admin panel', function () {
         $user = User::factory()->create();
-        $user->assignRole($role);
+        $user->assignRole(UserRole::USER);
 
-        $response = $this->actingAs($user)
-            ->get(route('admin.dashboard'));
-
-        $response->assertForbidden(); // 403
+        actingAs($user)
+            ->get(route('admin.dashboard'))
+            ->assertForbidden();
     });
 
-    test('users with EXPONENT role cannot access admin panel', function () {
-        $role = Role::findOrCreate(UserRole::EXPONENT->value);
+    it('forbids EXPONENT role from accessing admin panel', function () {
         $user = User::factory()->create();
-        $user->assignRole($role);
+        $user->assignRole(UserRole::EXPONENT);
 
-        $response = $this->actingAs($user)
-            ->get(route('admin.dashboard'));
-
-        $response->assertForbidden(); // 403
+        actingAs($user)
+            ->get(route('admin.dashboard'))
+            ->assertForbidden();
     });
 
-    test('users with ADMIN role can access admin panel', function () {
-        $role = Role::findOrCreate(UserRole::ADMIN->value);
-        $user = User::factory()->create();
-        $user->assignRole($role);
-
-        $response = $this->actingAs($user)
-            ->get(route('admin.dashboard'));
-
-        $response->assertOk();
-        $response->assertInertia(
-            fn($page) => $page
-                ->component('admin/Dashboard')
-        );
+    it('redirects unauthenticated users to login page', function () {
+        get(route('admin.dashboard'))
+            ->assertRedirect(route('login'));
     });
 
-    test('users with SUPER_ADMIN role can access admin panel', function () {
-        $role = Role::findOrCreate(UserRole::SUPER_ADMIN->value);
-        $user = User::factory()->create();
-        $user->assignRole($role);
+    it('allows ADMIN role to access admin panel', function () {
+        $admin = User::factory()->create();
+        $admin->assignRole(UserRole::ADMIN);
 
-        $response = $this->actingAs($user)
-            ->get(route('admin.dashboard'));
-
-        $response->assertOk();
-        $response->assertInertia(
-            fn($page) => $page
-                ->component('admin/Dashboard')
-        );
+        actingAs($admin)
+            ->get(route('admin.dashboard'))
+            ->assertOk()
+            ->assertInertia(
+                fn($page) => $page->component('admin/Dashboard')
+            );
     });
 
-    test('users without any role cannot access admin panel', function () {
-        $user = User::factory()->create();
+    it('allows SUPER_ADMIN role to access admin panel', function () {
+        $superAdmin = User::factory()->create();
+        $superAdmin->assignRole(UserRole::SUPER_ADMIN);
 
-        $response = $this->actingAs($user)
-            ->get(route('admin.dashboard'));
-
-        $response->assertForbidden(); // 403
+        actingAs($superAdmin)
+            ->get(route('admin.dashboard'))
+            ->assertOk()
+            ->assertInertia(
+                fn($page) => $page->component('admin/Dashboard')
+            );
     });
 });

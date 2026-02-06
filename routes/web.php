@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use App\Enums\UserPermission;
+use App\Enums\UserRole;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\ExhibitionController;
 use Illuminate\Support\Facades\Route;
@@ -22,13 +22,13 @@ Route::prefix('/admin')
     ->name('admin.')
     ->middleware([
         'auth',
-        'permission:'.UserPermission::ACCESS_ADMIN_PANEL->value,
+        'role:' . UserRole::ADMIN->value . ',' . UserRole::SUPER_ADMIN->value,
     ])
     ->group(function () {
         Route::get('/dashboard', DashboardController::class)->name('dashboard');
 
         Route::resource('/exhibitions', ExhibitionController::class)
-            ->middleware(['permission:'.UserPermission::VIEW_EXHIBITIONS->value])
+            ->middleware(['role:' . UserRole::SUPER_ADMIN->value])
             ->only('index');
 
         /*
@@ -39,7 +39,7 @@ Route::prefix('/admin')
 
         Route::prefix('exhibitions/{exhibition}')
             ->name('exhibitions.')
-            ->middleware('permission:'.UserPermission::VIEW_EXHIBITIONS->value)
+            // ->middleware('permission:' . UserPermission::VIEW_EXHIBITIONS->value)
             ->group(function () {
 
                 Route::get('/', [ExhibitionController::class, 'show'])

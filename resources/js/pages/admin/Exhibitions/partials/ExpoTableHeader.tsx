@@ -11,7 +11,7 @@ const HEADER_COLS: Column[] = [
     { label: 'Конец', query: 'ends_at' },
     { label: 'Площадка', query: 'location' },
     { label: 'Статус', query: 'is_active' },
-    { label: 'Действия' }, // No query key - not sortable
+    { label: 'Действия' },
 ] as const;
 
 

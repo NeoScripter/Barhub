@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Admin;
 
-use App\Enums\UserPermission;
+use App\Enums\UserRole;
 use App\Http\Controllers\Controller;
 use App\Models\Exhibition;
 use Illuminate\Support\Facades\Auth;
@@ -23,7 +23,7 @@ final class ExhibitionController extends Controller
 
         return Inertia::render('admin/Exhibitions/Exhibitions', [
             'expos' => $expos,
-            'isSuperAdmin' => Auth::user()->hasPermissionTo(UserPermission::MANAGE_EXHIBITIONS)
+            'isSuperAdmin' => Auth::user()->role === UserRole::ADMIN
         ]);
     }
 }
