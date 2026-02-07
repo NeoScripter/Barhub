@@ -1,0 +1,36 @@
+<?php
+
+namespace App\Policies;
+
+use App\Models\Exhibition;
+use App\Models\User;
+
+class ExhibitionPolicy extends BasePolicy
+{
+
+    public function viewAny(User $user): bool
+    {
+        return $this->isSuperAdmin($user) || $user->exhibitions()->exists();
+    }
+
+    public function view(User $user, Exhibition $exhibition): bool
+    {
+        return $this->isSuperAdmin($user) ||
+            $exhibition->users()->where('user_id', $user->id)->exists();
+    }
+
+    public function create(User $user): bool
+    {
+        return $this->isSuperAdmin($user);
+    }
+
+    public function update(User $user): bool
+    {
+        return $this->isSuperAdmin($user);
+    }
+
+    public function delete(User $user): bool
+    {
+        return $this->isSuperAdmin($user);
+    }
+}

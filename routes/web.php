@@ -5,6 +5,7 @@ declare(strict_types=1);
 use App\Enums\UserRole;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\ExhibitionController;
+use App\Models\Exhibition;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -26,7 +27,7 @@ Route::prefix('/admin')
         Route::get('/dashboard', DashboardController::class)->name('dashboard');
 
         Route::resource('/exhibitions', ExhibitionController::class)
-            ->middleware(['role:' . UserRole::SUPER_ADMIN->value])
+            ->middleware(['can:viewAny,' . Exhibition::class])
             ->only('index');
 
         /*
@@ -37,7 +38,7 @@ Route::prefix('/admin')
 
         Route::prefix('exhibitions/{exhibition}')
             ->name('exhibitions.')
-            // ->middleware('permission:' . UserPermission::VIEW_EXHIBITIONS->value)
+            ->middleware('can:view,exhibition')
             ->group(function (): void {
 
                 Route::get('/', [ExhibitionController::class, 'show'])

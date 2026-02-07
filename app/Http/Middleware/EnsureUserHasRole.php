@@ -19,7 +19,7 @@ class EnsureUserHasRole
     {
         $user = $request->user();
 
-        abort_unless($user, 403, 'Unauthorized');
+        abort_unless($user != null, 403, 'Unauthorized');
 
         // Convert string role names to UserRole enums if needed
         $allowedRoles = array_map(
