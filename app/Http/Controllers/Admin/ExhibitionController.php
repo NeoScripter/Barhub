@@ -23,7 +23,7 @@ final class ExhibitionController extends Controller
 
         return Inertia::render('admin/Exhibitions/Exhibitions', [
             'expos' => $expos,
-            'isSuperAdmin' => Auth::user()->role === UserRole::ADMIN
+            'isSuperAdmin' => Auth::user()->role === UserRole::SUPER_ADMIN
         ]);
     }
 }

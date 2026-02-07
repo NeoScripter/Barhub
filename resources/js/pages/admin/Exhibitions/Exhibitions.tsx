@@ -6,6 +6,7 @@ import { App } from '@/wayfinder/types';
 import { Plus } from 'lucide-react';
 import ExpoTable from './partials/ExpoTable';
 import ExpoTableHeader from './partials/ExpoTableHeader';
+import { usePage } from '@inertiajs/react';
 
 type Props = {
     expos: LaravelPaginator<App.Models.Exhibition>;
@@ -13,6 +14,8 @@ type Props = {
 };
 
 const Exhibitions = ({ expos, isSuperAdmin }: Props) => {
+    // const {auth} = usePage().props;
+    // console.log(auth)
     return (
         <>
             <div className="flex flex-wrap items-center justify-between gap-4 py-6.5 sm:py-8 xl:py-9.5">
