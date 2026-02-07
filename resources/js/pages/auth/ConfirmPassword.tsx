@@ -4,7 +4,7 @@ import { Input } from '@/components/ui/Input';
 import { Label } from '@/components/ui/Label';
 import { Spinner } from '@/components/ui/Spinner';
 import AuthLayout from '@/layouts/auth/AuthLayout';
-import ConfirmablePasswordController from '@/wayfinder/Laravel/Fortify/Http/Controllers/ConfirmablePasswordController';
+import { store } from '@/wayfinder/routes/password/confirm';
 import { Form, Head } from '@inertiajs/react';
 
 export default function ConfirmPassword() {
@@ -16,7 +16,7 @@ export default function ConfirmPassword() {
             <Head title="Подтверждение пароля" />
 
             <Form
-                {...ConfirmablePasswordController.store()}
+                {...store()}
                 resetOnSuccess={['password']}
             >
                 {({ processing, errors }) => (

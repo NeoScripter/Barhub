@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Admin;
 
+use Illuminate\Pagination\LengthAwarePaginator;
 use App\Enums\UserRole;
 use App\Http\Controllers\Controller;
 use App\Models\Exhibition;
@@ -15,7 +16,7 @@ final class ExhibitionController extends Controller
 {
     public function index()
     {
-        /** @var \Illuminate\Pagination\LengthAwarePaginator<Exhibition> $expos */
+        /** @var LengthAwarePaginator<Exhibition> $expos */
         $expos = QueryBuilder::for(Exhibition::class)
             ->allowedSorts(['name', 'starts_at', 'ends_at', 'location', 'is_active'])
             ->paginate()

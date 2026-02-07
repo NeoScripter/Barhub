@@ -8,9 +8,7 @@ use App\Http\Controllers\Admin\ExhibitionController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
-Route::get('/', function () {
-    return Inertia::render('Home');
-})->name('home');
+Route::get('/', fn() => Inertia::render('Home'))->name('home');
 
 // Route::get('dashboard', function () {
 //     return Inertia::render('dashboard');
@@ -24,7 +22,7 @@ Route::prefix('/admin')
         'auth',
         'role:' . UserRole::ADMIN->value . ',' . UserRole::SUPER_ADMIN->value,
     ])
-    ->group(function () {
+    ->group(function (): void {
         Route::get('/dashboard', DashboardController::class)->name('dashboard');
 
         Route::resource('/exhibitions', ExhibitionController::class)
@@ -40,7 +38,7 @@ Route::prefix('/admin')
         Route::prefix('exhibitions/{exhibition}')
             ->name('exhibitions.')
             // ->middleware('permission:' . UserPermission::VIEW_EXHIBITIONS->value)
-            ->group(function () {
+            ->group(function (): void {
 
                 Route::get('/', [ExhibitionController::class, 'show'])
                     ->name('show');

@@ -9,9 +9,9 @@ use App\Models\User;
 use function Pest\Laravel\actingAs;
 use function Pest\Laravel\get;
 
-describe('Exhibition Panel Permissions', function () {
+describe('Exhibition Panel Permissions', function (): void {
 
-    test('super admin can see all exhibitions', function () {
+    test('super admin can see all exhibitions', function (): void {
         $superAdmin = User::factory()->create();
         $superAdmin->assignRole(UserRole::SUPER_ADMIN);
 
@@ -32,7 +32,7 @@ describe('Exhibition Panel Permissions', function () {
         );
     });
 
-    test('admin can see only exhibitions assigned to them', function () {
+    test('admin can see only exhibitions assigned to them', function (): void {
         $admin = User::factory()->create();
         $admin->assignRole(UserRole::ADMIN);
 
@@ -68,7 +68,7 @@ describe('Exhibition Panel Permissions', function () {
         );
     });
 
-    it('forbids USER role from accessing exhibitions page', function () {
+    it('forbids USER role from accessing exhibitions page', function (): void {
         $user = User::factory()->create();
         $user->assignRole(UserRole::USER);
 
@@ -77,7 +77,7 @@ describe('Exhibition Panel Permissions', function () {
             ->assertForbidden();
     });
 
-    it('forbids EXPONENT role from accessing exhibitions page', function () {
+    it('forbids EXPONENT role from accessing exhibitions page', function (): void {
         $user = User::factory()->create();
         $user->assignRole(UserRole::EXPONENT);
 
@@ -87,13 +87,13 @@ describe('Exhibition Panel Permissions', function () {
     });
 
 
-    it('redirects unauthenticated users to login page', function () {
+    it('redirects unauthenticated users to login page', function (): void {
         get(route('admin.exhibitions.index'))
             ->assertRedirect(route('login'));
     });
 
 
-    it('forbids guest users from accessing exhibitions page', function () {
+    it('forbids guest users from accessing exhibitions page', function (): void {
         get(route('admin.exhibitions.index'))
             ->assertRedirect(route('login'));
     });

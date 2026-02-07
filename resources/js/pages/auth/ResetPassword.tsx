@@ -4,7 +4,7 @@ import { Input } from '@/components/ui/Input';
 import { Label } from '@/components/ui/Label';
 import { Spinner } from '@/components/ui/Spinner';
 import AuthLayout from '@/layouts/auth/AuthLayout';
-import ConfirmablePasswordController from '@/wayfinder/Laravel/Fortify/Http/Controllers/ConfirmablePasswordController';
+import { store } from '@/wayfinder/Laravel/Fortify/Http/Controllers/ConfirmablePasswordController';
 import { Form, Head } from '@inertiajs/react';
 
 type Props = {
@@ -21,7 +21,7 @@ export default function ResetPassword({ token, email }: Props) {
             <Head title="Сброс пароля" />
 
             <Form
-                {...ConfirmablePasswordController.store()}
+                {...store()}
                 transform={(data) => ({ ...data, token, email })}
                 resetOnSuccess={['password', 'password_confirmation']}
             >

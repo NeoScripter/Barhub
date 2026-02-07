@@ -8,14 +8,14 @@ use App\Models\User;
 use function Pest\Laravel\actingAs;
 use function Pest\Laravel\get;
 
-describe('Admin Panel Access Control', function () {
+describe('Admin Panel Access Control', function (): void {
 
-    it('redirects guest users to login', function () {
+    it('redirects guest users to login', function (): void {
         get(route('admin.dashboard'))
             ->assertRedirect(route('login'));
     });
 
-    it('forbids USER role from accessing admin panel', function () {
+    it('forbids USER role from accessing admin panel', function (): void {
         $user = User::factory()->create();
         $user->assignRole(UserRole::USER);
 
@@ -24,7 +24,7 @@ describe('Admin Panel Access Control', function () {
             ->assertForbidden();
     });
 
-    it('forbids EXPONENT role from accessing admin panel', function () {
+    it('forbids EXPONENT role from accessing admin panel', function (): void {
         $user = User::factory()->create();
         $user->assignRole(UserRole::EXPONENT);
 
@@ -33,12 +33,12 @@ describe('Admin Panel Access Control', function () {
             ->assertForbidden();
     });
 
-    it('redirects unauthenticated users to login page', function () {
+    it('redirects unauthenticated users to login page', function (): void {
         get(route('admin.dashboard'))
             ->assertRedirect(route('login'));
     });
 
-    it('allows ADMIN role to access admin panel', function () {
+    it('allows ADMIN role to access admin panel', function (): void {
         $admin = User::factory()->create();
         $admin->assignRole(UserRole::ADMIN);
 
@@ -50,7 +50,7 @@ describe('Admin Panel Access Control', function () {
             );
     });
 
-    it('allows SUPER_ADMIN role to access admin panel', function () {
+    it('allows SUPER_ADMIN role to access admin panel', function (): void {
         $superAdmin = User::factory()->create();
         $superAdmin->assignRole(UserRole::SUPER_ADMIN);
 

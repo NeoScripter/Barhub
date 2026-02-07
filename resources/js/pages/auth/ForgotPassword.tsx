@@ -5,6 +5,7 @@ import { Input } from '@/components/ui/Input';
 import { Label } from '@/components/ui/Label';
 import AuthLayout from '@/layouts/auth/AuthLayout';
 import { store } from '@/wayfinder/Laravel/Fortify/Http/Controllers/EmailVerificationNotificationController';
+import { login } from '@/wayfinder/routes';
 import { Form, Head } from '@inertiajs/react';
 import { LoaderCircle } from 'lucide-react';
 

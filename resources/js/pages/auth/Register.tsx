@@ -5,7 +5,8 @@ import { Input } from '@/components/ui/Input';
 import { Label } from '@/components/ui/Label';
 import { Spinner } from '@/components/ui/Spinner';
 import AuthLayout from '@/layouts/auth/AuthLayout';
-import RegisteredUserController from '@/wayfinder/Laravel/Fortify/Http/Controllers/RegisteredUserController';
+import { login } from '@/wayfinder/routes';
+import { store } from '@/wayfinder/routes/register';
 import { Form, Head, router } from '@inertiajs/react';
 
 export default function Register() {
@@ -16,7 +17,7 @@ export default function Register() {
         >
             <Head title="Регистрация" />
             <Form
-                {...RegisteredUserController.store()}
+                {...store()}
                 resetOnSuccess={['password', 'password_confirmation']}
                 onSuccess={() => router.flushAll()}
                 disableWhileProcessing

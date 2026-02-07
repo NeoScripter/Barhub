@@ -2,7 +2,7 @@ import TextLink from '@/components/form/TextLink';
 import { Button } from '@/components/ui/Button';
 import { Spinner } from '@/components/ui/Spinner';
 import AuthLayout from '@/layouts/auth/AuthLayout';
-import EmailVerificationNotificationController from '@/wayfinder/Laravel/Fortify/Http/Controllers/EmailVerificationNotificationController';
+import { store } from '@/wayfinder/Laravel/Fortify/Http/Controllers/EmailVerificationNotificationController';
 import { logout } from '@/wayfinder/routes';
 import { Form, Head } from '@inertiajs/react';
 
@@ -22,7 +22,7 @@ export default function VerifyEmail({ status }: { status?: string }) {
             )}
 
             <Form
-                {...EmailVerificationNotificationController.store()}
+                {...store()}
                 className="space-y-6 text-center"
             >
                 {({ processing }) => (
