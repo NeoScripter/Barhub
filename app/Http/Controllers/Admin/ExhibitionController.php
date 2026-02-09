@@ -17,14 +17,24 @@ final class ExhibitionController extends Controller
 {
     public function index(Request $request): Response
     {
-        /** @var LengthAwarePaginator<Exhibition> $expos */
-        $expos = QueryBuilder::for(Exhibition::class)
+        // Query building
+        $query = Exhibition::query();
+
+        // If not super admin, only show exhibitions assigned to this user
+        if ($request->user()->role !== UserRole::SUPER_ADMIN) {
+            $query->whereHas('users', function ($q) use ($request) {
+                $q->where('user_id', $request->user()->id);
+            });
+        }
+
+        /** @var LengthAwarePaginator<Exhibition> $exhibitions */
+        $exhibitions = QueryBuilder::for($query)
             ->allowedSorts(['name', 'starts_at', 'ends_at', 'location', 'is_active'])
             ->paginate()
-            ->appends(request()->query());
+            ->appends($request->query());
 
         return Inertia::render('admin/Exhibitions/Exhibitions', [
-            'expos' => $expos,
+            'expos' => $exhibitions,
             'isSuperAdmin' => $request->user()->role === UserRole::SUPER_ADMIN
         ]);
     }
