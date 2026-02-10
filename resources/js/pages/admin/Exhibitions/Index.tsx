@@ -13,7 +13,7 @@ type Props = {
     isSuperAdmin: boolean;
 };
 
-const Exhibitions = ({ expos, isSuperAdmin }: Props) => {
+const Index = ({ expos, isSuperAdmin }: Props) => {
     // const {auth} = usePage().props;
     // console.log(auth)
     return (
@@ -38,4 +38,4 @@ const Exhibitions = ({ expos, isSuperAdmin }: Props) => {
     );
 };
 
-export default Exhibitions;
+export default Index;

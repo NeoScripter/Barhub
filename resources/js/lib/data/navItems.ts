@@ -16,6 +16,7 @@ type NavLink = {
     label: string;
     url: string;
     type: 'link';
+    isDynamic: boolean;
 };
 
 export type NavDrawerType = {
@@ -24,74 +25,85 @@ export type NavDrawerType = {
     icon: LucideIcon;
     type: 'drawer';
     links: Omit<NavLink, 'icon'>[];
+    isDynamic: boolean;
 };
 
 export type NavItemType = NavLink | NavDrawerType;
 
-export const navItems: NavItemType[] = [
+export const adminNavItems: NavItemType[] = [
     {
         id: 'home',
         type: 'link',
         label: 'Главная',
         url: DashboardController.url(),
         icon: House,
+        isDynamic: false,
     },
     {
         id: 'program-events',
         type: 'link',
         label: 'События программы',
-        url: '/',
+        url: '/exhibitions/{exhibition}',
         icon: CalendarDays,
+        isDynamic: true,
     },
     {
         id: 'people',
         type: 'link',
         label: 'Люди',
-        url: '/',
+        url: '/exhibitions/{exhibition}/people',
         icon: UserCheck,
+        isDynamic: true,
     },
     {
         id: 'companies',
         type: 'link',
         label: 'Компании',
-        url: '/',
+        url: '/exhibitions/{exhibition}/companies',
         icon: BriefcaseBusiness,
+        isDynamic: true,
     },
     {
         id: 'partners-work',
         type: 'drawer',
         label: 'Работа с партнерами',
         icon: Star,
+        isDynamic: true,
         links: [
             {
                 id: 'partner-review-tasks',
                 type: 'link',
                 label: 'Задачи на проверке',
-                url: '/',
+                url: '/exhibitions/{exhibition}/partner-review-tasks',
+                isDynamic: true,
             },
             {
                 id: 'partner-all-tasks',
                 type: 'link',
                 label: 'Общие задачи',
-                url: '/',
+                url: '/exhibitions/{exhibition}/partner-all-tasks',
+                isDynamic: true,
             },
             {
                 id: 'partner-services',
                 type: 'link',
                 label: 'Услуги',
-                url: '/',
+                url: '/exhibitions/{exhibition}/partner-services',
+                isDynamic: true,
             },
             {
                 id: 'partner-company-tags',
                 type: 'link',
                 label: 'Теги компаний',
-                url: '/',
+                url: '/exhibitions/{exhibition}/partner-company-tags',
+                isDynamic: true,
             },
             {
                 id: 'partner-materials',
                 type: 'link',
                 label: 'Информация и материалы',
-                url: '/',
+                url: '/exhibitions/{exhibition}/partner-materials',
+                isDynamic: true,
             },
         ],
     },
@@ -101,5 +113,39 @@ export const navItems: NavItemType[] = [
         label: 'Выставки',
         url: ExhibitionController.index.url(),
         icon: Martini,
+        isDynamic: false,
     },
 ];
+
+function extractExhibitionId(url: string): string | null {
+    const match = url.match(/exhibitions\/(\d+)/);
+    return match ? match[1] : null;
+}
+
+function injectExhibitionId(item: NavItemType, exhibitionId: string): NavItemType {
+    const newItem = { ...item };
+
+    if (item.type === 'link' && item.isDynamic) {
+        newItem.url = item.url.replace('{exhibition}', exhibitionId);
+    }
+
+    if (item.type === 'drawer' && item.links) {
+        newItem.links = item.links.map(link =>
+            injectExhibitionId(link, exhibitionId)
+        );
+    }
+
+    return newItem;
+}
+
+export function renderAdminNavItems(currentUrl: string): NavItemType[] {
+    const exhibitionId = extractExhibitionId(currentUrl);
+
+    // Not on an exhibition page - show only non-dynamic items
+    if (!exhibitionId) {
+        return adminNavItems.filter(item => !item.isDynamic);
+    }
+
+    // On an exhibition page - inject the ID into all dynamic URLs
+    return adminNavItems.map(item => injectExhibitionId(item, exhibitionId));
+}

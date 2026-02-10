@@ -1,7 +1,10 @@
 import AccentHeading from '@/components/ui/AccentHeading';
-import { navItems } from '@/lib/data/navItems';
+import { useCurrentUrl } from '@/hooks/useCurrentUrl';
+import { renderAdminNavItems } from '@/lib/data/navItems';
 import { cn } from '@/lib/utils';
 import { NodeProps } from '@/types/shared';
+import { App } from '@/wayfinder/types';
+import { usePage } from '@inertiajs/react';
 import { ArrowLeftToLine } from 'lucide-react';
 import { FC, useState } from 'react';
 import AccountDropdown from './AccountDropdown';
@@ -9,11 +12,12 @@ import NavItem from './NavItem';
 
 const NavMenu: FC<NodeProps> = ({ className }) => {
     const [expanded, setExpanded] = useState(false);
+    const { currentUrl } = useCurrentUrl();
 
     return (
         <div
             className={cn(
-                'px-7.5 duration-300 ease-in-out sm:pb-8 sm:transition-all lg:fixed lg:top-10 lg:left-10 lg:z-10 lg:rounded-xl lg:border lg:border-gray-200/40 lg:bg-white lg:pt-5 lg:shadow-xl xl:left-31',
+                'w-full px-7.5 duration-300 ease-in-out sm:pb-8 sm:transition-all lg:fixed lg:top-10 lg:left-10 lg:z-10 lg:rounded-xl lg:border lg:border-gray-200/40 lg:bg-white lg:pt-5 lg:shadow-xl xl:left-31',
                 {
                     'lg:max-w-81 lg:pr-12 lg:pb-9 lg:pl-7.5': expanded,
                     'lg:max-w-12.5 lg:px-4.5 lg:pb-7': !expanded,
@@ -36,7 +40,7 @@ const NavMenu: FC<NodeProps> = ({ className }) => {
                             'lg:place-content-center lg:place-items-center',
                     )}
                 >
-                    {navItems.map((item) => (
+                    {renderAdminNavItems(currentUrl).map((item) => (
                         <NavItem
                             expanded={expanded}
                             key={item.id}
@@ -52,6 +56,10 @@ const NavMenu: FC<NodeProps> = ({ className }) => {
 export default NavMenu;
 
 const Header: FC<NodeProps> = ({ className }) => {
+    const { exhibition } = usePage<{
+        exhibition: App.Models.Exhibition | null;
+    }>().props;
+
     return (
         <header className={className}>
             {' '}
@@ -59,12 +67,14 @@ const Header: FC<NodeProps> = ({ className }) => {
                 className="mb-8"
                 email="admin@gmail.com"
             />
-            <AccentHeading
-                asChild
-                className="mb-8 text-lg lg:hidden"
-            >
-                <p>Название выставки</p>
-            </AccentHeading>
+            {exhibition && (
+                <AccentHeading
+                    asChild
+                    className="mb-8 text-lg lg:hidden"
+                >
+                    <p>{exhibition.name}</p>
+                </AccentHeading>
+            )}
         </header>
     );
 };
@@ -78,11 +88,13 @@ const CollapseBtn: FC<{ expanded: boolean; handleClick: () => void }> = ({
             <button
                 onClick={handleClick}
                 className="flex items-center gap-3 text-sm text-secondary xl:text-base"
+                data-test="collapse-menu-button"
             >
                 <ArrowLeftToLine
                     className={cn(
                         'size-4.5 transition-transform duration-300 ease-in-out xl:size-5.5',
-                        !expanded && 'lg:-translate-x-0.5 xl:-translate-x-1 rotate-y-180',
+                        !expanded &&
+                            'rotate-y-180 lg:-translate-x-0.5 xl:-translate-x-1',
                     )}
                 />
                 {expanded && 'Свернуть'}

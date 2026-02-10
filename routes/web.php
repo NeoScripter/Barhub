@@ -30,19 +30,14 @@ Route::prefix('/admin')
             ->middleware(['can:viewAny,' . Exhibition::class])
             ->only('index');
 
-        /*
-        |--------------------------------------------------------------------------
-        | Single Exhibition Context
-        |--------------------------------------------------------------------------
-        */
-
         Route::prefix('exhibitions/{exhibition}')
             ->name('exhibitions.')
             ->middleware('can:view,exhibition')
             ->group(function (): void {
 
-                Route::get('/', [ExhibitionController::class, 'show'])
-                    ->name('show');
+                Route::get('/', [ExhibitionController::class, 'edit'])
+                    ->middleware(['can:update,' . Exhibition::class])
+                    ->name('edit');
 
                 /*
                 |--------------------------------------------------------------------------

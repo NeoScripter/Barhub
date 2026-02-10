@@ -20,6 +20,7 @@ pest()->extend(TestCase::class)
     ->use(RefreshDatabase::class)
     ->in('Feature');
 
+pest()->browser()->timeout(3000);
 /*
 |--------------------------------------------------------------------------
 | Expectations

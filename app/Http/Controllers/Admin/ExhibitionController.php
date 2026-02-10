@@ -33,9 +33,16 @@ final class ExhibitionController extends Controller
             ->paginate()
             ->appends($request->query());
 
-        return Inertia::render('admin/Exhibitions/Exhibitions', [
+        return Inertia::render('admin/Exhibitions/Index', [
             'expos' => $exhibitions,
             'isSuperAdmin' => $request->user()->role === UserRole::SUPER_ADMIN
+        ]);
+    }
+
+    public function edit(Exhibition $exhibition): Response
+    {
+        return Inertia::render('admin/Exhibitions/Edit', [
+            'exhibition' => $exhibition
         ]);
     }
 }
