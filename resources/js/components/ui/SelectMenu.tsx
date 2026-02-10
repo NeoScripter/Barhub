@@ -14,7 +14,7 @@ const selectMenuVariants = cva('bg-white', {
     variants: {
         variant: {
             default:
-                'focus-visible:border-muted border-foreground focus-visible:ring-foreground/50',
+                'focus-visible:border-muted text-foreground border-foreground focus-visible:ring-foreground/50',
             outline:
                 'border-primary text-primary focus-visible:ring-primary/50 ',
             solid: 'border-primary text-white bg-primary focus-visible:ring-primary/50 ',
@@ -54,7 +54,10 @@ export function SelectMenu<T = string>({
     getValue = (item) => String(item),
 }: SelectMenuProps<T>) {
     return (
-        <Select defaultValue={defaultValue} onValueChange={onValueChange}>
+        <Select
+            defaultValue={defaultValue}
+            onValueChange={onValueChange}
+        >
             <SelectTrigger
                 className={cn(selectMenuVariants({ variant, size, className }))}
             >
@@ -66,7 +69,10 @@ export function SelectMenu<T = string>({
                     {items.map((item) => {
                         const value = getValue(item);
                         return (
-                            <SelectItem key={value} value={value}>
+                            <SelectItem
+                                key={value}
+                                value={value}
+                            >
                                 {getLabel(item)}
                             </SelectItem>
                         );

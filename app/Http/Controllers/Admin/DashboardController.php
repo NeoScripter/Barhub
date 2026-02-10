@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use App\Models\Exhibition;
 use Inertia\Inertia;
 
 final class DashboardController extends Controller
@@ -13,8 +13,12 @@ final class DashboardController extends Controller
     /**
      * Handle the incoming request.
      */
-    public function __invoke(Request $request)
+    public function __invoke()
     {
-        return Inertia::render('admin/Dashboard');
+        $expo = Exhibition::select(['id', 'name', 'starts_at'])->get();
+
+        return Inertia::render('admin/Dashboard/Dashboard', [
+            'expos' => $expo
+        ]);
     }
 }
