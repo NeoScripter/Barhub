@@ -5,7 +5,7 @@ import * as React from 'react';
 import { cn } from '@/lib/utils';
 
 const buttonVariants = cva(
-    'flex items-center justify-center gap-1 whitespace-nowrap rounded-md text-sm font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:stroke-2 cursor-pointer [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-blue-600 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 aria-invalid:border-destructive',
+    'flex items-center justify-center gap-1 whitespace-nowrap rounded-md text-sm font-medium transition-[color,box-shadow,border-color] disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:stroke-2 cursor-pointer [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-blue-600 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 aria-invalid:border-destructive',
     {
         variants: {
             variant: {
@@ -16,6 +16,8 @@ const buttonVariants = cva(
                     'text-muted bg-white shadow-xs border border-muted hover:bg-muted/90 hover:text-white focus-visible:text-white focus-visible:ring-muted/20',
                 secondary:
                     'bg-secondary text-white shadow-xs hover:bg-secondary/90',
+                tertiary:
+                    'rounded-full! hover:border-primary hover:text-primary border border-foreground text-foreground shadow-xs',
                 muted: 'bg-muted text-white shadow-xs hover:bg-muted/90',
                 ghost: 'hover:bg-accent hover:text-accent-foreground',
                 link: 'text-white underline-offset-4 hover:underline',

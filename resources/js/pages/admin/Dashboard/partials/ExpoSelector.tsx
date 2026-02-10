@@ -1,4 +1,3 @@
-import CardLayout from '@/components/layout/CardLayout';
 import AccentHeading from '@/components/ui/AccentHeading';
 import { Button } from '@/components/ui/Button';
 import { SelectMenu } from '@/components/ui/SelectMenu';
@@ -12,7 +11,7 @@ const ExpoSelector = () => {
     const [selectedId, setSelectedId] = useState<string | null>(null);
 
     return (
-        <CardLayout className="w-full space-y-4 px-12 py-8">
+        <>
             <AccentHeading className="text-center text-sm">
                 Название выставки
             </AccentHeading>
@@ -24,7 +23,7 @@ const ExpoSelector = () => {
                         getValue={(expo) => expo.id.toString()}
                         getLabel={(expo) => formatExpoValue(expo)}
                         placeholder="Выбрать выставку"
-                        className="max-w-80"
+                        className="max-w-90"
                         onValueChange={(value) => setSelectedId(value)}
                         variant="default"
                     />
@@ -38,7 +37,7 @@ const ExpoSelector = () => {
                     </Button>
                 </div>
             )}
-        </CardLayout>
+        </>
     );
 };
 
