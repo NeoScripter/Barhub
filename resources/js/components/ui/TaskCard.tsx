@@ -30,7 +30,7 @@ function TaskCard({ className, children }: NodeProps) {
     return (
         <CardLayout
             className={cn(
-                'aspect-square gap-2 px-2 py-4 sm:gap-3 xl:gap-4 xl:py-6',
+                'gap-2 px-2 py-4 sm:gap-3 xl:gap-4 xl:py-6',
                 className,
             )}
         >
