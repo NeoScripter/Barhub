@@ -23,7 +23,7 @@ describe('Exhibition Panel Permissions', function (): void {
         $response
             ->assertOk()
             ->assertInertia(
-                fn($page) => $page->component('admin/Exhibitions/Exhibitions')
+                fn($page) => $page->component('admin/Exhibitions/Index')
             );
 
         $exhibitions->each(
@@ -52,7 +52,7 @@ describe('Exhibition Panel Permissions', function (): void {
         $response
             ->assertOk()
             ->assertInertia(
-                fn($page) => $page->component('admin/Exhibitions/Exhibitions')
+                fn($page) => $page->component('admin/Exhibitions/Index')
             );
 
         // Should see assigned exhibitions

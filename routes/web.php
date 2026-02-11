@@ -3,8 +3,9 @@
 declare(strict_types=1);
 
 use App\Enums\UserRole;
-use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\ExhibitionController;
+use App\Http\Controllers\Exponent\DashboardController as ExponentDashboardController;
 use App\Models\Exhibition;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -15,7 +16,16 @@ Route::get('/', fn() => Inertia::render('Home'))->name('home');
 //     return Inertia::render('dashboard');
 // })->middleware(['auth', 'verified'])->name('dashboard');
 
-// require __DIR__.'/settings.php';
+Route::prefix('/exponent')
+    ->name('exponent.')
+    ->middleware([
+        'auth',
+        'role:' . UserRole::EXPONENT->value
+    ])
+    ->group(function (): void {
+        Route::get('/dashboard', ExponentDashboardController::class)->name('dashboard');
+    });
+
 
 Route::prefix('/admin')
     ->name('admin.')
@@ -24,7 +34,7 @@ Route::prefix('/admin')
         'role:' . UserRole::ADMIN->value . ',' . UserRole::SUPER_ADMIN->value,
     ])
     ->group(function (): void {
-        Route::get('/dashboard', DashboardController::class)->name('dashboard');
+        Route::get('/dashboard', AdminDashboardController::class)->name('dashboard');
 
         Route::resource('/exhibitions', ExhibitionController::class)
             ->middleware(['can:viewAny,' . Exhibition::class])
