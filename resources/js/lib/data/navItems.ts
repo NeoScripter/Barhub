@@ -1,9 +1,12 @@
-import DashboardController from '@/wayfinder/App/Http/Controllers/Admin/DashboardController';
+import AdminDash from '@/wayfinder/App/Http/Controllers/Admin/DashboardController';
 import ExhibitionController from '@/wayfinder/App/Http/Controllers/Admin/ExhibitionController';
+import ExponentDash from '@/wayfinder/App/Http/Controllers/Exponent/DashboardController';
 import {
     BriefcaseBusiness,
     CalendarDays,
     House,
+    LayoutDashboard,
+    ListChecks,
     LucideIcon,
     Martini,
     Star,
@@ -35,7 +38,7 @@ export const adminNavItems: NavItemType[] = [
         id: 'home',
         type: 'link',
         label: 'Главная',
-        url: DashboardController.url(),
+        url: AdminDash.url(),
         icon: House,
         isDynamic: false,
     },
@@ -117,12 +120,50 @@ export const adminNavItems: NavItemType[] = [
     },
 ];
 
+export const exponentNavItems: NavItemType[] = [
+    {
+        id: 'home',
+        type: 'link',
+        label: 'Главная',
+        url: ExponentDash.url(),
+        icon: House,
+        isDynamic: false,
+    },
+    {
+        id: 'companies',
+        type: 'link',
+        label: 'Задачи',
+        url: '/',
+        icon: BriefcaseBusiness,
+        isDynamic: false,
+    },
+    {
+        id: 'services',
+        type: 'link',
+        label: 'Услуги',
+        url: '/',
+        icon: LayoutDashboard,
+        isDynamic: false,
+    },
+    {
+        id: 'materials',
+        type: 'link',
+        label: 'Информация и материалы',
+        url: '/',
+        icon: ListChecks,
+        isDynamic: false,
+    },
+];
+
 function extractExhibitionId(url: string): string | null {
     const match = url.match(/exhibitions\/(\d+)/);
     return match ? match[1] : null;
 }
 
-function injectExhibitionId(item: NavItemType, exhibitionId: string): NavItemType {
+function injectExhibitionId(
+    item: NavItemType,
+    exhibitionId: string,
+): NavItemType {
     const newItem = { ...item };
 
     if (item.type === 'link' && item.isDynamic) {
@@ -130,8 +171,8 @@ function injectExhibitionId(item: NavItemType, exhibitionId: string): NavItemTyp
     }
 
     if (item.type === 'drawer' && item.links) {
-        newItem.links = item.links.map(link =>
-            injectExhibitionId(link, exhibitionId)
+        newItem.links = item.links.map((link) =>
+            injectExhibitionId(link, exhibitionId),
         );
     }
 
@@ -143,9 +184,21 @@ export function renderAdminNavItems(currentUrl: string): NavItemType[] {
 
     // Not on an exhibition page - show only non-dynamic items
     if (!exhibitionId) {
-        return adminNavItems.filter(item => !item.isDynamic);
+        return adminNavItems.filter((item) => !item.isDynamic);
     }
 
     // On an exhibition page - inject the ID into all dynamic URLs
-    return adminNavItems.map(item => injectExhibitionId(item, exhibitionId));
+    return adminNavItems.map((item) => injectExhibitionId(item, exhibitionId));
+}
+
+export function renderExponentNavItems(): NavItemType[] {
+    return exponentNavItems;
+}
+
+export function renderNavItems(currentUrl: string): NavItemType[] {
+    if (currentUrl.includes('/admin/')) {
+        return renderAdminNavItems(currentUrl);
+    } else {
+        return renderExponentNavItems();
+    }
 }

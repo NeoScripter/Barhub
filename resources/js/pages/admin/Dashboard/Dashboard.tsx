@@ -24,8 +24,11 @@ const Dashboard = () => {
                     <Filler className="hidden 2xl:block" />
                     <div className={cn(spacing)}>
                         <article>
-                            <AccentHeading className={headingStyles}>
-                                Активная выставка
+                            <AccentHeading
+                                asChild
+                                className={headingStyles}
+                            >
+                                <h1>Активная выставка</h1>
                             </AccentHeading>
 
                             <CardLayout
@@ -38,8 +41,11 @@ const Dashboard = () => {
                             </CardLayout>
                         </article>
                         <div>
-                            <AccentHeading className={headingStyles}>
-                                Дашборд задач
+                            <AccentHeading
+                                asChild
+                                className={headingStyles}
+                            >
+                                <h2>Дашборд задач</h2>
                             </AccentHeading>
 
                             <Tasks />
@@ -47,8 +53,11 @@ const Dashboard = () => {
                     </div>
 
                     <article>
-                        <AccentHeading className={headingStyles}>
-                            Быстрые действия
+                        <AccentHeading
+                            asChild
+                            className={headingStyles}
+                        >
+                            <h2>Быстрые действия</h2>
                         </AccentHeading>
 
                         <Actions />

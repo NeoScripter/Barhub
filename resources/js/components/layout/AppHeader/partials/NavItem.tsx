@@ -21,7 +21,7 @@ const NavItem: FC<{ item: NavItemType; expanded: boolean }> = ({
                 <Link
                     className={cn(
                         baseClass,
-                        '0.25s w-fit transition-opacity select-none hover:animate-jump hover:opacity-75',
+                        '0.25s w-fit whitespace-nowrap transition-opacity select-none hover:animate-jump hover:opacity-75',
                         whenCurrentUrl(item.url, 'text-primary'),
                     )}
                     prefetch

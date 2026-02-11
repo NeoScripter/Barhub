@@ -1,6 +1,6 @@
 import AccentHeading from '@/components/ui/AccentHeading';
 import { useCurrentUrl } from '@/hooks/useCurrentUrl';
-import { renderAdminNavItems } from '@/lib/data/navItems';
+import { renderAdminNavItems, renderNavItems } from '@/lib/data/navItems';
 import { cn } from '@/lib/utils';
 import { NodeProps } from '@/types/shared';
 import { App } from '@/wayfinder/types';
@@ -40,7 +40,7 @@ const NavMenu: FC<NodeProps> = ({ className }) => {
                             'lg:place-content-center lg:place-items-center',
                     )}
                 >
-                    {renderAdminNavItems(currentUrl).map((item) => (
+                    {renderNavItems(currentUrl).map((item) => (
                         <NavItem
                             expanded={expanded}
                             key={item.id}
