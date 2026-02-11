@@ -17,7 +17,7 @@ const ExpoSelector = () => {
             </AccentHeading>
 
             {expos && (
-                <div className="flex w-full flex-col items-center gap-4">
+                <div className="flex w-full flex-col items-center gap-4 sm:gap-6 lg:gap-8">
                     <SelectMenu
                         items={expos}
                         getValue={(expo) => expo.id.toString()}

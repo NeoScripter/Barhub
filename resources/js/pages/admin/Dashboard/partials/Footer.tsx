@@ -7,7 +7,9 @@ import { FC } from 'react';
 const Footer: FC<NodeProps> = ({ className }) => {
     return (
         <>
-            <AccentHeading className={cn(className, 'mb-0')}>
+            <AccentHeading
+                className={cn(className, 'mb-0!')}
+            >
                 Статус интеграции
             </AccentHeading>
 
