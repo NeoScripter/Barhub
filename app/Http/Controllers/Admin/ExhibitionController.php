@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Admin;
 
-use Illuminate\Pagination\LengthAwarePaginator;
 use App\Enums\UserRole;
 use App\Http\Controllers\Controller;
 use App\Models\Exhibition;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Inertia\Inertia;
 use Inertia\Response;
 use Spatie\QueryBuilder\QueryBuilder;
@@ -35,14 +35,14 @@ final class ExhibitionController extends Controller
 
         return Inertia::render('admin/Exhibitions/Index', [
             'expos' => $exhibitions,
-            'isSuperAdmin' => $request->user()->role === UserRole::SUPER_ADMIN
+            'isSuperAdmin' => $request->user()->role === UserRole::SUPER_ADMIN,
         ]);
     }
 
     public function edit(Exhibition $exhibition): Response
     {
         return Inertia::render('admin/Exhibitions/Edit', [
-            'exhibition' => $exhibition
+            'exhibition' => $exhibition,
         ]);
     }
 }

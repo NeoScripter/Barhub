@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use App\Enums\UserRole;
 use App\Models\User;
+
 use function Pest\Laravel\actingAs;
 use function Pest\Laravel\get;
 
@@ -32,7 +33,7 @@ describe('Exponent Dashboard Access Control', function (): void {
             ->get(route('exponent.dashboard'))
             ->assertOk()
             ->assertInertia(
-                fn($page) => $page->component('exponent/Dashboard/Dashboard')
+                fn ($page) => $page->component('exponent/Dashboard/Dashboard')
             );
     });
 

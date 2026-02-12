@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Responses;
 
 use App\Enums\UserRole;
 use Laravel\Fortify\Contracts\LoginResponse as LoginResponseContract;
 
-class LoginResponse implements LoginResponseContract
+final class LoginResponse implements LoginResponseContract
 {
     public function toResponse($request)
     {
@@ -19,6 +21,6 @@ class LoginResponse implements LoginResponseContract
             return redirect()->intended(route('exponent.dashboard'));
         }
 
-        return redirect()->intended(route('dashboard'));
+        return redirect()->intended(route('/'));
     }
 }

@@ -2,18 +2,18 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Controllers\Exponent;
+namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use Inertia\Inertia;
 
-final class DashboardController extends Controller
+final class HomeController extends Controller
 {
     /**
      * Handle the incoming request.
      */
     public function __invoke()
     {
-        return Inertia::render('exponent/Dashboard/Dashboard');
+        return Inertia::render('user/Home');
     }
 }

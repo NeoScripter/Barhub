@@ -1,6 +1,6 @@
 import AccentHeading from '@/components/ui/AccentHeading';
 import { useCurrentUrl } from '@/hooks/useCurrentUrl';
-import { renderAdminNavItems, renderNavItems } from '@/lib/data/navItems';
+import { renderNavItems } from '@/lib/data/navItems';
 import { cn } from '@/lib/utils';
 import { NodeProps } from '@/types/shared';
 import { App } from '@/wayfinder/types';

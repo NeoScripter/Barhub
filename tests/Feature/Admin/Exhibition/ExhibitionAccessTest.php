@@ -23,12 +23,11 @@ describe('Exhibition Panel Permissions', function (): void {
         $response
             ->assertOk()
             ->assertInertia(
-                fn($page) => $page->component('admin/Exhibitions/Index')
+                fn ($page) => $page->component('admin/Exhibitions/Index')
             );
 
         $exhibitions->each(
-            fn($exhibition) =>
-            $response->assertSee($exhibition->name)
+            fn ($exhibition) => $response->assertSee($exhibition->name)
         );
     });
 
@@ -39,8 +38,7 @@ describe('Exhibition Panel Permissions', function (): void {
         // Create exhibitions assigned to this admin
         $assignedExhibitions = Exhibition::factory(3)->create();
         $assignedExhibitions->each(
-            fn($exhibition) =>
-            $exhibition->users()->attach($admin)
+            fn ($exhibition) => $exhibition->users()->attach($admin)
         );
 
         // Create exhibitions NOT assigned to this admin
@@ -52,19 +50,17 @@ describe('Exhibition Panel Permissions', function (): void {
         $response
             ->assertOk()
             ->assertInertia(
-                fn($page) => $page->component('admin/Exhibitions/Index')
+                fn ($page) => $page->component('admin/Exhibitions/Index')
             );
 
         // Should see assigned exhibitions
         $assignedExhibitions->each(
-            fn($exhibition) =>
-            $response->assertSee($exhibition->name)
+            fn ($exhibition) => $response->assertSee($exhibition->name)
         );
 
         // Should NOT see unassigned exhibitions
         $unassignedExhibitions->each(
-            fn($exhibition) =>
-            $response->assertDontSee($exhibition->name)
+            fn ($exhibition) => $response->assertDontSee($exhibition->name)
         );
     });
 
@@ -86,12 +82,10 @@ describe('Exhibition Panel Permissions', function (): void {
             ->assertForbidden();
     });
 
-
     it('redirects unauthenticated users to login page', function (): void {
         get(route('admin.exhibitions.index'))
             ->assertRedirect(route('login'));
     });
-
 
     it('forbids guest users from accessing exhibitions page', function (): void {
         get(route('admin.exhibitions.index'))

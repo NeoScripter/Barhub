@@ -1,6 +1,9 @@
 <?php
 
+declare(strict_types=1);
+
 // app/Policies/BasePolicy.php
+
 namespace App\Policies;
 
 use App\Enums\UserRole;

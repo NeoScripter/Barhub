@@ -1,13 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Policies;
 
 use App\Models\Exhibition;
 use App\Models\User;
 
-class ExhibitionPolicy extends BasePolicy
+final class ExhibitionPolicy extends BasePolicy
 {
-
     public function viewAny(User $user): bool
     {
         return $this->isSuperAdmin($user) || $user->exhibitions()->exists();

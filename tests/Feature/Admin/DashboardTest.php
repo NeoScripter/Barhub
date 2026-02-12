@@ -46,7 +46,7 @@ describe('Admin Panel Access Control', function (): void {
             ->get(route('admin.dashboard'))
             ->assertOk()
             ->assertInertia(
-                fn($page) => $page->component('admin/Dashboard/Dashboard')
+                fn ($page) => $page->component('admin/Dashboard/Dashboard')
             );
     });
 
@@ -58,7 +58,7 @@ describe('Admin Panel Access Control', function (): void {
             ->get(route('admin.dashboard'))
             ->assertOk()
             ->assertInertia(
-                fn($page) => $page->component('admin/Dashboard/Dashboard')
+                fn ($page) => $page->component('admin/Dashboard/Dashboard')
             );
     });
 });

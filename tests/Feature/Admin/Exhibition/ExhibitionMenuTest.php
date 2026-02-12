@@ -30,12 +30,12 @@ describe('Exhibition Menu Test', function (): void {
         $this->assertAuthenticated();
 
         $page->click('@collapse-menu-button')
-            ->assertSee("Главная")
-            ->assertDontSee("События программы")
-            ->assertDontSee("Люди")
-            ->assertDontSee("Компании")
-            ->assertDontSee("Работа с партнерами")
-            ->assertSee("Выставки");
+            ->assertSee('Главная')
+            ->assertDontSee('События программы')
+            ->assertDontSee('Люди')
+            ->assertDontSee('Компании')
+            ->assertDontSee('Работа с партнерами')
+            ->assertSee('Выставки');
     });
 
     it('shows the short initial menu for super-admins', function () {
@@ -60,12 +60,12 @@ describe('Exhibition Menu Test', function (): void {
         $this->assertAuthenticated();
 
         $page->click('@collapse-menu-button')
-            ->assertSee("Главная")
-            ->assertDontSee("События программы")
-            ->assertDontSee("Люди")
-            ->assertDontSee("Компании")
-            ->assertDontSee("Работа с партнерами")
-            ->assertSee("Выставки");
+            ->assertSee('Главная')
+            ->assertDontSee('События программы')
+            ->assertDontSee('Люди')
+            ->assertDontSee('Компании')
+            ->assertDontSee('Работа с партнерами')
+            ->assertSee('Выставки');
     });
 
     it('shows the full menu on exhibition-related pages', function () {
@@ -92,14 +92,14 @@ describe('Exhibition Menu Test', function (): void {
         $this->assertAuthenticated();
 
         $page->navigate('/admin/exhibitions')
-            ->click('@edit-expo-' . $expos[0]->id);
+            ->click('@edit-expo-'.$expos[0]->id);
 
         $page->click('@collapse-menu-button')
-            ->assertSee("Главная")
-            ->assertSee("События программы")
-            ->assertSee("Люди")
-            ->assertSee("Компании")
-            ->assertSee("Работа с партнерами")
-            ->assertSee("Выставки");
+            ->assertSee('Главная')
+            ->assertSee('События программы')
+            ->assertSee('Люди')
+            ->assertSee('Компании')
+            ->assertSee('Работа с партнерами')
+            ->assertSee('Выставки');
     });
 });

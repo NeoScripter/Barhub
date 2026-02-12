@@ -33,7 +33,6 @@ export default function Login({
             <Form
                 {...store()}
                 resetOnSuccess={['password']}
-                onSuccess={() => router.flushAll()}
                 className="flex flex-col gap-6"
             >
                 {({ processing, errors }) => (

@@ -1,9 +1,11 @@
 import AdminDash from '@/wayfinder/App/Http/Controllers/Admin/DashboardController';
-import ExhibitionController from '@/wayfinder/App/Http/Controllers/Admin/ExhibitionController';
+import AdminExpos from '@/wayfinder/App/Http/Controllers/Admin/ExhibitionController';
 import ExponentDash from '@/wayfinder/App/Http/Controllers/Exponent/DashboardController';
+import UserExpos from '@/wayfinder/App/Http/Controllers/User/ExhibitionController';
 import {
     BriefcaseBusiness,
     CalendarDays,
+    Handshake,
     House,
     LayoutDashboard,
     ListChecks,
@@ -11,6 +13,7 @@ import {
     Martini,
     Star,
     UserCheck,
+    Users,
 } from 'lucide-react';
 
 type NavLink = {
@@ -114,7 +117,7 @@ export const adminNavItems: NavItemType[] = [
         id: 'exhibitions',
         type: 'link',
         label: 'Выставки',
-        url: ExhibitionController.index.url(),
+        url: AdminExpos.index.url(),
         icon: Martini,
         isDynamic: false,
     },
@@ -155,8 +158,35 @@ export const exponentNavItems: NavItemType[] = [
     },
 ];
 
+export const userNavItems: NavItemType[] = [
+    {
+        id: 'expos',
+        type: 'link',
+        label: 'Выставки',
+        url: UserExpos.index.url(),
+        icon: Martini,
+        isDynamic: false,
+    },
+    {
+        id: 'people',
+        type: 'link',
+        label: 'Спикеры и организаторы',
+        url: '/',
+        icon: Users,
+        isDynamic: false,
+    },
+    {
+        id: 'services',
+        type: 'link',
+        label: 'Партнеры и экспоненты',
+        url: '/',
+        icon: Handshake,
+        isDynamic: false,
+    },
+];
+
 function extractExhibitionId(url: string): string | null {
-    const match = url.match(/exhibitions\/(\d+)/);
+    const match = url.match(/admin\/exhibitions\/(\d+)/);
     return match ? match[1] : null;
 }
 
@@ -195,10 +225,16 @@ export function renderExponentNavItems(): NavItemType[] {
     return exponentNavItems;
 }
 
+export function renderUserNavItems(): NavItemType[] {
+    return userNavItems;
+}
+
 export function renderNavItems(currentUrl: string): NavItemType[] {
     if (currentUrl.includes('/admin/')) {
         return renderAdminNavItems(currentUrl);
-    } else {
+    } else if (currentUrl.includes('/exponent/')) {
         return renderExponentNavItems();
+    } else {
+        return renderUserNavItems();
     }
 }

@@ -18,7 +18,7 @@ final class DashboardController extends Controller
         $expo = Exhibition::select(['id', 'name', 'starts_at'])->get();
 
         return Inertia::render('admin/Dashboard/Dashboard', [
-            'expos' => $expo
+            'expos' => $expo,
         ]);
     }
 }

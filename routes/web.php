@@ -4,28 +4,29 @@ declare(strict_types=1);
 
 use App\Enums\UserRole;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
-use App\Http\Controllers\Admin\ExhibitionController;
+use App\Http\Controllers\Admin\ExhibitionController as AdminExhibitionController;
+use App\Http\Controllers\User\ExhibitionController as UserExhibitionController;
 use App\Http\Controllers\Exponent\DashboardController as ExponentDashboardController;
+use App\Http\Controllers\User\HomeController;
 use App\Models\Exhibition;
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
 
-Route::get('/', fn() => Inertia::render('Home'))->name('home');
+Route::get('/', HomeController::class)->name('home');
 
-// Route::get('dashboard', function () {
-//     return Inertia::render('dashboard');
-// })->middleware(['auth', 'verified'])->name('dashboard');
-
+Route::prefix('/exhibitions')
+    ->name('exhibitions.')
+    ->group(function (): void {
+        Route::resource('', UserExhibitionController::class)->only(['index']);
+    });
 Route::prefix('/exponent')
     ->name('exponent.')
     ->middleware([
         'auth',
-        'role:' . UserRole::EXPONENT->value
+        'role:' . UserRole::EXPONENT->value,
     ])
     ->group(function (): void {
         Route::get('/dashboard', ExponentDashboardController::class)->name('dashboard');
     });
-
 
 Route::prefix('/admin')
     ->name('admin.')
@@ -36,7 +37,7 @@ Route::prefix('/admin')
     ->group(function (): void {
         Route::get('/dashboard', AdminDashboardController::class)->name('dashboard');
 
-        Route::resource('/exhibitions', ExhibitionController::class)
+        Route::resource('/exhibitions', AdminExhibitionController::class)
             ->middleware(['can:viewAny,' . Exhibition::class])
             ->only('index');
 
@@ -45,7 +46,7 @@ Route::prefix('/admin')
             ->middleware('can:view,exhibition')
             ->group(function (): void {
 
-                Route::get('/', [ExhibitionController::class, 'edit'])
+                Route::get('/', [AdminExhibitionController::class, 'edit'])
                     ->middleware(['can:update,' . Exhibition::class])
                     ->name('edit');
 
