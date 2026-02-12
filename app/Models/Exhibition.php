@@ -24,4 +24,12 @@ final class Exhibition extends Model
     {
         return $this->hasMany(Event::class);
     }
+
+    protected function casts(): array
+    {
+        return [
+            'starts_at' => 'date',
+            'ends_at' => 'date',
+        ];
+    }
 }

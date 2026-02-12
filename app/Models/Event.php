@@ -11,7 +11,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
 final class Event extends Model
@@ -42,8 +41,16 @@ final class Event extends Model
     public function organizer(): HasOne
     {
         return $this->hasOne(Person::class)
-            ->whereHas('roleAssignments', function ($query) {
+            ->whereHas('roleAssignments', function ($query): void {
                 $query->where('role', PersonRole::ORGANIZER->value);
             });
+    }
+
+    protected function casts(): array
+    {
+        return [
+            'starts_at' => 'datetime',
+            'ends_at' => 'datetime',
+        ];
     }
 }
