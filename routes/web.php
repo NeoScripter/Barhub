@@ -7,16 +7,19 @@ use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\ExhibitionController as AdminExhibitionController;
 use App\Http\Controllers\User\ExhibitionController as UserExhibitionController;
 use App\Http\Controllers\Exponent\DashboardController as ExponentDashboardController;
+use App\Http\Controllers\User\EventController as UserEventController;
 use App\Http\Controllers\User\HomeController;
 use App\Models\Exhibition;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', HomeController::class)->name('home');
 
-Route::prefix('/exhibitions')
-    ->name('exhibitions.')
+Route::get('/exhibitions', UserExhibitionController::class)->name('exhibitions.index');
+
+Route::prefix('/exhibitions/{exhibition:slug}/events')
+    ->name('events.')
     ->group(function (): void {
-        Route::resource('', UserExhibitionController::class)->only(['index']);
+        Route::resource('', UserEventController::class)->only(['index']);
     });
 Route::prefix('/exponent')
     ->name('exponent.')
@@ -41,7 +44,7 @@ Route::prefix('/admin')
             ->middleware(['can:viewAny,' . Exhibition::class])
             ->only('index');
 
-        Route::prefix('exhibitions/{exhibition}')
+        Route::prefix('exhibitions/{exhibition:slug}')
             ->name('exhibitions.')
             ->middleware('can:view,exhibition')
             ->group(function (): void {

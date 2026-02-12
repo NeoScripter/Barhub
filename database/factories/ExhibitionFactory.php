@@ -23,7 +23,8 @@ final class ExhibitionFactory extends Factory
         $faker = \Faker\Factory::create('ru_RU');
 
         return [
-            'name' => $faker->words(random_int(4, 10), true),
+            'name' => $faker->words(random_int(2, 4), true),
+            'slug' => $faker->unique()->slug(),
             'starts_at' => $faker->date('Y-m-d'),
             'ends_at' => fn (array $attributes) => Date::parse($attributes['starts_at'])
                 ->addDays(random_int(1, 365))

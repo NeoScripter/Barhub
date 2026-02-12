@@ -163,7 +163,7 @@ export const userNavItems: NavItemType[] = [
         id: 'expos',
         type: 'link',
         label: 'Выставки',
-        url: UserExpos.index.url(),
+        url: UserExpos.url(),
         icon: Martini,
         isDynamic: false,
     },
