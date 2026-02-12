@@ -2,7 +2,7 @@ import Badge from '@/components/ui/Badge';
 import Table from '@/components/ui/Table';
 import { formatDateShort } from '@/lib/utils';
 import { NodeProps } from '@/types/shared';
-import ExhibitionController from '@/wayfinder/App/Http/Controllers/Admin/ExhibitionController';
+import { edit } from '@/wayfinder/routes/admin/exhibitions';
 import { App } from '@/wayfinder/types';
 import { Link } from '@inertiajs/react';
 import { PencilLine } from 'lucide-react';
@@ -58,8 +58,8 @@ const ExpoTable: FC<
                             width={0.5}
                         >
                             <Link
-                                href={ExhibitionController.edit({
-                                    exhibition: expo.id,
+                                href={edit({
+                                    exhibition: expo.slug,
                                 })}
                                 data-test={`edit-expo-${expo.id}`}
                             >
