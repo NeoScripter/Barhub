@@ -24,8 +24,8 @@ final class EventFactory extends Factory
 
         return [
             'title' => $faker->words(random_int(2, 4), true),
-            'description' => $faker->words(random_int(12, 15), true),
-            'starts_at' => $faker->date('Y-m-d'),
+            'description' => $faker->words(random_int(40, 60), true),
+            'starts_at' => $faker->dateTime(),
             'ends_at' => fn (array $attributes) => Date::parse($attributes['starts_at'])
                 ->addDays(random_int(1, 365))
                 ->format('Y-m-d'),

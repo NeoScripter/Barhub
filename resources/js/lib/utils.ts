@@ -21,6 +21,14 @@ export function formatDateShort(
     }).format(date);
 }
 
+export function formatTime(date: Date) {
+    return new Intl.DateTimeFormat('ru', {
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: false,
+    }).format(date);
+}
+
 export const getSortUrl = (query: string): string => {
     const params = new URLSearchParams(window.location.search);
     const currentSort = params.get('sort');
@@ -35,3 +43,10 @@ export const getSortUrl = (query: string): string => {
 
     return window.location.pathname + '?' + params.toString();
 };
+
+export function shortenDescription(desc: string, limit = 15) {
+    return (
+        desc.split(' ').slice(0, limit).join(' ') +
+        (desc.split(' ').length > limit ? '...' : '')
+    );
+}

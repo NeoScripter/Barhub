@@ -4,12 +4,15 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Enums\PersonRole;
 use Database\Factories\EventFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 final class Event extends Model
 {
@@ -34,5 +37,13 @@ final class Event extends Model
     public function people(): HasMany
     {
         return $this->hasMany(Person::class);
+    }
+
+    public function organizer(): HasOne
+    {
+        return $this->hasOne(Person::class)
+            ->whereHas('roleAssignments', function ($query) {
+                $query->where('role', PersonRole::ORGANIZER->value);
+            });
     }
 }

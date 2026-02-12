@@ -13,8 +13,15 @@ final class EventController extends Controller
 {
     public function index(Exhibition $exhibition)
     {
+        /** @var \App\Models\Event[] $events */
+        $events = $exhibition
+            ->events()
+            ->with(['stage', 'themes', 'organizer'])
+            ->get();
+
         return Inertia::render('user/Events/Events', [
             'exhibition' => $exhibition,
+            'events' => $events,
         ]);
     }
 
