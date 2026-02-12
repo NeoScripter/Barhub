@@ -7,6 +7,13 @@ import { FC } from 'react';
 import EventCard from './partials/EventCard';
 import EventFilter from './partials/EventFilter';
 
+function modifyDate(val: string) {
+    return new Intl.DateTimeFormat('ru', {
+        day: 'numeric',
+        month: 'short',
+    }).format(new Date(val));
+}
+
 const Events: FC<Inertia.Pages.User.Events.Events> = ({
     events,
     themes,
@@ -21,6 +28,7 @@ const Events: FC<Inertia.Pages.User.Events.Events> = ({
                     icon={Calendar}
                     label="Дни"
                     filters={days}
+                    modifier={modifyDate}
                 />
                 <EventFilter
                     key="stages-filter"

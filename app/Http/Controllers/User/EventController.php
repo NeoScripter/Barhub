@@ -36,7 +36,7 @@ final class EventController extends Controller
         /** @var string[] $days */
         $days = $events
             ->pluck('starts_at')
-            ->map(fn($date) => $date->format('d.m'))
+            ->sort()
             ->unique()
             ->values();
 

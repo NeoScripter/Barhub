@@ -4,8 +4,13 @@ import { LucideIcon } from 'lucide-react';
 import { FC } from 'react';
 
 const EventFilter: FC<
-    NodeProps<{ icon: LucideIcon; label: string; filters: string[] }>
-> = ({ className, icon, label, filters }) => {
+    NodeProps<{
+        icon: LucideIcon;
+        label: string;
+        filters: string[];
+        modifier?: (val: string) => string;
+    }>
+> = ({ className, icon, label, filters, modifier }) => {
     const Icon = icon;
     return (
         <li
@@ -22,7 +27,7 @@ const EventFilter: FC<
                 {filters.map((filter) => (
                     <FilterBtn
                         key={filter}
-                        filter={filter}
+                        filter={modifier ? modifier(filter) : filter}
                     />
                 ))}
             </ul>
