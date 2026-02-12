@@ -5,7 +5,6 @@ declare(strict_types=1);
 use App\Enums\UserRole;
 use App\Models\User;
 use Illuminate\Support\Facades\RateLimiter;
-use Laravel\Fortify\Features;
 
 test('login screen can be rendered', function (): void {
     $response = $this->get(route('login'));

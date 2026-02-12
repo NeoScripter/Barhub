@@ -8,7 +8,7 @@ use App\Models\User;
 
 describe('Exhibition Menu Test', function (): void {
 
-    it('shows the short initial menu for admins', function () {
+    it('shows the short initial menu for admins', function (): void {
 
         $user = User::factory()->create([
             'email' => 'admin@gmail.com',
@@ -38,7 +38,7 @@ describe('Exhibition Menu Test', function (): void {
             ->assertSee('Выставки');
     });
 
-    it('shows the short initial menu for super-admins', function () {
+    it('shows the short initial menu for super-admins', function (): void {
 
         $user = User::factory()->create([
             'email' => 'super-admin@gmail.com',
@@ -68,7 +68,7 @@ describe('Exhibition Menu Test', function (): void {
             ->assertSee('Выставки');
     });
 
-    it('shows the full menu on exhibition-related pages', function () {
+    it('shows the full menu on exhibition-related pages', function (): void {
 
         $expos = Exhibition::factory(10)->create();
 

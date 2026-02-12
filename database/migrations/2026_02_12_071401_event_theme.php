@@ -13,17 +13,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('tasks', function (Blueprint $table): void {
-            $table->id();
+        Schema::create('event_theme', function (Blueprint $table): void {
+            $table->foreignId('event_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('theme_id')->constrained()->cascadeOnDelete();
             $table->timestamps();
-        });
-    }
 
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
-    {
-        Schema::dropIfExists('tasks');
+            $table->primary(['event_id', 'theme_id']);
+        });
     }
 };

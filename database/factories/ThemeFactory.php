@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Database\Factories;
 
-use App\Models\Task;
+use App\Models\Theme;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends Factory<Task>
+ * @extends Factory<Theme>
  */
-final class TaskFactory extends Factory
+final class ThemeFactory extends Factory
 {
     /**
      * Define the model's default state.

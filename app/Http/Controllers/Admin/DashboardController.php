@@ -15,7 +15,7 @@ final class DashboardController extends Controller
      */
     public function __invoke()
     {
-        $expo = Exhibition::select(['id', 'name', 'starts_at'])->get();
+        $expo = Exhibition::query()->select(['id', 'name', 'starts_at'])->get();
 
         return Inertia::render('admin/Dashboard/Dashboard', [
             'expos' => $expo,

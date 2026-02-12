@@ -11,13 +11,18 @@ final class ExhibitionPolicy extends BasePolicy
 {
     public function viewAny(User $user): bool
     {
-        return $this->isSuperAdmin($user) || $user->exhibitions()->exists();
+        if ($this->isSuperAdmin($user)) {
+            return true;
+        }
+        return $user->exhibitions()->exists();
     }
 
     public function view(User $user, Exhibition $exhibition): bool
     {
-        return $this->isSuperAdmin($user) ||
-            $exhibition->users()->where('user_id', $user->id)->exists();
+        if ($this->isSuperAdmin($user)) {
+            return true;
+        }
+        return $exhibition->users()->where('user_id', $user->id)->exists();
     }
 
     public function create(User $user): bool

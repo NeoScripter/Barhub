@@ -22,7 +22,7 @@ final class ExhibitionController extends Controller
 
         // If not super admin, only show exhibitions assigned to this user
         if ($request->user()->role !== UserRole::SUPER_ADMIN) {
-            $query->whereHas('users', function ($q) use ($request) {
+            $query->whereHas('users', function ($q) use ($request): void {
                 $q->where('user_id', $request->user()->id);
             });
         }

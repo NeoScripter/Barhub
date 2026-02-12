@@ -13,14 +13,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('events', function (Blueprint $table): void {
+        Schema::create('themes', function (Blueprint $table): void {
             $table->id();
-            $table->foreignId('exhibition_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('stage_id')->nullable()->constrained()->nullOnDelete();
-            $table->string('title');
-            $table->text('description');
-            $table->dateTime('starts_at');
-            $table->dateTime('ends_at');
+            $table->string('name');
+            $table->string('color_hex');
             $table->timestamps();
         });
     }
@@ -30,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('events');
+        Schema::dropIfExists('themes');
     }
 };

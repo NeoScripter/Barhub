@@ -16,6 +16,9 @@ final class DatabaseSeeder extends Seeder
         $this->call([
             UserSeeder::class,
             ExhibitionSeeder::class,
+            ThemeSeeder::class,
+            StageSeeder::class,
+            EventSeeder::class,
         ]);
     }
 }

@@ -4,21 +4,15 @@ declare(strict_types=1);
 
 namespace App\Models;
 
-use Database\Factories\ExhibitionFactory;
+use Database\Factories\StageFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-final class Exhibition extends Model
+final class Stage extends Model
 {
-    /** @use HasFactory<ExhibitionFactory> */
+    /** @use HasFactory<StageFactory> */
     use HasFactory;
-
-    public function users(): BelongsToMany
-    {
-        return $this->belongsToMany(User::class);
-    }
 
     public function events(): HasMany
     {
