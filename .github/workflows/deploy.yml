@@ -1,0 +1,36 @@
+name: deploy
+
+on:
+  push:
+    branches:
+      - develop
+      - main
+  # workflow_dispatch:
+
+jobs:
+  deploy:
+    name: Deploy to VPS
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v0.1.8
+        with:
+          host: 89.111.162.226
+          port: 22
+          username: ilya
+          key: ${{ secrets.PRIVATE_KEY }}
+          script_stop: true
+          script: |
+            cd www/Lavanda && \
+            git pull origin main && \
+            npm install && \
+            npm run build && \
+            composer install && \
+            php artisan config:clear && \
+            php artisan view:clear && \
+            php artisan route:clear && \
+            php artisan config:cache && \
+            php artisan route:cache && \
+            php artisan view:cache && \
+            sudo service php8.3-fpm reload
+
