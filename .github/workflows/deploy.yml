@@ -23,6 +23,14 @@ jobs:
           script: |
             cd www/lab1 && \
             git pull origin main && \
+            rm -rf storage/wayfinder-cache && \
+            rm -rf storage/framework/surveyor && \
+            rm -rf storage/framework/cache && \
+            rm -rf bootstrap/cache && \
+            mkdir -p bootstrap/cache && \
+            mkdir -p storage/framework/cache && \
+            php artisan optimize:clear && \
+            composer dump-autoload && \
             pnpm install && \
             pnpm run build && \
             composer install && \
