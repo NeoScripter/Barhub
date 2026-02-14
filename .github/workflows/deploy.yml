@@ -23,8 +23,8 @@ jobs:
           script: |
             cd www/lab1 && \
             git pull origin main && \
-            npm install && \
-            npm run build && \
+            pnpm install && \
+            pnpm run build && \
             composer install && \
             php artisan config:clear && \
             php artisan view:clear && \
