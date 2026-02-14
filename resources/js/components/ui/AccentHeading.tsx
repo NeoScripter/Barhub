@@ -13,7 +13,7 @@ function AccentHeading({
     return (
         <Comp
             data-slot="p"
-            className={cn("text-primary text-xs sm:text-xl xl:text-2xl uppercase font-bold",className)}
+            className={cn("text-primary text-xs sm:text-xl 2xl:text-2xl uppercase font-bold",className)}
             {...props}
         />
     );

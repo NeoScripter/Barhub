@@ -18,10 +18,10 @@ const Dashboard = () => {
             <div className={spacing}>
                 <div
                     className={cn(
-                        'grid gap-8 sm:gap-16 lg:gap-24 2xl:grid-cols-[19rem_1fr_19rem] 2xl:gap-8',
+                        'grid gap-8 sm:gap-16 lg:gap-24 xl:grid-cols-[15rem_1fr_15rem] xl:gap-8',
                     )}
                 >
-                    <Filler className="hidden 2xl:block" />
+                    <Filler className="hidden xl:block" />
                     <div className={cn(spacing)}>
                         <article>
                             <AccentHeading

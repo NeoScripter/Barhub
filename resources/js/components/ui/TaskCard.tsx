@@ -30,7 +30,7 @@ function TaskCard({ className, children }: NodeProps) {
     return (
         <CardLayout
             className={cn(
-                'gap-2 px-2 py-4 sm:gap-3 xl:gap-4 xl:py-6',
+                'gap-2 px-2 py-4 sm:gap-3 2xl:gap-4 2xl:py-6',
                 className,
             )}
         >
@@ -48,7 +48,7 @@ const TaskCardBadge: FC<BadgeProps> = ({
         <div
             className={cn(
                 'mx-auto w-fit rounded-full px-3 py-1 text-center text-xs font-medium text-white',
-                'xl:px-6 xl:py-2 xl:text-sm',
+                '2xl:px-6 2xl:py-2 2xl:text-sm',
                 BADGE_VARIANTS[variant],
                 className,
             )}
@@ -64,7 +64,7 @@ const TaskCardDigit: FC<DigitProps> = ({ value, className }) => {
         <div
             className={cn(
                 'mx-auto w-fit text-5xl font-bold text-primary',
-                'sm:text-6xl xl:text-8xl',
+                'sm:text-6xl 2xl:text-8xl',
                 className,
             )}
             role="status"
@@ -79,7 +79,7 @@ const TaskCardLabel: FC<LabelProps> = ({ children, className }) => {
         <p
             className={cn(
                 'mx-auto -mt-2 w-fit text-sm font-semibold text-foreground',
-                'sm:-mt-3 sm:text-base xl:-mt-4 xl:text-2xl',
+                'sm:-mt-3 sm:text-base 2xl:-mt-4 2xl:text-2xl',
                 className,
             )}
         >
