@@ -185,8 +185,8 @@ export const userNavItems: NavItemType[] = [
     },
 ];
 
-function extractExhibitionId(url: string): string | null {
-    const match = url.match(/admin\/exhibitions\/(\d+)/);
+function extractExhibitionSlug(url: string): string | null {
+    const match = url.match(/admin\/exhibitions\/([^/]+)/);
     return match ? match[1] : null;
 }
 
@@ -210,7 +210,7 @@ function injectExhibitionId(
 }
 
 export function renderAdminNavItems(currentUrl: string): NavItemType[] {
-    const exhibitionId = extractExhibitionId(currentUrl);
+    const exhibitionId = extractExhibitionSlug(currentUrl);
 
     // Not on an exhibition page - show only non-dynamic items
     if (!exhibitionId) {
