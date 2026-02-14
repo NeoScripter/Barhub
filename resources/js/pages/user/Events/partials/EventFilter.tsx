@@ -15,12 +15,12 @@ const EventFilter: FC<
     return (
         <li
             className={cn(
-                'flex flex-col gap-6 sm:flex-row sm:items-start',
+                'flex flex-col gap-4 sm:gap-6 sm:flex-row sm:items-start',
                 className,
             )}
         >
-            <p className="flex items-center gap-2.5 sm:mt-0.5 md:gap-3.5 md:text-lg">
-                <Icon className="size-4.5 md:size-5.5" />
+            <p className="flex items-center gap-2.5 sm:mt-0.5 2xl:gap-3.5 2xl:text-lg">
+                <Icon className="size-4.5 2xl:size-5.5" />
                 {label}
             </p>
             <ul className="flex flex-wrap gap-3">
@@ -44,7 +44,7 @@ const FilterBtn: FC<{ filter: string; isActive?: boolean }> = ({
     return (
         <li
             className={cn(
-                'rounded-full border border-primary px-3 py-1 text-primary transition-colors',
+                'rounded-full border border-primary px-3 py-1 text-sm text-primary transition-colors 2xl:text-base',
                 isActive && 'bg-primary text-white',
             )}
         >

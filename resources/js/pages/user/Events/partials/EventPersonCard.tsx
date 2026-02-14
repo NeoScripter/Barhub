@@ -9,7 +9,7 @@ const EventPersonCard: FC<NodeProps<{ person: App.Models.Person }>> = ({
 }) => {
     return (
         <div className={cn('flex items-start gap-3', className)}>
-            <figure className="size-18 shrink-0">
+            <figure className="size-18 shrink-0 lg:size-12 2xl:size-18">
                 <img
                     src={person.avatar}
                     alt={formatFullName(person.name)}
@@ -17,8 +17,8 @@ const EventPersonCard: FC<NodeProps<{ person: App.Models.Person }>> = ({
             </figure>
 
             <div className="space-y-1">
-                <p className="font-bold">{formatFullName(person.name)}</p>
-                <p className="text-sm">организатор</p>
+                <p className="font-bold lg:text-sm 2xl:text-base">{formatFullName(person.name)}</p>
+                <p className="text-sm lg:text-xs 2xl:text-sm">организатор</p>
             </div>
         </div>
     );
