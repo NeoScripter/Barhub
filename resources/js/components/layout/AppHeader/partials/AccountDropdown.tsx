@@ -16,7 +16,7 @@ const AccountDropdown: FC<{ email: string; className?: string }> = ({
     return (
         <div className={className}>
             <DropdownMenu>
-                <DropdownMenuTrigger className="flex cursor-pointer items-center gap-[0.5em] font-medium text-primary xl:text-xl">
+                <DropdownMenuTrigger className="flex cursor-pointer items-center gap-[0.5em] font-medium text-primary 2xl:text-xl">
                     {email}
                     <ChevronDown
                         className="w-[1em]"

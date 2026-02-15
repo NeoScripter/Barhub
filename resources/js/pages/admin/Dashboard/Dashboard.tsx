@@ -13,7 +13,7 @@ const Dashboard = () => {
             <div className="spacing flex flex-col">
                 <div
                     className={cn(
-                        'grid gap-8 sm:gap-16 lg:gap-24 xl:grid-cols-[15rem_1fr_15rem] xl:gap-8',
+                        'grid gap-8 sm:gap-16 lg:gap-24 xl:grid-cols-[15rem_1fr_15rem] xl:gap-8 2xl:grid-cols-[19rem_1fr_19rem]',
                     )}
                 >
                     <Filler className="hidden xl:block" />
