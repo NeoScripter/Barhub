@@ -48,7 +48,7 @@ final class AppServiceProvider extends ServiceProvider
                 : null
         );
 
-        Model::shouldBeStrict();
         Model::unguard();
+        Model::shouldBeStrict();
     }
 }
