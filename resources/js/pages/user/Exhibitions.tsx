@@ -1,7 +1,7 @@
 import CardLayout from '@/components/layout/CardLayout';
 import AccentHeading from '@/components/ui/AccentHeading';
 import { cn } from '@/lib/utils';
-import EventController from '@/wayfinder/App/Http/Controllers/User/EventController';
+import { index } from '@/wayfinder/App/Http/Controllers/User/EventController';
 import { App } from '@/wayfinder/types';
 import { Link } from '@inertiajs/react';
 import { FC } from 'react';
@@ -27,7 +27,7 @@ const Exhibitions: FC<{
                                 className="underline underline-offset-4"
                             >
                                 <Link
-                                    href={EventController.index({
+                                    href={index({
                                         exhibition: expo.slug,
                                     })}
                                     className="hover:text-primary"

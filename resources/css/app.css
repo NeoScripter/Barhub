@@ -85,6 +85,10 @@
     @apply gap-4 px-6 py-8 md:px-12;
 }
 
+.link-hover {
+    @apply transition-opacity duration-250 select-none hover:animate-jump hover:opacity-75;
+}
+
 button {
     @apply cursor-pointer;
 }

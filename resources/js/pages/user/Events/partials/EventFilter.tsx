@@ -1,5 +1,6 @@
-import { cn } from '@/lib/utils';
+import { cn, getFilterUrl, isActiveFilter } from '@/lib/utils';
 import { NodeProps } from '@/types/shared';
+import { Link } from '@inertiajs/react';
 import { LucideIcon } from 'lucide-react';
 import { FC } from 'react';
 
@@ -8,14 +9,16 @@ const EventFilter: FC<
         icon: LucideIcon;
         label: string;
         filters: string[];
+        filterKey: string;
         modifier?: (val: string) => string;
     }>
-> = ({ className, icon, label, filters, modifier }) => {
+> = ({ className, icon, label, filters, filterKey, modifier }) => {
     const Icon = icon;
+
     return (
         <li
             className={cn(
-                'flex flex-col gap-4 sm:gap-6 sm:flex-row sm:items-start',
+                'flex flex-col gap-4 sm:flex-row sm:items-start sm:gap-6',
                 className,
             )}
         >
@@ -28,6 +31,8 @@ const EventFilter: FC<
                     <FilterBtn
                         key={filter}
                         filter={modifier ? modifier(filter) : filter}
+                        url={getFilterUrl(filterKey, filter)}
+                        isActive={isActiveFilter(filterKey, filter)}
                     />
                 ))}
             </ul>
@@ -37,18 +42,25 @@ const EventFilter: FC<
 
 export default EventFilter;
 
-const FilterBtn: FC<{ filter: string; isActive?: boolean }> = ({
+const FilterBtn: FC<{ filter: string; isActive?: boolean; url: string }> = ({
     filter,
     isActive = false,
+    url,
 }) => {
     return (
         <li
             className={cn(
-                'rounded-full border border-primary px-3 py-1 text-sm text-primary transition-colors 2xl:text-base',
+                'rounded-full link-hover border border-primary px-3 py-1 text-sm text-primary transition-[colors,opacity] select-none 2xl:text-base',
                 isActive && 'bg-primary text-white',
             )}
         >
-            {filter}
+            <Link
+                href={url}
+                preserveScroll
+                preserveState
+            >
+                {filter}
+            </Link>
         </li>
     );
 };

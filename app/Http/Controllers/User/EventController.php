@@ -9,19 +9,28 @@ use App\Models\Event;
 use App\Models\Exhibition;
 use App\Models\Stage;
 use Inertia\Inertia;
+use Spatie\QueryBuilder\AllowedFilter;
+use Spatie\QueryBuilder\QueryBuilder;
 
 final class EventController extends Controller
 {
     public function index(Exhibition $exhibition)
     {
-        // /** @var \App\Models\Event[] $events */
-        $events = $exhibition
-            ->events()
+        $eventsQuery = QueryBuilder::for($exhibition->events())
             ->with(['stage', 'themes', 'organizer'])
-            ->get();
+            ->allowedFilters([
+                AllowedFilter::exact('stage.name'),
+                AllowedFilter::exact('themes.name'),
+                'starts_at'
+            ]);
+
+        /** @var \App\Models\Event[] $events */
+        $events = $eventsQuery->get();
+
+        $allEvents = $exhibition->events()->with(['stage', 'themes'])->get();
 
         /** @var string[] $themes */
-        $themes = $events
+        $themes = $allEvents
             ->pluck('themes')
             ->flatten()
             ->pluck('name')
@@ -34,10 +43,11 @@ final class EventController extends Controller
             ->pluck('name');
 
         /** @var string[] $days */
-        $days = $events
+        $days = $allEvents
             ->pluck('starts_at')
             ->sort()
             ->unique()
+            ->map(fn($date) => $date->format('Y-m-d'))
             ->values();
 
         return Inertia::render('user/Events/Events', [

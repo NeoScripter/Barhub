@@ -5,10 +5,11 @@ import { FC } from 'react';
 import EventCard from './partials/EventCard';
 import EventFilter from './partials/EventFilter';
 
-function modifyDate(val: string) {
+export function modifyDate(val: string) {
     return new Intl.DateTimeFormat('ru', {
         day: 'numeric',
         month: 'short',
+        timeZone: 'UTC',
     }).format(new Date(val));
 }
 
@@ -20,11 +21,12 @@ const Events: FC<Inertia.Pages.User.Events.Events> = ({
 }) => {
     return (
         <div className="spacing grid">
-            <ul className="grid gap-8">
+            <ul className="grid gap-6 2xl:gap-8">
                 <EventFilter
                     key="days-filter"
                     icon={Calendar}
                     label="Дни"
+                    filterKey="starts_at"
                     filters={days}
                     modifier={modifyDate}
                 />
@@ -32,12 +34,14 @@ const Events: FC<Inertia.Pages.User.Events.Events> = ({
                     key="stages-filter"
                     icon={MapPin}
                     label="Площадки"
+                    filterKey="stage.name"
                     filters={stages}
                 />
                 <EventFilter
                     key="themes-filter"
                     icon={Rocket}
                     label="Направления"
+                    filterKey="themes.name"
                     filters={themes}
                 />
             </ul>
