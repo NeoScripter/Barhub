@@ -42,7 +42,7 @@ const NavMenu: FC<NodeProps> = ({ className }) => {
                             'lg:place-content-center lg:place-items-center',
                     )}
                 >
-                    {renderNavItems(currentUrl, auth.canViewAnyExhibitions).map(
+                    {renderNavItems(currentUrl, auth.hasExpos).map(
                         (item) => (
                             <NavItem
                                 expanded={expanded}
