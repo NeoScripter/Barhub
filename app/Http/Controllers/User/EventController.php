@@ -17,7 +17,7 @@ final class EventController extends Controller
     public function index(Exhibition $exhibition)
     {
         $eventsQuery = QueryBuilder::for($exhibition->events())
-            ->with(['stage', 'themes', 'organizer'])
+            ->with(['stage', 'themes', 'people'])
             ->allowedFilters([
                 AllowedFilter::exact('stage.name'),
                 AllowedFilter::exact('themes.name'),

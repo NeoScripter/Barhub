@@ -16,10 +16,11 @@ const Events: FC<Inertia.Pages.User.Events.Events> = ({ events }) => {
 
                 {events.length > 0 ? (
                     <ul className="grid gap-4 sm:gap-8">
-                        {events.map((event) => (
+                        {events.map((event, index) => (
                             <EventCard
                                 key={event.id}
                                 event={event}
+                                style={{ zIndex: events.length - index }}
                             />
                         ))}
                     </ul>
