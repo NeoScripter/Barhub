@@ -71,6 +71,29 @@
             animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
         }
     }
+
+    --animate-slide-down: slide-down 0.25s ease-in forwards;
+
+    @keyframes slide-down {
+        100% {
+            transform: translateY(calc(100% * var(--offset)));
+        }
+    }
+
+    --animate-slide-up: slide-up 0.25s ease-in forwards;
+
+    @keyframes slide-up {
+        100% {
+            transform: translateY(0%);
+        }
+    }
+}
+
+.slide-down {
+    transform: translateY(0%);
+}
+.slide-down-parent:hover .slide-down {
+    transform: translateY(calc(100% * var(--offset)));
 }
 
 .heading {
