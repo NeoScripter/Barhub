@@ -1,6 +1,7 @@
 import BurgerMenuIcon from '@/components/ui/BurgerMenuIcon';
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/Dialog';
 import { usePage } from '@inertiajs/react';
+import { useEffect, useState } from 'react';
 import AccountDropdown from './AccountDropdown';
 import NavMenu from './NavMenu';
 
@@ -8,10 +9,21 @@ const AccountMenuControls = () => {
     const { auth } = usePage<{
         auth: ShareData;
     }>().props;
+    const [open, setOpen] = useState(false);
+
+    useEffect(() => {
+        const closeMenu = () => setOpen(false);
+        document.addEventListener('closeNavMenu', closeMenu);
+
+        return () => document.removeEventListener('closeNavMenu', closeMenu);
+    }, []);
 
     return (
         <>
-            <Dialog>
+            <Dialog
+                open={open}
+                onOpenChange={setOpen}
+            >
                 <DialogTrigger asChild>
                     <button className="mr-2 size-8 sm:size-9 lg:hidden">
                         <BurgerMenuIcon className="size-full" />

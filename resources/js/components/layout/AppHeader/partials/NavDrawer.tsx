@@ -23,6 +23,10 @@ const NavDrawer: FC<NavDrawerProps> = ({ item, className, expanded }) => {
     const { whenCurrentUrl } = useCurrentUrl();
     const isTablet = useIsTablet();
 
+    const handleClick = () => {
+        document.dispatchEvent(new Event('closeNavMenu'));
+    };
+
     return (
         <li className={className}>
             <DropdownMenu onOpenChange={setIsOpen}>
@@ -54,6 +58,7 @@ const NavDrawer: FC<NavDrawerProps> = ({ item, className, expanded }) => {
                                         href={link.url}
                                         prefetch
                                         preserveState
+                                        onSuccess={handleClick}
                                         className={cn(
                                             'text-base transition-opacity duration-250 select-none group-hover:animate-jump group-hover:opacity-75',
                                             whenCurrentUrl(

@@ -13,6 +13,10 @@ const NavItem: FC<{ item: NavItemType; expanded: boolean }> = ({
     const { whenCurrentUrl } = useCurrentUrl();
     const isTablet = useIsTablet();
 
+    const handleClick = () => {
+        document.dispatchEvent(new Event('closeNavMenu'));
+    };
+
     const baseClass = 'inline-flex text-secondary items-center gap-2 xl:gap-3';
 
     if (item.type === 'link') {
@@ -26,6 +30,7 @@ const NavItem: FC<{ item: NavItemType; expanded: boolean }> = ({
                     )}
                     prefetch
                     preserveState
+                    onSuccess={handleClick}
                     href={item.url}
                 >
                     <item.icon className="size-4.5 shrink-0 xl:size-5.5" />

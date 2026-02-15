@@ -1,5 +1,6 @@
 import AccentHeading from '@/components/ui/AccentHeading';
 import { useCurrentUrl } from '@/hooks/useCurrentUrl';
+import useMediaQuery from '@/hooks/useMediaQuery';
 import { renderNavItems } from '@/lib/data/navItems';
 import { cn } from '@/lib/utils';
 import { NodeProps } from '@/types/shared';
@@ -13,7 +14,7 @@ import NavItem from './NavItem';
 const NavMenu: FC<NodeProps> = ({ className }) => {
     const [expanded, setExpanded] = useState(false);
     const { currentUrl } = useCurrentUrl();
-    const { auth } = usePage<{auth: Inertia.SharedData}>().props;
+    const { auth } = usePage<{ auth: Inertia.SharedData }>().props;
 
     return (
         <div
@@ -41,13 +42,15 @@ const NavMenu: FC<NodeProps> = ({ className }) => {
                             'lg:place-content-center lg:place-items-center',
                     )}
                 >
-                    {renderNavItems(currentUrl, auth.canViewAnyExhibitions).map((item) => (
-                        <NavItem
-                            expanded={expanded}
-                            key={item.id}
-                            item={item}
-                        />
-                    ))}
+                    {renderNavItems(currentUrl, auth.canViewAnyExhibitions).map(
+                        (item) => (
+                            <NavItem
+                                expanded={expanded}
+                                key={item.id}
+                                item={item}
+                            />
+                        ),
+                    )}
                 </ul>
             </nav>
         </div>
@@ -57,17 +60,20 @@ const NavMenu: FC<NodeProps> = ({ className }) => {
 export default NavMenu;
 
 const Header: FC<NodeProps> = ({ className }) => {
-    const { exhibition } = usePage<{
+    const { exhibition, auth } = usePage<{
         exhibition: App.Models.Exhibition | null;
+        auth: ShareData;
     }>().props;
 
     return (
         <header className={className}>
             {' '}
-            <AccountDropdown
-                className="mb-8"
-                email="admin@gmail.com"
-            />
+            {auth?.user && (
+                <AccountDropdown
+                    className="mb-8"
+                    email={auth.user?.email}
+                />
+            )}
             {exhibition && (
                 <AccentHeading
                     asChild
