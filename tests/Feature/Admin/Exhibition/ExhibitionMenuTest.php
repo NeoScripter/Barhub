@@ -32,12 +32,12 @@ describe('Exhibition Menu Test', function (): void {
         $this->assertAuthenticated();
 
         $page->click('@collapse-menu-button')
-            ->assertSee('Главная')
-            ->assertDontSee('События программы')
-            ->assertDontSee('Люди')
-            ->assertDontSee('Компании')
-            ->assertDontSee('Работа с партнерами')
-            ->assertSee('Выставки');
+            ->assertSeeLink('Главная')
+            ->assertDontSeeLink('События программы')
+            ->assertDontSeeLink('Люди')
+            ->assertDontSeeLink('Компании')
+            ->assertDontSeeLink('Работа с партнерами')
+            ->assertSeeLink('Выставки');
     });
 
     it('shows the short initial menu for super-admins', function (): void {
@@ -62,12 +62,12 @@ describe('Exhibition Menu Test', function (): void {
         $this->assertAuthenticated();
 
         $page->click('@collapse-menu-button')
-            ->assertSee('Главная')
-            ->assertDontSee('События программы')
-            ->assertDontSee('Люди')
-            ->assertDontSee('Компании')
-            ->assertDontSee('Работа с партнерами')
-            ->assertSee('Выставки');
+            ->assertSeeLink('Главная')
+            ->assertDontSeeLink('События программы')
+            ->assertDontSeeLink('Люди')
+            ->assertDontSeeLink('Компании')
+            ->assertDontSeeLink('Работа с партнерами')
+            ->assertSeeLink('Выставки');
     });
 
     it('shows the full menu on exhibition-related pages', function (): void {
@@ -97,12 +97,12 @@ describe('Exhibition Menu Test', function (): void {
             ->click('@edit-expo-' . $expos[0]->id);
 
         $page->click('@collapse-menu-button')
-            ->assertSee('Главная')
-            ->assertSee('События программы')
-            ->assertSee('Люди')
-            ->assertSee('Компании')
-            ->assertSee('Работа с партнерами')
-            ->assertSee('Выставки');
+            ->assertSeeLink('Главная')
+            ->assertSeeLink('События программы')
+            ->assertSeeLink('Люди')
+            ->assertSeeLink('Компании')
+            ->assertSeeLink('Работа с партнерами')
+            ->assertSeeLink('Выставки');
     });
 
     it('it does not show the link to the exhibitions page if the admin does not have access any exhibtion', function (): void {
@@ -127,11 +127,11 @@ describe('Exhibition Menu Test', function (): void {
         $this->assertAuthenticated();
 
         $page->click('@collapse-menu-button')
-            ->assertSee('Главная')
-            ->assertDontSee('События программы')
-            ->assertDontSee('Люди')
-            ->assertDontSee('Компании')
-            ->assertDontSee('Работа с партнерами')
-            ->assertDontSee('Выставки');
+            ->assertSeeLink('Главная')
+            ->assertDontSeeLink('События программы')
+            ->assertDontSeeLink('Люди')
+            ->assertDontSeeLink('Компании')
+            ->assertDontSeeLink('Работа с партнерами')
+            ->assertDontSeeLink('Выставки');
     });
 });
