@@ -16,6 +16,8 @@ describe('Exhibition Menu Test', function (): void {
         ]);
 
         $user->assignRole(UserRole::ADMIN);
+        $exhibition = Exhibition::factory()->create();
+        $exhibition->users()->attach($user);
 
         $page = visit('/login');
 
@@ -92,7 +94,7 @@ describe('Exhibition Menu Test', function (): void {
         $this->assertAuthenticated();
 
         $page->navigate('/admin/exhibitions')
-            ->click('@edit-expo-'.$expos[0]->id);
+            ->click('@edit-expo-' . $expos[0]->id);
 
         $page->click('@collapse-menu-button')
             ->assertSee('Главная')
@@ -101,5 +103,35 @@ describe('Exhibition Menu Test', function (): void {
             ->assertSee('Компании')
             ->assertSee('Работа с партнерами')
             ->assertSee('Выставки');
+    });
+
+    it('it does not show the link to the exhibitions page if the admin does not have access any exhibtion', function (): void {
+
+        $user = User::factory()->create([
+            'email' => 'admin@gmail.com',
+            'password' => 'password',
+        ]);
+
+        $user->assignRole(UserRole::ADMIN);
+
+        $page = visit('/login');
+
+        $page->assertSee('Вход в аккаунт')
+            ->fill('email', '')
+            ->fill('email', 'admin@gmail.com')
+            ->fill('password', '')
+            ->fill('password', 'password')
+            ->click('@login-button')
+            ->assertSee('admin@gmail.com');
+
+        $this->assertAuthenticated();
+
+        $page->click('@collapse-menu-button')
+            ->assertSee('Главная')
+            ->assertDontSee('События программы')
+            ->assertDontSee('Люди')
+            ->assertDontSee('Компании')
+            ->assertDontSee('Работа с партнерами')
+            ->assertDontSee('Выставки');
     });
 });

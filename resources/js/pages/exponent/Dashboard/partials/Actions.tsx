@@ -5,8 +5,6 @@ import { NodeProps } from '@/types/shared';
 import { Briefcase, ListChecks, LucideIcon } from 'lucide-react';
 import { FC } from 'react';
 
-const padding = 'px-12 gap-4 py-8';
-
 const Actions: FC<NodeProps> = ({ className }) => {
     return (
         <ul
@@ -30,7 +28,7 @@ export default Actions;
 const ActionCard: FC<NodeProps<{ card: ActionDataType }>> = ({ card }) => {
     const Icon = card.icon;
     return (
-        <CardLayout className={padding}>
+        <CardLayout className="padding">
             <div className="flex items-center gap-2 sm:gap-3">
                 <Icon className="size-5.5 sm:size-6 lg:size-7" />
                 <span className="text-sm font-bold text-foreground sm:text-lg lg:text-xl">

@@ -1,15 +1,10 @@
 import AccentHeading from '@/components/ui/AccentHeading';
 import { Button } from '@/components/ui/Button';
-import { cn } from '@/lib/utils';
-import { NodeProps } from '@/types/shared';
-import { FC } from 'react';
 
-const Footer: FC<NodeProps> = ({ className }) => {
+const Footer = () => {
     return (
         <>
-            <AccentHeading
-                className={cn(className, 'mb-0!')}
-            >
+            <AccentHeading className="heading mb-0! text-center text-base text-secondary">
                 Статус интеграции
             </AccentHeading>
 

@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace App\Http\Middleware;
 
+use App\Models\Exhibition;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use Inertia\Middleware;
 
 final class HandleInertiaRequests extends Middleware
@@ -42,6 +44,7 @@ final class HandleInertiaRequests extends Middleware
             'name' => config('app.name'),
             'auth' => [
                 'user' => $request->user(),
+                'canViewAnyExhibitions' => Gate::allows('viewAny', Exhibition::class),
             ],
         ];
     }

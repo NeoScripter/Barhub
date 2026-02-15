@@ -1,6 +1,4 @@
 import AccentHeading from '@/components/ui/AccentHeading';
-import { headingStyles, spacingStyles } from '@/lib/consts/styles';
-import { cn } from '@/lib/utils';
 import { Inertia } from '@/wayfinder/types';
 import { Calendar, MapPin, Rocket } from 'lucide-react';
 import { FC } from 'react';
@@ -21,7 +19,7 @@ const Events: FC<Inertia.Pages.User.Events.Events> = ({
     stages,
 }) => {
     return (
-        <div className={cn(spacingStyles, 'grid')}>
+        <div className="spacing grid">
             <ul className="grid gap-8">
                 <EventFilter
                     key="days-filter"
@@ -45,7 +43,7 @@ const Events: FC<Inertia.Pages.User.Events.Events> = ({
             </ul>
 
             <div>
-                <AccentHeading className={headingStyles}>
+                <AccentHeading className="heading text-base">
                     Расписание
                 </AccentHeading>
 

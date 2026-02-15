@@ -190,7 +190,7 @@ function extractExhibitionSlug(url: string): string | null {
     return match ? match[1] : null;
 }
 
-function injectExhibitionId(
+function injectExhibitionSlug(
     item: NavItemType,
     exhibitionId: string,
 ): NavItemType {
@@ -202,15 +202,27 @@ function injectExhibitionId(
 
     if (item.type === 'drawer' && item.links) {
         newItem.links = item.links.map((link) =>
-            injectExhibitionId(link, exhibitionId),
+            injectExhibitionSlug(link, exhibitionId),
         );
     }
 
     return newItem;
 }
 
-export function renderAdminNavItems(currentUrl: string): NavItemType[] {
+export function renderAdminNavItems(
+    currentUrl: string,
+    canViewExpos: boolean,
+): NavItemType[] {
     const exhibitionId = extractExhibitionSlug(currentUrl);
+
+    if (!canViewExpos) {
+        return adminNavItems.filter(
+            (item) =>
+                item.type === 'link' &&
+                !item.url.includes('admin/exhibitions') &&
+                !item.isDynamic,
+        );
+    }
 
     // Not on an exhibition page - show only non-dynamic items
     if (!exhibitionId) {
@@ -218,7 +230,9 @@ export function renderAdminNavItems(currentUrl: string): NavItemType[] {
     }
 
     // On an exhibition page - inject the ID into all dynamic URLs
-    return adminNavItems.map((item) => injectExhibitionId(item, exhibitionId));
+    return adminNavItems.map((item) =>
+        injectExhibitionSlug(item, exhibitionId),
+    );
 }
 
 export function renderExponentNavItems(): NavItemType[] {
@@ -229,9 +243,12 @@ export function renderUserNavItems(): NavItemType[] {
     return userNavItems;
 }
 
-export function renderNavItems(currentUrl: string): NavItemType[] {
+export function renderNavItems(
+    currentUrl: string,
+    canViewExpos: boolean,
+): NavItemType[] {
     if (currentUrl.includes('/admin/')) {
-        return renderAdminNavItems(currentUrl);
+        return renderAdminNavItems(currentUrl, canViewExpos);
     } else if (currentUrl.includes('/exponent/')) {
         return renderExponentNavItems();
     } else {

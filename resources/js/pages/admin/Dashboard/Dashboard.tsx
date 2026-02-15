@@ -7,43 +7,33 @@ import ExpoSelector from './partials/ExpoSelector';
 import Footer from './partials/Footer';
 import Tasks from './partials/Tasks';
 
-const headingStyles =
-    'mb-4 text-center text-secondary text-base sm:mb-8 lg:mb-12 2xl:mb-10';
-const padding = 'px-12 gap-4 py-8';
-const spacing = 'flex flex-col gap-8 sm:gap-16 lg:gap-24';
-
 const Dashboard = () => {
     return (
         <>
-            <div className={spacing}>
+            <div className="spacing flex flex-col">
                 <div
                     className={cn(
                         'grid gap-8 sm:gap-16 lg:gap-24 xl:grid-cols-[15rem_1fr_15rem] xl:gap-8',
                     )}
                 >
                     <Filler className="hidden xl:block" />
-                    <div className={cn(spacing)}>
+                    <div className="spacing flex flex-col">
                         <article>
                             <AccentHeading
                                 asChild
-                                className={headingStyles}
+                                className="heading text-center text-base text-secondary"
                             >
                                 <h1>Активная выставка</h1>
                             </AccentHeading>
 
-                            <CardLayout
-                                className={cn(
-                                    'w-full sm:gap-6 lg:gap-8',
-                                    padding,
-                                )}
-                            >
+                            <CardLayout className="padding w-full sm:gap-6 lg:gap-8">
                                 <ExpoSelector />
                             </CardLayout>
                         </article>
                         <div>
                             <AccentHeading
                                 asChild
-                                className={headingStyles}
+                                className="heading text-center text-base text-secondary"
                             >
                                 <h2>Дашборд задач</h2>
                             </AccentHeading>
@@ -55,7 +45,7 @@ const Dashboard = () => {
                     <article>
                         <AccentHeading
                             asChild
-                            className={headingStyles}
+                            className="heading text-center text-base text-secondary"
                         >
                             <h2>Быстрые действия</h2>
                         </AccentHeading>
@@ -65,13 +55,8 @@ const Dashboard = () => {
                 </div>
 
                 <footer>
-                    <CardLayout
-                        className={cn(
-                            'mx-auto w-full max-w-177.5 items-center justify-evenly sm:flex-row sm:items-baseline',
-                            padding,
-                        )}
-                    >
-                        <Footer className={headingStyles} />
+                    <CardLayout className="padding mx-auto w-full max-w-177.5 items-center justify-evenly sm:flex-row sm:items-baseline">
+                        <Footer />
                     </CardLayout>
                 </footer>
             </div>
