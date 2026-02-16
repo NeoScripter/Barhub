@@ -31,7 +31,6 @@ const PersonCardAccordion: FC<NodeProps<{ event: App.Models.Event }>> = ({
                 {personCards.map((card, idx) => (
                     <li
                         key={card.key}
-                        className="max-h-0 transition-[max-height] duration-150 ease-in-out group-hover:max-h-100"
                     >
                         <EventPersonCard
                             role={card.role}
@@ -40,7 +39,6 @@ const PersonCardAccordion: FC<NodeProps<{ event: App.Models.Event }>> = ({
                                 'bg-white sm:w-53 lg:w-40 lg:shrink-0 2xl:w-53',
                                 idx === 0 && 'hidden sm:flex',
                             )}
-                            style={{ '--offset': idx }}
                         />
                     </li>
                 ))}
