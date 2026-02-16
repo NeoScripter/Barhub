@@ -34,32 +34,32 @@ final class EventSeeder extends Seeder
                 ->has(
                     Person::factory()
                         ->count(rand(1, 3))
-                        ->has(
-                            PersonRoleAssignment::factory()
-                                ->count(rand(1, 2))
-                                ->state(fn() => ['role' => collect(PersonRole::cases())->random()->value])
-                        )
+                        // ->has(
+                        //     PersonRoleAssignment::factory()
+                        //         ->count(rand(1, 2))
+                        //         ->state(fn() => ['role' => collect(PersonRole::cases())->random()->value])
+                        // )
                         ->afterCreating(function (Person $person) {
                             $person->images()->createMany([
                                 [
-                                    'webp3x' => 'people/avatar3x.webp',
-                                    'webp2x' => 'people/avatar2x.webp',
-                                    'webp' => 'people/avatar.webp',
-                                    'avif3x' => 'people/avatar3x.avif',
-                                    'avif2x' => 'people/avatar2x.avif',
-                                    'avif' => 'people/avatar.avif',
-                                    'tiny' => 'people/avatar-tiny.webp',
+                                    'webp3x' => '/people/avatar3x.webp',
+                                    'webp2x' => '/people/avatar2x.webp',
+                                    'webp' => '/people/avatar.webp',
+                                    'avif3x' => '/people/avatar3x.avif',
+                                    'avif2x' => '/people/avatar2x.avif',
+                                    'avif' => '/people/avatar.avif',
+                                    'tiny' => '/people/avatar-tiny.webp',
                                     'alt' => "{$person->name}'s avatar",
                                     'type' => 'avatar',
                                 ],
                                 [
-                                    'webp3x' => 'people/logo3x.webp',
-                                    'webp2x' => 'people/logo2x.webp',
-                                    'webp' => 'people/logo.webp',
-                                    'avif3x' => 'people/logo3x.avif',
-                                    'avif2x' => 'people/logo2x.avif',
-                                    'avif' => 'people/logo.avif',
-                                    'tiny' => 'people/logo-tiny.webp',
+                                    'webp3x' => '/people/logo3x.webp',
+                                    'webp2x' => '/people/logo2x.webp',
+                                    'webp' => '/people/logo.webp',
+                                    'avif3x' => '/people/logo3x.avif',
+                                    'avif2x' => '/people/logo2x.avif',
+                                    'avif' => '/people/logo.avif',
+                                    'tiny' => '/people/logo-tiny.webp',
                                     'alt' => "{$person->name}'s logo",
                                     'type' => 'logo',
                                 ],

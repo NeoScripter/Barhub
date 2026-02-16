@@ -17,7 +17,7 @@ final class Person extends Model
     /** @use HasFactory<PersonFactory> */
     use HasFactory;
 
-    protected $with = ['roleAssignments'];
+    protected $with = ['roleAssignments', 'avatar', 'logo'];
 
     protected $appends = ['roles'];
 

@@ -1,3 +1,4 @@
+import Image from '@/components/ui/Image';
 import { cn } from '@/lib/utils';
 import { NodeProps } from '@/types/shared';
 import { App } from '@/wayfinder/types';
@@ -16,12 +17,12 @@ const EventPersonCard: FC<
             {...props}
             className={cn('flex items-start gap-3', className)}
         >
-            <figure className="size-18 shrink-0 lg:size-12 2xl:size-18">
-                <img
-                    src={person.avatar}
-                    alt={formatFullName(person.name)}
+            {person.avatar && (
+                <Image
+                    image={person.avatar}
+                    wrapperStyles="size-18 shrink-0 lg:size-12 2xl:size-18"
                 />
-            </figure>
+            )}
 
             <div className="space-y-1">
                 <p className="font-bold lg:text-sm 2xl:text-base">
