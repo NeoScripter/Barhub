@@ -94,7 +94,7 @@ describe('Exhibition Menu Test', function (): void {
         $this->assertAuthenticated();
 
         $page->navigate('/admin/exhibitions')
-            ->click('@edit-expo-' . $expos[0]->id);
+            ->click('@edit-expo-'.$expos[0]->id);
 
         $page->click('@collapse-menu-button')
             ->assertSeeLink('Главная')

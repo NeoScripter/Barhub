@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\User;
 
+use App\Actions\AttachRolesToPeople;
 use App\Http\Controllers\Controller;
 use App\Models\Event;
 use App\Models\Exhibition;
@@ -14,18 +15,18 @@ use Spatie\QueryBuilder\QueryBuilder;
 
 final class EventController extends Controller
 {
-    public function index(Exhibition $exhibition)
+    public function index(Exhibition $exhibition, AttachRolesToPeople $action)
     {
         $eventsQuery = QueryBuilder::for($exhibition->events())
             ->with(['stage', 'themes', 'people'])
             ->allowedFilters([
                 AllowedFilter::exact('stage.name'),
                 AllowedFilter::exact('themes.name'),
-                'starts_at'
+                'starts_at',
             ]);
 
-        /** @var \App\Models\Event[] $events */
-        $events = $eventsQuery->get();
+        /** @var Event[] $events */
+        $events = $action->execute($eventsQuery->get());
 
         $allEvents = $exhibition->events()->with(['stage', 'themes'])->get();
 

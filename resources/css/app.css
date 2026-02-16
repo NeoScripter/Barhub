@@ -59,7 +59,7 @@
     /* --color-sidebar-border: var(--sidebar-border); */
     /* --color-sidebar-ring: var(--sidebar-ring); */
 
-    --animate-jump: jump 0.25s ease-in-out forwards;
+    --animate-jump: jump 0.15s ease-in-out forwards;
 
     @keyframes jump {
         0% {
@@ -67,7 +67,7 @@
             animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
         }
         50% {
-            transform: translateY(-15%);
+            transform: translateY(-7%);
             animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
         }
     }

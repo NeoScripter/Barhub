@@ -1,10 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Traits;
 
 use App\Services\ImageResizer;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
+use InvalidArgumentException;
 
 trait ManagesImageFiles
 {
@@ -72,10 +75,8 @@ trait ManagesImageFiles
         }
 
         // Replace image files if new file uploaded
-        if ($file !== null) {
-            if ($folder === null || $baseWidth === null) {
-                throw new \InvalidArgumentException('Folder and baseWidth are required when updating image file');
-            }
+        if ($file instanceof UploadedFile) {
+            throw_if($folder === null || $baseWidth === null, InvalidArgumentException::class, 'Folder and baseWidth are required when updating image file');
 
             // Delete old files
             $this->deleteFiles();
@@ -105,7 +106,7 @@ trait ManagesImageFiles
     protected static function bootManagesImageFiles(): void
     {
         // Automatically delete files when image model is deleted
-        static::deleting(function ($image) {
+        static::deleting(function ($image): void {
             $image->deleteFiles();
         });
     }

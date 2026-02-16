@@ -14,6 +14,7 @@ final class ExhibitionPolicy extends BasePolicy
         if ($this->isSuperAdmin($user)) {
             return true;
         }
+
         return $user->exhibitions()->exists();
     }
 
@@ -22,6 +23,7 @@ final class ExhibitionPolicy extends BasePolicy
         if ($this->isSuperAdmin($user)) {
             return true;
         }
+
         return $exhibition->users()->where('user_id', $user->id)->exists();
     }
 

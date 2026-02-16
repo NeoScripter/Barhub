@@ -8,38 +8,24 @@ import EventPersonCard from './EventPersonCard';
 const PersonCardAccordion: FC<NodeProps<{ event: App.Models.Event }>> = ({
     event,
 }) => {
-    // const personCards =
-    //     event.people?.flatMap((person) =>
-    //         person?.roles.map((role) => ({
-    //             key: `${person.id}-${role}`,
-    //             role,
-    //             person,
-    //         })),
-    //     ) ?? [];
-    const personCards =
-        event.people?.map((person) => ({
-            key: `${person.id}`,
-            person,
-        })) ?? [];
-
-    console.log(event.people)
+    const people = event.people;
 
     return (
         <div className="relative isolate bg-white">
-            {personCards.slice(0, 1).map((card) => (
+            {people && people.slice(0, 1).map((person) => (
                 <EventPersonCard
-                    key={card.key}
-                    role={'role'}
-                    person={card.person}
+                    key={person.id}
+                    role={person.role}
+                    person={person}
                     className="sm:w-53 lg:w-40 lg:shrink-0 2xl:w-53"
                 />
             ))}
             <AccordionLayout>
-                {personCards.map((card, idx) => (
-                    <li key={card.key}>
+                {people && people.map((person, idx) => (
+                    <li key={person.id}>
                         <EventPersonCard
-                            role={'role'}
-                            person={card.person}
+                            role={person.role}
+                            person={person}
                             className={cn(
                                 'bg-white sm:w-53 lg:w-40 lg:shrink-0 2xl:w-53',
                                 idx === 0 && 'hidden sm:flex',

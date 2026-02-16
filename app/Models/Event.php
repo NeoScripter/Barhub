@@ -10,9 +10,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
-use Illuminate\Database\Eloquent\Builder;
 
 final class Event extends Model
 {
@@ -34,17 +32,10 @@ final class Event extends Model
         return $this->belongsToMany(Theme::class);
     }
 
-    public function people(): HasMany
+    public function people(): BelongsToMany
     {
-        return $this->hasMany(Person::class);
-    }
-
-    public function organizer(): HasOne
-    {
-        return $this->hasOne(Person::class)
-            ->whereHas('roleAssignments', function ($query): void {
-                $query->where('role', PersonRole::ORGANIZER->value);
-            });
+        return $this->belongsToMany(Person::class)
+            ->withPivot('role');
     }
 
     protected function casts(): array

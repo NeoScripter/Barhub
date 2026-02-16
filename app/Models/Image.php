@@ -1,16 +1,20 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
+use Database\Factories\ImageFactory;
 use App\Traits\ManagesImageFiles;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 
-class Image extends Model
+final class Image extends Model
 {
-    /** @use HasFactory<\Database\Factories\ImageFactory> */
+    /** @use HasFactory<ImageFactory> */
     use HasFactory;
+
     use ManagesImageFiles;
 
     public function imageable(): MorphTo

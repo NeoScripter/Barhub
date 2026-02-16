@@ -6,6 +6,4 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 
-final class PersonSeeder extends Seeder
-{
-}
+final class PersonSeeder extends Seeder {}
