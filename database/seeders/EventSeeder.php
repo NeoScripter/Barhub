@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 namespace Database\Seeders;
@@ -12,128 +11,64 @@ use App\Models\PersonRoleAssignment;
 use App\Models\Stage;
 use App\Models\Theme;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Collection;
 
 final class EventSeeder extends Seeder
 {
-    private Collection $stages;
-
-    private Collection $themes;
-
-    private readonly Collection $personRoles;
-
-    public function __construct()
-    {
-        $this->personRoles = collect(PersonRole::cases());
-    }
-
     public function run(): void
     {
-        // Retrieve all stages and themes from the database
-        $this->stages = Stage::all();
-        $this->themes = Theme::all();
-
-        // Validate that we have the required data
-        if ($this->stages->isEmpty()) {
-            $this->command->error('No stages found. Please run StageSeeder first.');
-
-            return;
-        }
-
-        if ($this->themes->isEmpty()) {
-            $this->command->error('No themes found. Please run ThemeSeeder first.');
-
-            return;
-        }
-
-        // Get all exhibitions
+        $stages = Stage::all();
+        $themes = Theme::all();
         $exhibitions = Exhibition::all();
 
-        if ($exhibitions->isEmpty()) {
-            $this->command->error('No exhibitions found. Please run ExhibitionSeeder first.');
-
+        if ($stages->isEmpty() || $themes->isEmpty() || $exhibitions->isEmpty()) {
+            $this->command->error('Missing required data. Run Stage, Theme, and Exhibition seeders first.');
             return;
         }
 
-        // Create 10 events for each exhibition
-        $exhibitions->each(function (Exhibition $exhibition): void {
-            // $this->command->info("Creating events for exhibition: {$exhibition->name}");
-
-            for ($i = 1; $i <= 10; $i++) {
-                $this->createEventWithRelations($exhibition);
-            }
-        });
+        $exhibitions->each(fn(Exhibition $exhibition) =>
+            Event::factory()
+                ->count(10)
+                ->for($exhibition)
+                ->for($stages->random())
+                ->hasAttached($themes->random(rand(1, 3)))
+                ->has(
+                    Person::factory()
+                        ->count(rand(1, 3))
+                        ->has(
+                            PersonRoleAssignment::factory()
+                                ->count(rand(1, 2))
+                                ->state(fn() => ['role' => collect(PersonRole::cases())->random()->value])
+                        )
+                        ->afterCreating(function (Person $person) {
+                            $person->images()->createMany([
+                                [
+                                    'webp3x' => 'people/avatar3x.webp',
+                                    'webp2x' => 'people/avatar2x.webp',
+                                    'webp' => 'people/avatar.webp',
+                                    'avif3x' => 'people/avatar3x.avif',
+                                    'avif2x' => 'people/avatar2x.avif',
+                                    'avif' => 'people/avatar.avif',
+                                    'tiny' => 'people/avatar-tiny.webp',
+                                    'alt' => "{$person->name}'s avatar",
+                                    'type' => 'avatar',
+                                ],
+                                [
+                                    'webp3x' => 'people/logo3x.webp',
+                                    'webp2x' => 'people/logo2x.webp',
+                                    'webp' => 'people/logo.webp',
+                                    'avif3x' => 'people/logo3x.avif',
+                                    'avif2x' => 'people/logo2x.avif',
+                                    'avif' => 'people/logo.avif',
+                                    'tiny' => 'people/logo-tiny.webp',
+                                    'alt' => "{$person->name}'s logo",
+                                    'type' => 'logo',
+                                ],
+                            ]);
+                        })
+                )
+                ->create()
+        );
 
         $this->command->info('Events seeded successfully!');
-    }
-
-    private function createEventWithRelations(Exhibition $exhibition): void
-    {
-        // Create the event with a random stage
-        $event = Event::factory()
-            ->for($exhibition, 'exhibition')
-            ->for($this->stages->random(), 'stage')
-            ->create();
-
-        // Assign 1-3 random themes to the event
-        $themesCount = random_int(1, 3);
-        $selectedThemes = $this->themes->random($themesCount);
-        $event->themes()->attach($selectedThemes->pluck('id'));
-
-        // Create 1-3 people for this event
-        $peopleCount = random_int(1, 3);
-        $people = $this->createPeopleForEvent($event, $peopleCount);
-
-        // Ensure at least one person has the ORGANIZER role
-        $this->ensureOrganizerExists($people);
-    }
-
-    private function createPeopleForEvent(Event $event, int $count): Collection
-    {
-        $people = collect();
-
-        for ($i = 0; $i < $count; $i++) {
-            $person = Person::factory()
-                ->for($event)
-                ->create();
-
-            // Assign 1-2 random roles to each person
-            $rolesCount = random_int(1, 2);
-            $this->assignRolesToPerson($person, $rolesCount);
-
-            $people->push($person);
-        }
-
-        return $people;
-    }
-
-    private function assignRolesToPerson(Person $person, int $count): void
-    {
-        $selectedRoles = $this->personRoles->random(min($count, $this->personRoles->count()));
-
-        foreach ($selectedRoles as $role) {
-            PersonRoleAssignment::query()->create([
-                'person_id' => $person->id,
-                'role' => $role->value,
-            ]);
-        }
-    }
-
-    private function ensureOrganizerExists(Collection $people): void
-    {
-        // Check if any person already has the ORGANIZER role
-        $hasOrganizer = $people->contains(fn(Person $person) => $person->roleAssignments()
-            ->where('role', PersonRole::ORGANIZER->value)
-            ->exists());
-
-        // If no organizer exists, assign the role to the first person
-        if (! $hasOrganizer && $people->isNotEmpty()) {
-            $firstPerson = $people->first();
-
-            PersonRoleAssignment::query()->firstOrCreate([
-                'person_id' => $firstPerson->id,
-                'role' => PersonRole::ORGANIZER->value,
-            ]);
-        }
     }
 }

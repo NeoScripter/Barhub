@@ -6,21 +6,18 @@ type ImageProps = {
     image: ImageType;
     wrapperStyles?: string;
     imgStyles?: string;
+    isLazy?: boolean;
 };
 
-export default function Image({ image, wrapperStyles, imgStyles }: ImageProps) {
+export default function Image({
+    image,
+    wrapperStyles,
+    imgStyles,
+    isLazy = true,
+}: ImageProps) {
     const [isLoading, setIsLoading] = useState(true);
 
-    const {
-        webp,
-        avif,
-        tiny,
-        alt,
-        webp3x,
-        webp2x,
-        avif3x,
-        avif2x,
-    } = image;
+    const { webp, avif, tiny, alt, webp3x, webp2x, avif3x, avif2x } = image;
 
     return (
         <div
@@ -38,20 +35,20 @@ export default function Image({ image, wrapperStyles, imgStyles }: ImageProps) {
                         `}
                     />
                 )}
-                    <source
-                        type="image/webp"
-                        srcSet={`
+                <source
+                    type="image/webp"
+                    srcSet={`
                           ${webp} 1x,
                           ${webp2x} 2x,
                           ${webp3x} 3x
                         `}
-                    />
+                />
 
                 <img
                     onLoad={() => setIsLoading(false)}
                     src={webp}
-                    alt=""
-                    loading="lazy"
+                    alt={alt ?? ''}
+                    loading={isLazy ? 'lazy' : undefined}
                     className={cn(
                         'size-full object-cover object-center transition-all duration-500 ease-in-out',
                         imgStyles,
@@ -65,7 +62,7 @@ export default function Image({ image, wrapperStyles, imgStyles }: ImageProps) {
                 <div
                     role="status"
                     aria-label="Фото загружается"
-                    className="absolute inset-0 z-10 flex items-center justify-center"
+                    className="absolute inset-0 z-10"
                 >
                     <div
                         aria-hidden="true"

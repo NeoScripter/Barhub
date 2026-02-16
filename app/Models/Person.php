@@ -46,7 +46,6 @@ final class Person extends Model
         return $this->morphMany(Image::class, 'imageable');
     }
 
-
     public function avatar()
     {
         return $this->morphOne(Image::class, 'imageable')->where('type', 'avatar');
