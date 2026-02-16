@@ -17,8 +17,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('event_id');
             $table->string('name');
-            $table->string('avatar');
-            $table->string('regalia');
+            $table->text('regalia');
             $table->text('bio');
             $table->string('telegram')->nullable();
             $table->timestamps();

@@ -5,8 +5,8 @@ import { NodeProps } from '@/types/shared';
 import { App } from '@/wayfinder/types';
 import { ComponentProps, FC } from 'react';
 import EventDateInfo from './EventDateInto';
+import LogoAccordion from './LogoAccordion';
 import PersonCardAccordion from './PersonCardAccordion';
-import RegaliaAccordion from './RegaliaAccordion';
 
 const EventCard: FC<
     NodeProps<{ event: App.Models.Event } & ComponentProps<'li'>>
@@ -37,7 +37,7 @@ const EventCard: FC<
                 <div className="flex flex-col items-start gap-6 sm:w-full sm:flex-row lg:gap-2 xl:gap-6 2xl:gap-8">
                     <PersonCardAccordion event={event} />
 
-                    <RegaliaAccordion event={event} />
+                    <LogoAccordion event={event} />
 
                     <ul className="flex flex-wrap items-baseline gap-2">
                         {event.themes?.map((theme) => (

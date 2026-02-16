@@ -37,11 +37,10 @@
     33 => 'NunoMaduro\\Collision\\Adapters\\Laravel\\CollisionServiceProvider',
     34 => 'Termwind\\Laravel\\TermwindServiceProvider',
     35 => 'Pest\\Laravel\\PestServiceProvider',
-    36 => 'Spatie\\MediaLibrary\\MediaLibraryServiceProvider',
-    37 => 'Spatie\\QueryBuilder\\QueryBuilderServiceProvider',
-    38 => 'Spatie\\StructureDiscoverer\\StructureDiscovererServiceProvider',
-    39 => 'App\\Providers\\AppServiceProvider',
-    40 => 'App\\Providers\\FortifyServiceProvider',
+    36 => 'Spatie\\QueryBuilder\\QueryBuilderServiceProvider',
+    37 => 'Spatie\\StructureDiscoverer\\StructureDiscovererServiceProvider',
+    38 => 'App\\Providers\\AppServiceProvider',
+    39 => 'App\\Providers\\FortifyServiceProvider',
   ),
   'eager' => 
   array (
@@ -65,11 +64,10 @@
     17 => 'NunoMaduro\\Collision\\Adapters\\Laravel\\CollisionServiceProvider',
     18 => 'Termwind\\Laravel\\TermwindServiceProvider',
     19 => 'Pest\\Laravel\\PestServiceProvider',
-    20 => 'Spatie\\MediaLibrary\\MediaLibraryServiceProvider',
-    21 => 'Spatie\\QueryBuilder\\QueryBuilderServiceProvider',
-    22 => 'Spatie\\StructureDiscoverer\\StructureDiscovererServiceProvider',
-    23 => 'App\\Providers\\AppServiceProvider',
-    24 => 'App\\Providers\\FortifyServiceProvider',
+    20 => 'Spatie\\QueryBuilder\\QueryBuilderServiceProvider',
+    21 => 'Spatie\\StructureDiscoverer\\StructureDiscovererServiceProvider',
+    22 => 'App\\Providers\\AppServiceProvider',
+    23 => 'App\\Providers\\FortifyServiceProvider',
   ),
   'deferred' => 
   array (

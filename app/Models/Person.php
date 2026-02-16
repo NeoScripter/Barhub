@@ -40,4 +40,20 @@ final class Person extends Model
                 ->all()
         );
     }
+
+    public function images()
+    {
+        return $this->morphMany(Image::class, 'imageable');
+    }
+
+
+    public function avatar()
+    {
+        return $this->morphOne(Image::class, 'imageable')->where('type', 'avatar');
+    }
+
+    public function logo()
+    {
+        return $this->morphOne(Image::class, 'imageable')->where('type', 'logo');
+    }
 }

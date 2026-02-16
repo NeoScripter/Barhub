@@ -24,8 +24,7 @@ final class PersonFactory extends Factory
         return [
             'name' => $faker->name('male'),
             'bio' => $faker->words(20, true),
-            'avatar' => '/storage/people/user-avatar.png',
-            'regalia' => '/storage/people/regalia.png',
+            'regalia' => $faker->words(10, true),
         ];
     }
 }

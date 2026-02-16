@@ -4,14 +4,14 @@ import { App } from '@/wayfinder/types';
 import { FC } from 'react';
 import AccordionLayout from './AccordionLayout';
 
-const RegaliaAccordion: FC<NodeProps<{ event: App.Models.Event }>> = ({
+const LogoAccordion: FC<NodeProps<{ event: App.Models.Event }>> = ({
     event,
 }) => {
     const regaliaCards =
         event.people?.flatMap((person) =>
             person?.roles.map((role) => ({
                 key: `${person.id}-${role}`,
-                regalia: person.regalia,
+                logo: person.logo,
             })),
         ) ?? [];
 
@@ -20,7 +20,7 @@ const RegaliaAccordion: FC<NodeProps<{ event: App.Models.Event }>> = ({
             {regaliaCards.slice(0, 1).map((card) => (
                 <figure className="w-full">
                     <img
-                        src={card.regalia}
+                        src={card.logo}
                         alt="Фото регалии"
                     />
                 </figure>
@@ -37,7 +37,7 @@ const RegaliaAccordion: FC<NodeProps<{ event: App.Models.Event }>> = ({
                             )}
                         >
                             <img
-                                src={card.regalia}
+                                src={card.logo}
                                 alt="Фото регалии"
                             />
                         </figure>
@@ -48,4 +48,4 @@ const RegaliaAccordion: FC<NodeProps<{ event: App.Models.Event }>> = ({
     );
 };
 
-export default RegaliaAccordion;
+export default LogoAccordion;

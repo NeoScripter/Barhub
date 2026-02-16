@@ -90,13 +90,6 @@
       0 => 'Pest\\Laravel\\PestServiceProvider',
     ),
   ),
-  'spatie/laravel-medialibrary' => 
-  array (
-    'providers' => 
-    array (
-      0 => 'Spatie\\MediaLibrary\\MediaLibraryServiceProvider',
-    ),
-  ),
   'spatie/laravel-query-builder' => 
   array (
     'providers' => 
