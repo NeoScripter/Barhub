@@ -5,19 +5,12 @@ import { NodeProps } from '@/types/shared';
 import { App } from '@/wayfinder/types';
 import { ComponentProps, FC } from 'react';
 import EventDateInfo from './EventDateInto';
-import EventPersonCard from './EventPersonCard';
+import PersonCardAccordion from './PersonCardAccordion';
+import RegaliaAccordion from './RegaliaAccordion';
 
 const EventCard: FC<
     NodeProps<{ event: App.Models.Event } & ComponentProps<'li'>>
 > = ({ className, event, ...props }) => {
-    const personCards =
-        event.people?.flatMap((person) =>
-            person?.roles.map((role) => ({
-                key: `${person.id}-${role}`,
-                role,
-                person,
-            })),
-        ) ?? [];
     return (
         <li
             {...props}
@@ -27,7 +20,7 @@ const EventCard: FC<
                 className={cn(
                     className,
                     paddingStyles,
-                    'group w-full items-start gap-6 slide-down-parent text-foreground transition-transform duration-150 ease-in-out hover:scale-105 sm:items-center sm:gap-9 lg:flex-row',
+                    'group slide-down-parent w-full items-start gap-6 text-foreground transition-transform duration-150 ease-in-out hover:scale-105 sm:items-center sm:gap-9 lg:flex-row',
                 )}
             >
                 <div className="flex flex-col items-start gap-6 sm:w-full sm:flex-row sm:justify-between lg:gap-10">
@@ -42,41 +35,9 @@ const EventCard: FC<
                 </div>
 
                 <div className="flex flex-col items-start gap-6 sm:w-full sm:flex-row lg:gap-2 xl:gap-6 2xl:gap-8">
-                    <div className="relative isolate bg-white">
-                        {personCards.slice(0, 1).map((card) => (
-                            <EventPersonCard
-                                key={card.key}
-                                role={card.role}
-                                person={card.person}
-                                className="sm:w-53 lg:w-40 lg:shrink-0 2xl:w-53"
-                            />
-                        ))}
-                        <div
-                            className={cn(
-                                'absolute top-0 bg-white opacity-100 z-20 shadow-sm transition-opacity duration-250 ease-in-out group-hover:z-20 group-hover:opacity-100',
-                            )}
-                        >
-                            <ul className="grid bg-white">
-                                {personCards.map((card, idx) => (
-                                    <li key={card.key}>
-                                        <EventPersonCard
-                                            role={card.role}
-                                            person={card.person}
-                                            className="slide-down py-1 absolute bg-white transition-all duration-250 ease-in sm:w-53 lg:w-40 lg:shrink-0 2xl:w-53"
-                                            style={{ '--offset': idx }}
-                                        />
-                                    </li>
-                                ))}
-                            </ul>
-                        </div>
-                    </div>
+                    <PersonCardAccordion event={event} />
 
-                    <figure className="max-w-31 shrink-0 md:mr-10 lg:mr-4 lg:max-w-20 xl:max-w-30 2xl:mr-6">
-                        <img
-                            src={event.organizer?.regalia}
-                            alt="Фото регалии"
-                        />
-                    </figure>
+                    <RegaliaAccordion event={event} />
 
                     <ul className="flex flex-wrap items-baseline gap-2">
                         {event.themes?.map((theme) => (

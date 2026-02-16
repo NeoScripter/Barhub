@@ -75,8 +75,11 @@
     --animate-slide-down: slide-down 0.25s ease-in forwards;
 
     @keyframes slide-down {
+        0% {
+            transform: translateY(calc(-100% * var(--offset)));
+        }
         100% {
-            transform: translateY(calc(100% * var(--offset)));
+            transform: translateY(0%);
         }
     }
 
@@ -90,10 +93,10 @@
 }
 
 .slide-down {
-    transform: translateY(0%);
+    transform: translateY(calc(100% * var(--offset)));
 }
 .slide-down-parent:hover .slide-down {
-    transform: translateY(calc(100% * var(--offset)));
+    transform: translateY(0%);
 }
 
 .heading {
