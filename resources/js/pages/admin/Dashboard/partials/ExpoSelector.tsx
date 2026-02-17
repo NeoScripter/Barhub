@@ -5,6 +5,7 @@ import UpdatedExhibitionStatusController from '@/wayfinder/App/Http/Controllers/
 import { App } from '@/wayfinder/types';
 import { router, usePage } from '@inertiajs/react';
 import { useState } from 'react';
+import { toast } from 'sonner';
 import { formatExpoValue } from './utils';
 
 const ExpoSelector = () => {
@@ -16,10 +17,21 @@ const ExpoSelector = () => {
     const handleClick = () => {
         if (!selectedExpo) return;
 
-        router.patch(
+        router.visit(
             UpdatedExhibitionStatusController.patch({ id: selectedExpo.id }),
             {
-                is_active: !selectedExpo.is_active,
+                method: 'patch',
+                onSuccess: () => {
+                    const action = selectedExpo.is_active
+                        ? 'деактивирована'
+                        : 'активирована';
+                    toast(`Выставка успешно ${action}`);
+                },
+                preserveScroll: true,
+                preserveState: true,
+                data: {
+                    is_active: !selectedExpo.is_active,
+                },
             },
         );
     };
