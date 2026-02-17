@@ -30,6 +30,18 @@ export function formatTime(date: Date) {
     }).format(date);
 }
 
+export function formatDateAndTime(date: Date) {
+    return new Intl.DateTimeFormat('ru', {
+        hour: '2-digit',
+        minute: '2-digit',
+        day: 'numeric',
+        month: 'short',
+        year: 'numeric',
+        timeZone: 'UTC',
+        hour12: false,
+    }).format(date);
+}
+
 export const getSortUrl = (query: string): string => {
     const params = new URLSearchParams(window.location.search);
     const currentSort = params.get('sort');
@@ -54,7 +66,7 @@ export const getFilterUrl = (key: string, value: string): string => {
 
     if (currentFilters.includes(value)) {
         // Remove the value from filters
-        newFilters = currentFilters.filter(f => f !== value);
+        newFilters = currentFilters.filter((f) => f !== value);
 
         if (newFilters.length === 0) {
             // If no filters left, remove the param entirely

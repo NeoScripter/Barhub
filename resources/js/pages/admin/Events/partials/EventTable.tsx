@@ -1,6 +1,6 @@
 import Table from '@/components/ui/Table';
 import ThemeBadge from '@/components/ui/ThemeBadge';
-import { formatDateShort } from '@/lib/utils';
+import { formatDateAndTime, formatDateShort } from '@/lib/utils';
 import { NodeProps } from '@/types/shared';
 import { edit } from '@/wayfinder/routes/admin/exhibitions/events';
 import { App } from '@/wayfinder/types';
@@ -38,7 +38,7 @@ const EventTable: FC<
                         key="startDate"
                         width={1.4}
                     >
-                        {formatDateShort(new Date(event.starts_at))}
+                        {formatDateAndTime(new Date(event.starts_at))}
                     </Table.Cell>
                     <Table.Cell key="stage">{event.stage?.name}</Table.Cell>
                     <Table.Cell
