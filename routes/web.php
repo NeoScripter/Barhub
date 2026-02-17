@@ -62,7 +62,7 @@ Route::prefix('/admin')
                     ->name('show');
 
 
-                Route::resource('events', AdminEventController::class)->only(['index']);
+                Route::resource('events', AdminEventController::class)->only(['index', 'edit']);
                 /*
                 |--------------------------------------------------------------------------
                 | Models Belonging To Exhibition

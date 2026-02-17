@@ -7,7 +7,6 @@ namespace App\Http\Controllers\Admin;
 use App\Enums\UserRole;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Exhibition\ExhibitionUpdateRequest;
-use App\Http\Requests\Exhibition\ExhibitionUpdateStatusRequest;
 use App\Models\Exhibition;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;

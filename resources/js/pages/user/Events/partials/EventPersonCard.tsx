@@ -26,7 +26,7 @@ const EventPersonCard: FC<
 
             <div className="space-y-1">
                 <p className="font-bold lg:text-sm 2xl:text-base">
-                    {formatFullName(person.name)}
+                    {person.name}
                 </p>
                 <p className="text-sm lg:text-xs 2xl:text-sm">{role}</p>
             </div>
@@ -36,8 +36,3 @@ const EventPersonCard: FC<
 
 export default EventPersonCard;
 
-function formatFullName(name: string) {
-    const parts = name.split(' ');
-
-    return `${parts[0]} ${parts[2]}`;
-}

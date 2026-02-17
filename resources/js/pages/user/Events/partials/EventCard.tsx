@@ -1,4 +1,5 @@
 import CardLayout from '@/components/layout/CardLayout';
+import ThemeBadge from '@/components/ui/ThemeBadge';
 import { paddingStyles } from '@/lib/consts/styles';
 import { cn, shortenDescription } from '@/lib/utils';
 import { NodeProps } from '@/types/shared';
@@ -41,13 +42,10 @@ const EventCard: FC<
 
                     <ul className="flex flex-wrap items-baseline gap-2">
                         {event.themes?.map((theme) => (
-                            <li
+                            <ThemeBadge
                                 key={theme.name}
-                                className="rounded-full px-2 py-1 text-xs"
-                                style={{ backgroundColor: theme.color_hex }}
-                            >
-                                {theme.name}
-                            </li>
+                                theme={theme}
+                            />
                         ))}
                     </ul>
                 </div>
