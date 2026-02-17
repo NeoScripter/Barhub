@@ -21,13 +21,11 @@ const ExpoTable: FC<
     return (
         <Table.Body className={className}>
             {expos.map((expo) => (
-                <Table.Row
-                    key={expo.id}
-                    className="relative"
-                >
+                <Table.Row key={expo.id}>
                     <Table.Cell
                         key="name"
                         width={2}
+                        className="relative"
                     >
                         <Link
                             href={show({ slug: expo.slug })}

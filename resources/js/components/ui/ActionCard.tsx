@@ -46,7 +46,7 @@ function Title({ children, className }: NodeProps) {
     return (
         <p
             className={cn(
-                '-mt-2 text-center font-bold text-foreground uppercase sm:text-2xl 2xl:-mt-3',
+                '-mt-1 text-center font-bold text-foreground uppercase sm:text-2xl 2xl:-mt-2',
                 className,
             )}
         >
