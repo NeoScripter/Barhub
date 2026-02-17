@@ -32,11 +32,7 @@ const EventTable: FC<
                         key="people"
                         width={0.75}
                     >
-                        <ul className="flex text-sm flex-wrap items-baseline gap-2">
-                            {event.people?.map((person) => (
-                                <li key={person.id}> {person.name}</li>
-                            ))}
-                        </ul>
+                        {event.people?.map((person) => person.name).join(', ')}
                     </Table.Cell>
                     <Table.Cell
                         key="startDate"

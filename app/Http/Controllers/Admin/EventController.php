@@ -23,6 +23,7 @@ class EventController extends Controller
                 'themes',
                 'people' => fn($query) => $query
                     ->select('people.id', 'people.name')
+                    ->groupBy('people.id', 'people.name')
             ])
             ->allowedSorts([
                 'title',
