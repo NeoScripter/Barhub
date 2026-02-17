@@ -1,14 +1,28 @@
 import AccentHeading from '@/components/ui/AccentHeading';
 import { Button } from '@/components/ui/Button';
 import { SelectMenu } from '@/components/ui/SelectMenu';
+import UpdatedExhibitionStatusController from '@/wayfinder/App/Http/Controllers/Admin/UpdatedExhibitionStatusController';
 import { App } from '@/wayfinder/types';
-import { usePage } from '@inertiajs/react';
+import { router, usePage } from '@inertiajs/react';
 import { useState } from 'react';
 import { formatExpoValue } from './utils';
 
 const ExpoSelector = () => {
     const { expos } = usePage<{ expos: App.Models.Exhibition[] }>().props;
     const [selectedId, setSelectedId] = useState<string | null>(null);
+
+    const selectedExpo = expos.find((expo) => expo.id === Number(selectedId));
+
+    const handleClick = () => {
+        if (!selectedExpo) return;
+
+        router.patch(
+            UpdatedExhibitionStatusController.patch({ id: selectedExpo.id }),
+            {
+                is_active: !selectedExpo.is_active,
+            },
+        );
+    };
 
     return (
         <>
@@ -28,12 +42,15 @@ const ExpoSelector = () => {
                         variant="default"
                     />
                     <Button
+                        onClick={handleClick}
                         variant="default"
                         size="sm"
                         className="mx-auto"
                         disabled={selectedId == null}
                     >
-                        Активировать
+                        {selectedExpo?.is_active
+                            ? 'Деактивировать'
+                            : 'Активировать'}
                     </Button>
                 </div>
             )}

@@ -6,6 +6,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Enums\UserRole;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Exhibition\ExhibitionUpdateRequest;
+use App\Http\Requests\Exhibition\ExhibitionUpdateStatusRequest;
 use App\Models\Exhibition;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -17,10 +19,8 @@ final class ExhibitionController extends Controller
 {
     public function index(Request $request): Response
     {
-        // Query building
         $query = Exhibition::query();
 
-        // If not super admin, only show exhibitions assigned to this user
         if ($request->user()->role !== UserRole::SUPER_ADMIN) {
             $query->whereHas('users', function ($q) use ($request): void {
                 $q->where('user_id', $request->user()->id);
@@ -45,4 +45,12 @@ final class ExhibitionController extends Controller
             'exhibition' => $exhibition,
         ]);
     }
+
+    public function update(ExhibitionUpdateRequest $request, Exhibition $exhibition)
+    {
+        $exhibition->update($request->validated());
+
+        return redirect()->back();
+    }
+
 }

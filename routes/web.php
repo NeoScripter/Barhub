@@ -5,6 +5,7 @@ declare(strict_types=1);
 use App\Enums\UserRole;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\ExhibitionController as AdminExhibitionController;
+use App\Http\Controllers\Admin\UpdatedExhibitionStatusController;
 use App\Http\Controllers\Exponent\DashboardController as ExponentDashboardController;
 use App\Http\Controllers\User\EventController as UserEventController;
 use App\Http\Controllers\User\ExhibitionController as UserExhibitionController;
@@ -25,7 +26,7 @@ Route::prefix('/exponent')
     ->name('exponent.')
     ->middleware([
         'auth',
-        'role:'.UserRole::EXPONENT->value,
+        'role:' . UserRole::EXPONENT->value,
     ])
     ->group(function (): void {
         Route::get('/dashboard', ExponentDashboardController::class)->name('dashboard');
@@ -35,22 +36,25 @@ Route::prefix('/admin')
     ->name('admin.')
     ->middleware([
         'auth',
-        'role:'.UserRole::ADMIN->value.','.UserRole::SUPER_ADMIN->value,
+        'role:' . UserRole::ADMIN->value . ',' . UserRole::SUPER_ADMIN->value,
     ])
     ->group(function (): void {
         Route::get('/dashboard', AdminDashboardController::class)->name('dashboard');
 
+        Route::patch('exhibitions/{exhibition}/status', UpdatedExhibitionStatusController::class)
+            ->name('update.status');
+
         Route::resource('/exhibitions', AdminExhibitionController::class)
-            ->middleware(['can:viewAny,'.Exhibition::class])
-            ->only('index');
+            ->middleware(['can:viewAny,' . Exhibition::class])
+            ->only(['index', 'update']);
 
         Route::prefix('exhibitions/{exhibition:slug}')
             ->name('exhibitions.')
             ->middleware('can:view,exhibition')
             ->group(function (): void {
 
-                Route::get('/', (new AdminExhibitionController())->edit(...))
-                    ->middleware(['can:update,'.Exhibition::class])
+                Route::get('/', [AdminExhibitionController::class, 'edit'])
+                    ->middleware(['can:update,' . Exhibition::class])
                     ->name('edit');
 
                 /*

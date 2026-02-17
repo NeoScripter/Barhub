@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace Database\Seeders;
 
 use App\Constants\ExhibitionName;
+use App\Enums\UserRole;
 use App\Models\Exhibition;
+use App\Models\User;
 use Illuminate\Database\Seeder;
 
 final class ExhibitionSeeder extends Seeder
@@ -18,5 +20,8 @@ final class ExhibitionSeeder extends Seeder
         foreach (ExhibitionName::NAMES as $name) {
             Exhibition::factory()->create(['name' => $name]);
         }
+
+        $admin = User::where('role', UserRole::ADMIN)->first();
+        $admin->exhibitions()->attach(Exhibition::first()->id);
     }
 }

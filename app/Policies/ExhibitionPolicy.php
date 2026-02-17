@@ -37,6 +37,15 @@ final class ExhibitionPolicy extends BasePolicy
         return $this->isSuperAdmin($user);
     }
 
+    public function updateStatus(User $user, Exhibition $exhibition): bool
+    {
+        if ($this->isSuperAdmin($user)) {
+            return true;
+        }
+
+        return $exhibition->users()->where('user_id', $user->id)->exists();
+    }
+
     public function delete(User $user): bool
     {
         return $this->isSuperAdmin($user);
