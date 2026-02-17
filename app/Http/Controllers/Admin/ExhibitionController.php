@@ -46,6 +46,13 @@ final class ExhibitionController extends Controller
         ]);
     }
 
+    public function show(Exhibition $exhibition): Response
+    {
+        return Inertia::render('admin/Exhibitions/Show', [
+            'exhibition' => $exhibition,
+        ]);
+    }
+
     public function update(ExhibitionUpdateRequest $request, Exhibition $exhibition)
     {
         $exhibition->update($request->validated());

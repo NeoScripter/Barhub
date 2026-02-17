@@ -2,7 +2,7 @@ import Badge from '@/components/ui/Badge';
 import Table from '@/components/ui/Table';
 import { formatDateShort } from '@/lib/utils';
 import { NodeProps } from '@/types/shared';
-import { edit } from '@/wayfinder/routes/admin/exhibitions';
+import { edit, show } from '@/wayfinder/routes/admin/exhibitions';
 import { App } from '@/wayfinder/types';
 import { Link } from '@inertiajs/react';
 import { PencilLine } from 'lucide-react';
@@ -21,11 +21,18 @@ const ExpoTable: FC<
     return (
         <Table.Body className={className}>
             {expos.map((expo) => (
-                <Table.Row key={expo.id}>
+                <Table.Row
+                    key={expo.id}
+                    className="relative"
+                >
                     <Table.Cell
                         key="name"
                         width={2}
                     >
+                        <Link
+                            href={show({ slug: expo.slug })}
+                            className="absolute inset-0 block"
+                        />
                         {expo.name}
                     </Table.Cell>
                     <Table.Cell

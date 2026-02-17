@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use App\Enums\UserRole;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
+use App\Http\Controllers\Admin\EventController as AdminEventController;
 use App\Http\Controllers\Admin\ExhibitionController as AdminExhibitionController;
 use App\Http\Controllers\Admin\UpdatedExhibitionStatusController;
 use App\Http\Controllers\Exponent\DashboardController as ExponentDashboardController;
@@ -53,17 +54,21 @@ Route::prefix('/admin')
             ->middleware('can:view,exhibition')
             ->group(function (): void {
 
-                Route::get('/', [AdminExhibitionController::class, 'edit'])
+                Route::get('/edit', [AdminExhibitionController::class, 'edit'])
                     ->middleware(['can:update,' . Exhibition::class])
                     ->name('edit');
 
+                Route::get('/', [AdminExhibitionController::class, 'show'])
+                    ->name('show');
+
+
+                Route::resource('events', AdminEventController::class)->only(['index']);
                 /*
                 |--------------------------------------------------------------------------
                 | Models Belonging To Exhibition
                 |--------------------------------------------------------------------------
                 */
 
-                // Route::resource('events', ExhibitionEventController::class);
                 // Route::resource('speakers', ExhibitionSpeakerController::class);
                 // Route::resource('tickets', ExhibitionTicketController::class);
                 // Route::resource('partners', ExhibitionPartnerController::class);

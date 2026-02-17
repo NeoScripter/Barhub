@@ -26,6 +26,7 @@ const ExpoSelector = () => {
                         ? 'деактивирована'
                         : 'активирована';
                     toast(`Выставка успешно ${action}`);
+                    router.flush('exhibitions')
                 },
                 preserveScroll: true,
                 preserveState: true,

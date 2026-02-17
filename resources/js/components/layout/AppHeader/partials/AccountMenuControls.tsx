@@ -25,7 +25,7 @@ const AccountMenuControls = () => {
                 onOpenChange={setOpen}
             >
                 <DialogTrigger asChild>
-                    <button className="mr-2 size-8 sm:size-9 lg:hidden">
+                    <button className="mr-2 ml-auto block size-8 sm:size-9 lg:hidden">
                         <BurgerMenuIcon className="size-full" />
                     </button>
                 </DialogTrigger>
@@ -38,7 +38,7 @@ const AccountMenuControls = () => {
             </Dialog>
             {auth?.user && (
                 <AccountDropdown
-                    className="hidden lg:block"
+                    className="ml-auto hidden w-fit lg:block"
                     email={auth.user.email}
                 />
             )}

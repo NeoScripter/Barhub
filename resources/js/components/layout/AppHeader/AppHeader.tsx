@@ -24,12 +24,14 @@ const AppHeader: FC<Props> = ({ variant = 'admin' }) => {
                 { 'sm:items-baseline': !isAdmin },
             )}
         >
-            <AppLogo />
+            <div className="flex-[1_0_0]">
+                <AppLogo />
+            </div>
             {exhibition && (
                 <AccentHeading
                     asChild
                     className={cn('sm:align-baseline', {
-                        'hidden lg:block': isAdmin,
+                        'hidden sm:block': isAdmin,
                         'text-right': !isAdmin,
                     })}
                 >
@@ -37,7 +39,11 @@ const AppHeader: FC<Props> = ({ variant = 'admin' }) => {
                 </AccentHeading>
             )}
 
-            {isAdmin && <AccountMenuControls />}
+            {isAdmin && (
+                <div className="flex-[1_0_0]">
+                    <AccountMenuControls />
+                </div>
+            )}
         </header>
     );
 };
