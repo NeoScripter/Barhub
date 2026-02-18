@@ -22,22 +22,22 @@ final class EventSeeder extends Seeder
 
         if ($stages->isEmpty() || $themes->isEmpty() || $exhibitions->isEmpty()) {
             $this->command->error('Missing required data. Run Stage, Theme, and Exhibition seeders first.');
+
             return;
         }
 
         $exhibitions->each(
-            fn(Exhibition $exhibition) =>
-            Event::factory()
+            fn (Exhibition $exhibition) => Event::factory()
                 ->count(10)
                 ->for($exhibition)
                 ->for($stages->random())
-                ->hasAttached($themes->random(rand(1, 3)))
-                ->afterCreating(function (Event $event) {
-                    $peopleCount = rand(1, 3);
+                ->hasAttached($themes->random(random_int(1, 3)))
+                ->afterCreating(function (Event $event): void {
+                    $peopleCount = random_int(1, 3);
 
                     for ($i = 0; $i < $peopleCount; $i++) {
                         $person = Person::factory()
-                            ->afterCreating(function (Person $person) {
+                            ->afterCreating(function (Person $person): void {
                                 $person->images()->createMany([
                                     [
                                         'webp3x' => '/storage/people/avatar3x.webp',
@@ -66,10 +66,9 @@ final class EventSeeder extends Seeder
                             ->create();
 
                         collect(PersonRole::cases())
-                            ->random(rand(1, 2))
+                            ->random(random_int(1, 2))
                             ->each(
-                                fn(PersonRole $role) =>
-                                $event->people()->attach($person->id, ['role' => $role->value])
+                                fn (PersonRole $role) => $event->people()->attach($person->id, ['role' => $role->value])
                             );
                     }
                 })

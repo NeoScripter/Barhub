@@ -50,7 +50,7 @@ final class EventController extends Controller
             ->pluck('starts_at')
             ->sort()
             ->unique()
-            ->map(fn($date) => $date->format('Y-m-d'))
+            ->map(fn ($date) => $date->format('Y-m-d'))
             ->values();
 
         return Inertia::render('user/Events/Index', [

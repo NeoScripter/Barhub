@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Actions;
@@ -15,8 +16,9 @@ final class AttachRolesToEvents
             return $this->modifyEvents($people);
         }
 
-        return $people->map(function ($person) {
+        return $people->map(function (Person $person): Person {
             $person->setRelation('events', $this->modifyEvents($person));
+
             return $person;
         });
     }
@@ -29,10 +31,11 @@ final class AttachRolesToEvents
                 $event = $eventGroup->first();
                 $event->roles = $eventGroup
                     ->pluck('pivot.role')
-                    ->map(fn($role) => PersonRole::from($role))->label()
+                    ->map(fn ($role) => PersonRole::from($role))->label()
                     ->values()
                     ->all();
                 unset($event->pivot);
+
                 return $event;
             })
             ->values();

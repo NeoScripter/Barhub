@@ -17,7 +17,7 @@ const Index: FC<Inertia.Pages.Admin.Events.Index> = ({
     return (
         <>
             <IndexToolbar>
-                <AccentHeading className="text-xl">События</AccentHeading>
+                <AccentHeading className="text-xl">События выставки</AccentHeading>
                 <SearchInput placeholder="Поиск события" />
 
                 <Button>

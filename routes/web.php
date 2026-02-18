@@ -6,6 +6,7 @@ use App\Enums\UserRole;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\EventController as AdminEventController;
 use App\Http\Controllers\Admin\ExhibitionController as AdminExhibitionController;
+use App\Http\Controllers\Admin\PersonController as AdminPersonController;
 use App\Http\Controllers\Admin\UpdatedExhibitionStatusController;
 use App\Http\Controllers\Exponent\DashboardController as ExponentDashboardController;
 use App\Http\Controllers\User\EventController as UserEventController;
@@ -22,11 +23,12 @@ Route::prefix('/exhibitions/{exhibition:slug}')
     ->group(function (): void {
         Route::resource('events', UserEventController::class)->only(['index', 'show']);
     });
+
 Route::prefix('/exponent')
     ->name('exponent.')
     ->middleware([
         'auth',
-        'role:' . UserRole::EXPONENT->value,
+        'role:'.UserRole::EXPONENT->value,
     ])
     ->group(function (): void {
         Route::get('/dashboard', ExponentDashboardController::class)->name('dashboard');
@@ -36,7 +38,7 @@ Route::prefix('/admin')
     ->name('admin.')
     ->middleware([
         'auth',
-        'role:' . UserRole::ADMIN->value . ',' . UserRole::SUPER_ADMIN->value,
+        'role:'.UserRole::ADMIN->value.','.UserRole::SUPER_ADMIN->value,
     ])
     ->group(function (): void {
         Route::get('/dashboard', AdminDashboardController::class)->name('dashboard');
@@ -45,7 +47,7 @@ Route::prefix('/admin')
             ->name('update.status');
 
         Route::resource('/exhibitions', AdminExhibitionController::class)
-            ->middleware(['can:viewAny,' . Exhibition::class])
+            ->middleware(['can:viewAny,'.Exhibition::class])
             ->only(['index', 'update']);
 
         Route::prefix('exhibitions/{exhibition:slug}')
@@ -53,15 +55,15 @@ Route::prefix('/admin')
             ->middleware('can:view,exhibition')
             ->group(function (): void {
 
-                Route::get('/edit', [AdminExhibitionController::class, 'edit'])
-                    ->middleware(['can:update,' . Exhibition::class])
+                Route::get('/edit', (new AdminExhibitionController())->edit(...))
+                    ->middleware(['can:update,'.Exhibition::class])
                     ->name('edit');
 
-                Route::get('/', [AdminExhibitionController::class, 'show'])
+                Route::get('/', (new AdminExhibitionController())->show(...))
                     ->name('show');
 
-
                 Route::resource('events', AdminEventController::class)->only(['index', 'edit']);
+                Route::resource('people', AdminPersonController::class)->only(['index', 'edit']);
                 /*
                 |--------------------------------------------------------------------------
                 | Models Belonging To Exhibition

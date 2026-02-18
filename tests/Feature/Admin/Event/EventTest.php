@@ -7,6 +7,7 @@ use App\Models\Event;
 use App\Models\Exhibition;
 use App\Models\Stage;
 use App\Models\User;
+
 use function Pest\Laravel\actingAs;
 use function Pest\Laravel\get;
 
@@ -51,13 +52,13 @@ describe('Event Panel Access Control', function (): void {
         $response
             ->assertOk()
             ->assertInertia(
-                fn($page) => $page->component('admin/Events/Index')
+                fn ($page) => $page->component('admin/Events/Index')
                     ->has('exhibition')
                     ->has('events.data', 5)
             );
 
         $events->each(
-            fn($event) => $response->assertSee($event->title)
+            fn ($event) => $response->assertSee($event->title)
         );
     });
 
@@ -78,7 +79,7 @@ describe('Event Panel Access Control', function (): void {
             ->get(route('admin.exhibitions.events.index', $assignedExhibition))
             ->assertOk()
             ->assertInertia(
-                fn($page) => $page->component('admin/Events/Index')
+                fn ($page) => $page->component('admin/Events/Index')
                     ->has('events.data', 3)
             );
 
@@ -105,7 +106,7 @@ describe('Event Sorting', function (): void {
         $response = actingAs($this->superAdmin)
             ->get(route('admin.exhibitions.events.index', [
                 'exhibition' => $this->exhibition,
-                'sort' => 'title'
+                'sort' => 'title',
             ]));
 
         $response->assertOk();
@@ -124,7 +125,7 @@ describe('Event Sorting', function (): void {
         $response = actingAs($this->superAdmin)
             ->get(route('admin.exhibitions.events.index', [
                 'exhibition' => $this->exhibition,
-                'sort' => '-title'
+                'sort' => '-title',
             ]));
 
         $response->assertOk();
@@ -143,7 +144,7 @@ describe('Event Sorting', function (): void {
         $response = actingAs($this->superAdmin)
             ->get(route('admin.exhibitions.events.index', [
                 'exhibition' => $this->exhibition,
-                'sort' => 'starts_at'
+                'sort' => 'starts_at',
             ]));
 
         $response->assertOk();
@@ -162,7 +163,7 @@ describe('Event Sorting', function (): void {
         $response = actingAs($this->superAdmin)
             ->get(route('admin.exhibitions.events.index', [
                 'exhibition' => $this->exhibition,
-                'sort' => '-starts_at'
+                'sort' => '-starts_at',
             ]));
 
         $response->assertOk();
@@ -185,7 +186,7 @@ describe('Event Sorting', function (): void {
         $response = actingAs($this->superAdmin)
             ->get(route('admin.exhibitions.events.index', [
                 'exhibition' => $this->exhibition,
-                'sort' => 'stage.name'
+                'sort' => 'stage.name',
             ]));
 
         $response->assertOk();
@@ -208,7 +209,7 @@ describe('Event Sorting', function (): void {
         $response = actingAs($this->superAdmin)
             ->get(route('admin.exhibitions.events.index', [
                 'exhibition' => $this->exhibition,
-                'sort' => '-stage.name'
+                'sort' => '-stage.name',
             ]));
 
         $response->assertOk();
@@ -236,7 +237,7 @@ describe('Event Search', function (): void {
         $response = actingAs($this->superAdmin)
             ->get(route('admin.exhibitions.events.index', [
                 'exhibition' => $this->exhibition,
-                'search' => 'Innovation'
+                'search' => 'Innovation',
             ]));
 
         $response->assertOk();
@@ -258,7 +259,7 @@ describe('Event Edit Page Access', function (): void {
             ->get(route('admin.exhibitions.events.edit', [$exhibition, $event]))
             ->assertOk()
             ->assertInertia(
-                fn($page) => $page->component('admin/Events/Edit')
+                fn ($page) => $page->component('admin/Events/Edit')
                     ->has('exhibition')
                     ->has('event')
             );

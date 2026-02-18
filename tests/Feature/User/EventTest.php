@@ -8,6 +8,7 @@ use App\Models\Exhibition;
 use App\Models\Person;
 use App\Models\Stage;
 use App\Models\Theme;
+
 use function Pest\Laravel\get;
 
 describe('Public Event Index Page', function (): void {
@@ -19,7 +20,7 @@ describe('Public Event Index Page', function (): void {
         get(route('events.index', $exhibition))
             ->assertOk()
             ->assertInertia(
-                fn($page) => $page->component('user/Events/Index')
+                fn ($page) => $page->component('user/Events/Index')
                     ->has('exhibition')
                     ->has('events', 3)
                     ->has('themes')
@@ -37,7 +38,7 @@ describe('Public Event Index Page', function (): void {
 
         $response->assertOk();
         $events->each(
-            fn($event) => $response->assertSee($event->title)
+            fn ($event) => $response->assertSee($event->title)
         );
     });
 
@@ -53,7 +54,7 @@ describe('Public Event Index Page', function (): void {
 
         $response->assertOk()
             ->assertInertia(
-                fn($page) => $page->component('user/Events/Index')
+                fn ($page) => $page->component('user/Events/Index')
                     ->has('events', 1)
                     ->where('events.0.people.0.name', $person->name)
                     ->where('events.0.people.0.role', PersonRole::HOST->label())
@@ -77,7 +78,7 @@ describe('Public Event Index Page', function (): void {
 
         $response->assertOk()
             ->assertInertia(
-                fn($page) => $page->component('user/Events/Index')
+                fn ($page) => $page->component('user/Events/Index')
                     ->has('themes', 2)
                     ->where('themes.0', 'Technology')
                     ->where('themes.1', 'Art')
@@ -97,7 +98,7 @@ describe('Public Event Index Page', function (): void {
 
         $response->assertOk()
             ->assertInertia(
-                fn($page) => $page->component('user/Events/Index')
+                fn ($page) => $page->component('user/Events/Index')
                     ->has('stages', 2)
                     ->where('stages.0', 'Main Hall')
                     ->where('stages.1', 'Workshop Room')
@@ -117,7 +118,7 @@ describe('Public Event Index Page', function (): void {
 
         $response->assertOk()
             ->assertInertia(
-                fn($page) => $page->component('user/Events/Index')
+                fn ($page) => $page->component('user/Events/Index')
                     ->has('days', 3)
                     ->where('days.0', '2025-03-14')
                     ->where('days.1', '2025-03-15')
@@ -138,7 +139,7 @@ describe('Event Filtering', function (): void {
 
         $response = get(route('events.index', [
             'exhibition' => $exhibition,
-            'filter' => ['stage.name' => 'Main Stage']
+            'filter' => ['stage.name' => 'Main Stage'],
         ]));
 
         $response->assertOk()
@@ -161,7 +162,7 @@ describe('Event Filtering', function (): void {
 
         $response = get(route('events.index', [
             'exhibition' => $exhibition,
-            'filter' => ['themes.name' => 'Technology']
+            'filter' => ['themes.name' => 'Technology'],
         ]));
 
         $response->assertOk()
@@ -175,16 +176,16 @@ describe('Event Filtering', function (): void {
 
         Event::factory()->for($exhibition)->for($stage)->create([
             'title' => 'March Event',
-            'starts_at' => '2025-03-15 10:00:00'
+            'starts_at' => '2025-03-15 10:00:00',
         ]);
         Event::factory()->for($exhibition)->for($stage)->create([
             'title' => 'April Event',
-            'starts_at' => '2025-04-15 10:00:00'
+            'starts_at' => '2025-04-15 10:00:00',
         ]);
 
         $response = get(route('events.index', [
             'exhibition' => $exhibition,
-            'filter' => ['starts_at' => '2025-03-15']
+            'filter' => ['starts_at' => '2025-03-15'],
         ]));
 
         $response->assertOk()
@@ -203,19 +204,19 @@ describe('Event Filtering', function (): void {
 
         $event1 = Event::factory()->for($exhibition)->for($mainStage)->create([
             'title' => 'Main Tech Talk',
-            'starts_at' => '2025-03-15 10:00:00'
+            'starts_at' => '2025-03-15 10:00:00',
         ]);
         $event1->themes()->attach($techTheme);
 
         $event2 = Event::factory()->for($exhibition)->for($mainStage)->create([
             'title' => 'Main Art Workshop',
-            'starts_at' => '2025-03-15 10:00:00'
+            'starts_at' => '2025-03-15 10:00:00',
         ]);
         $event2->themes()->attach($artTheme);
 
         $event3 = Event::factory()->for($exhibition)->for($sideStage)->create([
             'title' => 'Side Tech Talk',
-            'starts_at' => '2025-03-15 10:00:00'
+            'starts_at' => '2025-03-15 10:00:00',
         ]);
         $event3->themes()->attach($techTheme);
 
@@ -223,8 +224,8 @@ describe('Event Filtering', function (): void {
             'exhibition' => $exhibition,
             'filter' => [
                 'stage.name' => 'Main Stage',
-                'themes.name' => 'Technology'
-            ]
+                'themes.name' => 'Technology',
+            ],
         ]));
 
         $response->assertOk()
@@ -246,7 +247,7 @@ describe('Public Event Show Page', function (): void {
         ]))
             ->assertOk()
             ->assertInertia(
-                fn($page) => $page->component('user/Events/Show')
+                fn ($page) => $page->component('user/Events/Show')
                     ->has('event')
                     ->where('event.id', $event->id)
                     ->where('event.title', $event->title)
@@ -258,7 +259,7 @@ describe('Public Event Show Page', function (): void {
         $stage = Stage::factory()->create();
         $event = Event::factory()->for($exhibition)->for($stage)->create([
             'title' => 'Amazing Conference',
-            'description' => 'A conference about amazing things'
+            'description' => 'A conference about amazing things',
         ]);
 
         get(route('events.show', [
@@ -280,7 +281,7 @@ describe('Event Relationships', function (): void {
         get(route('events.index', $exhibition))
             ->assertOk()
             ->assertInertia(
-                fn($page) => $page->component('user/Events/Index')
+                fn ($page) => $page->component('user/Events/Index')
                     ->where('events.0.stage.name', 'Grand Hall')
             );
     });
@@ -298,7 +299,7 @@ describe('Event Relationships', function (): void {
         get(route('events.index', $exhibition))
             ->assertOk()
             ->assertInertia(
-                fn($page) => $page->component('user/Events/Index')
+                fn ($page) => $page->component('user/Events/Index')
                     ->has('events.0.themes', 2)
                     ->where('events.0.themes.0.name', 'Innovation')
                     ->where('events.0.themes.1.name', 'Design')

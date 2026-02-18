@@ -22,7 +22,7 @@ final class PersonFactory extends Factory
         $faker = \Faker\Factory::create('ru_RU');
 
         return [
-            'name' => $faker->firstName('male') . ' ' . $faker->lastName('male'),
+            'name' => $faker->firstName('male').' '.$faker->lastName('male'),
             'bio' => $faker->words(20, true),
             'regalia' => $faker->words(10, true),
         ];

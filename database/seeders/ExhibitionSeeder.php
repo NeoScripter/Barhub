@@ -21,7 +21,7 @@ final class ExhibitionSeeder extends Seeder
             Exhibition::factory()->create(['name' => $name]);
         }
 
-        $admin = User::where('role', UserRole::ADMIN)->first();
-        $admin->exhibitions()->attach(Exhibition::first()->id);
+        $admin = User::query()->where('role', UserRole::ADMIN)->first();
+        $admin->exhibitions()->attach(Exhibition::query()->first()->id);
     }
 }

@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Admin;
 
+use Illuminate\Http\RedirectResponse;
 use App\Enums\UserRole;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Admin\ExhibitionIndexRequest;
-use App\Http\Requests\Exhibition\ExhibitionUpdateRequest;
+use App\Http\Requests\Admin\Exhibition\ExhibitionIndexRequest;
+use App\Http\Requests\Admin\Exhibition\ExhibitionUpdateRequest;
 use App\Models\Exhibition;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Inertia\Inertia;
@@ -52,11 +53,10 @@ final class ExhibitionController extends Controller
         ]);
     }
 
-    public function update(ExhibitionUpdateRequest $request, Exhibition $exhibition)
+    public function update(ExhibitionUpdateRequest $request, Exhibition $exhibition): RedirectResponse
     {
         $exhibition->update($request->validated());
 
-        return redirect()->back();
+        return back();
     }
-
 }
