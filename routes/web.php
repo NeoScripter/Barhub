@@ -18,10 +18,9 @@ Route::get('/', HomeController::class)->name('home');
 
 Route::get('/exhibitions', UserExhibitionController::class)->name('exhibitions.index');
 
-Route::prefix('/exhibitions/{exhibition:slug}/events')
-    ->name('events.')
+Route::prefix('/exhibitions/{exhibition:slug}')
     ->group(function (): void {
-        Route::resource('', UserEventController::class)->only(['index']);
+        Route::resource('events', UserEventController::class)->only(['index', 'show']);
     });
 Route::prefix('/exponent')
     ->name('exponent.')

@@ -51,7 +51,7 @@ final class EventController extends Controller
             ->map(fn($date) => $date->format('Y-m-d'))
             ->values();
 
-        return Inertia::render('user/Events/Events', [
+        return Inertia::render('user/Events/Index', [
             'exhibition' => $exhibition,
             'events' => $events,
             'themes' => $themes,
@@ -60,9 +60,10 @@ final class EventController extends Controller
         ]);
     }
 
-    public function show(Event $event)
+    public function show(Exhibition $exhibition, Event $event)
     {
-        return Inertia::render('user/Events/Events', [
+        return Inertia::render('user/Events/Show', [
+            'exhibition' => $exhibition,
             'event' => $event,
         ]);
     }

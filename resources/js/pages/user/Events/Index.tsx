@@ -4,7 +4,7 @@ import { FC } from 'react';
 import EventCard from './partials/EventCard';
 import EventFilters from './partials/EventFilters';
 
-const Events: FC<Inertia.Pages.User.Events.Events> = ({ events }) => {
+const Index: FC<Inertia.Pages.User.Events.Index> = ({ events }) => {
     return (
         <div className="spacing grid">
             <EventFilters />
@@ -14,7 +14,7 @@ const Events: FC<Inertia.Pages.User.Events.Events> = ({ events }) => {
                     Расписание
                 </AccentHeading>
 
-                {events.length > 0 ? (
+                {events && events.length > 0 ? (
                     <ul className="grid gap-4 sm:gap-8">
                         {events.map((event, index) => (
                             <EventCard
@@ -32,4 +32,4 @@ const Events: FC<Inertia.Pages.User.Events.Events> = ({ events }) => {
     );
 };
 
-export default Events;
+export default Index;
