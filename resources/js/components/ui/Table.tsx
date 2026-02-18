@@ -3,6 +3,8 @@ import { ComponentPropsWithoutRef, FC, ReactNode } from 'react';
 
 type TableProps = ComponentPropsWithoutRef<'table'> & {
     children: ReactNode;
+    isEmpty?: boolean;
+    placeholder?: string;
 };
 
 type TablePartProps = ComponentPropsWithoutRef<'thead' | 'tbody'> & {
@@ -23,7 +25,16 @@ type TableHeaderCellProps = ComponentPropsWithoutRef<'th'> & {
     width?: number;
 };
 
-function Table({ className, children, ...props }: TableProps) {
+function Table({
+    className,
+    children,
+    isEmpty = false,
+    placeholder = '',
+    ...props
+}: TableProps) {
+    if (isEmpty) {
+        return <p>{placeholder}</p>;
+    }
     return (
         <div className="w-full overflow-x-auto pb-4">
             <table

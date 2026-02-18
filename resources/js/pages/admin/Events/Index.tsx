@@ -24,7 +24,10 @@ const Index: FC<Inertia.Pages.Admin.Events.Index> = ({
                     <Plus /> Добавить событие
                 </Button>
             </IndexToolbar>
-            <Table>
+            <Table
+                isEmpty={events?.data?.length === 0}
+                placeholder="По вашему запросу не найдено ни одного события"
+            >
                 <EventTableHeader />
                 <EventTable
                     events={events.data}

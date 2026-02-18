@@ -14,6 +14,7 @@ const EventTable: FC<
         exhibition: App.Models.Exhibition;
     }>
 > = ({ className, events, exhibition }) => {
+
     if (!events) {
         return null;
     }
