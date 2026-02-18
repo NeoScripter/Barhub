@@ -35,7 +35,7 @@ class EventIndexRequest extends FormRequest
                     '-stage.name',
                 ]),
             ],
-            'search' => ['sometimes', 'string', 'max:255'],
+            'search' => ['sometimes', 'string', 'max:50'],
             'page' => ['sometimes', 'integer', 'min:1'],
         ];
     }

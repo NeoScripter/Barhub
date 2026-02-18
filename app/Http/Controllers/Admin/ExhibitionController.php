@@ -6,9 +6,9 @@ namespace App\Http\Controllers\Admin;
 
 use App\Enums\UserRole;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\ExhibitionIndexRequest;
 use App\Http\Requests\Exhibition\ExhibitionUpdateRequest;
 use App\Models\Exhibition;
-use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -16,7 +16,7 @@ use Spatie\QueryBuilder\QueryBuilder;
 
 final class ExhibitionController extends Controller
 {
-    public function index(Request $request): Response
+    public function index(ExhibitionIndexRequest $request): Response
     {
         $query = Exhibition::query();
 
