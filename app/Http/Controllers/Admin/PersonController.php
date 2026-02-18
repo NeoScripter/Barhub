@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Person\PersonIndexRequest;
 use App\Models\Exhibition;
 use App\Models\Person;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Inertia\Inertia;
 use Spatie\QueryBuilder\QueryBuilder;
 
@@ -17,6 +18,7 @@ final class PersonController extends Controller
     {
         $eventIds = $exhibition->events()->pluck('id');
 
+        /** @var LengthAwarePaginator<Person> $people */
         $people = QueryBuilder::for(Person::whereHas('events', fn($q) => $q->whereIn('events.id', $eventIds)))
             ->select('people.*')
             ->withCount('events')
@@ -25,7 +27,7 @@ final class PersonController extends Controller
             ->paginate()
             ->through(fn($person) => tap($person, function ($p) use ($eventIds) {
                 $p->roles = $p->roles($eventIds->toArray());
-            }));
+            }))->appends($request->query());
 
         return Inertia::render('admin/People/Index', [
             'exhibition' => $exhibition,

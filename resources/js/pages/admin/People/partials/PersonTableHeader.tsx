@@ -6,11 +6,11 @@ import { ChevronsUpDown } from 'lucide-react';
 type Column = { label: string; query?: string };
 
 const HEADER_COLS: Column[] = [
-    { label: 'Название', query: 'title' },
-    { label: 'Спикеры' },
-    { label: 'Время и дата', query: 'starts_at' },
-    { label: 'Площадка', query: 'stage.name' },
-    { label: 'Направления' },
+    { label: 'Фото' },
+    { label: 'Имя', query: 'name' },
+    { label: 'Роли'},
+    { label: 'Телеграм'},
+    { label: 'Кол-во лекций' },
     { label: 'Действия' },
 ] as const;
 
@@ -21,7 +21,6 @@ const EventTableHeader = () => {
                 {HEADER_COLS.map((col, idx) => (
                     <Table.HeaderCell
                         key={idx}
-                        width={idx === 0 ? 2 : 1}
                     >
                         {col.query ? (
                             <Link

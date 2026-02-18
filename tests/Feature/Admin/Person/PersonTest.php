@@ -61,9 +61,10 @@ describe('Person Panel Access Control', function (): void {
                     ->has('people.data', 5)
             );
 
-        $people->each(
-            fn($person) => $response->assertSee($person->name)
-        );
+        $inertiaData = $response->viewData('page')['props']['people']['data'];
+        $people->each(function ($person) use ($inertiaData) {
+            expect(collect($inertiaData)->pluck('name'))->toContain($person->name);
+        });
     });
 
     test('admin can see people only for exhibitions assigned to them', function (): void {
