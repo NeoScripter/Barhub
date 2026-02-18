@@ -2,7 +2,8 @@ import AdminDash from '@/wayfinder/App/Http/Controllers/Admin/DashboardControlle
 import AdminExpos from '@/wayfinder/App/Http/Controllers/Admin/ExhibitionController';
 import ExponentDash from '@/wayfinder/App/Http/Controllers/Exponent/DashboardController';
 import UserExpos from '@/wayfinder/App/Http/Controllers/User/ExhibitionController';
-import { index } from '@/wayfinder/routes/admin/exhibitions/events';
+import { index as expoIndex } from '@/wayfinder/routes/admin/exhibitions/events';
+import { index as personIndex } from '@/wayfinder/routes/admin/exhibitions/people';
 import {
     BriefcaseBusiness,
     CalendarDays,
@@ -50,7 +51,7 @@ export const adminNavItems: NavItemType[] = [
         id: 'program-events',
         type: 'link',
         label: 'События программы',
-        url: index.url('{exhibition}'),
+        url: expoIndex.url('{exhibition}'),
         icon: CalendarDays,
         isDynamic: true,
     },
@@ -58,7 +59,7 @@ export const adminNavItems: NavItemType[] = [
         id: 'people',
         type: 'link',
         label: 'Люди',
-        url: '/admin/exhibitions/{exhibition}/people',
+        url: personIndex.url('{exhibition}'),
         icon: UserCheck,
         isDynamic: true,
     },

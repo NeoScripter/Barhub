@@ -1,8 +1,9 @@
+import Image from '@/components/ui/Image';
 import Table from '@/components/ui/Table';
 import ThemeBadge from '@/components/ui/ThemeBadge';
-import { formatDateAndTime, formatDateShort } from '@/lib/utils';
+import { formatDateAndTime } from '@/lib/utils';
 import { NodeProps } from '@/types/shared';
-import { edit } from '@/wayfinder/routes/admin/exhibitions/persons';
+import { edit } from '@/wayfinder/routes/admin/exhibitions/people';
 import { App } from '@/wayfinder/types';
 import { Link } from '@inertiajs/react';
 import { PencilLine } from 'lucide-react';
@@ -10,33 +11,32 @@ import { FC } from 'react';
 
 const PersonTable: FC<
     NodeProps<{
-        persons: App.Models.Person[] | undefined;
+        people: App.Models.Person[] | undefined;
         exhibition: App.Models.Exhibition;
     }>
-> = ({ className, persons, exhibition }) => {
-
-    if (!persons) {
+> = ({ className, people, exhibition }) => {
+    if (!people) {
         return null;
     }
 
     return (
         <Table.Body className={className}>
-            {persons.map((person) => (
+            {people.map((person) => (
                 <Table.Row key={person.id}>
                     <Table.Cell
+                        key="avatar"
+                        width={1}
+                    >
+                        {person.avatar && <Image image={person.avatar} />}
+                    </Table.Cell>
+                    <Table.Cell
                         key="name"
-                        width={2}
+                        width={1}
                     >
-                        {person.title}
+                        {person.name}
                     </Table.Cell>
                     <Table.Cell
-                        key="people"
-                        width={0.75}
-                    >
-                        {person.people?.map((person) => person.name).join(', ')}
-                    </Table.Cell>
-                    <Table.Cell
-                        key="startDate"
+                        key="roles"
                         width={1.4}
                     >
                         {formatDateAndTime(new Date(person.starts_at))}

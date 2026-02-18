@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Requests\Admin;
+namespace App\Http\Requests\Admin\Person;
 
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
@@ -30,12 +30,8 @@ final class PersonIndexRequest extends FormRequest
                 'sometimes',
                 'string',
                 Rule::in([
-                    'title',
-                    '-title',
-                    'starts_at',
-                    '-starts_at',
-                    'stage.name',
-                    '-stage.name',
+                    'name',
+                    '-name',
                 ]),
             ],
             'search' => ['sometimes', 'string', 'max:50'],

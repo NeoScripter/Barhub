@@ -11,30 +11,30 @@ import PersonTable from './partials/PersonTable';
 import PersonTableHeader from './partials/PersonTableHeader';
 
 const Index: FC<Inertia.Pages.Admin.People.Index> = ({
-    persons,
+    people,
     exhibition,
 }) => {
     return (
         <>
             <IndexToolbar>
-                <AccentHeading className="text-xl">События выставки</AccentHeading>
-                <SearchInput placeholder="Поиск события" />
+                <AccentHeading className="text-xl">Люди</AccentHeading>
+                <SearchInput placeholder="Поиск по имени" />
 
                 <Button>
-                    <Plus /> Добавить событие
+                    <Plus /> Добавить человека
                 </Button>
             </IndexToolbar>
             <Table
-                isEmpty={persons?.data?.length === 0}
-                placeholder="По вашему запросу не найдено ни одного события"
+                isEmpty={people?.data?.length === 0}
+                placeholder="По вашему запросу не найдено ни одного человека"
             >
                 <PersonTableHeader />
                 <PersonTable
-                    persons={persons.data}
+                    people={people.data}
                     exhibition={exhibition}
                 />
             </Table>
-            <Pagination data={persons} />
+            <Pagination data={people} />
         </>
     );
 };
