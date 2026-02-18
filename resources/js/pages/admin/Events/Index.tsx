@@ -1,25 +1,29 @@
 import AccentHeading from '@/components/ui/AccentHeading';
 import { Button } from '@/components/ui/Button';
+import IndexToolbar from '@/components/ui/IndexToolbar';
 import Pagination from '@/components/ui/Pagination';
+import SearchInput from '@/components/ui/SearchInput';
 import Table from '@/components/ui/Table';
 import { Inertia } from '@/wayfinder/types';
 import { Plus } from 'lucide-react';
 import { FC } from 'react';
-import EventTableHeader from './partials/EventTableHeader';
 import EventTable from './partials/EventTable';
+import EventTableHeader from './partials/EventTableHeader';
 
 const Index: FC<Inertia.Pages.Admin.Events.Index> = ({
     events,
-    exhibition
+    exhibition,
 }) => {
     return (
         <>
-            <div className="flex flex-wrap items-center justify-between gap-4 py-6.5 sm:py-8 xl:py-9.5">
-                <AccentHeading className="text-lg">События</AccentHeading>
-                <Button size={'lg'}>
+            <IndexToolbar>
+                <AccentHeading className="text-xl">События</AccentHeading>
+                <SearchInput placeholder="Поиск события" />
+
+                <Button>
                     <Plus /> Добавить событие
                 </Button>
-            </div>
+            </IndexToolbar>
             <Table>
                 <EventTableHeader />
                 <EventTable

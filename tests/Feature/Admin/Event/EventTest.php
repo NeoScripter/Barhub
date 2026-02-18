@@ -243,7 +243,7 @@ describe('Event Search', function (): void {
 
         $events = $response->viewData('page')['props']['events']['data'];
         expect(count($events))->toBe(2);
-    })->skip('Search not yet implemented');
+    });
 });
 
 describe('Event Edit Page Access', function (): void {

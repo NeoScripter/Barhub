@@ -42,47 +42,65 @@ export function formatDateAndTime(date: Date) {
     }).format(date);
 }
 
-export const getSortUrl = (query: string): string => {
-    const params = new URLSearchParams(window.location.search);
-    const currentSort = params.get('sort');
+export const getSortUrl = (field: string): string => {
+    const { pathname, search } = window.location;
+    const params = new URLSearchParams(search);
 
-    // Determine new sort direction
-    const isCurrentlyDesc = currentSort === `-${query}`;
-    const newSort = isCurrentlyDesc ? query : `-${query}`;
+    const current = params.get('sort');
+    const isDesc = current === `-${field}`;
+    const next = isDesc ? field : `-${field}`;
 
-    params.set('sort', newSort);
-
+    params.set('sort', next);
     params.set('page', '1');
 
-    return window.location.pathname + '?' + params.toString();
+    const qs = params.toString();
+    return qs ? `${pathname}?${qs}` : pathname;
+};
+
+
+export const getSearchUrl = (query: string): string => {
+    const { pathname, search } = window.location;
+    const params = new URLSearchParams(search);
+
+    if (query.length === 0) {
+        params.delete('search');
+    } else {
+        params.set('search', query);
+        params.set('page', '1');
+    }
+
+    const qs = params.toString();
+    return qs ? `${pathname}?${qs}` : pathname;
 };
 
 export const getFilterUrl = (key: string, value: string): string => {
-    const params = new URLSearchParams(window.location.search);
-    const filterKey = `filter[${key}]`;
-    const currentFilters = params.get(filterKey)?.split(',') || [];
+    const { pathname, search } = window.location;
+    const params = new URLSearchParams(search);
 
-    let newFilters: string[];
+    const paramKey = `filter[${key}]`;
 
-    if (currentFilters.includes(value)) {
-        // Remove the value from filters
-        newFilters = currentFilters.filter((f) => f !== value);
+    const values = new Set(
+        (params.get(paramKey)?.split(',').filter(Boolean)) ?? []
+    );
 
-        if (newFilters.length === 0) {
-            // If no filters left, remove the param entirely
-            params.delete(filterKey);
-        } else {
-            // Update with remaining filters
-            params.set(filterKey, newFilters.join(','));
-        }
+    if (values.has(value)) {
+        values.delete(value);
     } else {
-        // Add the value to filters
-        newFilters = [...currentFilters, value];
-        params.set(filterKey, newFilters.join(','));
+        values.add(value);
     }
 
-    return window.location.pathname + '?' + params.toString();
+    if (values.size === 0) {
+        params.delete(paramKey);
+    } else {
+        params.set(paramKey, [...values].join(','));
+    }
+
+    params.set('page', '1');
+
+    const qs = params.toString();
+    return qs ? `${pathname}?${qs}` : pathname;
 };
+
 
 export const isActiveFilter = (key: string, value: string): boolean => {
     const params = new URLSearchParams(window.location.search);
