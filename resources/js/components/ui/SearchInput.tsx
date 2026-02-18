@@ -1,7 +1,15 @@
-import { cn } from '@/lib/utils';
+import { useDebounce } from '@/hooks/useDebounce';
+import { cn, getSearchUrl } from '@/lib/utils';
 import { NodeProps } from '@/types/shared';
+import { router } from '@inertiajs/react';
 import { Search } from 'lucide-react';
-import { ChangeEvent, FC, InputHTMLAttributes, useState } from 'react';
+import {
+    ChangeEvent,
+    FC,
+    InputHTMLAttributes,
+    useEffect,
+    useState,
+} from 'react';
 import { Input } from './Input';
 
 type Props = NodeProps<
@@ -10,11 +18,23 @@ type Props = NodeProps<
 
 const SearchInput: FC<Props> = ({ className, ...props }) => {
     const [query, setQuery] = useState('');
+    const debouncedQuery = useDebounce(query, 300);
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         const newQuery = e.currentTarget.value;
         setQuery(newQuery);
     };
+
+    useEffect(() => {
+        if (debouncedQuery === null) return;
+
+        router.get(
+            getSearchUrl(debouncedQuery),
+            {},
+            { preserveState: true, preserveScroll: true },
+        );
+    }, [debouncedQuery]);
+
     return (
         <div className={cn('relative md:w-80 lg:w-100', className)}>
             <Input
