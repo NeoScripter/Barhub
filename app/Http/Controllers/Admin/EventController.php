@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\EventIndexRequest;
 use App\Models\Exhibition;
-use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Inertia\Inertia;
 use App\Models\Event;
@@ -14,7 +14,7 @@ use Spatie\QueryBuilder\QueryBuilder;
 
 class EventController extends Controller
 {
-    public function index(Request $request, Exhibition $exhibition)
+    public function index(EventIndexRequest $request, Exhibition $exhibition)
     {
         /** @var LengthAwarePaginator<Event> $events */
         $events = QueryBuilder::for($exhibition->events())
@@ -30,6 +30,11 @@ class EventController extends Controller
                 'starts_at',
                 AllowedSort::custom('stage.name', new RelationSort('stages', 'name', 'stage_id')),
             ])
+            ->when($request->string('search'), function ($query, $search) {
+                $query->where(function ($q) use ($search) {
+                    $q->whereRaw('title LIKE ?', ["%{$search}%"]);
+                });
+            })
             ->paginate()
             ->appends($request->query());
 
