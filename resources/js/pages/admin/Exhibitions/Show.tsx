@@ -19,7 +19,7 @@ const Show: FC<Inertia.Pages.Admin.Exhibitions.Show> = ({ exhibition }) => {
                             asChild
                             className="w-2/3"
                         >
-                            <Link href={card.url(exhibition.slug)}>Перейти</Link>
+                            <Link href={card.url(exhibition.id)}>Перейти</Link>
                         </Button>
                     </ActionCard>
                 </li>
@@ -34,7 +34,7 @@ type CardLinkType = {
     id: string;
     icon: LucideIcon;
     label: string;
-    url: (slug: string) => string;
+    url: (id: number) => string;
 };
 
 const cards: CardLinkType[] = [
@@ -42,18 +42,18 @@ const cards: CardLinkType[] = [
         id: crypto.randomUUID(),
         icon: Calendar,
         label: 'События',
-        url: (slug) => index({slug: slug}).url,
+        url: (id) => index({id: id}).url,
     },
     {
         id: crypto.randomUUID(),
         icon: User,
         label: 'Спикеры',
-        url: (slug) => '/',
+        url: (id) => '/',
     },
     {
         id: crypto.randomUUID(),
         icon: BriefcaseBusiness,
         label: 'Компании',
-        url: (slug) => '/',
+        url: (id) => '/',
     },
 ];

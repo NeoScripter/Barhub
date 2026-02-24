@@ -28,7 +28,7 @@ const ExpoTable: FC<
                         className="relative"
                     >
                         <Link
-                            href={show({ slug: expo.slug })}
+                            href={show({ id: expo.id })}
                             className="absolute inset-0 block"
                         />
                         {expo.name}
@@ -64,7 +64,7 @@ const ExpoTable: FC<
                         >
                             <Link
                                 href={edit({
-                                    exhibition: expo.slug,
+                                    exhibition: expo.id,
                                 })}
                                 data-test={`edit-expo-${expo.id}`}
                             >

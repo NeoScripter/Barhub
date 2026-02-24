@@ -19,7 +19,7 @@ Route::get('/', HomeController::class)->name('home');
 
 Route::get('/exhibitions', UserExhibitionController::class)->name('exhibitions.index');
 
-Route::prefix('/exhibitions/{exhibition:slug}')
+Route::prefix('/exhibitions/{exhibition}')
     ->group(function (): void {
         Route::resource('events', UserEventController::class)->only(['index', 'show']);
     });
@@ -50,7 +50,7 @@ Route::prefix('/admin')
             ->middleware(['can:viewAny,'.Exhibition::class])
             ->only(['index', 'update']);
 
-        Route::prefix('exhibitions/{exhibition:slug}')
+        Route::prefix('exhibitions/{exhibition}')
             ->name('exhibitions.')
             ->middleware('can:view,exhibition')
             ->group(function (): void {

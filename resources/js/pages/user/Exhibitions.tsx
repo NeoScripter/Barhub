@@ -7,7 +7,7 @@ import { Link } from '@inertiajs/react';
 import { FC } from 'react';
 
 const Exhibitions: FC<{
-    expos: Pick<App.Models.Exhibition, 'name' | 'id' | 'slug'>[];
+    expos: Pick<App.Models.Exhibition, 'name' | 'id'>[];
 }> = ({ expos }) => {
     return (
         <div className="flex h-full flex-1 flex-col items-center justify-center gap-4">
@@ -28,7 +28,7 @@ const Exhibitions: FC<{
                             >
                                 <Link
                                     href={index({
-                                        exhibition: expo.slug,
+                                        exhibition: expo.id,
                                     })}
                                     className="hover:text-primary"
                                 >

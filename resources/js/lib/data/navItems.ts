@@ -187,12 +187,12 @@ export const userNavItems: NavItemType[] = [
     },
 ];
 
-function extractExhibitionSlug(url: string): string | null {
-    const match = url.match(/admin\/exhibitions\/([^/]+)/);
+function extractExhibitionId(url: string): string | null {
+    const match = url.match(/admin\/exhibitions\/(\d+)/);
     return match ? match[1] : null;
 }
 
-function injectExhibitionSlug(
+function injectExhibitionId(
     item: NavItemType,
     exhibitionId: string,
 ): NavItemType {
@@ -204,7 +204,7 @@ function injectExhibitionSlug(
 
     if (item.type === 'drawer' && item.links) {
         newItem.links = item.links.map((link) =>
-            injectExhibitionSlug(link, exhibitionId),
+            injectExhibitionId(link, exhibitionId),
         );
     }
 
@@ -215,7 +215,7 @@ export function renderAdminNavItems(
     currentUrl: string,
     canViewExpos: boolean,
 ): NavItemType[] {
-    const exhibitionId = extractExhibitionSlug(currentUrl);
+    const exhibitionId = extractExhibitionId(currentUrl);
 
     if (!canViewExpos) {
         return adminNavItems.filter(
@@ -233,7 +233,7 @@ export function renderAdminNavItems(
 
     // On an exhibition page - inject the ID into all dynamic URLs
     return adminNavItems.map((item) =>
-        injectExhibitionSlug(item, exhibitionId),
+        injectExhibitionId(item, exhibitionId),
     );
 }
 

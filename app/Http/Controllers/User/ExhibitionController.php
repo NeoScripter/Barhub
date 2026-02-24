@@ -12,7 +12,7 @@ final class ExhibitionController extends Controller
 {
     public function __invoke()
     {
-        $expos = Exhibition::query()->select(['name', 'id', 'slug'])->get();
+        $expos = Exhibition::query()->select(['name', 'id'])->get();
 
         return Inertia::render('user/Exhibitions', [
             'expos' => $expos,

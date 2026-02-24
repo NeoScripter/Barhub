@@ -62,7 +62,7 @@ const EventTable: FC<
                         <Link
                             href={edit({
                                 event: event.id,
-                                exhibition: exhibition.slug,
+                                exhibition: exhibition,
                             })}
                         >
                             <PencilLine />

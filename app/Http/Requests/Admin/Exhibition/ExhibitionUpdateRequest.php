@@ -27,7 +27,6 @@ final class ExhibitionUpdateRequest extends FormRequest
     {
         return [
             'name' => ['sometimes', 'string', 'max:255'],
-            'slug' => ['sometimes', 'string', 'max:255', Rule::unique('exhibitions')->ignore($this->exhibition)],
             'starts_at' => ['sometimes', 'date'],
             'ends_at' => ['sometimes', 'date', 'after:starts_at'],
             'location' => ['sometimes', 'string', 'max:255'],

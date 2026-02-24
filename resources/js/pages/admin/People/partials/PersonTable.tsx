@@ -63,12 +63,12 @@ const PersonTable: FC<
                     <Table.Cell key="stage">{person.events_count}</Table.Cell>
                     <Table.Cell
                         key="edit-btn"
-                        width={0.5}
+                        width={1}
                     >
                         <Link
                             href={edit({
                                 person: person.id,
-                                exhibition: exhibition.slug,
+                                exhibition: exhibition.id,
                             })}
                         >
                             <PencilLine />
