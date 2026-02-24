@@ -1,7 +1,8 @@
 import GridLayout from '@/components/layout/GridLayout';
 import ActionCard from '@/components/ui/ActionCard';
 import { Button } from '@/components/ui/Button';
-import { index } from '@/wayfinder/routes/admin/exhibitions/events';
+import EventController from '@/wayfinder/App/Http/Controllers/Admin/EventController';
+import PersonController from '@/wayfinder/App/Http/Controllers/Admin/PersonController';
 import { Inertia } from '@/wayfinder/types';
 import { Link } from '@inertiajs/react';
 import { BriefcaseBusiness, Calendar, LucideIcon, User } from 'lucide-react';
@@ -42,13 +43,13 @@ const cards: CardLinkType[] = [
         id: crypto.randomUUID(),
         icon: Calendar,
         label: 'События',
-        url: (id) => index({id: id}).url,
+        url: (id) => EventController.index({id: id}).url,
     },
     {
         id: crypto.randomUUID(),
         icon: User,
         label: 'Спикеры',
-        url: (id) => '/',
+        url: (id) => PersonController.index({id: id}).url,
     },
     {
         id: crypto.randomUUID(),

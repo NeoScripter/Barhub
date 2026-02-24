@@ -119,6 +119,11 @@ button {
     @apply cursor-pointer;
 }
 
+input,
+textarea {
+    field-sizing: content;
+}
+
 .burger {
     transform-origin: center;
 }
