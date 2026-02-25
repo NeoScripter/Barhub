@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 namespace App\Actions;
@@ -11,22 +10,31 @@ use Illuminate\Database\Eloquent\Collection;
 final class FormatEventPeople
 {
     /**
-     * @return array<int, array{person_id: int, name: string, role: int}>
+     * @return array<int, array{person_id: int, name: string, roles: array<int, int>}>
      */
     public function execute(Event $event): array
     {
         /** @var Collection<int, Person> $people */
         $people = $event->people;
 
-        return $people->map(function (Person $person): array {
-            /** @var object{role: int} $pivot */
-            $pivot = $person->pivot;
+        // Group by person_id since same person can have multiple roles
+        return $people
+            ->groupBy('id')
+            ->map(function (Collection $personGroup): array {
+                /** @var Person $firstPerson */
+                $firstPerson = $personGroup->first();
 
-            return [
-                'person_id' => $person->id,
-                'name' => $person->name,
-                'role' => $pivot->role,
-            ];
-        })->toArray();
+                return [
+                    'person_id' => $firstPerson->id,
+                    'name' => $firstPerson->name,
+                    'roles' => $personGroup->map(function (Person $person): int {
+                        /** @var object{role: int} $pivot */
+                        $pivot = $person->pivot;
+                        return $pivot->role;
+                    })->values()->toArray(),
+                ];
+            })
+            ->values()
+            ->toArray();
     }
 }

@@ -14,16 +14,16 @@ type Role = {
     label: string;
 };
 
-export type PersonWithRole = {
+export type PersonWithRoles = {
     person_id: number;
-    role: number;
+    roles: number[];
 };
 
 type PersonSelectProps = {
     availablePeople: Person[];
     roles: Role[];
-    selectedPeople: PersonWithRole[];
-    onChange: (people: PersonWithRole[]) => void;
+    selectedPeople: PersonWithRoles[];
+    onChange: (people: PersonWithRoles[]) => void;
     errors?: Record<string, string>;
 };
 
@@ -43,7 +43,7 @@ export function PersonSelect({
             ...selectedPeople,
             {
                 person_id: firstAvailablePerson.id,
-                role: roles[0].value,
+                roles: [roles[0].value],
             },
         ]);
     };
@@ -52,13 +52,27 @@ export function PersonSelect({
         onChange(selectedPeople.filter((_, i) => i !== index));
     };
 
-    const updatePerson = (
-        index: number,
-        field: keyof PersonWithRole,
-        value: number,
-    ) => {
+    const updatePersonId = (index: number, personId: number) => {
         const updated = [...selectedPeople];
-        updated[index][field] = value;
+        updated[index].person_id = personId;
+        onChange(updated);
+    };
+
+    const addRoleToPerson = (index: number, roleValue: string) => {
+        const role = parseInt(roleValue);
+        const updated = [...selectedPeople];
+
+        if (!updated[index].roles.includes(role)) {
+            updated[index].roles = [...updated[index].roles, role];
+            onChange(updated);
+        }
+    };
+
+    const removeRoleFromPerson = (personIndex: number, role: number) => {
+        const updated = [...selectedPeople];
+        updated[personIndex].roles = updated[personIndex].roles.filter(
+            (r) => r !== role,
+        );
         onChange(updated);
     };
 
@@ -74,6 +88,11 @@ export function PersonSelect({
         return availablePeople.filter((p) => !otherSelectedIds.includes(p.id));
     };
 
+    const getAvailableRolesForPerson = (personIndex: number) => {
+        const selectedRoles = selectedPeople[personIndex].roles;
+        return roles.filter((role) => !selectedRoles.includes(role.value));
+    };
+
     const canAddMore = selectedPeople.length < availablePeople.length;
 
     return (
@@ -81,69 +100,108 @@ export function PersonSelect({
             <Label>Участники</Label>
 
             {selectedPeople.length > 0 ? (
-                <div className="grid gap-4">
-                    {selectedPeople.map((person, index) => (
+                <div className="grid max-w-max gap-4">
+                    {selectedPeople.map((person, personIndex) => (
                         <div
-                            key={index}
-                            className="grid gap-4 rounded border p-4 sm:grid-cols-[1fr,1fr,auto]"
+                            key={personIndex}
+                            className="flex flex-col gap-4 rounded border border-muted p-4 sm:gap-6"
                         >
-                            <div className="grid gap-2">
-                                <Label className="text-sm font-normal">
-                                    Человек
-                                </Label>
+                            <div className="grid gap-1">
+                                <Label className="text-sm">Участник</Label>
                                 <SelectMenu
                                     items={getAvailablePeopleForSelect(
                                         person.person_id,
                                     )}
                                     value={person.person_id.toString()}
                                     onValueChange={(value) =>
-                                        updatePerson(
-                                            index,
-                                            'person_id',
+                                        updatePersonId(
+                                            personIndex,
                                             parseInt(value),
                                         )
                                     }
                                     getLabel={(p) => p.name}
                                     getValue={(p) => p.id.toString()}
                                     placeholder="Выберите участника"
+                                    className="w-120 rounded-md"
                                 />
                                 <InputError
                                     message={
-                                        errors[`people.${index}.person_id`]
+                                        errors[
+                                            `people.${personIndex}.person_id`
+                                        ]
                                     }
                                 />
                             </div>
 
-                            <div className="grid gap-2">
-                                <Label className="text-sm font-normal">
-                                    Роль
-                                </Label>
-                                <SelectMenu
-                                    items={roles}
-                                    value={person.role.toString()}
-                                    onValueChange={(value) =>
-                                        updatePerson(
-                                            index,
-                                            'role',
-                                            parseInt(value),
-                                        )
-                                    }
-                                    getLabel={(r) => r.label}
-                                    getValue={(r) => r.value.toString()}
-                                />
+                            <div className="grid gap-3">
+                                <Label className="text-sm">Роли</Label>
+                                {getAvailableRolesForPerson(personIndex)
+                                    .length > 0 && (
+                                    <SelectMenu
+                                        items={getAvailableRolesForPerson(
+                                            personIndex,
+                                        )}
+                                        value=""
+                                        onValueChange={(value) =>
+                                            addRoleToPerson(personIndex, value)
+                                        }
+                                        getLabel={(r) => r.label}
+                                        getValue={(r) => r.value.toString()}
+                                        placeholder="Добавить роль"
+                                        className="rounded-md"
+                                    />
+                                )}
+
+                                <div className="flex flex-col gap-2">
+                                    {/* Selected roles */}
+                                    {person.roles.length > 0 && (
+                                        <div className="flex flex-wrap gap-2">
+                                            {person.roles.map((role) => {
+                                                const roleData = roles.find(
+                                                    (r) => r.value === role,
+                                                );
+                                                return (
+                                                    <div
+                                                        key={role}
+                                                        className="flex items-center gap-2 rounded-md bg-gray-400 px-3 py-1 text-sm text-white"
+                                                    >
+                                                        <span>
+                                                            {roleData?.label}
+                                                        </span>
+                                                        <button
+                                                            type="button"
+                                                            onClick={() =>
+                                                                removeRoleFromPerson(
+                                                                    personIndex,
+                                                                    role,
+                                                                )
+                                                            }
+                                                            className="hover:opacity-70"
+                                                        >
+                                                            <X className="size-4" />
+                                                        </button>
+                                                    </div>
+                                                );
+                                            })}
+                                        </div>
+                                    )}
+                                </div>
                                 <InputError
-                                    message={errors[`people.${index}.role`]}
+                                    message={
+                                        errors[`people.${personIndex}.roles`]
+                                    }
                                 />
                             </div>
 
                             <div className="flex items-end">
                                 <Button
                                     type="button"
-                                    variant="outline"
-                                    size="icon"
-                                    onClick={() => removePerson(index)}
+                                    variant="destructive"
+                                    size="sm"
+                                    onClick={() => removePerson(personIndex)}
                                 >
-                                    <X className="h-4 w-4" />
+                                    Удалить
+                                    <X className="size-4" />
                                 </Button>
                             </div>
                         </div>
@@ -157,7 +215,7 @@ export function PersonSelect({
 
             <Button
                 type="button"
-                variant="outline"
+                variant="secondary"
                 onClick={addPerson}
                 className="w-fit"
                 disabled={!canAddMore}

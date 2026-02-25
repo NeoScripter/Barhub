@@ -31,13 +31,26 @@ class EventUpdateRequest extends FormRequest
             'theme_ids.*' => ['exists:themes,id'],
             'people' => ['sometimes', 'array'],
             'people.*.person_id' => ['required', 'exists:people,id'],
-            'people.*.role' => [
+            'people.*.roles' => ['required', 'array', 'min:1'],
+            'people.*.roles.*' => [
                 'required',
                 'integer',
                 Rule::in(collect(PersonRole::cases())->pluck('value')->toArray())
             ],
             'starts_at' => ['sometimes', 'date'],
             'ends_at' => ['sometimes', 'date', 'after:starts_at'],
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'people.*.person_id.required' => 'Выберите участника',
+            'people.*.person_id.exists' => 'Выбранный участник не существует',
+            'people.*.roles.required' => 'Выберите хотя бы одну роль',
+            'people.*.roles.min' => 'Выберите хотя бы одну роль',
+            'people.*.roles.*.in' => 'Недопустимое значение роли',
+            'ends_at.after' => 'Время окончания должно быть позже времени начала',
         ];
     }
 }

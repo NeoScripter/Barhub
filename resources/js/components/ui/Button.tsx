@@ -24,9 +24,9 @@ const buttonVariants = cva(
             },
             size: {
                 default:
-                    'h-10.5 text-sm rounded-lg gap-1.5 px-5.5 has-[>svg]:pl-4.5 [&_svg]:size-5',
-                sm: 'h-9.5 text-sm rounded-md gap-1.5 px-4.5 has-[>svg]:pl-3.5 [&_svg]:size-4',
-                lg: 'h-11.5 rounded-lg gap-2 px-3 text-sm sm:text-base px-6 has-[>svg]:pl-4.5 [>svg]:size-3 sm:[>svg]:size-3.5',
+                    'h-10.5 text-sm rounded-lg gap-1.5 px-4.5 has-[>svg]:pr-3.5 [&_svg]:size-5',
+                sm: 'h-9.5 text-sm rounded-md gap-1.5 px-3.5 has-[>svg]:pr-2.5 [&_svg]:size-4',
+                lg: 'h-11.5 rounded-lg gap-2 px-3 text-sm sm:text-base px-5 has-[>svg]:pr-4 [>svg]:size-3 sm:[>svg]:size-3.5',
                 icon: 'size-9',
             },
         },

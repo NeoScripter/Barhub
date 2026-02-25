@@ -87,11 +87,13 @@ final class EventController extends Controller
             }
 
             if ($request->has('people')) {
-                $peopleData = collect($request->people)->mapWithKeys(function ($item) {
-                    return [$item['person_id'] => ['role' => $item['role']]];
-                });
+                $event->people()->detach();
 
-                $event->people()->sync($peopleData);
+                foreach ($request->people as $personData) {
+                    foreach ($personData['roles'] as $role) {
+                        $event->people()->attach($personData['person_id'], ['role' => $role]);
+                    }
+                }
             }
         });
 
