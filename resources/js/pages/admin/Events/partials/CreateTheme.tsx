@@ -32,7 +32,7 @@ const CreateTheme: FC = () => {
         color_hex: predefinedColors[0],
     });
 
-    const handleClick = (e: React.FormEvent) => {
+    const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         post(store().url, {
             onSuccess: () => {
@@ -43,7 +43,10 @@ const CreateTheme: FC = () => {
     };
 
     return (
-        <form className="my-5 flex flex-col gap-4">
+        <form
+            onSubmit={handleSubmit}
+            className="my-5 flex flex-col gap-4"
+        >
             <div className="grid gap-2">
                 <Label htmlFor="name">Название</Label>
                 <Input
@@ -68,9 +71,8 @@ const CreateTheme: FC = () => {
             </div>
 
             <Button
-                type="button"
+                type="submit"
                 variant="secondary"
-                onClick={handleClick}
                 disabled={processing}
                 className="w-fit"
             >

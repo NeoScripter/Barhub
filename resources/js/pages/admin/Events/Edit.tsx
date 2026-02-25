@@ -96,6 +96,13 @@ const Edit: FC<Inertia.Pages.Admin.Events.Edit> = ({
                 />
             </div>
 
+            <div className="mb-8 flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
+                <ThemeDialog
+                    isOpen={isEditingTheme}
+                    setIsOpen={setIsEditingTheme}
+                />
+            </div>
+
             <form
                 onSubmit={handleSubmit}
                 className="flex flex-col gap-6"
@@ -173,23 +180,16 @@ const Edit: FC<Inertia.Pages.Admin.Events.Edit> = ({
                         <InputError message={errors.stage_id} />
                     </div>
 
-                    <div className="flex flex-wrap items-center justify-between gap-4">
-                        <div className="grid max-w-lg gap-2">
-                            <Label htmlFor="themes">Направления</Label>
-                            <ThemeSelect
-                                availableThemes={themes}
-                                selectedThemeIds={data.theme_ids}
-                                onChange={(themeIds) =>
-                                    setData('theme_ids', themeIds)
-                                }
-                            />
-                            <InputError message={errors.theme_ids} />
-                        </div>
-
-                        <ThemeDialog
-                            isOpen={isEditingTheme}
-                            setIsOpen={setIsEditingTheme}
+                    <div className="grid max-w-lg gap-2">
+                        <Label htmlFor="themes">Направления</Label>
+                        <ThemeSelect
+                            availableThemes={themes}
+                            selectedThemeIds={data.theme_ids}
+                            onChange={(themeIds) =>
+                                setData('theme_ids', themeIds)
+                            }
                         />
+                        <InputError message={errors.theme_ids} />
                     </div>
                 </div>
 
