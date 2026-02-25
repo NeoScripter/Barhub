@@ -1,6 +1,6 @@
 import Table from '@/components/ui/Table';
 import ThemeBadge from '@/components/ui/ThemeBadge';
-import { formatDateAndTime, formatDateShort } from '@/lib/utils';
+import { formatDateAndTime } from '@/lib/utils';
 import { NodeProps } from '@/types/shared';
 import { edit } from '@/wayfinder/routes/admin/exhibitions/events';
 import { App } from '@/wayfinder/types';
@@ -14,7 +14,6 @@ const EventTable: FC<
         exhibition: App.Models.Exhibition;
     }>
 > = ({ className, events, exhibition }) => {
-
     if (!events) {
         return null;
     }
@@ -33,7 +32,9 @@ const EventTable: FC<
                         key="people"
                         width={0.75}
                     >
-                        {event.people?.map((person) => person.name).join(', ')}
+                        {Array.from(
+                            new Set((event.people ?? []).map((p) => p.name)),
+                        ).join(', ')}
                     </Table.Cell>
                     <Table.Cell
                         key="startDate"

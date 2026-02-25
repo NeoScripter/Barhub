@@ -30,9 +30,7 @@ final class EventController extends Controller
             ->with([
                 'stage',
                 'themes',
-                'people' => fn($query) => $query
-                    ->select('people.id', 'people.name')
-                    ->groupBy('people.id', 'people.name'),
+                'people:name,id'
             ])
             ->allowedSorts([
                 'title',

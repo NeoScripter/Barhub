@@ -96,7 +96,7 @@ export function PersonSelect({
     const canAddMore = selectedPeople.length < availablePeople.length;
 
     return (
-        <div className="grid gap-4">
+        <div className="grid gap-2">
             <Label>Участники</Label>
 
             {selectedPeople.length > 0 ? (
@@ -217,7 +217,7 @@ export function PersonSelect({
                 type="button"
                 variant="secondary"
                 onClick={addPerson}
-                className="w-fit"
+                className="w-fit mt-3"
                 disabled={!canAddMore}
             >
                 Добавить участника

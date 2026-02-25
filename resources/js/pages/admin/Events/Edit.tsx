@@ -10,8 +10,8 @@ import { update } from '@/wayfinder/routes/admin/exhibitions/events';
 import { Inertia } from '@/wayfinder/types';
 import { useForm } from '@inertiajs/react';
 import { FC } from 'react';
-import { ThemeSelect } from './partials/ThemeSelect';
 import { PersonSelect } from './partials/PersonSelect';
+import { ThemeSelect } from './partials/ThemeSelect';
 
 type PersonWithRole = {
     person_id: number;
@@ -142,14 +142,24 @@ const Edit: FC<Inertia.Pages.Admin.Events.Edit> = ({
                     errors={errors}
                 />
 
-                <Button
-                    type="submit"
-                    className="mt-2 w-fit"
-                    disabled={processing}
-                >
-                    {processing && <Spinner />}
-                    Сохранить
-                </Button>
+                <div className="mt-2 flex items-center gap-4">
+                    <Button
+                        type="submit"
+                        className="w-fit"
+                        disabled={processing}
+                    >
+                        {processing && <Spinner />}
+                        Сохранить
+                    </Button>
+                    <Button
+                        type="button"
+                        variant="tertiary"
+                        className="w-fit rounded-md!"
+                        onClick={() => history.back()}
+                    >
+                        Отмена
+                    </Button>
+                </div>
             </form>
         </div>
     );
