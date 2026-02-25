@@ -4,7 +4,9 @@ import IndexToolbar from '@/components/ui/IndexToolbar';
 import Pagination from '@/components/ui/Pagination';
 import SearchInput from '@/components/ui/SearchInput';
 import Table from '@/components/ui/Table';
+import { create } from '@/wayfinder/routes/admin/exhibitions/events';
 import { Inertia } from '@/wayfinder/types';
+import { Link } from '@inertiajs/react';
 import { Plus } from 'lucide-react';
 import { FC } from 'react';
 import EventTable from './partials/EventTable';
@@ -17,11 +19,15 @@ const Index: FC<Inertia.Pages.Admin.Events.Index> = ({
     return (
         <>
             <IndexToolbar>
-                <AccentHeading className="text-xl">События выставки</AccentHeading>
+                <AccentHeading className="text-xl">
+                    События выставки
+                </AccentHeading>
                 <SearchInput placeholder="Поиск события" />
 
-                <Button>
-                    <Plus /> Добавить событие
+                <Button asChild>
+                    <Link href={create({ exhibition })}>
+                        <Plus /> Добавить событие
+                    </Link>
                 </Button>
             </IndexToolbar>
             <Table

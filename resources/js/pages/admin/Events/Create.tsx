@@ -5,95 +5,40 @@ import { Label } from '@/components/ui/Label';
 import { SelectMenu } from '@/components/ui/SelectMenu';
 import { Spinner } from '@/components/ui/Spinner';
 import { Textarea } from '@/components/ui/Textarea';
-import { convertDateToInputString } from '@/lib/utils';
-import { destroy, update } from '@/wayfinder/routes/admin/exhibitions/events';
+import { store } from '@/wayfinder/routes/admin/exhibitions/events';
 import { Inertia } from '@/wayfinder/types';
-import { router, useForm } from '@inertiajs/react';
-import { Link, Trash2 } from 'lucide-react';
-import { FC, useState } from 'react';
+import { useForm } from '@inertiajs/react';
+import { FC } from 'react';
 import { toast } from 'sonner';
 import { PersonSelect, PersonWithRoles } from './partials/PersonSelect';
 import { ThemeSelect } from './partials/ThemeSelect';
-import { DeleteAlertDialog } from '@/components/ui/DeleteAlertDialog';
 
-const Edit: FC<Inertia.Pages.Admin.Events.Edit> = ({
-    event,
+const Create: FC<Inertia.Pages.Admin.Events.Create> = ({
     exhibition,
-    eventPeople,
     stages,
     themes,
     availablePeople,
     roles,
 }) => {
-    const { data, setData, put, processing, errors } = useForm({
-        title: event.title,
-        description: event.description,
-        stage_id: event.stage_id,
-        theme_ids: event?.themes?.map((t) => t.id) || [],
-        people: (eventPeople as PersonWithRoles[]) || [],
-        starts_at: convertDateToInputString(event.starts_at),
-        ends_at: convertDateToInputString(event.ends_at),
+    const { data, setData, post, processing, errors } = useForm({
+        title: '',
+        description: '',
+        stage_id: null as number | null,
+        theme_ids: [] as number[],
+        people: [] as PersonWithRoles[],
+        starts_at: '',
+        ends_at: '',
     });
-
-    const [isDeleting, setIsDeleting] = useState(false);
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        put(update({ event, exhibition }).url, {
-            onSuccess: () => toast.success('Событие успешно обновлено'),
+        post(store({ exhibition }).url, {
+            onSuccess: () => toast.success('Событие успешно создано'),
         });
-    };
-
-    const handleDelete = () => {
-        setIsDeleting(true);
-        router.delete(destroy({ event, exhibition }).url, {
-            onSuccess: () => {
-                toast.success('Событие успешно удалено');
-            },
-            onError: () => {
-                toast.error('Ошибка при удалении события');
-                setIsDeleting(false);
-            },
-        });
-    };
-
-    const handleCopyLink = () => {
-        const eventUrl = `${window.location.origin}/exhibitions/${exhibition.slug}/events/${event.id}`;
-        navigator.clipboard.writeText(eventUrl);
-        toast.success('Ссылка скопирована');
     };
 
     return (
         <div className="mx-auto w-full max-w-250">
-            <div className="mb-8 flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
-                <Button
-                    variant="muted"
-                    onClick={handleCopyLink}
-                    type="button"
-                >
-                    Копировать ссылку
-                    <Link />
-                </Button>
-
-                <DeleteAlertDialog
-                    trigger={
-                        <Button
-                            variant="destructive"
-                            type="button"
-                        >
-                            Удалить мероприятие
-                            <Trash2 />
-                        </Button>
-                    }
-                    title="Удалить мероприятие?"
-                    description={`Вы уверены, что хотите удалить мероприятие "${event.title}"? Это действие нельзя отменить.`}
-                    onConfirm={handleDelete}
-                    confirmText="Удалить"
-                    cancelText="Отмена"
-                    isLoading={isDeleting}
-                />
-            </div>
-
             <form
                 onSubmit={handleSubmit}
                 className="flex flex-col gap-6"
@@ -107,6 +52,7 @@ const Edit: FC<Inertia.Pages.Admin.Events.Edit> = ({
                             required
                             value={data.title}
                             onChange={(e) => setData('title', e.target.value)}
+                            placeholder="Введите название события"
                         />
                         <InputError message={errors.title} />
                     </div>
@@ -121,6 +67,7 @@ const Edit: FC<Inertia.Pages.Admin.Events.Edit> = ({
                                 setData('description', e.target.value)
                             }
                             className="max-w-full"
+                            placeholder="Введите описание события"
                         />
                         <InputError message={errors.description} />
                     </div>
@@ -159,7 +106,7 @@ const Edit: FC<Inertia.Pages.Admin.Events.Edit> = ({
                         <Label htmlFor="stage_id">Площадка</Label>
                         <SelectMenu
                             items={stages}
-                            defaultValue={data.stage_id?.toString()}
+                            value={data.stage_id?.toString() || ''}
                             onValueChange={(value) =>
                                 setData('stage_id', parseInt(value))
                             }
@@ -199,7 +146,7 @@ const Edit: FC<Inertia.Pages.Admin.Events.Edit> = ({
                         disabled={processing}
                     >
                         {processing && <Spinner />}
-                        Сохранить
+                        Создать
                     </Button>
                     <Button
                         type="button"
@@ -215,4 +162,4 @@ const Edit: FC<Inertia.Pages.Admin.Events.Edit> = ({
     );
 };
 
-export default Edit;
+export default Create;

@@ -62,7 +62,7 @@ Route::prefix('/admin')
                 Route::get('/', (new AdminExhibitionController())->show(...))
                     ->name('show');
 
-                Route::resource('events', AdminEventController::class)->only(['index', 'edit', 'update']);
+                Route::resource('events', AdminEventController::class)->except('show');
                 Route::resource('people', AdminPersonController::class)->only(['index', 'edit']);
                 /*
                 |--------------------------------------------------------------------------

@@ -8,6 +8,7 @@ use App\Actions\FormatEventPeople;
 use App\Enums\PersonRole;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Event\EventIndexRequest;
+use App\Http\Requests\Admin\Event\EventStoreRequest;
 use App\Http\Requests\Admin\Event\EventUpdateRequest;
 use App\Models\Event;
 use App\Models\Exhibition;
@@ -98,5 +99,56 @@ final class EventController extends Controller
         return redirect()
             ->route('admin.exhibitions.events.index', $exhibition)
             ->with('success', 'Event updated successfully');
+    }
+
+    public function create(Exhibition $exhibition)
+    {
+        return Inertia::render('admin/Events/Create', [
+            'exhibition' => $exhibition,
+            'stages' => Stage::select(['id', 'name'])->get(),
+            'themes' => Theme::all(),
+            'availablePeople' => Person::select(['id', 'name'])->get(),
+            'roles' => PersonRole::toSelectList(),
+        ]);
+    }
+
+    public function store(EventStoreRequest $request, Exhibition $exhibition)
+    {
+        DB::transaction(function () use ($request, $exhibition) {
+            $event = $exhibition->events()->create($request->only([
+                'title',
+                'description',
+                'stage_id',
+                'starts_at',
+                'ends_at',
+            ]));
+
+            if ($request->has('theme_ids')) {
+                $event->themes()->attach($request->theme_ids);
+            }
+
+            if ($request->has('people')) {
+                foreach ($request->people as $personData) {
+                    foreach ($personData['roles'] as $role) {
+                        $event->people()->attach($personData['person_id'], ['role' => $role]);
+                    }
+                }
+            }
+
+            return $event;
+        });
+
+        return redirect()
+            ->route('admin.exhibitions.events.index', $exhibition)
+            ->with('success', 'Событие успешно создано');
+    }
+
+    public function destroy(Exhibition $exhibition, Event $event)
+    {
+        $event->delete();
+
+        return redirect()
+            ->route('admin.exhibitions.events.index', $exhibition)
+            ->with('success', 'Событие успешно удалено');
     }
 }
