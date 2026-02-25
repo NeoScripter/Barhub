@@ -1,5 +1,6 @@
 import InputError from '@/components/form/InputError';
 import { Button } from '@/components/ui/Button';
+import { DeleteAlertDialog } from '@/components/ui/DeleteAlertDialog';
 import { Input } from '@/components/ui/Input';
 import { Label } from '@/components/ui/Label';
 import { SelectMenu } from '@/components/ui/SelectMenu';
@@ -13,8 +14,8 @@ import { Link, Trash2 } from 'lucide-react';
 import { FC, useState } from 'react';
 import { toast } from 'sonner';
 import { PersonSelect, PersonWithRoles } from './partials/PersonSelect';
+import ThemeDialog from './partials/ThemeDialog';
 import { ThemeSelect } from './partials/ThemeSelect';
-import { DeleteAlertDialog } from '@/components/ui/DeleteAlertDialog';
 
 const Edit: FC<Inertia.Pages.Admin.Events.Edit> = ({
     event,
@@ -36,6 +37,7 @@ const Edit: FC<Inertia.Pages.Admin.Events.Edit> = ({
     });
 
     const [isDeleting, setIsDeleting] = useState(false);
+    const [isEditingTheme, setIsEditingTheme] = useState(false);
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
@@ -171,16 +173,23 @@ const Edit: FC<Inertia.Pages.Admin.Events.Edit> = ({
                         <InputError message={errors.stage_id} />
                     </div>
 
-                    <div className="grid max-w-lg gap-2">
-                        <Label htmlFor="themes">Направления</Label>
-                        <ThemeSelect
-                            availableThemes={themes}
-                            selectedThemeIds={data.theme_ids}
-                            onChange={(themeIds) =>
-                                setData('theme_ids', themeIds)
-                            }
+                    <div className="flex flex-wrap items-center justify-between gap-4">
+                        <div className="grid max-w-lg gap-2">
+                            <Label htmlFor="themes">Направления</Label>
+                            <ThemeSelect
+                                availableThemes={themes}
+                                selectedThemeIds={data.theme_ids}
+                                onChange={(themeIds) =>
+                                    setData('theme_ids', themeIds)
+                                }
+                            />
+                            <InputError message={errors.theme_ids} />
+                        </div>
+
+                        <ThemeDialog
+                            isOpen={isEditingTheme}
+                            setIsOpen={setIsEditingTheme}
                         />
-                        <InputError message={errors.theme_ids} />
                     </div>
                 </div>
 

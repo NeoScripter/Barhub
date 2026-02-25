@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\EventController as AdminEventController;
 use App\Http\Controllers\Admin\ExhibitionController as AdminExhibitionController;
 use App\Http\Controllers\Admin\PersonController as AdminPersonController;
+use App\Http\Controllers\Admin\ThemeController;
 use App\Http\Controllers\Admin\UpdatedExhibitionStatusController;
 use App\Http\Controllers\Exponent\DashboardController as ExponentDashboardController;
 use App\Http\Controllers\User\EventController as UserEventController;
@@ -28,7 +29,7 @@ Route::prefix('/exponent')
     ->name('exponent.')
     ->middleware([
         'auth',
-        'role:'.UserRole::EXPONENT->value,
+        'role:' . UserRole::EXPONENT->value,
     ])
     ->group(function (): void {
         Route::get('/dashboard', ExponentDashboardController::class)->name('dashboard');
@@ -38,7 +39,7 @@ Route::prefix('/admin')
     ->name('admin.')
     ->middleware([
         'auth',
-        'role:'.UserRole::ADMIN->value.','.UserRole::SUPER_ADMIN->value,
+        'role:' . UserRole::ADMIN->value . ',' . UserRole::SUPER_ADMIN->value,
     ])
     ->group(function (): void {
         Route::get('/dashboard', AdminDashboardController::class)->name('dashboard');
@@ -47,8 +48,10 @@ Route::prefix('/admin')
             ->name('update.status');
 
         Route::resource('/exhibitions', AdminExhibitionController::class)
-            ->middleware(['can:viewAny,'.Exhibition::class])
+            ->middleware(['can:viewAny,' . Exhibition::class])
             ->only(['index', 'update']);
+
+        Route::resource('themes', ThemeController::class)->only(['store', 'destroy']);
 
         Route::prefix('exhibitions/{exhibition}')
             ->name('exhibitions.')
@@ -56,7 +59,7 @@ Route::prefix('/admin')
             ->group(function (): void {
 
                 Route::get('/edit', (new AdminExhibitionController())->edit(...))
-                    ->middleware(['can:update,'.Exhibition::class])
+                    ->middleware(['can:update,' . Exhibition::class])
                     ->name('edit');
 
                 Route::get('/', (new AdminExhibitionController())->show(...))
