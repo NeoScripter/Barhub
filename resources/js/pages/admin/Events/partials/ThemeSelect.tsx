@@ -55,8 +55,9 @@ export function ThemeSelect({
                 onValueChange={addTheme}
                 getLabel={(theme) => theme.name}
                 getValue={(theme) => theme.id.toString()}
-                placeholder="Добавить тему"
+                placeholder="Добавить направление"
                 className="rounded-md"
+                disabled={availableToSelect.length === 0}
             />
 
             {selectedThemes.length > 0 && (

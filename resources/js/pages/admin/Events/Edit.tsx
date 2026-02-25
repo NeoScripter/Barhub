@@ -2,7 +2,6 @@ import InputError from '@/components/form/InputError';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { Label } from '@/components/ui/Label';
-import { MultiSelect } from '@/components/ui/MultiSelect';
 import { SelectMenu } from '@/components/ui/SelectMenu';
 import { Spinner } from '@/components/ui/Spinner';
 import { Textarea } from '@/components/ui/Textarea';
@@ -12,6 +11,7 @@ import { Inertia } from '@/wayfinder/types';
 import { useForm } from '@inertiajs/react';
 import { FC } from 'react';
 import { ThemeSelect } from './partials/ThemeSelect';
+import { PersonSelect } from './partials/PersonSelect';
 
 type PersonWithRole = {
     person_id: number;
@@ -31,8 +31,8 @@ const Edit: FC<Inertia.Pages.Admin.Events.Edit> = ({
         title: event.title,
         description: event.description,
         stage_id: event.stage_id,
-        theme_ids: event?.themes?.map((t) => t.id),
-        people: eventPeople as PersonWithRole[],
+        theme_ids: event?.themes?.map((t) => t.id) || [],
+        people: (eventPeople as PersonWithRole[]) || [],
         starts_at: convertDateToInputString(event.starts_at),
         ends_at: convertDateToInputString(event.ends_at),
     });
@@ -40,30 +40,6 @@ const Edit: FC<Inertia.Pages.Admin.Events.Edit> = ({
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         put(update({ event, exhibition }).url);
-    };
-
-    const addPerson = () => {
-        setData('people', [
-            ...data.people,
-            { person_id: 0, role: roles[0].value },
-        ]);
-    };
-
-    const removePerson = (index: number) => {
-        setData(
-            'people',
-            data.people.filter((_, i) => i !== index),
-        );
-    };
-
-    const updatePerson = (
-        index: number,
-        field: keyof PersonWithRole,
-        value: number,
-    ) => {
-        const newPeople = [...data.people];
-        newPeople[index][field] = value;
-        setData('people', newPeople);
     };
 
     return (
@@ -145,8 +121,8 @@ const Edit: FC<Inertia.Pages.Admin.Events.Edit> = ({
                         <InputError message={errors.stage_id} />
                     </div>
 
-                    <div className="grid gap-2 max-w-lg">
-                        <Label htmlFor="themes">Темы</Label>
+                    <div className="grid max-w-lg gap-2">
+                        <Label htmlFor="themes">Направления</Label>
                         <ThemeSelect
                             availableThemes={themes}
                             selectedThemeIds={data.theme_ids}
@@ -158,78 +134,13 @@ const Edit: FC<Inertia.Pages.Admin.Events.Edit> = ({
                     </div>
                 </div>
 
-                <div className="grid gap-4">
-                    <Label>Участники</Label>
-                    {data.people.map((person, index) => (
-                        <div
-                            key={index}
-                            className="grid gap-4 rounded border p-4 sm:grid-cols-[1fr,1fr,auto]"
-                        >
-                            <div className="grid gap-2">
-                                <Label>Человек</Label>
-                                <SelectMenu
-                                    items={availablePeople}
-                                    defaultValue={person.person_id.toString()}
-                                    onValueChange={(value) =>
-                                        updatePerson(
-                                            index,
-                                            'person_id',
-                                            parseInt(value),
-                                        )
-                                    }
-                                    getLabel={(p) => p.name}
-                                    getValue={(p) => p.id.toString()}
-                                    placeholder="Выберите участника"
-                                />
-                                <InputError
-                                    message={
-                                        errors[`people.${index}.person_id`]
-                                    }
-                                />
-                            </div>
-
-                            <div className="grid gap-2">
-                                <Label>Роль</Label>
-                                <SelectMenu
-                                    items={roles}
-                                    defaultValue={person.role.toString()}
-                                    onValueChange={(value) =>
-                                        updatePerson(
-                                            index,
-                                            'role',
-                                            parseInt(value),
-                                        )
-                                    }
-                                    getLabel={(r) => r.label}
-                                    getValue={(r) => r.value.toString()}
-                                />
-                                <InputError
-                                    message={errors[`people.${index}.role`]}
-                                />
-                            </div>
-
-                            <div className="flex items-end">
-                                <Button
-                                    type="button"
-                                    variant="outline"
-                                    onClick={() => removePerson(index)}
-                                >
-                                    Удалить
-                                </Button>
-                            </div>
-                        </div>
-                    ))}
-
-                    <Button
-                        type="button"
-                        variant="outline"
-                        onClick={addPerson}
-                        className="w-fit"
-                    >
-                        Добавить участника
-                    </Button>
-                    <InputError message={errors.people} />
-                </div>
+                <PersonSelect
+                    availablePeople={availablePeople}
+                    roles={roles}
+                    selectedPeople={data.people}
+                    onChange={(people) => setData('people', people)}
+                    errors={errors}
+                />
 
                 <Button
                     type="submit"

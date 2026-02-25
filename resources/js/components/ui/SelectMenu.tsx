@@ -33,6 +33,7 @@ const selectMenuVariants = cva('bg-white', {
 type SelectMenuProps<T> = {
     items: T[];
     value?: string;
+    disabled?: boolean;
     defaultValue?: string;
     onValueChange?: (value: string) => void;
     placeholder?: string;
@@ -45,6 +46,7 @@ type SelectMenuProps<T> = {
 export function SelectMenu<T = string>({
     items,
     value,
+    disabled = false,
     defaultValue,
     className,
     onValueChange,
@@ -60,6 +62,7 @@ export function SelectMenu<T = string>({
             value={value}
             defaultValue={defaultValue}
             onValueChange={onValueChange}
+            disabled={disabled}
         >
             <SelectTrigger
                 className={cn(selectMenuVariants({ variant, size, className }))}

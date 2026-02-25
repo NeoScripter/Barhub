@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Admin;
 
+use App\Actions\FormatEventPeople;
 use App\Enums\PersonRole;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Event\EventIndexRequest;
@@ -52,37 +53,27 @@ final class EventController extends Controller
         ]);
     }
 
-    public function edit(Exhibition $exhibition, Event $event)
-    {
-        // Load event with people and their pivot roles
+    public function edit(
+        Exhibition $exhibition,
+        Event $event,
+        FormatEventPeople $formatPeople
+    ) {
         $event->load(['stage', 'themes', 'people']);
-
-        // Transform people to include their role for this specific event
-        $eventPeople = $event->people->map(function ($person) {
-            return [
-                'person_id' => $person->id,
-                'role' => $person->pivot->role,
-            ];
-        });
 
         return Inertia::render('admin/Events/Edit', [
             'exhibition' => $exhibition,
             'event' => $event,
-            'eventPeople' => $eventPeople,
+            'eventPeople' => $formatPeople->execute($event),
             'stages' => Stage::select(['id', 'name'])->get(),
             'themes' => Theme::all(),
             'availablePeople' => Person::select(['id', 'name'])->get(),
-            'roles' => collect(PersonRole::cases())->map(fn($role) => [
-                'value' => $role->value,
-                'label' => $role->label(),
-            ]),
+            'roles' => PersonRole::toSelectList(),
         ]);
     }
 
     public function update(EventUpdateRequest $request, Exhibition $exhibition, Event $event)
     {
         DB::transaction(function () use ($request, $event) {
-            // Update basic fields
             $event->update($request->only([
                 'title',
                 'description',
@@ -91,14 +82,11 @@ final class EventController extends Controller
                 'ends_at',
             ]));
 
-            // Sync themes
             if ($request->has('theme_ids')) {
                 $event->themes()->sync($request->theme_ids);
             }
 
-            // Sync people with roles
             if ($request->has('people')) {
-                // Build sync data: [person_id => ['role' => role_value]]
                 $peopleData = collect($request->people)->mapWithKeys(function ($item) {
                     return [$item['person_id'] => ['role' => $item['role']]];
                 });
