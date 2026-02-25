@@ -42,6 +42,10 @@ export function formatDateAndTime(date: Date) {
     }).format(date);
 }
 
+export function convertDateToInputString(date: string | null) {
+    return date ? new Date(date).toISOString().slice(0, 16) : '';
+}
+
 export const getSortUrl = (field: string): string => {
     const { pathname, search } = window.location;
     const params = new URLSearchParams(search);
@@ -56,7 +60,6 @@ export const getSortUrl = (field: string): string => {
     const qs = params.toString();
     return qs ? `${pathname}?${qs}` : pathname;
 };
-
 
 export const getSearchUrl = (query: string): string => {
     const { pathname, search } = window.location;
@@ -80,7 +83,7 @@ export const getFilterUrl = (key: string, value: string): string => {
     const paramKey = `filter[${key}]`;
 
     const values = new Set(
-        (params.get(paramKey)?.split(',').filter(Boolean)) ?? []
+        params.get(paramKey)?.split(',').filter(Boolean) ?? [],
     );
 
     if (values.has(value)) {
@@ -100,7 +103,6 @@ export const getFilterUrl = (key: string, value: string): string => {
     const qs = params.toString();
     return qs ? `${pathname}?${qs}` : pathname;
 };
-
 
 export const isActiveFilter = (key: string, value: string): boolean => {
     const params = new URLSearchParams(window.location.search);
