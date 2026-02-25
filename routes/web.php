@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\EventController as AdminEventController;
 use App\Http\Controllers\Admin\ExhibitionController as AdminExhibitionController;
 use App\Http\Controllers\Admin\PersonController as AdminPersonController;
+use App\Http\Controllers\Admin\StageController;
 use App\Http\Controllers\Admin\ThemeController;
 use App\Http\Controllers\Admin\UpdatedExhibitionStatusController;
 use App\Http\Controllers\Exponent\DashboardController as ExponentDashboardController;
@@ -52,6 +53,7 @@ Route::prefix('/admin')
             ->only(['index', 'update']);
 
         Route::resource('themes', ThemeController::class)->only(['store', 'destroy']);
+        Route::resource('stages', StageController::class)->only(['store', 'destroy']);
 
         Route::prefix('exhibitions/{exhibition}')
             ->name('exhibitions.')

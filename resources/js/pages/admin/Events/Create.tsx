@@ -12,6 +12,8 @@ import { FC } from 'react';
 import { toast } from 'sonner';
 import { PersonSelect, PersonWithRoles } from './partials/PersonSelect';
 import { ThemeSelect } from './partials/ThemeSelect';
+import ThemeDialog from './partials/ThemeDialog';
+import StageDialog from './partials/StageDialog';
 
 const Create: FC<Inertia.Pages.Admin.Events.Create> = ({
     exhibition,
@@ -39,6 +41,11 @@ const Create: FC<Inertia.Pages.Admin.Events.Create> = ({
 
     return (
         <div className="mx-auto w-full max-w-250">
+            <div className="mb-8 flex flex-col gap-8">
+                <ThemeDialog />
+                <StageDialog />
+            </div>
+
             <form
                 onSubmit={handleSubmit}
                 className="flex flex-col gap-6"

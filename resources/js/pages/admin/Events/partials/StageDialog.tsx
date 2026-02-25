@@ -8,10 +8,10 @@ import {
     DialogTrigger,
 } from '@/components/ui/Dialog';
 import { useState } from 'react';
-import CreateTheme from './CreateTheme';
-import DeleteTheme from './DeleteTheme';
+import CreateStage from './CreateStage';
+import DeleteStage from './DeleteStage';
 
-const ThemeDialog = () => {
+const StageDialog = () => {
     const [isOpen, setIsOpen] = useState(false);
 
     return (
@@ -20,9 +20,9 @@ const ThemeDialog = () => {
             onOpenChange={setIsOpen}
         >
             <div className="space-y-3">
-                <DialogTitle>Управление направлениями</DialogTitle>
+                <DialogTitle>Управление площадками</DialogTitle>
                 <DialogDescription>
-                    Создание и удаление направлений
+                    Создание и удаление площадок
                 </DialogDescription>
                 <DialogTrigger asChild>
                     <Button
@@ -35,17 +35,17 @@ const ThemeDialog = () => {
             <DialogContent className="h-max max-w-95">
                 <div>
                     <AccentHeading className="text-base! text-secondary">
-                        Добавить направление
+                        Добавить площадку
                     </AccentHeading>
-                    <CreateTheme />
+                    <CreateStage />
                     <AccentHeading className="text-base! text-secondary">
-                        Удалить направление
+                        Удалить площадку
                     </AccentHeading>
-                    <DeleteTheme />
+                    <DeleteStage />
                 </div>
             </DialogContent>
         </Dialog>
     );
 };
 
-export default ThemeDialog;
+export default StageDialog;

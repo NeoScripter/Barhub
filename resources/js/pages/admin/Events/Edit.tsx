@@ -16,6 +16,7 @@ import { toast } from 'sonner';
 import { PersonSelect, PersonWithRoles } from './partials/PersonSelect';
 import ThemeDialog from './partials/ThemeDialog';
 import { ThemeSelect } from './partials/ThemeSelect';
+import StageDialog from './partials/StageDialog';
 
 const Edit: FC<Inertia.Pages.Admin.Events.Edit> = ({
     event,
@@ -37,7 +38,6 @@ const Edit: FC<Inertia.Pages.Admin.Events.Edit> = ({
     });
 
     const [isDeleting, setIsDeleting] = useState(false);
-    const [isEditingTheme, setIsEditingTheme] = useState(false);
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
@@ -96,11 +96,9 @@ const Edit: FC<Inertia.Pages.Admin.Events.Edit> = ({
                 />
             </div>
 
-            <div className="mb-8 flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
-                <ThemeDialog
-                    isOpen={isEditingTheme}
-                    setIsOpen={setIsEditingTheme}
-                />
+            <div className="mb-8 flex flex-col gap-8">
+                <ThemeDialog />
+                <StageDialog />
             </div>
 
             <form
