@@ -3,7 +3,6 @@ import type { AxiosProgressEvent } from 'axios';
 import React, { useEffect, useId, useState } from 'react';
 import LoadingRing from './LoadingRing';
 import UploadFileBtn from './UploadFileBtn';
-import DialogLayout from '../layout/DialogLayout';
 
 type ImgInputProps = {
     src?: string;
@@ -46,8 +45,6 @@ export default function ImgInput({
         onChange(file);
     };
 
-    const [showPopup, setShowPopup] = useState(false);
-
     return (
         <div>
             <p className="mb-2 text-center font-semibold sm:text-lg md:text-left">
@@ -81,10 +78,7 @@ export default function ImgInput({
                     )}
                 </div>
                 <div>
-                    <div
-                        onClick={() => setShowPopup(true)}
-                        className="transition-scale relative flex size-40 cursor-pointer items-center justify-center duration-200 ease-in hover:scale-110"
-                    >
+                    <div className="transition-scale relative flex size-40 items-center justify-center duration-200 ease-in hover:scale-110">
                         <img
                             src={preview ?? Placeholder}
                             alt="Preview"
@@ -103,20 +97,6 @@ export default function ImgInput({
                     updated={preview !== src}
                 />
             </div>
-
-            <DialogLayout
-                show={showPopup}
-                onClose={() => setShowPopup(false)}
-                className="mx-auto w-fit max-w-260"
-            >
-                {' '}
-                <div className="mx-auto w-fit">
-                    <img
-                        src={preview}
-                        alt={altText}
-                    />
-                </div>
-            </DialogLayout>
         </div>
     );
 }

@@ -166,6 +166,8 @@ final class PersonController extends Controller
 
     public function destroy(Exhibition $exhibition, Person $person)
     {
+        $person->avatar?->delete();
+        $person->logo?->delete();
         $person->delete();
 
         return redirect()
