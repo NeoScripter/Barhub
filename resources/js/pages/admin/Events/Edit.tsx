@@ -1,5 +1,6 @@
 import InputError from '@/components/form/InputError';
 import { Button } from '@/components/ui/Button';
+import CopyLinkBtn from '@/components/ui/CopyLinkBtn';
 import { DeleteAlertDialog } from '@/components/ui/DeleteAlertDialog';
 import { Input } from '@/components/ui/Input';
 import { Label } from '@/components/ui/Label';
@@ -10,13 +11,13 @@ import { convertDateToInputString } from '@/lib/utils';
 import { destroy, update } from '@/wayfinder/routes/admin/exhibitions/events';
 import { Inertia } from '@/wayfinder/types';
 import { router, useForm } from '@inertiajs/react';
-import { Link, Trash2 } from 'lucide-react';
+import { Trash2 } from 'lucide-react';
 import { FC, useState } from 'react';
 import { toast } from 'sonner';
 import { PersonSelect, PersonWithRoles } from './partials/PersonSelect';
+import StageDialog from './partials/StageDialog';
 import ThemeDialog from './partials/ThemeDialog';
 import { ThemeSelect } from './partials/ThemeSelect';
-import StageDialog from './partials/StageDialog';
 
 const Edit: FC<Inertia.Pages.Admin.Events.Edit> = ({
     event,
@@ -59,23 +60,12 @@ const Edit: FC<Inertia.Pages.Admin.Events.Edit> = ({
         });
     };
 
-    const handleCopyLink = () => {
-        const eventUrl = `${window.location.origin}/exhibitions/${exhibition.slug}/events/${event.id}`;
-        navigator.clipboard.writeText(eventUrl);
-        toast.success('Ссылка скопирована');
-    };
-
     return (
         <div className="mx-auto w-full max-w-250">
             <div className="mb-8 flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
-                <Button
-                    variant="muted"
-                    onClick={handleCopyLink}
-                    type="button"
-                >
-                    Копировать ссылку
-                    <Link />
-                </Button>
+                <CopyLinkBtn
+                    url={`${window.location.origin}/exhibitions/${exhibition.slug}/events/${event.id}`}
+                />
 
                 <DeleteAlertDialog
                     trigger={

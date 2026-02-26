@@ -20,8 +20,8 @@ const selectMenuVariants = cva('bg-white', {
             solid: 'border-primary text-white bg-primary focus-visible:ring-primary/50 ',
         },
         size: {
-            default: 'pl-5 pr-3 max-w-60 py-2 text-sm gap-2 [&_svg]:size-4 ',
-            lg: 'text-base pl-7 max-w-75 pr-5 gap-4 py-3 [&_svg]:size-6 ',
+            default: 'pl-5 pr-3 max-w-60 py-2 text-sm lg:text-base gap-2 [&_svg]:size-4 ',
+            lg: 'text-base lg:text-lg pl-7 max-w-75 pr-5 gap-4 py-3 [&_svg]:size-6 ',
         },
     },
     defaultVariants: {
