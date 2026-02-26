@@ -68,7 +68,7 @@ Route::prefix('/admin')
                     ->name('show');
 
                 Route::resource('events', AdminEventController::class)->except('show');
-                Route::resource('people', AdminPersonController::class)->only(['index', 'edit']);
+                Route::resource('people', AdminPersonController::class)->except(['show']);
                 /*
                 |--------------------------------------------------------------------------
                 | Models Belonging To Exhibition

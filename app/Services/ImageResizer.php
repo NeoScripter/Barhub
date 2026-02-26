@@ -41,7 +41,7 @@ final class ImageResizer
                 $encoded = $image->{$formatConfig['method']}($formatConfig['quality']);
 
                 $columnName = "{$formatKey}{$densitySuffix}";
-                $path = "uploads/{$folder}/{$filename}-{$columnName}.{$formatKey}";
+                $path = "/uploads/{$folder}/{$filename}-{$columnName}.{$formatKey}";
 
                 Storage::disk('public')->put($path, (string) $encoded);
 
@@ -50,7 +50,7 @@ final class ImageResizer
         }
 
         $tiny = $manager->read($file)->scaleDown(width: 20)->toWebp(80);
-        $tinyPath = "uploads/{$folder}/{$filename}-tiny.webp";
+        $tinyPath = "/uploads/{$folder}/{$filename}-tiny.webp";
         Storage::disk('public')->put($tinyPath, (string) $tiny);
         $paths['tiny'] = $tinyPath;
 
