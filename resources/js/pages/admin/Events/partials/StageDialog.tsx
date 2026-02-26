@@ -27,6 +27,7 @@ const StageDialog = () => {
                 <DialogTrigger asChild>
                     <Button
                         variant="secondary"
+                        data-test="edit-stages"
                     >
                         Редактировать
                     </Button>

@@ -15,6 +15,7 @@ const DeleteStage = () => {
                 >
                     <span>{stage.name}</span>
                     <Link
+                        data-test={`delete stage ${stage.name}`}
                         className="hover:opacity-70"
                         href={destroy(stage.id)}
                         onSuccess={() => toast.success('Площадка удалена')}
