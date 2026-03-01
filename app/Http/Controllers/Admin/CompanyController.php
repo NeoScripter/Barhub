@@ -13,6 +13,7 @@ use App\Models\Exhibition;
 use App\Models\Image;
 use App\Models\Tag;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 use Spatie\QueryBuilder\QueryBuilder;
@@ -51,20 +52,10 @@ final class CompanyController extends Controller
     public function store(CompanyStoreRequest $request, Exhibition $exhibition)
     {
         DB::transaction(function () use ($request, $exhibition) {
+            $validated = $request->validated();
+
             $company = Company::create([
-                ...$request->only([
-                    'public_name',
-                    'legal_name',
-                    'description',
-                    'phone',
-                    'email',
-                    'site_url',
-                    'instagram',
-                    'telegram',
-                    'stand_code',
-                    'show_on_site',
-                    'activities',
-                ]),
+                ...Arr::except($validated, ['tags', 'logo', 'logo_alt']),
                 'exhibition_id' => $exhibition->id,
             ]);
 
@@ -105,19 +96,8 @@ final class CompanyController extends Controller
     public function update(CompanyUpdateRequest $request, Exhibition $exhibition, Company $company)
     {
         DB::transaction(function () use ($request, $company) {
-            $company->update($request->only([
-                'public_name',
-                'legal_name',
-                'description',
-                'phone',
-                'email',
-                'site_url',
-                'instagram',
-                'telegram',
-                'stand_code',
-                'show_on_site',
-                'activities',
-            ]));
+            $validated = $request->validated();
+            $company->update(Arr::except($validated, ['tags', 'logo', 'logo_alt']));
 
             if ($request->has('tags')) {
                 $company->tags()->sync($request->input('tags', []));

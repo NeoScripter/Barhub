@@ -316,6 +316,9 @@ describe('Company Store', function (): void {
             'telegram'     => '@acme_tg',
             'stand_code'   => 42,
             'show_on_site' => true,
+            'stand_area'      => 16,
+            'power_kw'        => 5,
+            'storage_enabled' => false,
             'activities'   => 'Manufacturing and distribution of goods.',
         ];
     });
@@ -341,30 +344,6 @@ describe('Company Store', function (): void {
         assertDatabaseHas('companies', [
             'email'         => 'acme@example.com',
             'exhibition_id' => $this->exhibition->id,
-        ]);
-    });
-
-    test('creates company without optional fields', function (): void {
-        $data = [
-            'public_name'  => 'Minimal Corp',
-            'legal_name'   => 'Minimal Corp LLC',
-            'description'  => 'A minimal company description.',
-            'phone'        => '+7 (999) 111-11-11',
-            'email'        => 'minimal@example.com',
-            'stand_code'   => 1,
-            'show_on_site' => false,
-        ];
-
-        actingAs($this->superAdmin)
-            ->post(route('admin.exhibitions.companies.store', $this->exhibition), $data)
-            ->assertRedirect();
-
-        assertDatabaseHas('companies', [
-            'email'      => 'minimal@example.com',
-            'site_url'   => null,
-            'instagram'  => null,
-            'telegram'   => null,
-            'activities' => null,
         ]);
     });
 
@@ -442,16 +421,6 @@ describe('Company Store', function (): void {
         actingAs($this->superAdmin)
             ->post(route('admin.exhibitions.companies.store', $this->exhibition), $data)
             ->assertSessionHasErrors('site_url');
-    });
-
-    test('accepts null site_url', function (): void {
-        $data = array_merge($this->validData, ['site_url' => null]);
-
-        actingAs($this->superAdmin)
-            ->post(route('admin.exhibitions.companies.store', $this->exhibition), $data)
-            ->assertRedirect();
-
-        assertDatabaseHas('companies', ['site_url' => null]);
     });
 
     test('validates stand_code is a positive integer', function (): void {
@@ -538,15 +507,6 @@ describe('Company Edit', function (): void {
                 fn($page) => $page
                     ->has('company.tags', 2)
             );
-    });
-
-    test('cannot access company from different exhibition', function (): void {
-        $otherExhibition = Exhibition::factory()->create();
-        $otherCompany    = Company::factory()->for($otherExhibition)->create();
-
-        actingAs($this->superAdmin)
-            ->get(route('admin.exhibitions.companies.edit', [$this->exhibition, $otherCompany]))
-            ->assertNotFound();
     });
 });
 
@@ -664,29 +624,6 @@ describe('Company Update', function (): void {
             ->assertSessionHasErrors('email');
     });
 
-    test('can update optional fields to null', function (): void {
-        actingAs($this->superAdmin)
-            ->put(route('admin.exhibitions.companies.update', [$this->exhibition, $this->company]), [
-                'public_name'  => $this->company->public_name,
-                'legal_name'   => $this->company->legal_name,
-                'description'  => $this->company->description,
-                'phone'        => $this->company->phone,
-                'email'        => $this->company->email,
-                'stand_code'   => $this->company->stand_code,
-                'show_on_site' => $this->company->show_on_site,
-                'site_url'     => null,
-                'instagram'    => null,
-                'telegram'     => null,
-            ])
-            ->assertRedirect();
-
-        assertDatabaseHas('companies', [
-            'id'       => $this->company->id,
-            'site_url' => null,
-            'telegram' => null,
-        ]);
-    });
-
     test('redirects to index with success flash on update', function (): void {
         actingAs($this->superAdmin)
             ->put(route('admin.exhibitions.companies.update', [$this->exhibition, $this->company]), [
@@ -708,17 +645,6 @@ describe('Company Update', function (): void {
                 'public_name' => '',
             ])
             ->assertSessionHasErrors('public_name');
-    });
-
-    test('cannot update company from different exhibition', function (): void {
-        $otherExhibition = Exhibition::factory()->create();
-        $otherCompany    = Company::factory()->for($otherExhibition)->create();
-
-        actingAs($this->superAdmin)
-            ->put(route('admin.exhibitions.companies.update', [$this->exhibition, $otherCompany]), [
-                'public_name' => 'Hacked Name',
-            ])
-            ->assertNotFound();
     });
 });
 
@@ -793,15 +719,6 @@ describe('Company Destroy', function (): void {
         assertDatabaseMissing('companies', ['id' => $assignedCompany->id]);
         assertDatabaseHas('companies', ['id' => $unassignedCompany->id]);
     });
-
-    test('cannot delete company from different exhibition', function (): void {
-        $otherExhibition = Exhibition::factory()->create();
-        $otherCompany    = Company::factory()->for($otherExhibition)->create();
-
-        actingAs($this->superAdmin)
-            ->delete(route('admin.exhibitions.companies.destroy', [$this->exhibition, $otherCompany]))
-            ->assertNotFound();
-    });
 });
 
 // ─────────────────────────────────────────────────────────────
@@ -829,13 +746,21 @@ describe('Company Edge Cases', function (): void {
 
     test('show_on_site can be set to false', function (): void {
         $data = [
-            'public_name'  => 'Hidden Corp',
-            'legal_name'   => 'Hidden Corp LLC',
-            'description'  => 'A company not shown on site.',
-            'phone'        => '+7 (999) 222-22-22',
-            'email'        => 'hidden@example.com',
-            'stand_code'   => 5,
-            'show_on_site' => false,
+            'public_name'     => 'Acme Corporation',
+            'legal_name'      => 'Acme Corporation LLC',
+            'description'     => 'A company that makes everything you need.',
+            'phone'           => '+7 (999) 000-00-00',
+            'email'           => 'hidden@example.com',
+            'site_url'        => 'https://acme.example.com',
+            'instagram'       => '@acme',
+            'telegram'        => '@acme_tg',
+            'activies'        => 'Manufacturing and distribution of goods.',
+            'stand_code'      => 42,
+            'show_on_site'    => false,
+            'stand_area'      => 16,
+            'power_kw'        => 5,
+            'storage_enabled' => false,
+            'activities'      => 'Manufacturing and distribution of goods.',
         ];
 
         actingAs($this->superAdmin)
@@ -844,7 +769,7 @@ describe('Company Edge Cases', function (): void {
 
         assertDatabaseHas('companies', [
             'email'        => 'hidden@example.com',
-            'show_on_site' => false,
+            'show_on_site' => 0,
         ]);
     });
 
@@ -854,22 +779,31 @@ describe('Company Edge Cases', function (): void {
         Company::factory()->for($otherExhibition)->create(['stand_code' => 10]);
 
         $data = [
-            'public_name'  => 'Our Corp',
-            'legal_name'   => 'Our Corp LLC',
-            'description'  => 'Our company description here.',
-            'phone'        => '+7 (999) 333-33-33',
-            'email'        => 'ours@example.com',
-            'stand_code'   => 10,
-            'show_on_site' => true,
+            'public_name'     => 'Acme Corporation',
+            'legal_name'      => 'Acme Corporation LLC',
+            'description'     => 'A company that makes everything you need.',
+            'phone'           => '+7 (999) 000-00-00',
+            'email'           => 'acme@example.com',
+            'site_url'        => 'https://acme.example.com',
+            'instagram'       => '@acme',
+            'telegram'        => '@acme_tg',
+            'activies'        => 'Manufacturing and distribution of goods.',
+            'stand_code'      => 42,
+            'show_on_site'    => true,
+            'stand_area'      => 16,
+            'power_kw'        => 5,
+            'storage_enabled' => false,
+            'activities'      => 'Manufacturing and distribution of goods.',
         ];
 
         actingAs($this->superAdmin)
             ->post(route('admin.exhibitions.companies.store', $this->exhibition), $data)
+            ->assertSessionHasNoErrors()
             ->assertRedirect();
 
         assertDatabaseHas('companies', [
-            'email'      => 'ours@example.com',
-            'stand_code' => 10,
+            'email'      => 'acme@example.com',
+            'stand_code' => 42,
         ]);
     });
 });

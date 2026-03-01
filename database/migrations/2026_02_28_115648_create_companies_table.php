@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('site_url');
             $table->string('instagram');
             $table->string('telegram');
-            $table->text('activies');
+            $table->text('activities');
             $table->string('legal_name');
             $table->unsignedInteger('stand_code');
             $table->boolean('show_on_site');

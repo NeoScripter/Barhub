@@ -27,7 +27,7 @@ class CompanyFactory extends Factory
             'site_url' => $faker->url(),
             'instagram' => substr($faker->url(), 0, 25),
             'telegram' => substr($faker->url(), 0, 25),
-            'activies' => $faker->sentence(),
+            'activities' => $faker->sentence(),
             'stand_code' => $faker->numberBetween(101, 700),
             'show_on_site' => true,
             'stand_area' => $faker->numberBetween(10, 30),
