@@ -17,7 +17,7 @@ const CreateTag: FC = () => {
         e.preventDefault();
         post(store().url, {
             onSuccess: () => {
-                toast.success('Площадка создана');
+                toast.success('Тег создан');
                 reset();
             },
         });

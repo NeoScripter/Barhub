@@ -14,6 +14,7 @@ import { Trash2 } from 'lucide-react';
 import { FC, useState } from 'react';
 import { toast } from 'sonner';
 import { TagSelect } from './partials/TagSelect';
+import TagDialog from './partials/TagDialog';
 
 const Edit: FC<Inertia.Pages.Admin.Companies.Edit> = ({
     company,
@@ -86,6 +87,10 @@ const Edit: FC<Inertia.Pages.Admin.Companies.Edit> = ({
                     cancelText="Отмена"
                     isLoading={isDeleting}
                 />
+            </div>
+
+            <div className="mb-8 flex flex-col gap-8">
+                <TagDialog />
             </div>
 
             <form

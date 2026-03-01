@@ -20,9 +20,9 @@ const TagDialog = () => {
             onOpenChange={setIsOpen}
         >
             <div className="space-y-3">
-                <DialogTitle>Управление площадками</DialogTitle>
+                <DialogTitle>Управление тегами</DialogTitle>
                 <DialogDescription>
-                    Создание и удаление площадок
+                    Создание и удаление тегов
                 </DialogDescription>
                 <DialogTrigger asChild>
                     <Button
@@ -36,11 +36,11 @@ const TagDialog = () => {
             <DialogContent className="h-max max-w-95">
                 <div>
                     <AccentHeading className="text-base! text-secondary">
-                        Добавить площадку
+                        Добавить тег
                     </AccentHeading>
                     <CreateTag />
                     <AccentHeading className="text-base! text-secondary">
-                        Удалить площадку
+                        Удалить тег
                     </AccentHeading>
                     <DeleteTag />
                 </div>

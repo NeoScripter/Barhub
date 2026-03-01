@@ -11,8 +11,8 @@ class Tag extends Model
     /** @use HasFactory<\Database\Factories\TagFactory> */
     use HasFactory;
 
-    public function tags(): BelongsToMany
+    public function companies(): BelongsToMany
     {
-        return $this->belongsToMany(Tag::class);
+        return $this->belongsToMany(Company::class);
     }
 }

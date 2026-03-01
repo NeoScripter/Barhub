@@ -40,15 +40,6 @@ const Create: FC<Inertia.Pages.Admin.Companies.Create> = ({
         });
     };
 
-    const toggleTag = (id: number) => {
-        setData(
-            'tags',
-            data.tags.includes(id)
-                ? data.tags.filter((t) => t !== id)
-                : [...data.tags, id],
-        );
-    };
-
     return (
         <div className="mx-auto w-full max-w-250">
             <form

@@ -18,7 +18,7 @@ const DeleteTag = () => {
                         data-test={`delete tag ${tag.name}`}
                         className="hover:opacity-70"
                         href={destroy(tag.id)}
-                        onSuccess={() => toast.success('Площадка удалена')}
+                        onSuccess={() => toast.success('Тег удален')}
                     >
                         <X className="h-4 w-4" />
                     </Link>
