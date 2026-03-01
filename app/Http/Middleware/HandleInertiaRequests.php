@@ -46,6 +46,7 @@ final class HandleInertiaRequests extends Middleware
                 'user' => $request->user(),
                 'hasExpos' => $request->user() && Gate::allows('viewAny', Exhibition::class),
             ],
+            'isProd' => app()->isProduction(),
         ];
     }
 }
