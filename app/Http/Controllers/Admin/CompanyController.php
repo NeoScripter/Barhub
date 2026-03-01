@@ -23,7 +23,9 @@ final class CompanyController extends Controller
     {
         /** @var LengthAwarePaginator<Company> $companies */
         $companies = QueryBuilder::for(
-            Company::where('exhibition_id', $exhibition->id)->with(['logo', 'tags'])
+            Company::select(['id', 'public_name', 'legal_name', 'stand_code'])
+                ->where('exhibition_id', $exhibition->id)
+                ->with(['logo', 'tags'])
         )
             ->allowedSorts(['public_name'])
             ->withSearch('public_name', $request->string('search'))

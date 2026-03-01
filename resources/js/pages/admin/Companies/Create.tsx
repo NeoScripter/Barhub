@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/Button';
 import ImgInput from '@/components/ui/ImgInput';
 import { Input } from '@/components/ui/Input';
 import { Label } from '@/components/ui/Label';
+import RadioCheckbox from '@/components/ui/RadioCheckbox';
 import { Spinner } from '@/components/ui/Spinner';
 import { Textarea } from '@/components/ui/Textarea';
 import { Inertia } from '@/wayfinder/types';
@@ -84,6 +85,18 @@ const Create: FC<Inertia.Pages.Admin.Companies.Create> = ({
                         />
                         <InputError message={errors.legal_name} />
                     </div>
+
+                    <ImgInput
+                        key="logo-input"
+                        progress={progress}
+                        label="Логотип"
+                        isEdited={true}
+                        onChange={(file) => setData('logo', file)}
+                        onAltChange={(val) => setData('logo_alt', val)}
+                        altError={errors.logo_alt}
+                        altText={data.logo_alt}
+                        error={errors.logo}
+                    />
 
                     <div className="grid gap-2 md:col-span-2">
                         <Label htmlFor="description">Описание</Label>
@@ -183,8 +196,27 @@ const Create: FC<Inertia.Pages.Admin.Companies.Create> = ({
                         <InputError message={errors.stand_code} />
                     </div>
 
+                    {tags.length > 0 && (
+                        <div className="grid gap-2 md:col-span-2">
+                            <Label htmlFor="tags">Теги</Label>
+                            <TagSelect
+                                availableTags={tags}
+                                selectedTagIds={data.tags}
+                                onChange={(tags) => setData('tags', tags)}
+                            />
+                            <InputError message={errors.tags} />
+                        </div>
+                    )}
+
+                    <div className="md:col-span-2">
+                        <RadioCheckbox
+                            value={data.show_on_site}
+                            onChange={(val) => setData('show_on_site', val)}
+                        />
+                    </div>
+
                     <div className="grid gap-2 md:col-span-2">
-                        <Label htmlFor="activities">Деятельность</Label>
+                        <Label htmlFor="activities">Активности на стенде</Label>
                         <Textarea
                             id="activities"
                             value={data.activities}
@@ -196,47 +228,7 @@ const Create: FC<Inertia.Pages.Admin.Companies.Create> = ({
                         />
                         <InputError message={errors.activities} />
                     </div>
-
-                    <div className="flex items-center gap-3 md:col-span-2">
-                        <input
-                            id="show_on_site"
-                            type="checkbox"
-                            checked={data.show_on_site}
-                            onChange={(e) =>
-                                setData('show_on_site', e.target.checked)
-                            }
-                            className="h-4 w-4 rounded border-gray-300"
-                        />
-                        <Label htmlFor="show_on_site">
-                            Показывать на сайте
-                        </Label>
-                        <InputError message={errors.show_on_site} />
-                    </div>
-
-                    {tags.length > 0 && (
-                        <div className="grid max-w-lg gap-2">
-                            <Label htmlFor="tags">Теги</Label>
-                            <TagSelect
-                                availableTags={tags}
-                                selectedTagIds={data.tags}
-                                onChange={(tags) => setData('tags', tags)}
-                            />
-                            <InputError message={errors.tags} />
-                        </div>
-                    )}
                 </div>
-
-                <ImgInput
-                    key="logo-input"
-                    progress={progress}
-                    label="Логотип"
-                    isEdited={true}
-                    onChange={(file) => setData('logo', file)}
-                    onAltChange={(val) => setData('logo_alt', val)}
-                    altError={errors.logo_alt}
-                    altText={data.logo_alt}
-                    error={errors.logo}
-                />
 
                 <div className="mt-4 flex items-center gap-4">
                     <Button

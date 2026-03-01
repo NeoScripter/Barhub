@@ -65,7 +65,7 @@ export function TagSelect({
                     {selectedTags.map((tag) => (
                         <div
                             key={tag.id}
-                            className="flex bg-gray-400 text-white items-center gap-2 rounded-md px-3 py-1.5 text-sm"
+                            className="flex bg-gray-500 text-white items-center gap-2 rounded-md px-3 py-1.5 text-sm"
                         >
                             <span>{tag.name}</span>
                             <button
