@@ -1,5 +1,6 @@
 import InputError from '@/components/form/InputError';
 import { Button } from '@/components/ui/Button';
+import CopyLinkBtn from '@/components/ui/CopyLinkBtn';
 import { DeleteAlertDialog } from '@/components/ui/DeleteAlertDialog';
 import ImgInput from '@/components/ui/ImgInput';
 import { Input } from '@/components/ui/Input';
@@ -11,6 +12,7 @@ import { router, useForm } from '@inertiajs/react';
 import { Trash2 } from 'lucide-react';
 import { FC, useState } from 'react';
 import { toast } from 'sonner';
+import { TagSelect } from './partials/TagSelect';
 
 const Edit: FC<Inertia.Pages.Admin.Companies.Edit> = ({
     company,
@@ -59,18 +61,13 @@ const Edit: FC<Inertia.Pages.Admin.Companies.Edit> = ({
         );
     };
 
-    const toggleTag = (id: number) => {
-        setData(
-            'tags',
-            data.tags.includes(id)
-                ? data.tags.filter((t) => t !== id)
-                : [...data.tags, id],
-        );
-    };
-
     return (
         <div className="mx-auto w-full max-w-250">
-            <div className="mb-8 flex justify-end">
+            <div className="mb-8 flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
+                <CopyLinkBtn
+                    url={`${window.location.origin}/exhibitions/${exhibition.id}/companies/${company.id}`}
+                />
+
                 <DeleteAlertDialog
                     trigger={
                         <Button
@@ -246,26 +243,14 @@ const Edit: FC<Inertia.Pages.Admin.Companies.Edit> = ({
                         </Label>
                         <InputError message={errors.show_on_site} />
                     </div>
-
                     {tags.length > 0 && (
-                        <div className="grid gap-2 md:col-span-2">
-                            <Label>Теги</Label>
-                            <div className="flex flex-wrap gap-2">
-                                {tags.map((tag) => (
-                                    <button
-                                        key={tag.id}
-                                        type="button"
-                                        onClick={() => toggleTag(tag.id)}
-                                        className={`rounded-full border px-3 py-1 text-sm transition-colors ${
-                                            data.tags.includes(tag.id)
-                                                ? 'border-blue-500 bg-blue-50 text-blue-700'
-                                                : 'border-gray-300 bg-white text-gray-600 hover:border-gray-400'
-                                        }`}
-                                    >
-                                        {tag.name}
-                                    </button>
-                                ))}
-                            </div>
+                        <div className="grid max-w-lg gap-2">
+                            <Label htmlFor="tags">Теги</Label>
+                            <TagSelect
+                                availableTags={tags}
+                                selectedTagIds={data.tags}
+                                onChange={(tags) => setData('tags', tags)}
+                            />
                             <InputError message={errors.tags} />
                         </div>
                     )}

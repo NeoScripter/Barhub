@@ -9,26 +9,27 @@ import { Inertia } from '@/wayfinder/types';
 import { useForm } from '@inertiajs/react';
 import { FC } from 'react';
 import { toast } from 'sonner';
+import { TagSelect } from './partials/TagSelect';
 
 const Create: FC<Inertia.Pages.Admin.Companies.Create> = ({
     exhibition,
     tags,
 }) => {
     const { data, setData, post, processing, errors, progress } = useForm({
-        public_name:  '',
-        legal_name:   '',
-        description:  '',
-        phone:        '',
-        email:        '',
-        site_url:     '',
-        instagram:    '',
-        telegram:     '',
-        stand_code:   '',
+        public_name: '',
+        legal_name: '',
+        description: '',
+        phone: '',
+        email: '',
+        site_url: '',
+        instagram: '',
+        telegram: '',
+        stand_code: '',
         show_on_site: false,
-        activities:   '',
-        tags:         [] as number[],
-        logo:         null as File | null,
-        logo_alt:     '',
+        activities: '',
+        tags: [] as number[],
+        logo: null as File | null,
+        logo_alt: '',
     });
 
     const handleSubmit = (e: React.FormEvent) => {
@@ -61,7 +62,9 @@ const Create: FC<Inertia.Pages.Admin.Companies.Create> = ({
                             type="text"
                             required
                             value={data.public_name}
-                            onChange={(e) => setData('public_name', e.target.value)}
+                            onChange={(e) =>
+                                setData('public_name', e.target.value)
+                            }
                             placeholder="Название для отображения на сайте"
                         />
                         <InputError message={errors.public_name} />
@@ -74,7 +77,9 @@ const Create: FC<Inertia.Pages.Admin.Companies.Create> = ({
                             type="text"
                             required
                             value={data.legal_name}
-                            onChange={(e) => setData('legal_name', e.target.value)}
+                            onChange={(e) =>
+                                setData('legal_name', e.target.value)
+                            }
                             placeholder="ООО «Название»"
                         />
                         <InputError message={errors.legal_name} />
@@ -86,7 +91,9 @@ const Create: FC<Inertia.Pages.Admin.Companies.Create> = ({
                             id="description"
                             required
                             value={data.description}
-                            onChange={(e) => setData('description', e.target.value)}
+                            onChange={(e) =>
+                                setData('description', e.target.value)
+                            }
                             className="max-w-full"
                             placeholder="Описание компании"
                         />
@@ -125,7 +132,9 @@ const Create: FC<Inertia.Pages.Admin.Companies.Create> = ({
                             id="site_url"
                             type="url"
                             value={data.site_url}
-                            onChange={(e) => setData('site_url', e.target.value)}
+                            onChange={(e) =>
+                                setData('site_url', e.target.value)
+                            }
                             placeholder="https://example.com"
                         />
                         <InputError message={errors.site_url} />
@@ -137,7 +146,9 @@ const Create: FC<Inertia.Pages.Admin.Companies.Create> = ({
                             id="instagram"
                             type="text"
                             value={data.instagram}
-                            onChange={(e) => setData('instagram', e.target.value)}
+                            onChange={(e) =>
+                                setData('instagram', e.target.value)
+                            }
                             placeholder="@username"
                         />
                         <InputError message={errors.instagram} />
@@ -149,7 +160,9 @@ const Create: FC<Inertia.Pages.Admin.Companies.Create> = ({
                             id="telegram"
                             type="text"
                             value={data.telegram}
-                            onChange={(e) => setData('telegram', e.target.value)}
+                            onChange={(e) =>
+                                setData('telegram', e.target.value)
+                            }
                             placeholder="@username"
                         />
                         <InputError message={errors.telegram} />
@@ -163,7 +176,9 @@ const Create: FC<Inertia.Pages.Admin.Companies.Create> = ({
                             required
                             min={1}
                             value={data.stand_code}
-                            onChange={(e) => setData('stand_code', e.target.value)}
+                            onChange={(e) =>
+                                setData('stand_code', e.target.value)
+                            }
                         />
                         <InputError message={errors.stand_code} />
                     </div>
@@ -173,7 +188,9 @@ const Create: FC<Inertia.Pages.Admin.Companies.Create> = ({
                         <Textarea
                             id="activities"
                             value={data.activities}
-                            onChange={(e) => setData('activities', e.target.value)}
+                            onChange={(e) =>
+                                setData('activities', e.target.value)
+                            }
                             className="max-w-full"
                             placeholder="Описание деятельности компании"
                         />
@@ -185,32 +202,25 @@ const Create: FC<Inertia.Pages.Admin.Companies.Create> = ({
                             id="show_on_site"
                             type="checkbox"
                             checked={data.show_on_site}
-                            onChange={(e) => setData('show_on_site', e.target.checked)}
+                            onChange={(e) =>
+                                setData('show_on_site', e.target.checked)
+                            }
                             className="h-4 w-4 rounded border-gray-300"
                         />
-                        <Label htmlFor="show_on_site">Показывать на сайте</Label>
+                        <Label htmlFor="show_on_site">
+                            Показывать на сайте
+                        </Label>
                         <InputError message={errors.show_on_site} />
                     </div>
 
                     {tags.length > 0 && (
-                        <div className="grid gap-2 md:col-span-2">
-                            <Label>Теги</Label>
-                            <div className="flex flex-wrap gap-2">
-                                {tags.map((tag) => (
-                                    <button
-                                        key={tag.id}
-                                        type="button"
-                                        onClick={() => toggleTag(tag.id)}
-                                        className={`rounded-full border px-3 py-1 text-sm transition-colors ${
-                                            data.tags.includes(tag.id)
-                                                ? 'border-blue-500 bg-blue-50 text-blue-700'
-                                                : 'border-gray-300 bg-white text-gray-600 hover:border-gray-400'
-                                        }`}
-                                    >
-                                        {tag.name}
-                                    </button>
-                                ))}
-                            </div>
+                        <div className="grid max-w-lg gap-2">
+                            <Label htmlFor="tags">Теги</Label>
+                            <TagSelect
+                                availableTags={tags}
+                                selectedTagIds={data.tags}
+                                onChange={(tags) => setData('tags', tags)}
+                            />
                             <InputError message={errors.tags} />
                         </div>
                     )}

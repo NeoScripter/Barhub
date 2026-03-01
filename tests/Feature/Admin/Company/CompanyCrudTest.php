@@ -1,0 +1,875 @@
+<?php
+
+declare(strict_types=1);
+
+use App\Enums\UserRole;
+use App\Models\Company;
+use App\Models\Exhibition;
+use App\Models\Tag;
+use App\Models\User;
+
+use function Pest\Laravel\actingAs;
+use function Pest\Laravel\assertDatabaseHas;
+use function Pest\Laravel\assertDatabaseMissing;
+use function Pest\Laravel\delete;
+use function Pest\Laravel\get;
+use function Pest\Laravel\post;
+use function Pest\Laravel\put;
+
+// ─────────────────────────────────────────────────────────────
+// Access Control
+// ─────────────────────────────────────────────────────────────
+
+describe('Company CRUD - Access Control', function (): void {
+    beforeEach(function (): void {
+        $this->exhibition = Exhibition::factory()->create();
+        $this->company    = Company::factory()->for($this->exhibition)->create();
+    });
+
+    it('redirects guest users to login on index', function (): void {
+        get(route('admin.exhibitions.companies.index', $this->exhibition))
+            ->assertRedirect(route('login'));
+    });
+
+    it('redirects guest users to login on create', function (): void {
+        get(route('admin.exhibitions.companies.create', $this->exhibition))
+            ->assertRedirect(route('login'));
+    });
+
+    it('redirects guest users to login on edit', function (): void {
+        get(route('admin.exhibitions.companies.edit', [$this->exhibition, $this->company]))
+            ->assertRedirect(route('login'));
+    });
+
+    it('forbids USER role from accessing companies', function (): void {
+        $user = User::factory()->create();
+        $user->assignRole(UserRole::USER);
+
+        actingAs($user)
+            ->get(route('admin.exhibitions.companies.index', $this->exhibition))
+            ->assertForbidden();
+    });
+
+    it('forbids EXPONENT role from accessing companies', function (): void {
+        $user = User::factory()->create();
+        $user->assignRole(UserRole::EXPONENT);
+
+        actingAs($user)
+            ->get(route('admin.exhibitions.companies.index', $this->exhibition))
+            ->assertForbidden();
+    });
+
+    test('super admin can access all exhibitions companies', function (): void {
+        $superAdmin = User::factory()->create();
+        $superAdmin->assignRole(UserRole::SUPER_ADMIN);
+
+        actingAs($superAdmin)
+            ->get(route('admin.exhibitions.companies.index', $this->exhibition))
+            ->assertOk();
+    });
+
+    test('admin can only access assigned exhibitions companies', function (): void {
+        $admin = User::factory()->create();
+        $admin->assignRole(UserRole::ADMIN);
+
+        $assignedExhibition = Exhibition::factory()->create();
+        $assignedExhibition->users()->attach($admin);
+
+        $unassignedExhibition = Exhibition::factory()->create();
+
+        actingAs($admin)
+            ->get(route('admin.exhibitions.companies.index', $assignedExhibition))
+            ->assertOk();
+
+        actingAs($admin)
+            ->get(route('admin.exhibitions.companies.index', $unassignedExhibition))
+            ->assertForbidden();
+    });
+});
+
+// ─────────────────────────────────────────────────────────────
+// Index
+// ─────────────────────────────────────────────────────────────
+
+describe('Company Index', function (): void {
+    beforeEach(function (): void {
+        $this->superAdmin = User::factory()->create();
+        $this->superAdmin->assignRole(UserRole::SUPER_ADMIN);
+        $this->exhibition = Exhibition::factory()->create();
+    });
+
+    test('displays all companies for an exhibition', function (): void {
+        Company::factory(5)->for($this->exhibition)->create();
+
+        actingAs($this->superAdmin)
+            ->get(route('admin.exhibitions.companies.index', $this->exhibition))
+            ->assertOk()
+            ->assertInertia(
+                fn($page) => $page
+                    ->component('admin/Companies/Index')
+                    ->has('companies.data', 5)
+            );
+    });
+
+    test('only shows companies belonging to the given exhibition', function (): void {
+        Company::factory(3)->for($this->exhibition)->create();
+        $otherExhibition = Exhibition::factory()->create();
+        Company::factory(4)->for($otherExhibition)->create();
+
+        actingAs($this->superAdmin)
+            ->get(route('admin.exhibitions.companies.index', $this->exhibition))
+            ->assertOk()
+            ->assertInertia(
+                fn($page) => $page->has('companies.data', 3)
+            );
+    });
+
+    test('passes exhibition to the view', function (): void {
+        actingAs($this->superAdmin)
+            ->get(route('admin.exhibitions.companies.index', $this->exhibition))
+            ->assertOk()
+            ->assertInertia(
+                fn($page) => $page
+                    ->has('exhibition')
+                    ->where('exhibition.id', $this->exhibition->id)
+            );
+    });
+
+    test('eager loads logo and tags', function (): void {
+        $tag     = Tag::factory()->create();
+        $company = Company::factory()->for($this->exhibition)->create();
+        $company->tags()->attach($tag);
+
+        actingAs($this->superAdmin)
+            ->get(route('admin.exhibitions.companies.index', $this->exhibition))
+            ->assertOk()
+            ->assertInertia(
+                fn($page) => $page
+                    ->has('companies.data.0.tags')
+            );
+    });
+
+    test('searches companies by public_name', function (): void {
+        Company::factory()->for($this->exhibition)->create(['public_name' => 'Acme Corporation']);
+        Company::factory()->for($this->exhibition)->create(['public_name' => 'Globex Industries']);
+        Company::factory()->for($this->exhibition)->create(['public_name' => 'Acme Supplies']);
+
+        $response = actingAs($this->superAdmin)
+            ->get(route('admin.exhibitions.companies.index', [
+                'exhibition' => $this->exhibition,
+                'search'     => 'Acme',
+            ]));
+
+        $response->assertOk();
+        $data = $response->viewData('page')['props']['companies']['data'];
+        expect(count($data))->toBe(2);
+    });
+
+    test('search is case-insensitive', function (): void {
+        Company::factory()->for($this->exhibition)->create(['public_name' => 'Acme Corporation']);
+        Company::factory()->for($this->exhibition)->create(['public_name' => 'Other Company']);
+
+        $response = actingAs($this->superAdmin)
+            ->get(route('admin.exhibitions.companies.index', [
+                'exhibition' => $this->exhibition,
+                'search'     => 'acme',
+            ]));
+
+        $data = $response->viewData('page')['props']['companies']['data'];
+        expect(count($data))->toBe(1);
+    });
+
+    test('returns empty results for non-matching search', function (): void {
+        Company::factory(3)->for($this->exhibition)->create();
+
+        $response = actingAs($this->superAdmin)
+            ->get(route('admin.exhibitions.companies.index', [
+                'exhibition' => $this->exhibition,
+                'search'     => 'xyznonexistent',
+            ]));
+
+        $data = $response->viewData('page')['props']['companies']['data'];
+        expect(count($data))->toBe(0);
+    });
+
+    test('sorts companies by public_name ascending', function (): void {
+        Company::factory()->for($this->exhibition)->create(['public_name' => 'Zebra Co']);
+        Company::factory()->for($this->exhibition)->create(['public_name' => 'Alpha Co']);
+        Company::factory()->for($this->exhibition)->create(['public_name' => 'Beta Co']);
+
+        $response = actingAs($this->superAdmin)
+            ->get(route('admin.exhibitions.companies.index', [
+                'exhibition' => $this->exhibition,
+                'sort'       => 'public_name',
+            ]));
+
+        $data = $response->viewData('page')['props']['companies']['data'];
+        expect($data[0]['public_name'])->toBe('Alpha Co')
+            ->and($data[1]['public_name'])->toBe('Beta Co')
+            ->and($data[2]['public_name'])->toBe('Zebra Co');
+    });
+
+    test('sorts companies by public_name descending', function (): void {
+        Company::factory()->for($this->exhibition)->create(['public_name' => 'Zebra Co']);
+        Company::factory()->for($this->exhibition)->create(['public_name' => 'Alpha Co']);
+        Company::factory()->for($this->exhibition)->create(['public_name' => 'Beta Co']);
+
+        $response = actingAs($this->superAdmin)
+            ->get(route('admin.exhibitions.companies.index', [
+                'exhibition' => $this->exhibition,
+                'sort'       => '-public_name',
+            ]));
+
+        $data = $response->viewData('page')['props']['companies']['data'];
+        expect($data[0]['public_name'])->toBe('Zebra Co')
+            ->and($data[1]['public_name'])->toBe('Beta Co')
+            ->and($data[2]['public_name'])->toBe('Alpha Co');
+    });
+
+    test('paginates companies', function (): void {
+        Company::factory(20)->for($this->exhibition)->create();
+
+        actingAs($this->superAdmin)
+            ->get(route('admin.exhibitions.companies.index', $this->exhibition))
+            ->assertOk()
+            ->assertInertia(
+                fn($page) => $page
+                    ->has('companies.data', 15) // default pagination
+                    ->has('companies.links')
+            );
+    });
+
+    test('handles exhibition with no companies', function (): void {
+        actingAs($this->superAdmin)
+            ->get(route('admin.exhibitions.companies.index', $this->exhibition))
+            ->assertOk()
+            ->assertInertia(
+                fn($page) => $page
+                    ->where('companies.data', fn($data) => count($data) === 0)
+            );
+    });
+});
+
+// ─────────────────────────────────────────────────────────────
+// Create
+// ─────────────────────────────────────────────────────────────
+
+describe('Company Create', function (): void {
+    beforeEach(function (): void {
+        $this->superAdmin = User::factory()->create();
+        $this->superAdmin->assignRole(UserRole::SUPER_ADMIN);
+        $this->exhibition = Exhibition::factory()->create();
+    });
+
+    test('displays create form', function (): void {
+        actingAs($this->superAdmin)
+            ->get(route('admin.exhibitions.companies.create', $this->exhibition))
+            ->assertOk()
+            ->assertInertia(
+                fn($page) => $page
+                    ->component('admin/Companies/Create')
+                    ->has('exhibition')
+                    ->has('tags')
+            );
+    });
+
+    test('passes all tags to create form', function (): void {
+        Tag::factory(5)->create();
+
+        actingAs($this->superAdmin)
+            ->get(route('admin.exhibitions.companies.create', $this->exhibition))
+            ->assertOk()
+            ->assertInertia(
+                fn($page) => $page
+                    ->where('tags', fn($tags) => count($tags) === 5)
+            );
+    });
+
+    test('passes correct exhibition to create form', function (): void {
+        actingAs($this->superAdmin)
+            ->get(route('admin.exhibitions.companies.create', $this->exhibition))
+            ->assertOk()
+            ->assertInertia(
+                fn($page) => $page
+                    ->where('exhibition.id', $this->exhibition->id)
+            );
+    });
+});
+
+// ─────────────────────────────────────────────────────────────
+// Store
+// ─────────────────────────────────────────────────────────────
+
+describe('Company Store', function (): void {
+    beforeEach(function (): void {
+        $this->superAdmin = User::factory()->create();
+        $this->superAdmin->assignRole(UserRole::SUPER_ADMIN);
+        $this->exhibition = Exhibition::factory()->create();
+        $this->validData  = [
+            'public_name'  => 'Acme Corporation',
+            'legal_name'   => 'Acme Corporation LLC',
+            'description'  => 'A company that makes everything you need.',
+            'phone'        => '+7 (999) 000-00-00',
+            'email'        => 'acme@example.com',
+            'site_url'     => 'https://acme.example.com',
+            'instagram'    => '@acme',
+            'telegram'     => '@acme_tg',
+            'stand_code'   => 42,
+            'show_on_site' => true,
+            'activities'   => 'Manufacturing and distribution of goods.',
+        ];
+    });
+
+    test('creates company with all fields', function (): void {
+        actingAs($this->superAdmin)
+            ->post(route('admin.exhibitions.companies.store', $this->exhibition), $this->validData)
+            ->assertRedirect(route('admin.exhibitions.companies.index', $this->exhibition));
+
+        assertDatabaseHas('companies', [
+            'public_name'   => 'Acme Corporation',
+            'legal_name'    => 'Acme Corporation LLC',
+            'email'         => 'acme@example.com',
+            'stand_code'    => 42,
+            'exhibition_id' => $this->exhibition->id,
+        ]);
+    });
+
+    test('assigns exhibition_id automatically', function (): void {
+        actingAs($this->superAdmin)
+            ->post(route('admin.exhibitions.companies.store', $this->exhibition), $this->validData);
+
+        assertDatabaseHas('companies', [
+            'email'         => 'acme@example.com',
+            'exhibition_id' => $this->exhibition->id,
+        ]);
+    });
+
+    test('creates company without optional fields', function (): void {
+        $data = [
+            'public_name'  => 'Minimal Corp',
+            'legal_name'   => 'Minimal Corp LLC',
+            'description'  => 'A minimal company description.',
+            'phone'        => '+7 (999) 111-11-11',
+            'email'        => 'minimal@example.com',
+            'stand_code'   => 1,
+            'show_on_site' => false,
+        ];
+
+        actingAs($this->superAdmin)
+            ->post(route('admin.exhibitions.companies.store', $this->exhibition), $data)
+            ->assertRedirect();
+
+        assertDatabaseHas('companies', [
+            'email'      => 'minimal@example.com',
+            'site_url'   => null,
+            'instagram'  => null,
+            'telegram'   => null,
+            'activities' => null,
+        ]);
+    });
+
+    test('attaches tags on create', function (): void {
+        $tags = Tag::factory(3)->create();
+        $data = array_merge($this->validData, [
+            'tags' => $tags->pluck('id')->toArray(),
+        ]);
+
+        actingAs($this->superAdmin)
+            ->post(route('admin.exhibitions.companies.store', $this->exhibition), $data);
+
+        $company = Company::where('email', 'acme@example.com')->first();
+        expect($company->tags)->toHaveCount(3);
+    });
+
+    test('creates company without tags', function (): void {
+        actingAs($this->superAdmin)
+            ->post(route('admin.exhibitions.companies.store', $this->exhibition), $this->validData);
+
+        $company = Company::where('email', 'acme@example.com')->first();
+        expect($company->tags)->toHaveCount(0);
+    });
+
+    test('redirects to index with success flash on store', function (): void {
+        actingAs($this->superAdmin)
+            ->post(route('admin.exhibitions.companies.store', $this->exhibition), $this->validData)
+            ->assertRedirect(route('admin.exhibitions.companies.index', $this->exhibition))
+            ->assertSessionHas('success');
+    });
+
+    // ── Validation ──
+
+    test('validates required fields', function (): void {
+        actingAs($this->superAdmin)
+            ->post(route('admin.exhibitions.companies.store', $this->exhibition), [])
+            ->assertSessionHasErrors(['public_name', 'legal_name', 'description', 'phone', 'email', 'stand_code', 'show_on_site']);
+    });
+
+    test('validates public_name max length', function (): void {
+        $data = array_merge($this->validData, ['public_name' => str_repeat('a', 256)]);
+
+        actingAs($this->superAdmin)
+            ->post(route('admin.exhibitions.companies.store', $this->exhibition), $data)
+            ->assertSessionHasErrors('public_name');
+    });
+
+    test('accepts public_name at max boundary', function (): void {
+        $data = array_merge($this->validData, ['public_name' => str_repeat('a', 255)]);
+
+        actingAs($this->superAdmin)
+            ->post(route('admin.exhibitions.companies.store', $this->exhibition), $data)
+            ->assertRedirect();
+    });
+
+    test('validates email format', function (): void {
+        $data = array_merge($this->validData, ['email' => 'not-an-email']);
+
+        actingAs($this->superAdmin)
+            ->post(route('admin.exhibitions.companies.store', $this->exhibition), $data)
+            ->assertSessionHasErrors('email');
+    });
+
+    test('validates email uniqueness', function (): void {
+        Company::factory()->for($this->exhibition)->create(['email' => 'acme@example.com']);
+
+        actingAs($this->superAdmin)
+            ->post(route('admin.exhibitions.companies.store', $this->exhibition), $this->validData)
+            ->assertSessionHasErrors('email');
+    });
+
+    test('validates site_url format', function (): void {
+        $data = array_merge($this->validData, ['site_url' => 'not-a-url']);
+
+        actingAs($this->superAdmin)
+            ->post(route('admin.exhibitions.companies.store', $this->exhibition), $data)
+            ->assertSessionHasErrors('site_url');
+    });
+
+    test('accepts null site_url', function (): void {
+        $data = array_merge($this->validData, ['site_url' => null]);
+
+        actingAs($this->superAdmin)
+            ->post(route('admin.exhibitions.companies.store', $this->exhibition), $data)
+            ->assertRedirect();
+
+        assertDatabaseHas('companies', ['site_url' => null]);
+    });
+
+    test('validates stand_code is a positive integer', function (): void {
+        $data = array_merge($this->validData, ['stand_code' => -1]);
+
+        actingAs($this->superAdmin)
+            ->post(route('admin.exhibitions.companies.store', $this->exhibition), $data)
+            ->assertSessionHasErrors('stand_code');
+    });
+
+    test('validates description minimum length', function (): void {
+        $data = array_merge($this->validData, ['description' => 'Short']);
+
+        actingAs($this->superAdmin)
+            ->post(route('admin.exhibitions.companies.store', $this->exhibition), $data)
+            ->assertSessionHasErrors('description');
+    });
+
+    test('validates tags exist in database', function (): void {
+        $data = array_merge($this->validData, ['tags' => [99999]]);
+
+        actingAs($this->superAdmin)
+            ->post(route('admin.exhibitions.companies.store', $this->exhibition), $data)
+            ->assertSessionHasErrors('tags.0');
+    });
+});
+
+// ─────────────────────────────────────────────────────────────
+// Edit
+// ─────────────────────────────────────────────────────────────
+
+describe('Company Edit', function (): void {
+    beforeEach(function (): void {
+        $this->superAdmin = User::factory()->create();
+        $this->superAdmin->assignRole(UserRole::SUPER_ADMIN);
+        $this->exhibition = Exhibition::factory()->create();
+        $this->company    = Company::factory()->for($this->exhibition)->create();
+    });
+
+    test('displays edit form', function (): void {
+        actingAs($this->superAdmin)
+            ->get(route('admin.exhibitions.companies.edit', [$this->exhibition, $this->company]))
+            ->assertOk()
+            ->assertInertia(
+                fn($page) => $page
+                    ->component('admin/Companies/Edit')
+                    ->has('exhibition')
+                    ->has('company')
+                    ->has('tags')
+            );
+    });
+
+    test('passes correct company to edit form', function (): void {
+        actingAs($this->superAdmin)
+            ->get(route('admin.exhibitions.companies.edit', [$this->exhibition, $this->company]))
+            ->assertOk()
+            ->assertInertia(
+                fn($page) => $page
+                    ->where('company.id', $this->company->id)
+                    ->where('company.public_name', $this->company->public_name)
+            );
+    });
+
+    test('passes all tags to edit form', function (): void {
+        Tag::factory(4)->create();
+
+        actingAs($this->superAdmin)
+            ->get(route('admin.exhibitions.companies.edit', [$this->exhibition, $this->company]))
+            ->assertOk()
+            ->assertInertia(
+                fn($page) => $page
+                    ->where('tags', fn($tags) => count($tags) === 4)
+            );
+    });
+
+    test('eager loads tags on company', function (): void {
+        $tags = Tag::factory(2)->create();
+        $this->company->tags()->attach($tags->pluck('id'));
+
+        actingAs($this->superAdmin)
+            ->get(route('admin.exhibitions.companies.edit', [$this->exhibition, $this->company]))
+            ->assertOk()
+            ->assertInertia(
+                fn($page) => $page
+                    ->has('company.tags', 2)
+            );
+    });
+
+    test('cannot access company from different exhibition', function (): void {
+        $otherExhibition = Exhibition::factory()->create();
+        $otherCompany    = Company::factory()->for($otherExhibition)->create();
+
+        actingAs($this->superAdmin)
+            ->get(route('admin.exhibitions.companies.edit', [$this->exhibition, $otherCompany]))
+            ->assertNotFound();
+    });
+});
+
+// ─────────────────────────────────────────────────────────────
+// Update
+// ─────────────────────────────────────────────────────────────
+
+describe('Company Update', function (): void {
+    beforeEach(function (): void {
+        $this->superAdmin = User::factory()->create();
+        $this->superAdmin->assignRole(UserRole::SUPER_ADMIN);
+        $this->exhibition = Exhibition::factory()->create();
+        $this->company    = Company::factory()->for($this->exhibition)->create([
+            'public_name' => 'Original Name',
+            'email'       => 'original@example.com',
+        ]);
+    });
+
+    test('updates basic company fields', function (): void {
+        actingAs($this->superAdmin)
+            ->put(route('admin.exhibitions.companies.update', [$this->exhibition, $this->company]), [
+                'public_name'  => 'Updated Name',
+                'legal_name'   => 'Updated Legal LLC',
+                'description'  => 'Updated description for the company.',
+                'phone'        => '+7 (999) 999-99-99',
+                'email'        => 'updated@example.com',
+                'stand_code'   => 99,
+                'show_on_site' => false,
+            ])
+            ->assertRedirect(route('admin.exhibitions.companies.index', $this->exhibition));
+
+        assertDatabaseHas('companies', [
+            'id'          => $this->company->id,
+            'public_name' => 'Updated Name',
+            'email'       => 'updated@example.com',
+            'stand_code'  => 99,
+        ]);
+    });
+
+    test('updates tags', function (): void {
+        $oldTags = Tag::factory(2)->create();
+        $newTags = Tag::factory(3)->create();
+        $this->company->tags()->attach($oldTags->pluck('id'));
+
+        actingAs($this->superAdmin)
+            ->put(route('admin.exhibitions.companies.update', [$this->exhibition, $this->company]), [
+                'public_name'  => $this->company->public_name,
+                'legal_name'   => $this->company->legal_name,
+                'description'  => $this->company->description,
+                'phone'        => $this->company->phone,
+                'email'        => $this->company->email,
+                'stand_code'   => $this->company->stand_code,
+                'show_on_site' => $this->company->show_on_site,
+                'tags'         => $newTags->pluck('id')->toArray(),
+            ]);
+
+        $this->company->refresh();
+        expect($this->company->tags)->toHaveCount(3);
+        expect($this->company->tags->pluck('id')->toArray())
+            ->toBe($newTags->pluck('id')->toArray());
+    });
+
+    test('removes all tags when empty array sent', function (): void {
+        $tags = Tag::factory(3)->create();
+        $this->company->tags()->attach($tags->pluck('id'));
+
+        actingAs($this->superAdmin)
+            ->put(route('admin.exhibitions.companies.update', [$this->exhibition, $this->company]), [
+                'public_name'  => $this->company->public_name,
+                'legal_name'   => $this->company->legal_name,
+                'description'  => $this->company->description,
+                'phone'        => $this->company->phone,
+                'email'        => $this->company->email,
+                'stand_code'   => $this->company->stand_code,
+                'show_on_site' => $this->company->show_on_site,
+                'tags'         => [],
+            ]);
+
+        $this->company->refresh();
+        expect($this->company->tags)->toHaveCount(0);
+    });
+
+    test('allows same email on update for same company', function (): void {
+        actingAs($this->superAdmin)
+            ->put(route('admin.exhibitions.companies.update', [$this->exhibition, $this->company]), [
+                'public_name'  => $this->company->public_name,
+                'legal_name'   => $this->company->legal_name,
+                'description'  => $this->company->description,
+                'phone'        => $this->company->phone,
+                'email'        => 'original@example.com', // same email
+                'stand_code'   => $this->company->stand_code,
+                'show_on_site' => $this->company->show_on_site,
+            ])
+            ->assertRedirect();
+
+        assertDatabaseHas('companies', [
+            'id'    => $this->company->id,
+            'email' => 'original@example.com',
+        ]);
+    });
+
+    test('rejects email already taken by another company', function (): void {
+        Company::factory()->for($this->exhibition)->create(['email' => 'taken@example.com']);
+
+        actingAs($this->superAdmin)
+            ->put(route('admin.exhibitions.companies.update', [$this->exhibition, $this->company]), [
+                'public_name'  => $this->company->public_name,
+                'legal_name'   => $this->company->legal_name,
+                'description'  => $this->company->description,
+                'phone'        => $this->company->phone,
+                'email'        => 'taken@example.com',
+                'stand_code'   => $this->company->stand_code,
+                'show_on_site' => $this->company->show_on_site,
+            ])
+            ->assertSessionHasErrors('email');
+    });
+
+    test('can update optional fields to null', function (): void {
+        actingAs($this->superAdmin)
+            ->put(route('admin.exhibitions.companies.update', [$this->exhibition, $this->company]), [
+                'public_name'  => $this->company->public_name,
+                'legal_name'   => $this->company->legal_name,
+                'description'  => $this->company->description,
+                'phone'        => $this->company->phone,
+                'email'        => $this->company->email,
+                'stand_code'   => $this->company->stand_code,
+                'show_on_site' => $this->company->show_on_site,
+                'site_url'     => null,
+                'instagram'    => null,
+                'telegram'     => null,
+            ])
+            ->assertRedirect();
+
+        assertDatabaseHas('companies', [
+            'id'       => $this->company->id,
+            'site_url' => null,
+            'telegram' => null,
+        ]);
+    });
+
+    test('redirects to index with success flash on update', function (): void {
+        actingAs($this->superAdmin)
+            ->put(route('admin.exhibitions.companies.update', [$this->exhibition, $this->company]), [
+                'public_name'  => 'Updated Name',
+                'legal_name'   => $this->company->legal_name,
+                'description'  => $this->company->description,
+                'phone'        => $this->company->phone,
+                'email'        => $this->company->email,
+                'stand_code'   => $this->company->stand_code,
+                'show_on_site' => $this->company->show_on_site,
+            ])
+            ->assertRedirect(route('admin.exhibitions.companies.index', $this->exhibition))
+            ->assertSessionHas('success');
+    });
+
+    test('validates update data', function (): void {
+        actingAs($this->superAdmin)
+            ->put(route('admin.exhibitions.companies.update', [$this->exhibition, $this->company]), [
+                'public_name' => '',
+            ])
+            ->assertSessionHasErrors('public_name');
+    });
+
+    test('cannot update company from different exhibition', function (): void {
+        $otherExhibition = Exhibition::factory()->create();
+        $otherCompany    = Company::factory()->for($otherExhibition)->create();
+
+        actingAs($this->superAdmin)
+            ->put(route('admin.exhibitions.companies.update', [$this->exhibition, $otherCompany]), [
+                'public_name' => 'Hacked Name',
+            ])
+            ->assertNotFound();
+    });
+});
+
+// ─────────────────────────────────────────────────────────────
+// Destroy
+// ─────────────────────────────────────────────────────────────
+
+describe('Company Destroy', function (): void {
+    beforeEach(function (): void {
+        $this->superAdmin = User::factory()->create();
+        $this->superAdmin->assignRole(UserRole::SUPER_ADMIN);
+        $this->exhibition = Exhibition::factory()->create();
+        $this->company    = Company::factory()->for($this->exhibition)->create();
+    });
+
+    test('deletes company', function (): void {
+        actingAs($this->superAdmin)
+            ->delete(route('admin.exhibitions.companies.destroy', [$this->exhibition, $this->company]))
+            ->assertRedirect();
+
+        assertDatabaseMissing('companies', ['id' => $this->company->id]);
+    });
+
+    test('redirects to index with success flash on destroy', function (): void {
+        actingAs($this->superAdmin)
+            ->delete(route('admin.exhibitions.companies.destroy', [$this->exhibition, $this->company]))
+            ->assertRedirect(route('admin.exhibitions.companies.index', $this->exhibition))
+            ->assertSessionHas('success');
+    });
+
+    test('detaches tags on delete', function (): void {
+        $tags = Tag::factory(2)->create();
+        $this->company->tags()->attach($tags->pluck('id'));
+
+        actingAs($this->superAdmin)
+            ->delete(route('admin.exhibitions.companies.destroy', [$this->exhibition, $this->company]));
+
+        assertDatabaseMissing('company_tag', ['company_id' => $this->company->id]);
+    });
+
+    test('does not delete the tags themselves', function (): void {
+        $tags = Tag::factory(2)->create();
+        $this->company->tags()->attach($tags->pluck('id'));
+
+        actingAs($this->superAdmin)
+            ->delete(route('admin.exhibitions.companies.destroy', [$this->exhibition, $this->company]));
+
+        foreach ($tags as $tag) {
+            assertDatabaseHas('tags', ['id' => $tag->id]);
+        }
+    });
+
+    test('admin can only delete companies from assigned exhibitions', function (): void {
+        $admin = User::factory()->create();
+        $admin->assignRole(UserRole::ADMIN);
+
+        $assignedExhibition = Exhibition::factory()->create();
+        $assignedExhibition->users()->attach($admin);
+        $assignedCompany = Company::factory()->for($assignedExhibition)->create();
+
+        $unassignedExhibition = Exhibition::factory()->create();
+        $unassignedCompany    = Company::factory()->for($unassignedExhibition)->create();
+
+        actingAs($admin)
+            ->delete(route('admin.exhibitions.companies.destroy', [$assignedExhibition, $assignedCompany]))
+            ->assertRedirect();
+
+        actingAs($admin)
+            ->delete(route('admin.exhibitions.companies.destroy', [$unassignedExhibition, $unassignedCompany]))
+            ->assertForbidden();
+
+        assertDatabaseMissing('companies', ['id' => $assignedCompany->id]);
+        assertDatabaseHas('companies', ['id' => $unassignedCompany->id]);
+    });
+
+    test('cannot delete company from different exhibition', function (): void {
+        $otherExhibition = Exhibition::factory()->create();
+        $otherCompany    = Company::factory()->for($otherExhibition)->create();
+
+        actingAs($this->superAdmin)
+            ->delete(route('admin.exhibitions.companies.destroy', [$this->exhibition, $otherCompany]))
+            ->assertNotFound();
+    });
+});
+
+// ─────────────────────────────────────────────────────────────
+// Edge Cases
+// ─────────────────────────────────────────────────────────────
+
+describe('Company Edge Cases', function (): void {
+    beforeEach(function (): void {
+        $this->superAdmin = User::factory()->create();
+        $this->superAdmin->assignRole(UserRole::SUPER_ADMIN);
+        $this->exhibition = Exhibition::factory()->create();
+    });
+
+    test('handles company with no tags on index', function (): void {
+        Company::factory()->for($this->exhibition)->create();
+
+        actingAs($this->superAdmin)
+            ->get(route('admin.exhibitions.companies.index', $this->exhibition))
+            ->assertOk()
+            ->assertInertia(
+                fn($page) => $page
+                    ->where('companies.data.0.tags', fn($tags) => count($tags) === 0)
+            );
+    });
+
+    test('show_on_site can be set to false', function (): void {
+        $data = [
+            'public_name'  => 'Hidden Corp',
+            'legal_name'   => 'Hidden Corp LLC',
+            'description'  => 'A company not shown on site.',
+            'phone'        => '+7 (999) 222-22-22',
+            'email'        => 'hidden@example.com',
+            'stand_code'   => 5,
+            'show_on_site' => false,
+        ];
+
+        actingAs($this->superAdmin)
+            ->post(route('admin.exhibitions.companies.store', $this->exhibition), $data)
+            ->assertRedirect();
+
+        assertDatabaseHas('companies', [
+            'email'        => 'hidden@example.com',
+            'show_on_site' => false,
+        ]);
+    });
+
+    test('two companies in different exhibitions can share the same stand_code', function (): void {
+        $otherExhibition = Exhibition::factory()->create();
+
+        Company::factory()->for($otherExhibition)->create(['stand_code' => 10]);
+
+        $data = [
+            'public_name'  => 'Our Corp',
+            'legal_name'   => 'Our Corp LLC',
+            'description'  => 'Our company description here.',
+            'phone'        => '+7 (999) 333-33-33',
+            'email'        => 'ours@example.com',
+            'stand_code'   => 10,
+            'show_on_site' => true,
+        ];
+
+        actingAs($this->superAdmin)
+            ->post(route('admin.exhibitions.companies.store', $this->exhibition), $data)
+            ->assertRedirect();
+
+        assertDatabaseHas('companies', [
+            'email'      => 'ours@example.com',
+            'stand_code' => 10,
+        ]);
+    });
+});
