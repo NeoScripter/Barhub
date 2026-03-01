@@ -53,7 +53,7 @@ const Edit: FC<Inertia.Pages.Admin.People.Edit> = ({ person, exhibition }) => {
         <div className="mx-auto w-full max-w-250">
             <div className="mb-8 flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
                 <CopyLinkBtn
-                    url={`${window.location.origin}/exhibitions/${exhibition.slug}/people/${person.id}`}
+                    url={`${window.location.origin}/exhibitions/${exhibition.id}/people/${person.id}`}
                 />
 
                 <DeleteAlertDialog

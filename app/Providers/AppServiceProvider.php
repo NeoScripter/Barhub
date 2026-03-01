@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Providers;
 
+use App\Models\Company;
 use App\Models\Person;
 use Carbon\CarbonImmutable;
 use Illuminate\Database\Eloquent\Model;
@@ -56,6 +57,7 @@ final class AppServiceProvider extends ServiceProvider
 
         Relation::enforceMorphMap([
             'person' => Person::class,
+            'company' => Company::class,
         ]);
     }
 }

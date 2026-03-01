@@ -17,8 +17,10 @@ final class DatabaseSeeder extends Seeder
             UserSeeder::class,
             ExhibitionSeeder::class,
             ThemeSeeder::class,
+            TagSeeder::class,
             StageSeeder::class,
             EventSeeder::class,
+            CompanySeeder::class,
         ]);
     }
 }

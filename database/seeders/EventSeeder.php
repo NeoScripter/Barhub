@@ -74,7 +74,5 @@ final class EventSeeder extends Seeder
                 })
                 ->create()
         );
-
-        $this->command->info('Events seeded successfully!');
     }
 }

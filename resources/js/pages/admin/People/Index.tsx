@@ -4,7 +4,9 @@ import IndexToolbar from '@/components/ui/IndexToolbar';
 import Pagination from '@/components/ui/Pagination';
 import SearchInput from '@/components/ui/SearchInput';
 import Table from '@/components/ui/Table';
+import { create } from '@/wayfinder/routes/admin/exhibitions/people';
 import { Inertia } from '@/wayfinder/types';
+import { Link } from '@inertiajs/react';
 import { Plus } from 'lucide-react';
 import { FC } from 'react';
 import PersonTable from './partials/PersonTable';
@@ -20,8 +22,10 @@ const Index: FC<Inertia.Pages.Admin.People.Index> = ({
                 <AccentHeading className="text-xl">Люди</AccentHeading>
                 <SearchInput placeholder="Поиск по имени" />
 
-                <Button>
-                    <Plus /> Добавить человека
+                <Button asChild>
+                    <Link href={create(exhibition).url}>
+                        <Plus /> Добавить человека
+                    </Link>
                 </Button>
             </IndexToolbar>
             <Table

@@ -1,6 +1,7 @@
 import GridLayout from '@/components/layout/GridLayout';
 import ActionCard from '@/components/ui/ActionCard';
 import { Button } from '@/components/ui/Button';
+import CompanyController from '@/wayfinder/App/Http/Controllers/Admin/CompanyController';
 import EventController from '@/wayfinder/App/Http/Controllers/Admin/EventController';
 import PersonController from '@/wayfinder/App/Http/Controllers/Admin/PersonController';
 import { Inertia } from '@/wayfinder/types';
@@ -43,18 +44,18 @@ const cards: CardLinkType[] = [
         id: crypto.randomUUID(),
         icon: Calendar,
         label: 'События',
-        url: (id) => EventController.index({id: id}).url,
+        url: (id) => EventController.index({ id: id }).url,
     },
     {
         id: crypto.randomUUID(),
         icon: User,
         label: 'Спикеры',
-        url: (id) => PersonController.index({id: id}).url,
+        url: (id) => PersonController.index({ id: id }).url,
     },
     {
         id: crypto.randomUUID(),
         icon: BriefcaseBusiness,
         label: 'Компании',
-        url: (id) => '/',
+        url: (id) => CompanyController.index({ id: id }).url,
     },
 ];

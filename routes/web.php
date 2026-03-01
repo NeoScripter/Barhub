@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\EventController as AdminEventController;
 use App\Http\Controllers\Admin\ExhibitionController as AdminExhibitionController;
 use App\Http\Controllers\Admin\PersonController as AdminPersonController;
+use App\Http\Controllers\Admin\CompanyController as AdminCompanyController;
 use App\Http\Controllers\Admin\StageController;
 use App\Http\Controllers\Admin\ThemeController;
 use App\Http\Controllers\Admin\UpdatedExhibitionStatusController;
@@ -69,6 +70,7 @@ Route::prefix('/admin')
 
                 Route::resource('events', AdminEventController::class)->except('show');
                 Route::resource('people', AdminPersonController::class)->except(['show']);
+                Route::resource('companies', AdminCompanyController::class)->except(['show']);
                 /*
                 |--------------------------------------------------------------------------
                 | Models Belonging To Exhibition

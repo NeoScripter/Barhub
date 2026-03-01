@@ -25,6 +25,11 @@ final class Exhibition extends Model
         return $this->hasMany(Event::class);
     }
 
+    public function companies(): HasMany
+    {
+        return $this->hasMany(Company::class);
+    }
+
     protected function casts(): array
     {
         return [
