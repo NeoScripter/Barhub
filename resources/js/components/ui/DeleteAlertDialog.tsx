@@ -51,6 +51,7 @@ export function DeleteAlertDialog({
                                 type="button"
                                 onClick={onConfirm}
                                 disabled={isLoading}
+                                data-test="delete-btn"
                             >
                                 {isLoading ? 'Удаление...' : confirmText}
                             </Button>

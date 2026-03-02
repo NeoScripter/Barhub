@@ -1,11 +1,12 @@
 import { Button } from '@/components/ui/Button';
+import { DeleteAlertDialog } from '@/components/ui/DeleteAlertDialog';
 import { cn } from '@/lib/utils';
 import { NodeProps } from '@/types/shared';
 import { destroy } from '@/wayfinder/routes/admin/exhibitions/exponents';
 import { App, Inertia } from '@/wayfinder/types';
-import { Link, usePage } from '@inertiajs/react';
+import { router, usePage } from '@inertiajs/react';
 import { Trash2 } from 'lucide-react';
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import { toast } from 'sonner';
 
 const ExponentRow: FC<
@@ -15,6 +16,23 @@ const ExponentRow: FC<
 > = ({ className, user }) => {
     const { exhibition, company } =
         usePage<Inertia.Pages.Admin.Exponents.Index>().props;
+    const [isDeleting, setIsDeleting] = useState(false);
+
+    const handleDelete = () => {
+        setIsDeleting(true);
+
+        router.delete(destroy({ exhibition, company, exponent: user.id }).url, {
+            onSuccess: () => {
+                toast.success(
+                    'Пользователь удален из экспонентов данной компании',
+                );
+            },
+            onError: () => {
+                toast.error('Ошибка удаления экспонента');
+                setIsDeleting(false);
+            },
+        });
+    };
 
     return (
         <li
@@ -38,26 +56,24 @@ const ExponentRow: FC<
                 key="lastLogin"
                 content={user.last_login_at ?? 'Отсутствует'}
             />
-            <Button
-                variant="destructive"
-                className="w-fit"
-                asChild
-            >
-                <Link
-                    href={
-                        destroy({ exhibition, company, exponent: user.id }).url
-                    }
-                    method='delete'
-                    onSuccess={() =>
-                        toast.success(
-                            'Пользователь удален из экспонентов данной компании',
-                        )
-                    }
-                >
-                    <Trash2 />
-                    Удалить
-                </Link>
-            </Button>
+            <DeleteAlertDialog
+                trigger={
+                    <Button
+                        variant="destructive"
+                        type="button"
+                        className="w-fit"
+                    >
+                        Удалить
+                        <Trash2 />
+                    </Button>
+                }
+                title="Удалить экспонента?"
+                description={`Вы уверены, что хотите удалить данного экспонента?`}
+                onConfirm={handleDelete}
+                confirmText="Удалить"
+                cancelText="Отмена"
+                isLoading={isDeleting}
+            />
         </li>
     );
 };
