@@ -38,5 +38,7 @@ final class UserSeeder extends Seeder
             'email' => 'super-admin@gmail.com',
             'role' => UserRole::SUPER_ADMIN->value,
         ]);
+
+        User::factory(20)->create();
     }
 }

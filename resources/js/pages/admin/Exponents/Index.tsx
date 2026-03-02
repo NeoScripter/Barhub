@@ -2,19 +2,19 @@ import CompanyLayout from '@/layouts/app/CompanyLayout';
 import { Inertia } from '@/wayfinder/types';
 import { FC } from 'react';
 import ExponentDialog from './partials/ExponentDialog';
+import ExponentRow from './partials/ExponentRow';
 
-const Index: FC<Inertia.Pages.Admin.Exponents.Index> = ({ exponents, users }) => {
+const Index: FC<Inertia.Pages.Admin.Exponents.Index> = ({
+    exponents,
+}) => {
     return (
         <CompanyLayout>
-            <ul>
+            <ul className="mb-8 space-y-14 sm:mb-14 lg:mb-16">
                 {exponents.map((exponent) => (
-                    <li
+                    <ExponentRow
                         key={exponent.id}
-                        className="grid grid-cols-3"
-                    >
-                        <div>{exponent.name}</div>
-                        <div>{exponent.last_login_at}</div>
-                    </li>
+                        user={exponent}
+                    />
                 ))}
             </ul>
 
