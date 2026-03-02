@@ -72,7 +72,7 @@ Route::prefix('/admin')
                     ->name('show');
 
                 Route::resource('companies/{company}/exponents', AdminExponentController::class)
-                    ->only(['update', 'index']);
+                    ->only(['update', 'index', 'destroy']);
 
                 Route::resource('events', AdminEventController::class)->except('show');
                 Route::resource('people', AdminPersonController::class)->except(['show']);

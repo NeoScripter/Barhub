@@ -13,9 +13,9 @@ const CompanyLayout: FC<NodeProps> = ({ className, children }) => {
     const { currentUrl } = useCurrentUrl();
 
     return (
-        <div className={className}>
+        <div>
             <nav>
-                <ul className="mx-auto mb-12 flex max-w-7/10 flex-wrap items-center justify-center gap-3 md:max-w-full">
+                <ul className="mx-auto mt-8 mb-24 flex max-w-7/10 flex-wrap items-center justify-center gap-3 md:max-w-full">
                     {navLinks.map((link) => (
                         <NavLink
                             key={link.id}
@@ -25,27 +25,29 @@ const CompanyLayout: FC<NodeProps> = ({ className, children }) => {
                 </ul>
             </nav>
 
-            {!currentUrl.endsWith('edit') && <div className="my-14 flex flex-col items-center gap-4 sm:gap-9 sm:flex-row">
-                {company.logo && (
-                    <Image
-                        wrapperStyles="max-w-27 md:max-w-40"
-                        image={company.logo}
-                    />
-                )}
+            {!currentUrl.endsWith('edit') && (
+                <div className="my-20 flex flex-col items-center gap-4 sm:flex-row sm:gap-9">
+                    {company.logo && (
+                        <Image
+                            wrapperStyles="max-w-27 md:max-w-40"
+                            image={company.logo}
+                        />
+                    )}
 
-                <div className='text-center sm:text-left'>
-                    <AccentHeading
-                        asChild
-                        className="mb-1 text-lg"
-                    >
-                        <h3>{company.public_name}</h3>
-                    </AccentHeading>
+                    <div className="text-center sm:text-left">
+                        <AccentHeading
+                            asChild
+                            className="mb-1 text-lg"
+                        >
+                            <h3>{company.public_name}</h3>
+                        </AccentHeading>
 
-                    <p>{company.legal_name}</p>
+                        <p>{company.legal_name}</p>
+                    </div>
                 </div>
-            </div>}
+            )}
 
-            {children}
+            <div className={className}>{children}</div>
         </div>
     );
 };

@@ -34,4 +34,13 @@ class ExponentController extends Controller
 
         return redirect()->back();
     }
+
+    public function destroy(Exhibition $exhibition, Company $company, int $id)
+    {
+        $user = User::find($id);
+        $user->update(['company_id' => null, 'role' => UserRole::USER]);
+        $user->save();
+
+        return redirect()->back();
+    }
 }

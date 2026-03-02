@@ -8,7 +8,7 @@ const Index: FC<Inertia.Pages.Admin.Exponents.Index> = ({
     exponents,
 }) => {
     return (
-        <CompanyLayout>
+        <CompanyLayout className='space-y-30!'>
             <ul className="mb-8 space-y-14 sm:mb-14 lg:mb-16">
                 {exponents.map((exponent) => (
                     <ExponentRow
