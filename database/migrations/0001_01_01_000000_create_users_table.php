@@ -24,6 +24,7 @@ return new class extends Migration
             $table->string('password');
             $table->unsignedInteger('status')->default(UserStatus::ACTIVE->value);
             $table->foreignId('company_id')->nullable()->constrained()->nullOnDelete();
+            $table->timestamp('last_login_at')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

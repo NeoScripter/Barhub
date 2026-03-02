@@ -15,6 +15,8 @@ class Company extends Model
     use HasFactory;
     use HasFilterSearch;
 
+    protected $with = ['logo'];
+
     public function images()
     {
         return $this->morphMany(Image::class, 'imageable');

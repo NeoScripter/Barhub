@@ -26,7 +26,7 @@ final class CompanyController extends Controller
         $companies = QueryBuilder::for(
             Company::select(['id', 'public_name', 'legal_name', 'stand_code'])
                 ->where('exhibition_id', $exhibition->id)
-                ->with(['logo', 'tags'])
+                ->with(['tags'])
         )
             ->allowedSorts(['public_name'])
             ->withSearch('public_name', $request->string('search'))
@@ -84,7 +84,7 @@ final class CompanyController extends Controller
     {
         $tags = Tag::orderBy('name')->get();
 
-        $company->load(['logo', 'tags']);
+        $company->load(['tags']);
 
         return Inertia::render('admin/Companies/Edit', [
             'exhibition' => $exhibition,

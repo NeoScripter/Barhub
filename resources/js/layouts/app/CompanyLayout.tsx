@@ -17,7 +17,7 @@ const CompanyLayout: FC<NodeProps> = ({ className, children }) => {
             <nav>
                 <ul className="mx-auto mb-12 flex max-w-7/10 flex-wrap items-center justify-center gap-3 md:max-w-full">
                     {navLinks.map((link) => (
-                        <CompanyNavLink
+                        <NavLink
                             key={link.id}
                             link={link}
                         />
@@ -50,7 +50,7 @@ const CompanyLayout: FC<NodeProps> = ({ className, children }) => {
     );
 };
 
-const CompanyNavLink: FC<{ link: CompanyLinkType }> = ({ link }) => {
+const NavLink: FC<{ link: NavLinkType }> = ({ link }) => {
     const { currentUrl } = useCurrentUrl();
 
     const path = extractPathToCurrentCompany(currentUrl) ?? '';
@@ -77,32 +77,32 @@ const CompanyNavLink: FC<{ link: CompanyLinkType }> = ({ link }) => {
 
 export default CompanyLayout;
 
-type CompanyLinkType = {
+type NavLinkType = {
     id: string;
     label: string;
     url: (path: string) => string;
 };
 
-const navLinks: CompanyLinkType[] = [
+const navLinks: NavLinkType[] = [
     {
         id: crypto.randomUUID(),
         label: 'Редактировать',
-        url: (path: string) => `${path}/edit`,
+        url: (path: string) => `/${path}/edit`,
     },
     {
         id: crypto.randomUUID(),
         label: 'Аккаунт',
-        url: (path: string) => `${path}/exponents`,
+        url: (path: string) => `/${path}/exponents`,
     },
     {
         id: crypto.randomUUID(),
         label: 'Задачи',
-        url: (path: string) => `${path}/tasks`,
+        url: (path: string) => `/${path}/tasks`,
     },
     {
         id: crypto.randomUUID(),
         label: 'Услуги',
-        url: (path: string) => `${path}/services`,
+        url: (path: string) => `/${path}/services`,
     },
 ];
 
