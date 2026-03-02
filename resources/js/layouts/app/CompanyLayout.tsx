@@ -1,15 +1,21 @@
+import AccentHeading from '@/components/ui/AccentHeading';
 import { Button } from '@/components/ui/Button';
+import Image from '@/components/ui/Image';
 import { useCurrentUrl } from '@/hooks/useCurrentUrl';
 import { cn } from '@/lib/utils';
 import { NodeProps } from '@/types/shared';
-import { Link } from '@inertiajs/react';
+import { Inertia } from '@/wayfinder/types';
+import { Link, usePage } from '@inertiajs/react';
 import { FC } from 'react';
 
 const CompanyLayout: FC<NodeProps> = ({ className, children }) => {
+    const { company } = usePage<Inertia.Pages.Admin.Companies.Edit>().props;
+    const { currentUrl } = useCurrentUrl();
+
     return (
         <div className={className}>
             <nav>
-                <ul className="mb-12 flex flex-wrap items-center justify-center gap-3 mx-auto max-w-7/10 md:max-w-full">
+                <ul className="mx-auto mb-12 flex max-w-7/10 flex-wrap items-center justify-center gap-3 md:max-w-full">
                     {navLinks.map((link) => (
                         <CompanyNavLink
                             key={link.id}
@@ -18,6 +24,26 @@ const CompanyLayout: FC<NodeProps> = ({ className, children }) => {
                     ))}
                 </ul>
             </nav>
+
+            {!currentUrl.endsWith('edit') && <div className="my-14 flex flex-col items-center gap-4 sm:gap-9 sm:flex-row">
+                {company.logo && (
+                    <Image
+                        wrapperStyles="max-w-27 md:max-w-40"
+                        image={company.logo}
+                    />
+                )}
+
+                <div className='text-center sm:text-left'>
+                    <AccentHeading
+                        asChild
+                        className="mb-1 text-lg"
+                    >
+                        <h3>{company.public_name}</h3>
+                    </AccentHeading>
+
+                    <p>{company.legal_name}</p>
+                </div>
+            </div>}
 
             {children}
         </div>
@@ -30,12 +56,17 @@ const CompanyNavLink: FC<{ link: CompanyLinkType }> = ({ link }) => {
     const path = extractPathToCurrentCompany(currentUrl) ?? '';
 
     const isActive = currentUrl.endsWith(link.url(path));
+
     return (
         <li>
             <Button asChild>
                 <Link
                     href={link.url(path)}
-                    className={cn('min-w-40', !isActive && 'bg-white hover:text-white! text-foreground! shadow-md!')}
+                    className={cn(
+                        'min-w-40',
+                        !isActive &&
+                            'bg-white text-foreground! shadow-md! hover:text-white!',
+                    )}
                 >
                     {link.label}
                 </Link>
