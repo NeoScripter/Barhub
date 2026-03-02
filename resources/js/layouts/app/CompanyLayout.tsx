@@ -9,7 +9,7 @@ const CompanyLayout: FC<NodeProps> = ({ className, children }) => {
     return (
         <div className={className}>
             <nav>
-                <ul className="mb-12 flex flex-wrap items-center justify-center gap-3">
+                <ul className="mb-12 flex flex-wrap items-center justify-center gap-3 mx-auto max-w-7/10 md:max-w-full">
                     {navLinks.map((link) => (
                         <CompanyNavLink
                             key={link.id}

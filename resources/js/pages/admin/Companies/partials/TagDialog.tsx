@@ -33,7 +33,7 @@ const TagDialog = () => {
                     </Button>
                 </DialogTrigger>
             </div>
-            <DialogContent className="h-max max-w-95">
+            <DialogContent className="h-max max-w-95 data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0">
                 <div>
                     <AccentHeading className="text-base! text-secondary">
                         Добавить тег
