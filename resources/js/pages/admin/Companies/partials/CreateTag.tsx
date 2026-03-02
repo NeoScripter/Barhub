@@ -29,11 +29,12 @@ const CreateTag: FC = () => {
             className="my-5 flex flex-col gap-4"
         >
             <div className="grid gap-2">
-                <Label htmlFor="name">Название</Label>
+                <Label htmlFor="tagname">Название</Label>
                 <Input
-                    id="name"
+                    id="tagname"
                     type="text"
                     required
+                    name='tagname'
                     value={data.name}
                     onChange={(e) => setData('name', e.target.value)}
                     placeholder="Введите название"

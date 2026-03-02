@@ -7,9 +7,9 @@ import { toast } from 'sonner';
 const DeleteTag = () => {
     const { tags } = usePage<{ tags: App.Models.Tag[] }>().props;
     return (
-        <div className="my-5 flex flex-wrap gap-2">
+        <ul id='tag-list' className="my-5 flex flex-wrap gap-2">
             {tags.map((tag) => (
-                <div
+                <li
                     key={tag.id}
                     className="flex items-center gap-2 rounded-md bg-gray-300 px-3 py-1.5 text-sm text-foreground"
                 >
@@ -22,9 +22,9 @@ const DeleteTag = () => {
                     >
                         <X className="h-4 w-4" />
                     </Link>
-                </div>
+                </li>
             ))}
-        </div>
+        </ul>
     );
 };
 

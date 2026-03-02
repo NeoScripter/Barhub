@@ -7,9 +7,9 @@ import { toast } from 'sonner';
 const DeleteTheme = () => {
     const { themes } = usePage<{ themes: App.Models.Theme[] }>().props;
     return (
-        <div className="my-5 flex flex-wrap gap-2">
+        <ul className="my-5 flex flex-wrap gap-2">
             {themes.map((theme) => (
-                <div
+                <li
                     key={theme.id}
                     className="flex items-center gap-2 rounded-md px-3 py-1.5 text-sm text-foreground"
                     style={{ backgroundColor: theme.color_hex }}
@@ -22,9 +22,9 @@ const DeleteTheme = () => {
                     >
                         <X className="h-4 w-4" />
                     </Link>
-                </div>
+                </li>
             ))}
-        </div>
+        </ul>
     );
 };
 

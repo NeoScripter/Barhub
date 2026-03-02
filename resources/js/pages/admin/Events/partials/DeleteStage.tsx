@@ -7,9 +7,9 @@ import { toast } from 'sonner';
 const DeleteStage = () => {
     const { stages } = usePage<{ stages: App.Models.Stage[] }>().props;
     return (
-        <div className="my-5 flex flex-wrap gap-2">
+        <ul className="my-5 flex flex-wrap gap-2">
             {stages.map((stage) => (
-                <div
+                <li
                     key={stage.id}
                     className="flex items-center gap-2 rounded-md bg-gray-300 px-3 py-1.5 text-sm text-foreground"
                 >
@@ -22,9 +22,9 @@ const DeleteStage = () => {
                     >
                         <X className="h-4 w-4" />
                     </Link>
-                </div>
+                </li>
             ))}
-        </div>
+        </ul>
     );
 };
 
