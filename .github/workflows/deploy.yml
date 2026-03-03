@@ -27,6 +27,11 @@ jobs:
             pnpm install && \
             pnpm run build && \
             composer install && \
+            rm -rf storage/wayfinder-cache && \
+            rm -rf storage/framework/surveyor && \
+            rm -rf storage/framework/cache && \
+            php artisan optimize:clear && \
+            composer dump-autoload && \
             php artisan config:clear && \
             php artisan view:clear && \
             php artisan route:clear && \

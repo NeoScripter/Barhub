@@ -39,6 +39,7 @@ const CreateExponent = () => {
                 variant="default"
                 size="sm"
                 className="mx-auto"
+                data-test="add-exponent"
                 disabled={selectedId == null}
             >
                 Добавить

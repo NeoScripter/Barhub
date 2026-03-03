@@ -31,7 +31,7 @@ const ExponentDialog = () => {
                 >
                     <Button
                         variant="secondary"
-                        data-test="edit-exponents"
+                        data-test="select-exponent"
                         size='lg'
                     >
                         Добавить
