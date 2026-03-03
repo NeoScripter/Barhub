@@ -24,14 +24,14 @@ jobs:
             source ~/.zshrc && \
             cd www/lab1 && \
             git pull origin main && \
-            pnpm install && \
-            pnpm run build && \
             composer install && \
             rm -rf storage/wayfinder-cache && \
             rm -rf storage/framework/surveyor && \
             rm -rf storage/framework/cache && \
             php artisan optimize:clear && \
             composer dump-autoload && \
+            pnpm install && \
+            pnpm run build && \
             php artisan config:clear && \
             php artisan view:clear && \
             php artisan route:clear && \

@@ -31,6 +31,7 @@
         "pestphp/pest": "^4.3",
         "pestphp/pest-plugin-browser": "^4.2",
         "pestphp/pest-plugin-laravel": "^4.0",
+        "pestphp/pest-plugin-stressless": "^4.0",
         "rector/rector": "^2.3"
     },
     "autoload": {
