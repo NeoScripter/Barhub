@@ -7,6 +7,8 @@ namespace Database\Seeders;
 use App\Models\Company;
 use App\Models\Exhibition;
 use App\Models\Tag;
+use App\Models\Task;
+use App\Models\TaskFile;
 use Illuminate\Database\Seeder;
 
 final class CompanySeeder extends Seeder
@@ -24,6 +26,9 @@ final class CompanySeeder extends Seeder
 
         $exhibitions->each(
             fn(Exhibition $exhibition) => Company::factory()
+                ->has(Task::factory()
+                    ->has(TaskFile::factory()->count(3), 'files')
+                    ->count(8))
                 ->count(10)
                 ->for($exhibition)
                 ->hasAttached($tags->random(random_int(1, 3)))
