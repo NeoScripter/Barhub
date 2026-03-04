@@ -24,7 +24,7 @@ final class EventController extends Controller
             ->allowedFilters([
                 AllowedFilter::exact('stage.name'),
                 AllowedFilter::exact('themes.name'),
-                'starts_at',
+                AllowedFilter::exact('starts_at'),
             ]);
 
         /** @var Event[] $events */

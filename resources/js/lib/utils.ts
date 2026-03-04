@@ -101,7 +101,7 @@ export const getFilterUrl = (key: string, value: string): string => {
     params.set('page', '1');
 
     const qs = params.toString();
-    return qs ? `${pathname}?${qs}` : pathname;
+    return qs ? `${pathname}?${decodeURIComponent(qs)}` : pathname;
 };
 
 export const isActiveFilter = (key: string, value: string): boolean => {
