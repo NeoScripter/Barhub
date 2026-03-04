@@ -12,27 +12,29 @@ const PersonCardAccordion: FC<NodeProps<{ event: App.Models.Event }>> = ({
 
     return (
         <div className="relative isolate bg-white">
-            {people && people.slice(0, 1).map((person) => (
-                <EventPersonCard
-                    key={person.id}
-                    role={person.role}
-                    person={person}
-                    className="sm:w-53 lg:w-40 lg:shrink-0 2xl:w-53"
-                />
-            ))}
-            <AccordionLayout>
-                {people && people.map((person, idx) => (
-                    <li key={person.id}>
-                        <EventPersonCard
-                            role={person.role}
-                            person={person}
-                            className={cn(
-                                'bg-white sm:w-53 lg:w-40 lg:shrink-0 2xl:w-53',
-                                idx === 0 && 'hidden sm:flex',
-                            )}
-                        />
-                    </li>
+            {people &&
+                people.slice(0, 1).map((person) => (
+                    <EventPersonCard
+                        key={person.id + '_main'}
+                        role={person.role}
+                        person={person}
+                        className="sm:w-53 lg:w-40 lg:shrink-0 2xl:w-53"
+                    />
                 ))}
+            <AccordionLayout>
+                {people &&
+                    people.map((person, idx) => (
+                        <li key={`${person.id} ${idx}`}>
+                            <EventPersonCard
+                                role={person.role}
+                                person={person}
+                                className={cn(
+                                    'bg-white sm:w-53 lg:w-40 lg:shrink-0 2xl:w-53',
+                                    idx === 0 && 'hidden sm:flex',
+                                )}
+                            />
+                        </li>
+                    ))}
             </AccordionLayout>
         </div>
     );

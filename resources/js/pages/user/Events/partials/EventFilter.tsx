@@ -27,9 +27,9 @@ const EventFilter: FC<
                 {label}
             </p>
             <ul className="flex flex-wrap gap-3">
-                {filters.map((filter) => (
+                {filters.map((filter, idx) => (
                     <FilterBtn
-                        key={filter}
+                        key={idx}
                         filter={modifier ? modifier(filter) : filter}
                         url={getFilterUrl(filterKey, filter)}
                         isActive={isActiveFilter(filterKey, filter)}
