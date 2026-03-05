@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Enums\TaskStatus;
 use App\Enums\UserRole;
 use App\Models\Company;
 use App\Models\Exhibition;
@@ -36,6 +37,68 @@ describe('Admin Task Test', function (): void {
         $page->assertSee($company->public_name);
         $page->assertSee($tasks[0]->title);
     });
+
+    it('sorts the tasks by all the criteria', function (): void {
+        $user = User::factory()->create([
+            'email' => 'super-admin@gmail.com',
+            'password' => 'password',
+        ]);
+        $user->assignRole(UserRole::SUPER_ADMIN);
+        $exhibition = Exhibition::factory()->create();
+        $company = Company::factory()->for($exhibition)->create();
+
+        $date1 = now();
+        $date2 = now()->addDay();
+        $date3 = now()->addDays(2);
+
+        $tasks = Task::factory()
+            ->for($company)
+            ->createMany([
+                ['title' => 'Alpha', 'deadline' => $date1],
+                ['title' => 'Beta', 'deadline' => $date2],
+                ['title' => 'Zebra', 'deadline' => $date3],
+            ]);
+        $route = "/admin/exhibitions/{$exhibition->id}/companies/{$company->id}/tasks";
+
+        $page = visit('/login');
+
+        $page->assertSee('Вход в аккаунт')
+            ->fill('email', 'super-admin@gmail.com')
+            ->fill('password', 'password')
+            ->click('@login-button')
+            ->assertSee('super-admin@gmail.com');
+
+        $this->assertAuthenticated();
+
+        $page->navigate($route);
+        $page->assertSee($tasks[0]->title);
+        $page->click('Задача');
+        $page->assertSeeIn('#tasks-table tr:first-child td:first-child', 'Zebra');
+        $page->click('Задача');
+        $page->assertSeeIn('#tasks-table tr:first-child td:first-child', 'Alpha');
+
+        // Test sorting by deadline
+        $page->click('Дедлайн');
+        $page->assertSeeIn('#tasks-table tr:first-child td:nth-child(2)', $date3->translatedFormat('j M. Y г., H:i'));
+        $page->assertSeeIn('#tasks-table tr:nth-child(3) td:nth-child(2)', $date1->translatedFormat('j M. Y г., H:i'));
+        $page->click('Дедлайн');
+        $page->assertSeeIn('#tasks-table tr:first-child td:nth-child(2)', $date1->translatedFormat('j M. Y г., H:i'));
+        $page->assertSeeIn('#tasks-table tr:nth-child(3) td:nth-child(2)', $date3->translatedFormat('j M. Y г., H:i'));
+
+        // Test sorting by status
+        $tasks[0]->update(['status' => TaskStatus::COMPLETED]);
+        $tasks[2]->update(['status' => TaskStatus::TO_BE_COMPLETED]);
+        $tasks[1]->update(['status' => TaskStatus::DELAYED]);
+
+        $page->navigate($route);
+        $page->click('Статус');
+        $page->assertSeeIn('#tasks-table tr:first-child td:nth-child(3)', TaskStatus::DELAYED->label());
+        $page->assertSeeIn('#tasks-table tr:nth-child(3) td:nth-child(3)', TaskStatus::COMPLETED->label());
+        $page->click('Статус');
+        $page->assertSeeIn('#tasks-table tr:first-child td:nth-child(3)', TaskStatus::COMPLETED->label());
+        $page->assertSeeIn('#tasks-table tr:nth-child(3) td:nth-child(3)', TaskStatus::DELAYED->label());
+    });
+
 
     it('allows only super admin and admin with exhibition access to see the tasks index page', function (): void {
         $adminWithAccess = User::factory()->create([

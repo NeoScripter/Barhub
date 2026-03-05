@@ -20,7 +20,10 @@ const TaskTable: FC<
     }
 
     return (
-        <Table.Body className={className}>
+        <Table.Body
+            id="tasks-table"
+            className={className}
+        >
             {tasks.map((task) => (
                 <Table.Row key={task.id}>
                     <Table.Cell
