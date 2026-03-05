@@ -46,4 +46,9 @@ class Company extends Model
     {
         return $this->hasMany(Task::class);
     }
+
+    public function services(): HasMany
+    {
+        return $this->hasMany(Service::class);
+    }
 }
