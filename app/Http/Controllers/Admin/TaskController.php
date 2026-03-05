@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Exhibition\TaskIndexRequest;
 use App\Models\Company;
 use App\Models\Exhibition;
+use App\Models\Task;
 use App\Models\User;
 use Inertia\Inertia;
 use Spatie\QueryBuilder\QueryBuilder;
@@ -15,8 +16,7 @@ class TaskController extends Controller
 {
     public function index(TaskIndexRequest $request, Exhibition $exhibition, Company $company)
     {
-
-        $tasks = QueryBuilder::for($company->tasks(['name', 'id', 'deadline', 'status']))
+        $tasks = QueryBuilder::for($company->tasks()->select(['name', 'id', 'deadline', 'status']))
             ->allowedSorts(['name', 'deadline', 'status'])
             ->paginate()
             ->appends($request->query());
@@ -25,8 +25,17 @@ class TaskController extends Controller
             'exhibition' => $exhibition,
             'company' => $company,
             'tasks' => $tasks,
-            'users' => $users,
         ]);
+    }
+
+    public function store(Exhibition $exhibition, Company $company)
+    {
+        $user = User::find($id);
+        $company->users()->save($user);
+        $user->update(['role' => UserRole::task]);
+        $user->save();
+
+        return redirect()->back();
     }
 
     public function update(Exhibition $exhibition, Company $company, int $id)

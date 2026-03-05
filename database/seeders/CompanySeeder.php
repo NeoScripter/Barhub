@@ -8,6 +8,7 @@ use App\Models\Company;
 use App\Models\Exhibition;
 use App\Models\Tag;
 use App\Models\Task;
+use App\Models\TaskComment;
 use App\Models\TaskFile;
 use Illuminate\Database\Seeder;
 
@@ -28,7 +29,9 @@ final class CompanySeeder extends Seeder
             fn(Exhibition $exhibition) => Company::factory()
                 ->has(Task::factory()
                     ->has(TaskFile::factory()->count(3), 'files')
-                    ->count(8))
+                    ->count(8)
+                    ->has(TaskComment::factory()->count(3), 'comments')
+                    ->count(rand(1, 3))
                 ->count(10)
                 ->for($exhibition)
                 ->hasAttached($tags->random(random_int(1, 3)))

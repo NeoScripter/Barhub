@@ -21,6 +21,11 @@ final class Task extends Model
         return $this->hasMany(TaskFile::class);
     }
 
+    public function comments(): HasMany
+    {
+        return $this->hasMany(TaskComment::class);
+    }
+
     public function company(): BelongsTo
     {
         return $this->belongsTo(Company::class);
