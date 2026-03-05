@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Enums\UserRole;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Admin\Exhibition\TaskIndexRequest;
+use App\Http\Requests\Admin\Task\TaskIndexRequest;
 use App\Models\Company;
 use App\Models\Exhibition;
 use App\Models\Task;
@@ -16,9 +16,13 @@ class TaskController extends Controller
 {
     public function index(TaskIndexRequest $request, Exhibition $exhibition, Company $company)
     {
-        $tasks = QueryBuilder::for($company->tasks()->select(['name', 'id', 'deadline', 'status']))
-            ->allowedSorts(['name', 'deadline', 'status'])
+        $tasks = QueryBuilder::for($company->tasks()->select(['title', 'id', 'deadline', 'status']))
+            ->allowedSorts(['title', 'deadline', 'status'])
             ->paginate()
+            ->through(fn($task) => [
+                ...$task->toArray(),
+                'status' => $task->status->label(),
+            ])
             ->appends($request->query());
 
         return Inertia::render('admin/Tasks/Index', [
@@ -28,32 +32,42 @@ class TaskController extends Controller
         ]);
     }
 
-    public function store(Exhibition $exhibition, Company $company)
+    public function edit(Exhibition $exhibition, Company $company, Task $task)
     {
-        $user = User::find($id);
-        $company->users()->save($user);
-        $user->update(['role' => UserRole::task]);
-        $user->save();
-
-        return redirect()->back();
+        return Inertia::render('admin/Companies/Edit', [
+            'exhibition' => $exhibition,
+            'company'    => $company,
+            'task'       => $task,
+        ]);
     }
 
-    public function update(Exhibition $exhibition, Company $company, int $id)
-    {
-        $user = User::find($id);
-        $company->users()->save($user);
-        $user->update(['role' => UserRole::task]);
-        $user->save();
 
-        return redirect()->back();
-    }
+    // public function store(Exhibition $exhibition, Company $company)
+    // {
+    //     $user = User::find($id);
+    //     $company->users()->save($user);
+    //     $user->update(['role' => UserRole::task]);
+    //     $user->save();
 
-    public function destroy(Exhibition $exhibition, Company $company, int $id)
-    {
-        $user = User::find($id);
-        $user->update(['company_id' => null, 'role' => UserRole::USER]);
-        $user->save();
+    //     return redirect()->back();
+    // }
 
-        return redirect()->back();
-    }
+    // public function update(Exhibition $exhibition, Company $company, int $id)
+    // {
+    //     $user = User::find($id);
+    //     $company->users()->save($user);
+    //     $user->update(['role' => UserRole::task]);
+    //     $user->save();
+
+    //     return redirect()->back();
+    // }
+
+    // public function destroy(Exhibition $exhibition, Company $company, int $id)
+    // {
+    //     $user = User::find($id);
+    //     $user->update(['company_id' => null, 'role' => UserRole::USER]);
+    //     $user->save();
+
+    //     return redirect()->back();
+    // }
 }

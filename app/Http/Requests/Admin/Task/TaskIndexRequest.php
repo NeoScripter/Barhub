@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Requests\Admin\Exhibition;
+namespace App\Http\Requests\Admin\Task;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
@@ -21,8 +21,8 @@ final class TaskIndexRequest extends FormRequest
                 'sometimes',
                 'string',
                 Rule::in([
-                    'name',
-                    '-name',
+                    'title',
+                    '-title',
                     'deadline',
                     '-deadline',
                     'status',

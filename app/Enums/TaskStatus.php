@@ -16,7 +16,7 @@ enum TaskStatus: int
     {
         return match ($this) {
             self::COMPLETED => 'Выполнена',
-            self::TO_BE_COMPLETED => 'Ждет выполнения',
+            self::TO_BE_COMPLETED => 'Ожидает выполнения',
             self::TO_BE_VERIFIED => 'На проверке',
             self::IMCOMPLETE => 'Требует доработки',
             self::DELAYED => 'Просрочена',
