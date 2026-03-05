@@ -10,7 +10,6 @@ type FileInputProps = {
     onChange: (file: File | null) => void;
     error?: string;
     progress?: AxiosProgressEvent | null;
-    label?: string;
 };
 
 export default function FileInput({
@@ -20,7 +19,6 @@ export default function FileInput({
     onChange,
     error,
     progress,
-    label = 'Файл',
 }: FileInputProps) {
     const [currentFilename, setCurrentFilename] = useState(filename);
     const [isUpdated, setIsUpdated] = useState(false);
@@ -47,9 +45,6 @@ export default function FileInput({
 
     return (
         <div>
-            <p className="mb-2 text-center font-semibold sm:text-lg md:text-left">
-                {label}
-            </p>
             <div className="flex max-w-150 flex-col items-center justify-start gap-10 md:flex-row">
                 {isEdited && (
                     <input

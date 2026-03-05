@@ -40,7 +40,7 @@ class TaskController extends Controller
     {
         $task->load(['comments', 'files']);
 
-        return Inertia::render('admin/Companies/Edit', [
+        return Inertia::render('admin/Tasks/Edit', [
             'exhibition' => $exhibition,
             'company'    => $company,
             'task'       => $task,
@@ -49,7 +49,7 @@ class TaskController extends Controller
 
     public function create(Exhibition $exhibition, Company $company)
     {
-        return Inertia::render('admin/Companies/Create', [
+        return Inertia::render('admin/Tasks/Create', [
             'exhibition' => $exhibition,
             'company'    => $company,
         ]);
