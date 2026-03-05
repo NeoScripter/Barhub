@@ -47,7 +47,6 @@ const FilterBtn: FC<{ filter: string; isActive?: boolean; url: string }> = ({
     isActive = false,
     url,
 }) => {
-    console.log(url)
     return (
         <li
             className={cn(
