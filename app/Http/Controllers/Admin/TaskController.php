@@ -2,13 +2,17 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Enums\TaskStatus;
 use App\Enums\UserRole;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Task\TaskIndexRequest;
+use App\Http\Requests\Admin\Task\TaskStoreRequest;
+use App\Http\Requests\Admin\Task\TaskUpdateRequest;
 use App\Models\Company;
 use App\Models\Exhibition;
 use App\Models\Task;
 use App\Models\User;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use Spatie\QueryBuilder\QueryBuilder;
 
@@ -34,6 +38,8 @@ class TaskController extends Controller
 
     public function edit(Exhibition $exhibition, Company $company, Task $task)
     {
+        $task->load(['comments', 'files']);
+
         return Inertia::render('admin/Companies/Edit', [
             'exhibition' => $exhibition,
             'company'    => $company,
@@ -49,33 +55,59 @@ class TaskController extends Controller
         ]);
     }
 
+    public function store(TaskStoreRequest $request, Exhibition $exhibition, Company $company)
+    {
+        $task = $company->tasks()->create([
+            ...$request->only(['title', 'description', 'deadline']),
+            'status' => TaskStatus::TO_BE_COMPLETED
+        ]);
 
-    // public function store(Exhibition $exhibition, Company $company)
-    // {
-    //     $user = User::find($id);
-    //     $company->users()->save($user);
-    //     $user->update(['role' => UserRole::task]);
-    //     $user->save();
+        if ($request->hasFile('file')) {
+            $path = $request->file('file')->store('task-files');
+            $task->files()->create([
+                'name' => $request->validated('file_name'),
+                'url'  => $path,
+            ]);
+        }
 
-    //     return redirect()->back();
-    // }
+        if ($request->filled('comment')) {
+            $task->comments()->create([
+                'content' => $request->validated('comment'),
+            ]);
+        }
 
-    // public function update(Exhibition $exhibition, Company $company, int $id)
-    // {
-    //     $user = User::find($id);
-    //     $company->users()->save($user);
-    //     $user->update(['role' => UserRole::task]);
-    //     $user->save();
+        return redirect()->back();
+    }
 
-    //     return redirect()->back();
-    // }
+    public function update(TaskUpdateRequest $request, Exhibition $exhibition, Company $company, Task $task)
+    {
+        $task->update($request->only(['title', 'description', 'deadline']));
 
-    // public function destroy(Exhibition $exhibition, Company $company, int $id)
-    // {
-    //     $user = User::find($id);
-    //     $user->update(['company_id' => null, 'role' => UserRole::USER]);
-    //     $user->save();
+        if ($request->hasFile('file')) {
+            $path = $request->file('file')->store('task-files');
+            $task->files()->create([
+                'name' => $request->validated('file_name'),
+                'url'  => $path,
+            ]);
+        }
 
-    //     return redirect()->back();
-    // }
+        // if ($request->filled('comment')) {
+        //     $task->comments()->oldest()->update([
+        //         'content' => $request->validated('comment'),
+        //     ]);
+        // }
+
+        return redirect()->back();
+    }
+
+    public function destroy(Exhibition $exhibition, Company $company, Task $task)
+    {
+        foreach ($task->files as $file) {
+            Storage::delete($file->url);
+        }
+
+        $task->delete();
+
+        return redirect()->back();
+    }
 }
