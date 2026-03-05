@@ -23,7 +23,7 @@ class TaskStoreRequest extends FormRequest
                 'max:10240',
                 'mimes:jpg,jpeg,png,gif,webp,svg,pdf,doc,docx,xls,xlsx,ppt,pptx,txt,csv,zip,rar',
             ],
-            'file_name'   => ['required_with:file', 'string', 'max:255'],
+            'file_name'   => ['required_with:file', 'nullable' ,'string', 'max:255'],
             'comment'     => ['nullable', 'string', 'max:2000'],
         ];
     }

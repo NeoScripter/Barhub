@@ -16,7 +16,10 @@ const AccountDropdown: FC<{ email: string; className?: string }> = ({
     return (
         <div className={className}>
             <DropdownMenu>
-                <DropdownMenuTrigger className="flex cursor-pointer items-center gap-[0.5em] font-medium text-primary 2xl:text-xl">
+                <DropdownMenuTrigger
+                    data-test="logout-dropdown"
+                    className="flex cursor-pointer items-center gap-[0.5em] font-medium text-primary 2xl:text-xl"
+                >
                     {email}
                     <ChevronDown
                         className="w-[1em]"
@@ -31,6 +34,7 @@ const AccountDropdown: FC<{ email: string; className?: string }> = ({
                 >
                     <DropdownMenuItem asChild>
                         <Link
+                            data-test="logout-button"
                             href={logout()}
                             onSuccess={() => router.flushAll()}
                         >
