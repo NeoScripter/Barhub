@@ -26,7 +26,7 @@ final class CompanyController extends Controller
         $companies = QueryBuilder::for(
             Company::select(['id', 'public_name', 'legal_name', 'stand_code'])
                 ->where('exhibition_id', $exhibition->id)
-                ->with(['tags'])
+                ->with(['tags', 'tasks:id,status,company_id'])
         )
             ->allowedSorts(['public_name'])
             ->withSearch('public_name', $request->string('search'))

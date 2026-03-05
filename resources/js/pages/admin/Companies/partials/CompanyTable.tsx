@@ -1,12 +1,13 @@
-import Badge from '@/components/ui/Badge';
 import Image from '@/components/ui/Image';
 import Table from '@/components/ui/Table';
+import { range } from '@/lib/utils';
 import { NodeProps } from '@/types/shared';
 import { edit } from '@/wayfinder/routes/admin/exhibitions/companies';
 import { App } from '@/wayfinder/types';
 import { Link } from '@inertiajs/react';
 import { PencilLine } from 'lucide-react';
 import { FC } from 'react';
+import TaskStatusLine from './TaskStatusLine';
 
 const CompanyTable: FC<
     NodeProps<{
@@ -68,13 +69,19 @@ const CompanyTable: FC<
                     </Table.Cell>
                     <Table.Cell
                         key="tasks"
-                        width={1}
+                        width={1.5}
                     >
-                        TODO
+                        {range(1, 5).map((num) => (
+                            <TaskStatusLine
+                                key={num}
+                                tasks={company.tasks}
+                                status={num}
+                            />
+                        ))}
                     </Table.Cell>
                     <Table.Cell
                         key="services"
-                        width={1}
+                        width={1.5}
                     >
                         TODO
                     </Table.Cell>
