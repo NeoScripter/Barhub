@@ -75,7 +75,7 @@ Route::prefix('/admin')
                 Route::resource('companies/{company}/exponents', AdminExponentController::class)
                     ->only(['update', 'index', 'destroy']);
                 Route::resource('companies/{company}/tasks', AdminTaskController::class)
-                    ->only(['update', 'index', 'edit']);
+                    ->only(['update', 'index', 'edit', 'create']);
 
                 Route::resource('events', AdminEventController::class)->except('show');
                 Route::resource('people', AdminPersonController::class)->except(['show']);

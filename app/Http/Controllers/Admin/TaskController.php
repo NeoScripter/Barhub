@@ -41,6 +41,14 @@ class TaskController extends Controller
         ]);
     }
 
+    public function create(Exhibition $exhibition, Company $company)
+    {
+        return Inertia::render('admin/Companies/Create', [
+            'exhibition' => $exhibition,
+            'company'    => $company,
+        ]);
+    }
+
 
     // public function store(Exhibition $exhibition, Company $company)
     // {
