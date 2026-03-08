@@ -1,3 +1,4 @@
+import FormButtons from '@/components/form/FormButtons';
 import InputError from '@/components/form/InputError';
 import { Button } from '@/components/ui/Button';
 import ImgInput from '@/components/ui/ImgInput';
@@ -5,7 +6,7 @@ import { Input } from '@/components/ui/Input';
 import { Label } from '@/components/ui/Label';
 import { Spinner } from '@/components/ui/Spinner';
 import { Textarea } from '@/components/ui/Textarea';
-import { store } from '@/wayfinder/routes/admin/exhibitions/people';
+import { index, store } from '@/wayfinder/routes/admin/exhibitions/people';
 import { Inertia } from '@/wayfinder/types';
 import { useForm } from '@inertiajs/react';
 import { FC } from 'react';
@@ -119,24 +120,11 @@ const Create: FC<Inertia.Pages.Admin.People.Create> = ({ exhibition }) => {
                     />
                 </div>
 
-                <div className="mt-4 flex items-center gap-4">
-                    <Button
-                        type="submit"
-                        className="w-fit"
-                        disabled={processing}
-                    >
-                        {processing && <Spinner />}
-                        Создать
-                    </Button>
-                    <Button
-                        type="button"
-                        variant="tertiary"
-                        className="w-fit rounded-md!"
-                        onClick={() => history.back()}
-                    >
-                        Отмена
-                    </Button>
-                </div>
+                <FormButtons
+                    label="Создать"
+                    processing={processing}
+                    backUrl={index({ exhibition }).url}
+                />
             </form>
         </div>
     );

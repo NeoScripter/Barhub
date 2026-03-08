@@ -1,3 +1,4 @@
+import FormButtons from '@/components/form/FormButtons';
 import InputError from '@/components/form/InputError';
 import { Button } from '@/components/ui/Button';
 import { DeleteAlertDialog } from '@/components/ui/DeleteAlertDialog';
@@ -6,7 +7,7 @@ import { Label } from '@/components/ui/Label';
 import { Spinner } from '@/components/ui/Spinner';
 import { Textarea } from '@/components/ui/Textarea';
 import { convertDateToInputString } from '@/lib/utils';
-import { destroy, update } from '@/wayfinder/routes/admin/exhibitions/tasks';
+import { destroy, index, update } from '@/wayfinder/routes/admin/exhibitions/tasks';
 import { Inertia } from '@/wayfinder/types';
 import { router, useForm } from '@inertiajs/react';
 import { Trash2 } from 'lucide-react';
@@ -163,25 +164,11 @@ const Edit: FC<Inertia.Pages.Admin.Tasks.Edit> = ({
                     </div>
                 </div>
 
-                <div className="mt-2 flex items-center gap-4">
-                    <Button
-                        type="submit"
-                        className="w-fit"
-                        data-test="submit-update-task"
-                        disabled={processing}
-                    >
-                        {processing && <Spinner />}
-                        Сохранить
-                    </Button>
-                    <Button
-                        type="button"
-                        variant="tertiary"
-                        className="w-fit rounded-md!"
-                        onClick={() => history.back()}
-                    >
-                        Отмена
-                    </Button>
-                </div>
+                <FormButtons
+                    label="Сохранить"
+                    processing={processing}
+                    backUrl={index({ exhibition, company }).url}
+                />
             </form>
         </div>
     );

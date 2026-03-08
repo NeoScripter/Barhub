@@ -1,9 +1,8 @@
+import FormButtons from '@/components/form/FormButtons';
 import InputError from '@/components/form/InputError';
-import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { Label } from '@/components/ui/Label';
 import RadioCheckbox from '@/components/ui/RadioCheckbox';
-import { Spinner } from '@/components/ui/Spinner';
 import { Textarea } from '@/components/ui/Textarea';
 import { index, store } from '@/wayfinder/routes/admin/exhibitions/services';
 import { Inertia } from '@/wayfinder/types';
@@ -40,7 +39,7 @@ const Create: FC<Inertia.Pages.Admin.Tasks.Create> = ({
                 encType="multipart/form-data"
             >
                 <div className="grid gap-6">
-                    <div className="grid gap-2">
+                    <div className="grid gap-2 md:col-span-2">
                         <Label htmlFor="name">Название</Label>
                         <Input
                             id="name"
@@ -54,7 +53,7 @@ const Create: FC<Inertia.Pages.Admin.Tasks.Create> = ({
                         <InputError message={errors.name} />
                     </div>
 
-                    <div className="grid gap-2">
+                    <div className="grid gap-2 md:col-span-2">
                         <Label htmlFor="description">Описание</Label>
                         <Textarea
                             id="description"
@@ -69,7 +68,7 @@ const Create: FC<Inertia.Pages.Admin.Tasks.Create> = ({
                         <InputError message={errors.description} />
                     </div>
 
-                    <div className="grid gap-2">
+                    <div className="grid gap-2 md:col-span-2">
                         <Label htmlFor="placeholder">Подсказка</Label>
                         <Textarea
                             id="placeholder"
@@ -92,25 +91,11 @@ const Create: FC<Inertia.Pages.Admin.Tasks.Create> = ({
                     </div>
                 </div>
 
-                <div className="mt-2 flex items-center gap-4">
-                    <Button
-                        type="submit"
-                        data-test="submit-create-task"
-                        className="w-fit"
-                        disabled={processing}
-                    >
-                        {processing && <Spinner />}
-                        Создать
-                    </Button>
-                    <Button
-                        type="button"
-                        variant="tertiary"
-                        className="w-fit rounded-md!"
-                        onClick={() => history.back()}
-                    >
-                        Отмена
-                    </Button>
-                </div>
+                <FormButtons
+                    label="Создать"
+                    processing={processing}
+                    backUrl={index({ exhibition, company }).url}
+                />
             </form>
         </div>
     );

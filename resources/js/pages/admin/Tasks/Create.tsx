@@ -1,9 +1,8 @@
+import FormButtons from '@/components/form/FormButtons';
 import InputError from '@/components/form/InputError';
-import { Button } from '@/components/ui/Button';
 import FileInput from '@/components/ui/FileInput';
 import { Input } from '@/components/ui/Input';
 import { Label } from '@/components/ui/Label';
-import { Spinner } from '@/components/ui/Spinner';
 import { Textarea } from '@/components/ui/Textarea';
 import { index, store } from '@/wayfinder/routes/admin/exhibitions/tasks';
 import { Inertia } from '@/wayfinder/types';
@@ -129,25 +128,11 @@ const Create: FC<Inertia.Pages.Admin.Tasks.Create> = ({
                     </div>
                 </div>
 
-                <div className="mt-2 flex items-center gap-4">
-                    <Button
-                        type="submit"
-                        data-test="submit-create-task"
-                        className="w-fit"
-                        disabled={processing}
-                    >
-                        {processing && <Spinner />}
-                        Создать
-                    </Button>
-                    <Button
-                        type="button"
-                        variant="tertiary"
-                        className="w-fit rounded-md!"
-                        onClick={() => history.back()}
-                    >
-                        Отмена
-                    </Button>
-                </div>
+                <FormButtons
+                    label="Создать"
+                    processing={processing}
+                    backUrl={index({ exhibition, company }).url}
+                />
             </form>
         </div>
     );

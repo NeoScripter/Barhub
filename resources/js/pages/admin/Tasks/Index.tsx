@@ -21,8 +21,8 @@ const Index: FC<Inertia.Pages.Admin.Tasks.Index> = ({
                 data-test="create-task"
                 href={create({ exhibition, company })}
             >
-                <Plus />
                 Создать задачу
+                <Plus />
             </Link>
         </Button>
     );

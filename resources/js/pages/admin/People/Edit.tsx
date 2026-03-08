@@ -1,3 +1,4 @@
+import FormButtons from '@/components/form/FormButtons';
 import InputError from '@/components/form/InputError';
 import { Button } from '@/components/ui/Button';
 import CopyLinkBtn from '@/components/ui/CopyLinkBtn';
@@ -7,7 +8,7 @@ import { Input } from '@/components/ui/Input';
 import { Label } from '@/components/ui/Label';
 import { Spinner } from '@/components/ui/Spinner';
 import { Textarea } from '@/components/ui/Textarea';
-import { destroy, update } from '@/wayfinder/routes/admin/exhibitions/people';
+import { destroy, index, update } from '@/wayfinder/routes/admin/exhibitions/people';
 import { Inertia } from '@/wayfinder/types';
 import { router, useForm } from '@inertiajs/react';
 import { Trash2 } from 'lucide-react';
@@ -161,24 +162,11 @@ const Edit: FC<Inertia.Pages.Admin.People.Edit> = ({ person, exhibition }) => {
                     />
                 </div>
 
-                <div className="mt-4 flex items-center gap-4">
-                    <Button
-                        type="submit"
-                        className="w-fit"
-                        disabled={processing}
-                    >
-                        {processing && <Spinner />}
-                        Сохранить
-                    </Button>
-                    <Button
-                        type="button"
-                        variant="tertiary"
-                        className="w-fit rounded-md!"
-                        onClick={() => history.back()}
-                    >
-                        Отмена
-                    </Button>
-                </div>
+                <FormButtons
+                    label="Сохранить"
+                    processing={processing}
+                    backUrl={index({ exhibition }).url}
+                />
             </form>
         </div>
     );

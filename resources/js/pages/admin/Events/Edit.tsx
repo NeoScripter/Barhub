@@ -8,7 +8,7 @@ import { SelectMenu } from '@/components/ui/SelectMenu';
 import { Spinner } from '@/components/ui/Spinner';
 import { Textarea } from '@/components/ui/Textarea';
 import { convertDateToInputString } from '@/lib/utils';
-import { destroy, update } from '@/wayfinder/routes/admin/exhibitions/events';
+import { destroy, index, update } from '@/wayfinder/routes/admin/exhibitions/events';
 import { Inertia } from '@/wayfinder/types';
 import { router, useForm } from '@inertiajs/react';
 import { Trash2 } from 'lucide-react';
@@ -18,6 +18,7 @@ import { PersonSelect, PersonWithRoles } from './partials/PersonSelect';
 import StageDialog from './partials/StageDialog';
 import ThemeDialog from './partials/ThemeDialog';
 import { ThemeSelect } from './partials/ThemeSelect';
+import FormButtons from '@/components/form/FormButtons';
 
 const Edit: FC<Inertia.Pages.Admin.Events.Edit> = ({
     event,
@@ -189,24 +190,11 @@ const Edit: FC<Inertia.Pages.Admin.Events.Edit> = ({
                     errors={errors}
                 />
 
-                <div className="mt-2 flex items-center gap-4">
-                    <Button
-                        type="submit"
-                        className="w-fit"
-                        disabled={processing}
-                    >
-                        {processing && <Spinner />}
-                        Сохранить
-                    </Button>
-                    <Button
-                        type="button"
-                        variant="tertiary"
-                        className="w-fit rounded-md!"
-                        onClick={() => history.back()}
-                    >
-                        Отмена
-                    </Button>
-                </div>
+                <FormButtons
+                    label="Сохранить"
+                    processing={processing}
+                    backUrl={index({ exhibition }).url}
+                />
             </form>
         </div>
     );

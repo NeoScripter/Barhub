@@ -5,7 +5,7 @@ import { Label } from '@/components/ui/Label';
 import { SelectMenu } from '@/components/ui/SelectMenu';
 import { Spinner } from '@/components/ui/Spinner';
 import { Textarea } from '@/components/ui/Textarea';
-import { store } from '@/wayfinder/routes/admin/exhibitions/events';
+import { index, store } from '@/wayfinder/routes/admin/exhibitions/events';
 import { Inertia } from '@/wayfinder/types';
 import { useForm } from '@inertiajs/react';
 import { FC } from 'react';
@@ -14,6 +14,7 @@ import { PersonSelect, PersonWithRoles } from './partials/PersonSelect';
 import { ThemeSelect } from './partials/ThemeSelect';
 import ThemeDialog from './partials/ThemeDialog';
 import StageDialog from './partials/StageDialog';
+import FormButtons from '@/components/form/FormButtons';
 
 const Create: FC<Inertia.Pages.Admin.Events.Create> = ({
     exhibition,
@@ -146,24 +147,11 @@ const Create: FC<Inertia.Pages.Admin.Events.Create> = ({
                     errors={errors}
                 />
 
-                <div className="mt-2 flex items-center gap-4">
-                    <Button
-                        type="submit"
-                        className="w-fit"
-                        disabled={processing}
-                    >
-                        {processing && <Spinner />}
-                        Создать
-                    </Button>
-                    <Button
-                        type="button"
-                        variant="tertiary"
-                        className="w-fit rounded-md!"
-                        onClick={() => history.back()}
-                    >
-                        Отмена
-                    </Button>
-                </div>
+                <FormButtons
+                    label="Создать"
+                    processing={processing}
+                    backUrl={index({ exhibition }).url}
+                />
             </form>
         </div>
     );
