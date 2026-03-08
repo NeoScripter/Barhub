@@ -132,6 +132,38 @@ describe('Admin Task Test', function (): void {
             ->assertSee('Описание задачи не должно превышать 5000 символов');
     });
 
+    it('doesnt allow to create a task when the comment is too long', function (): void {
+        $user = User::factory()->create([
+            'email' => 'super-admin@gmail.com',
+            'password' => 'password',
+        ]);
+        $user->assignRole(UserRole::SUPER_ADMIN);
+        $exhibition = Exhibition::factory()->create();
+        $company = Company::factory()->for($exhibition)->create();
+        $route = "/admin/exhibitions/{$exhibition->id}/companies/{$company->id}/tasks";
+
+        $page = visit('/login');
+
+        $page->assertSee('Вход в аккаунт')
+            ->fill('email', 'super-admin@gmail.com')
+            ->fill('password', 'password')
+            ->click('@login-button')
+            ->assertSee('super-admin@gmail.com');
+
+        $this->assertAuthenticated();
+
+        $page->navigate($route)
+            ->assertSee($company->public_name)
+            ->click('@create-task')
+            ->assertSee('Название')
+            ->fill('title', generateTextWithChars(50))
+            ->fill('description', generateTextWithChars(100))
+            ->fill('comment', generateTextWithChars(2005))
+            ->fill('deadline', now()->addYear()->format('Y') . '-03-20T12:02')
+            ->click('@submit-create-task')
+            ->assertSee('Комментарий не должен превышать 2000 символов');
+    });
+
     it('doesnt allow to create a task when the deadline is in the past', function (): void {
         $user = User::factory()->create([
             'email' => 'super-admin@gmail.com',
@@ -190,6 +222,7 @@ describe('Admin Task Test', function (): void {
             ->fill('title', generateTextWithChars(50))
             ->fill('description', generateTextWithChars(20))
             ->fill('deadline', now()->addYear()->format('Y') . '-03-20T12:02')
+            ->fill('comment', generateTextWithChars(100))
             ->click('@submit-create-task')
             ->assertPathEndsWith($route);
     });
@@ -296,6 +329,40 @@ describe('Admin Task Test', function (): void {
             ->assertSee('Описание задачи не должно превышать 5000 символов');
     });
 
+    it('doesnt allow to update a task when the comment is too long', function (): void {
+        $user = User::factory()->create([
+            'email' => 'super-admin@gmail.com',
+            'password' => 'password',
+        ]);
+        $user->assignRole(UserRole::SUPER_ADMIN);
+        $exhibition = Exhibition::factory()->create();
+        $company = Company::factory()->for($exhibition)->create();
+        $task = Task::factory()
+            ->for($company)
+            ->create(['title' => 'Zebra', 'deadline' => now()]);
+        $route = "/admin/exhibitions/{$exhibition->id}/companies/{$company->id}/tasks";
+
+        $page = visit('/login');
+
+        $page->assertSee('Вход в аккаунт')
+            ->fill('email', 'super-admin@gmail.com')
+            ->fill('password', 'password')
+            ->click('@login-button')
+            ->assertSee('super-admin@gmail.com');
+
+        $this->assertAuthenticated();
+
+        $page->navigate($route)
+            ->assertSee($company->public_name)
+            ->assertSee($task->title)
+            ->click('@edit-task-' . $task->id)
+            ->assertSee('Название')
+            ->clear('comment')
+            ->fill('comment', generateTextWithChars(2005))
+            ->click('@submit-update-task')
+            ->assertSee('Комментарий не должен превышать 2000 символов');
+    });
+
     it('doesnt allow to update a task when the deadline is in the past', function (): void {
         $user = User::factory()->create([
             'email' => 'super-admin@gmail.com',
@@ -365,6 +432,8 @@ describe('Admin Task Test', function (): void {
             ->fill('title', $newTitle)
             ->clear('description')
             ->fill('description', $newDescription)
+            ->clear('comment')
+            ->fill('comment', generateTextWithChars(100))
             ->clear('deadline')
             ->fill('deadline', now()->addYear()->format('Y') . '-03-20T12:02')
             ->click('@submit-update-task');
