@@ -27,6 +27,7 @@ const ServiceCard: FC<{ service: App.Models.Service }> = ({ service }) => {
                                 service: service.id,
                             }).url
                         }
+                        data-test={`edit-service-${service.id}`}
                         className="absolute top-4 right-4 flex items-center justify-center p-1"
                     >
                         <Pencil className="size-5 opacity-50" />

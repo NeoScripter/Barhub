@@ -27,14 +27,14 @@ const Edit: FC<Inertia.Pages.Admin.Services.Edit> = ({
         name: service.name,
         description: service.description,
         placeholder: service.placeholder,
-        is_active: service.is_active,
+        is_active: !!service.is_active,
     });
 
     const [isDeleting, setIsDeleting] = useState(false);
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        put(update({ exhibition, company, service }).url, {
+        put(update({ exhibition, company, service: service.id }).url, {
             onSuccess: () => {
                 toast.success('Услуга успешно обновлена');
             },

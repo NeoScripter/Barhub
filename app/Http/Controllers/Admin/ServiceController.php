@@ -48,7 +48,7 @@ final class ServiceController extends Controller
     public function store(ServiceStoreRequest $request, Exhibition $exhibition, Company $company)
     {
         $company->services()->create(
-            $request->only(['name', 'id', 'placeholder', 'description'])
+            $request->only(['name', 'id', 'placeholder', 'description', 'is_active'])
         );
 
         return to_route('admin.exhibitions.services.index', [
@@ -59,7 +59,7 @@ final class ServiceController extends Controller
 
     public function update(ServiceUpdateRequest $request, Exhibition $exhibition, Company $company, Service $service)
     {
-        $service->update($request->only(['name', 'id', 'placeholder', 'description']));
+        $service->update($request->only(['name', 'id', 'placeholder', 'description', 'is_active']));
 
         return to_route('admin.exhibitions.services.index', [
             'exhibition' => $exhibition,

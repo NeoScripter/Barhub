@@ -34,7 +34,7 @@ final class ServiceStoreRequest extends FormRequest
             'description.max' => 'Описание не должно превышать 5000 символов',
             'placeholder.required' => 'Введите подсказку',
             'placeholder.min' => 'Подсказка должна содержать не менее 10 символов',
-            'placeholder.max' => 'Длинна подсказки не должна превышать 5000 символов',
+            'placeholder.max' => 'Длина подсказки не должна превышать 5000 символов',
             'is_active.required' => 'Укажите статус активности',
             'is_active.boolean' => 'Статус активности может быть только да или нет',
         ];

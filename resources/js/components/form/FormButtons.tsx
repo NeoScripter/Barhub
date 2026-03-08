@@ -12,7 +12,6 @@ const FormButtons: FC<
         <div className={cn('mt-2 flex items-center gap-4', className)}>
             <Button
                 type="submit"
-                data-test="submit-create-task"
                 className="w-fit"
                 disabled={processing}
             >

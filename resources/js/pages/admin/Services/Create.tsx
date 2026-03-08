@@ -18,7 +18,7 @@ const Create: FC<Inertia.Pages.Admin.Tasks.Create> = ({
         name: '',
         description: '',
         placeholder: '',
-        is_active: false,
+        is_active: true,
     });
 
     const handleSubmit = (e: React.FormEvent) => {
@@ -36,7 +36,6 @@ const Create: FC<Inertia.Pages.Admin.Tasks.Create> = ({
             <form
                 onSubmit={handleSubmit}
                 className="flex flex-col gap-6"
-                encType="multipart/form-data"
             >
                 <div className="grid gap-6">
                     <div className="grid gap-2 md:col-span-2">

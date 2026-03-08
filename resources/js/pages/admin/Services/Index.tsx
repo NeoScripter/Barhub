@@ -13,8 +13,6 @@ const Index: FC<Inertia.Pages.Admin.Services.Index> = ({
     exhibition,
     company,
 }) => {
-
-    console.log(services)
     const CreateLink = () => (
         <Button asChild>
             <Link
