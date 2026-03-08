@@ -1,11 +1,11 @@
 import InputError from '@/components/form/InputError';
 import { Button } from '@/components/ui/Button';
-import FileInput from '@/components/ui/FileInput';
 import { Input } from '@/components/ui/Input';
 import { Label } from '@/components/ui/Label';
+import RadioCheckbox from '@/components/ui/RadioCheckbox';
 import { Spinner } from '@/components/ui/Spinner';
 import { Textarea } from '@/components/ui/Textarea';
-import { index, store } from '@/wayfinder/routes/admin/exhibitions/tasks';
+import { index, store } from '@/wayfinder/routes/admin/exhibitions/services';
 import { Inertia } from '@/wayfinder/types';
 import { router, useForm } from '@inertiajs/react';
 import { FC } from 'react';
@@ -16,12 +16,10 @@ const Create: FC<Inertia.Pages.Admin.Tasks.Create> = ({
     company,
 }) => {
     const { data, setData, post, processing, errors } = useForm({
-        title: '',
+        name: '',
         description: '',
-        deadline: '',
-        file: null as File | null,
-        file_name: '',
-        comment: '',
+        placeholder: '',
+        is_active: false,
     });
 
     const handleSubmit = (e: React.FormEvent) => {
@@ -29,7 +27,7 @@ const Create: FC<Inertia.Pages.Admin.Tasks.Create> = ({
         post(store({ exhibition, company }).url, {
             onSuccess: () => {
                 router.visit(index({ exhibition, company }));
-                toast.success('Задача успешно создана');
+                toast.success('Услуга успешно создана');
             },
         });
     };
@@ -43,24 +41,23 @@ const Create: FC<Inertia.Pages.Admin.Tasks.Create> = ({
             >
                 <div className="grid gap-6">
                     <div className="grid gap-2">
-                        <Label htmlFor="title">Название</Label>
+                        <Label htmlFor="name">Название</Label>
                         <Input
-                            id="title"
+                            id="name"
                             type="text"
                             required
-                            name="title"
-                            value={data.title}
-                            onChange={(e) => setData('title', e.target.value)}
+                            name="name"
+                            value={data.name}
+                            onChange={(e) => setData('name', e.target.value)}
                             placeholder="Введите название задачи"
                         />
-                        <InputError message={errors.title} />
+                        <InputError message={errors.name} />
                     </div>
 
                     <div className="grid gap-2">
                         <Label htmlFor="description">Описание</Label>
                         <Textarea
                             id="description"
-                            required
                             name="description"
                             value={data.description}
                             onChange={(e) =>
@@ -73,59 +70,25 @@ const Create: FC<Inertia.Pages.Admin.Tasks.Create> = ({
                     </div>
 
                     <div className="grid gap-2">
-                        <Label htmlFor="deadline">Срок выполнения</Label>
-                        <Input
-                            id="deadline"
-                            type="datetime-local"
-                            name="deadline"
-                            value={data.deadline}
-                            onChange={(e) =>
-                                setData('deadline', e.target.value)
-                            }
-                        />
-                        <InputError message={errors.deadline} />
-                    </div>
-
-                    <div className="grid gap-2">
-                        <Label htmlFor="file">Файл</Label>
-                        <FileInput
-                            isEdited={true}
-                            name="file"
-                            error={errors.file}
-                            onChange={(file) => {
-                                setData('file', file);
-                                if (file) setData('file_name', file.name);
-                            }}
-                        />
-                        <InputError message={errors.file} />
-                    </div>
-
-                    <div className="grid gap-2">
-                        <Label htmlFor="file_name">Название файла</Label>
-                        <Input
-                            id="file_name"
-                            type="text"
-                            name="file_name"
-                            value={data.file_name}
-                            onChange={(e) =>
-                                setData('file_name', e.target.value)
-                            }
-                            placeholder="Введите название файла"
-                        />
-                        <InputError message={errors.file_name} />
-                    </div>
-
-                    <div className="grid gap-2">
-                        <Label htmlFor="comment">Комментарий</Label>
+                        <Label htmlFor="placeholder">Подсказка</Label>
                         <Textarea
-                            id="comment"
-                            name="comment"
-                            value={data.comment}
-                            onChange={(e) => setData('comment', e.target.value)}
+                            id="placeholder"
+                            name="placeholder"
+                            value={data.placeholder}
+                            onChange={(e) =>
+                                setData('placeholder', e.target.value)
+                            }
                             className="max-w-full"
-                            placeholder="Введите комментарий"
+                            placeholder="Введите подсказку"
                         />
-                        <InputError message={errors.comment} />
+                        <InputError message={errors.placeholder} />
+                    </div>
+
+                    <div className="md:col-span-2">
+                        <RadioCheckbox
+                            value={data.is_active}
+                            onChange={(val) => setData('is_active', val)}
+                        />
                     </div>
                 </div>
 

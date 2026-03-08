@@ -3,49 +3,52 @@ import { Button } from '@/components/ui/Button';
 import { DeleteAlertDialog } from '@/components/ui/DeleteAlertDialog';
 import { Input } from '@/components/ui/Input';
 import { Label } from '@/components/ui/Label';
+import RadioCheckbox from '@/components/ui/RadioCheckbox';
 import { Spinner } from '@/components/ui/Spinner';
 import { Textarea } from '@/components/ui/Textarea';
-import { convertDateToInputString } from '@/lib/utils';
-import { destroy, update } from '@/wayfinder/routes/admin/exhibitions/tasks';
+import {
+    destroy,
+    index,
+    update,
+} from '@/wayfinder/routes/admin/exhibitions/services';
 import { Inertia } from '@/wayfinder/types';
 import { router, useForm } from '@inertiajs/react';
 import { Trash2 } from 'lucide-react';
 import { FC, useState } from 'react';
 import { toast } from 'sonner';
 
-const Edit: FC<Inertia.Pages.Admin.Tasks.Edit> = ({
+const Edit: FC<Inertia.Pages.Admin.Services.Edit> = ({
     exhibition,
     company,
-    task,
+    service,
 }) => {
     const { data, setData, put, processing, errors } = useForm({
-        title: task.title,
-        description: task.description,
-        deadline: convertDateToInputString(task.deadline),
-        file: null as File | null,
-        file_name: '',
-        comment: '',
+        name: service.name,
+        description: service.description,
+        placeholder: service.placeholder,
+        is_active: service.is_active,
     });
 
     const [isDeleting, setIsDeleting] = useState(false);
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        put(update({ exhibition, company, task }).url, {
+        put(update({ exhibition, company, service }).url, {
             onSuccess: () => {
-                toast.success('Задача успешно обновлена');
+                toast.success('Услуга успешно обновлена');
             },
         });
     };
 
     const handleDelete = () => {
         setIsDeleting(true);
-        router.delete(destroy({ exhibition, company, task }).url, {
+        router.delete(destroy({ exhibition, company, service }).url, {
             onSuccess: () => {
-                toast.success('Задача успешно удалена');
+                router.visit(index({ exhibition, company }).url);
+                toast.success('Услуга успешно удалена');
             },
             onError: () => {
-                toast.error('Ошибка при удалении задачи');
+                toast.error('Ошибка при удалении услуги');
                 setIsDeleting(false);
             },
         });
@@ -59,14 +62,14 @@ const Edit: FC<Inertia.Pages.Admin.Tasks.Edit> = ({
                         <Button
                             variant="destructive"
                             type="button"
-                            data-test="delete-task"
+                            data-test="delete-service"
                         >
-                            Удалить задачу
+                            Удалить услугу
                             <Trash2 />
                         </Button>
                     }
-                    title="Удалить задачу?"
-                    description={`Вы уверены, что хотите удалить задачу "${task.title}"? Это действие нельзя отменить.`}
+                    title="Удалить услугу?"
+                    description={`Вы уверены, что хотите удалить услугу "${service.name}"? Это действие нельзя отменить.`}
                     onConfirm={handleDelete}
                     confirmText="Удалить"
                     cancelText="Отмена"
@@ -80,15 +83,16 @@ const Edit: FC<Inertia.Pages.Admin.Tasks.Edit> = ({
             >
                 <div className="grid gap-6">
                     <div className="grid gap-2">
-                        <Label htmlFor="title">Название</Label>
+                        <Label htmlFor="name">Название</Label>
                         <Input
-                            id="title"
-                            name="title"
+                            id="name"
                             type="text"
-                            value={data.title}
-                            onChange={(e) => setData('title', e.target.value)}
+                            name="name"
+                            value={data.name}
+                            onChange={(e) => setData('name', e.target.value)}
+                            placeholder="Введите название услуги"
                         />
-                        <InputError message={errors.title} />
+                        <InputError message={errors.name} />
                     </div>
 
                     <div className="grid gap-2">
@@ -101,73 +105,39 @@ const Edit: FC<Inertia.Pages.Admin.Tasks.Edit> = ({
                                 setData('description', e.target.value)
                             }
                             className="max-w-full"
+                            placeholder="Введите описание услуги"
                         />
                         <InputError message={errors.description} />
                     </div>
 
                     <div className="grid gap-2">
-                        <Label htmlFor="deadline">Срок выполнения</Label>
-                        <Input
-                            id="deadline"
-                            type="datetime-local"
-                            name="deadline"
-                            value={data.deadline}
-                            onChange={(e) =>
-                                setData('deadline', e.target.value)
-                            }
-                        />
-                        <InputError message={errors.deadline} />
-                    </div>
-
-                    {/* <div className="grid gap-2"> */}
-                    {/*     <Label htmlFor="file">Прикрепить новый файл</Label> */}
-                    {/*     <FileInput */}
-                    {/*         isEdited={true} */}
-                    {/*         src={task.file?.url} */}
-                    {/*         filename={task.file?.name} */}
-                    {/*         error={errors.file} */}
-                    {/*         onChange={(file) => { */}
-                    {/*             setData('file', file); */}
-                    {/*             if (file) setData('file_name', file.name); */}
-                    {/*         }} */}
-                    {/*     /> */}
-                    {/*     <InputError message={errors.file} /> */}
-                    {/* </div> */}
-
-                    <div className="grid gap-2">
-                        <Label htmlFor="file_name">Название файла</Label>
-                        <Input
-                            id="file_name"
-                            type="text"
-                            name="file_name"
-                            value={data.file_name}
-                            onChange={(e) =>
-                                setData('file_name', e.target.value)
-                            }
-                            placeholder="Введите название файла"
-                        />
-                        <InputError message={errors.file_name} />
-                    </div>
-
-                    <div className="grid gap-2">
-                        <Label htmlFor="comment">Добавить комментарий</Label>
+                        <Label htmlFor="placeholder">Подсказка</Label>
                         <Textarea
-                            id="comment"
-                            name="comment"
-                            value={data.comment}
-                            onChange={(e) => setData('comment', e.target.value)}
+                            id="placeholder"
+                            name="placeholder"
+                            value={data.placeholder}
+                            onChange={(e) =>
+                                setData('placeholder', e.target.value)
+                            }
                             className="max-w-full"
-                            placeholder="Введите комментарий"
+                            placeholder="Введите подсказку"
                         />
-                        <InputError message={errors.comment} />
+                        <InputError message={errors.placeholder} />
+                    </div>
+
+                    <div className="md:col-span-2">
+                        <RadioCheckbox
+                            value={data.is_active}
+                            onChange={(val) => setData('is_active', val)}
+                        />
                     </div>
                 </div>
 
                 <div className="mt-2 flex items-center gap-4">
                     <Button
                         type="submit"
+                        data-test="submit-update-service"
                         className="w-fit"
-                        data-test="submit-update-task"
                         disabled={processing}
                     >
                         {processing && <Spinner />}
