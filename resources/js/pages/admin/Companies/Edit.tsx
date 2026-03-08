@@ -33,7 +33,7 @@ const Edit: FC<Inertia.Pages.Admin.Companies.Edit> = ({
         instagram: company.instagram ?? '',
         telegram: company.telegram ?? '',
         stand_code: String(company.stand_code),
-        show_on_site: company.show_on_site,
+        show_on_site: !!company.show_on_site,
         activities: company.activities ?? '',
         tags:
             company.tags?.map((t: { id: number }) => t.id) ?? ([] as number[]),

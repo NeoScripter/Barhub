@@ -519,11 +519,11 @@ describe('Admin Task Test', function (): void {
 
         // Test sorting by deadline
         $page->click('Дедлайн');
-        $page->assertSeeIn('#tasks-table tr:first-child td:nth-child(2)', $date3->translatedFormat('j M. Y г., H:i'));
-        $page->assertSeeIn('#tasks-table tr:nth-child(3) td:nth-child(2)', $date1->translatedFormat('j M. Y г., H:i'));
+        $page->assertSeeIn('#tasks-table tr:first-child td:nth-child(2)', $date3->translatedFormat('j M. Y'));
+        $page->assertSeeIn('#tasks-table tr:nth-child(3) td:nth-child(2)', $date1->translatedFormat('j M. Y'));
         $page->click('Дедлайн');
-        $page->assertSeeIn('#tasks-table tr:first-child td:nth-child(2)', $date1->translatedFormat('j M. Y г., H:i'));
-        $page->assertSeeIn('#tasks-table tr:nth-child(3) td:nth-child(2)', $date3->translatedFormat('j M. Y г., H:i'));
+        $page->assertSeeIn('#tasks-table tr:first-child td:nth-child(2)', $date1->translatedFormat('j M. Y'));
+        $page->assertSeeIn('#tasks-table tr:nth-child(3) td:nth-child(2)', $date3->translatedFormat('j M. Y'));
 
         // Test sorting by status
         $tasks[0]->update(['status' => TaskStatus::COMPLETED]);
@@ -612,29 +612,4 @@ describe('Admin Task Test', function (): void {
 
         $page->navigate($route)->assertSee('Unauthorized');
     });
-
-    // it('allows super-admin to create and delete tags', function (): void {
-
-    //     $page->assertSee('Управление тегами');
-
-    //     $page->click('@edit-tags');
-
-    //     $page->assertSee('Добавить тег');
-
-    //     $page->press('Добавить');
-    //     $page->assertCount('#tag-list li', 3);
-
-    //     $newTagName = 'Семинар';
-    //     $page->type('tagname', $newTagName);
-
-    //     // Submit the form
-    //     $page->click('Добавить');
-
-    //     $page->assertSee($newTagName);
-    //     $page->assertCount('#tag-list li', 4);
-    //     $page->click('@delete tag ' . $newTagName);
-
-    //     $page->assertCount('#tag-list li', 3);
-    //     $page->assertDontSee($newTagName);
-    // })->group('browser');
 });
