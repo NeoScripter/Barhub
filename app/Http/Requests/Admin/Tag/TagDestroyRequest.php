@@ -6,17 +6,13 @@ namespace App\Http\Requests\Admin\Tag;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class TagDestroyRequest extends FormRequest
+final class TagDestroyRequest extends FormRequest
 {
     public function authorize(): bool
     {
         $tag = $this->route('tag');
 
-        if ($tag->companies()->exists()) {
-            return false;
-        }
-
-        return true;
+        return ! $tag->companies()->exists();
     }
 
     public function rules(): array

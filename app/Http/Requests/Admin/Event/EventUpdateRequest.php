@@ -1,12 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Requests\Admin\Event;
 
 use App\Enums\PersonRole;
+use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class EventUpdateRequest extends FormRequest
+final class EventUpdateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -19,7 +22,7 @@ class EventUpdateRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     * @return array<string, ValidationRule|array<mixed>|string>
      */
     public function rules(): array
     {
@@ -35,7 +38,7 @@ class EventUpdateRequest extends FormRequest
             'people.*.roles.*' => [
                 'required',
                 'integer',
-                Rule::in(collect(PersonRole::cases())->pluck('value')->toArray())
+                Rule::in(collect(PersonRole::cases())->pluck('value')->toArray()),
             ],
             'starts_at' => ['sometimes', 'date'],
             'ends_at' => ['sometimes', 'date', 'after:starts_at'],

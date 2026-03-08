@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Actions;
@@ -30,11 +31,12 @@ final class FormatEventPeople
                     'roles' => $personGroup->map(function (Person $person): int {
                         /** @var object{role: int} $pivot */
                         $pivot = $person->pivot;
+
                         return $pivot->role;
-                    })->values()->toArray(),
+                    })->values()->all(),
                 ];
             })
             ->values()
-            ->toArray();
+            ->all();
     }
 }

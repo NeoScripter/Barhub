@@ -130,7 +130,7 @@ describe('Theme CRUD Test', function (): void {
         $page->navigate("/admin/exhibitions/{$exhibition->id}/events/{$event->id}/edit");
 
         // Verify selected themes are shown
-        $themes->take(3)->each(function ($theme) use ($page) {
+        $themes->take(3)->each(function ($theme) use ($page): void {
             $page->assertSee($theme->name);
         });
 
@@ -140,7 +140,7 @@ describe('Theme CRUD Test', function (): void {
         $page->wait(1);
 
         // All themes should be visible
-        $themes->each(function ($theme) use ($page) {
+        $themes->each(function ($theme) use ($page): void {
             $page->assertSee($theme->name);
         });
     })->group('browser');

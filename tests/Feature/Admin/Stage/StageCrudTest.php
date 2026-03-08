@@ -40,7 +40,7 @@ describe('Stage CRUD Test', function (): void {
         $this->assertAuthenticated();
 
         // Navigate to event edit page (pick first event)
-        $event = Event::first();
+        $event = Event::query()->first();
         $page->navigate("/admin/exhibitions/{$exhibition->id}/events/{$event->id}/edit");
         $page->assertSee('Название');
 
@@ -145,7 +145,6 @@ describe('Stage CRUD Test', function (): void {
         $page->navigate("/admin/exhibitions/{$exhibition->id}/events/{$event->id}/edit");
         $page->click('@edit-stages');
 
-
         $page->assertSee('Used Stage');
         $page->assertSee('Unused Stage');
 
@@ -192,7 +191,7 @@ describe('Stage CRUD Test', function (): void {
         $page->click('@edit-stages');
 
         // All stages should be visible in the management dialog
-        $stages->each(function ($stage) use ($page) {
+        $stages->each(function ($stage) use ($page): void {
             $page->assertSee($stage->name);
         });
     })->group('browser');

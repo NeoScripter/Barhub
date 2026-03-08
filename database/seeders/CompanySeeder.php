@@ -27,11 +27,11 @@ final class CompanySeeder extends Seeder
         }
 
         $exhibitions->each(
-            fn(Exhibition $exhibition) => Company::factory()
+            fn (Exhibition $exhibition) => Company::factory()
                 ->has(Task::factory()
                     ->count(8)
                     ->has(TaskFile::factory()->count(3), 'files')
-                    ->has(TaskComment::factory()->count(rand(1, 3)), 'comments'))
+                    ->has(TaskComment::factory()->count(random_int(1, 3)), 'comments'))
                 ->has(Service::factory()->count(5))
                 ->count(10)
                 ->for($exhibition)
@@ -46,7 +46,7 @@ final class CompanySeeder extends Seeder
                         'avif2x' => '/storage/people/logo2x.avif',
                         'avif' => '/storage/people/logo.avif',
                         'tiny' => '/storage/people/logo-tiny.webp',
-                        'alt' => "alt",
+                        'alt' => 'alt',
                         'type' => 'logo',
                     ]);
                 })

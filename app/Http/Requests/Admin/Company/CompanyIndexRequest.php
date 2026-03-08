@@ -27,7 +27,7 @@ final class CompanyIndexRequest extends FormRequest
                 Rule::in(['public_name', '-public_name']),
             ],
             'search' => ['sometimes', 'string', 'max:50'],
-            'page'   => ['sometimes', 'integer', 'min:1'],
+            'page' => ['sometimes', 'integer', 'min:1'],
         ];
     }
 }

@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Http\Requests\Admin\Event;
@@ -7,7 +8,7 @@ use App\Enums\PersonRole;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class EventStoreRequest extends FormRequest
+final class EventStoreRequest extends FormRequest
 {
     public function authorize(): bool
     {
@@ -28,7 +29,7 @@ class EventStoreRequest extends FormRequest
             'people.*.roles.*' => [
                 'required',
                 'integer',
-                Rule::in(collect(PersonRole::cases())->pluck('value')->toArray())
+                Rule::in(collect(PersonRole::cases())->pluck('value')->toArray()),
             ],
             'starts_at' => ['required', 'date'],
             'ends_at' => ['required', 'date', 'after:starts_at'],

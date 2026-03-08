@@ -1,14 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
+use Database\Factories\TaskCommentFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class TaskComment extends Model
+final class TaskComment extends Model
 {
-    /** @use HasFactory<\Database\Factories\TaskCommentFactory> */
+    /** @use HasFactory<TaskCommentFactory> */
     use HasFactory;
 
     public function task(): BelongsTo

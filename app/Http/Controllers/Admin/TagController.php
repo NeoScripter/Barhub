@@ -14,17 +14,15 @@ final class TagController extends Controller
 {
     public function store(TagStoreRequest $request): RedirectResponse
     {
-        Tag::create($request->validated());
+        Tag::query()->create($request->validated());
 
-        return redirect()
-            ->back();
+        return back();
     }
 
     public function destroy(TagDestroyRequest $request, Tag $tag): RedirectResponse
     {
         $tag->delete();
 
-        return redirect()
-            ->back();
+        return back();
     }
 }

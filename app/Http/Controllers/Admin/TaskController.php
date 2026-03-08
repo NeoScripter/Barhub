@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers\Admin;
 
 use App\Enums\TaskStatus;
@@ -14,14 +16,14 @@ use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use Spatie\QueryBuilder\QueryBuilder;
 
-class TaskController extends Controller
+final class TaskController extends Controller
 {
     public function index(TaskIndexRequest $request, Exhibition $exhibition, Company $company)
     {
         $tasks = QueryBuilder::for($company->tasks()->select(['title', 'id', 'deadline', 'status']))
             ->allowedSorts(['title', 'deadline', 'status'])
             ->paginate()
-            ->through(fn($task) => [
+            ->through(fn ($task): array => [
                 ...$task->toArray(),
                 'status' => $task->status->label(),
             ])
@@ -40,8 +42,8 @@ class TaskController extends Controller
 
         return Inertia::render('admin/Tasks/Edit', [
             'exhibition' => $exhibition,
-            'company'    => $company,
-            'task'       => $task,
+            'company' => $company,
+            'task' => $task,
         ]);
     }
 
@@ -49,7 +51,7 @@ class TaskController extends Controller
     {
         return Inertia::render('admin/Tasks/Create', [
             'exhibition' => $exhibition,
-            'company'    => $company,
+            'company' => $company,
         ]);
     }
 
@@ -57,14 +59,14 @@ class TaskController extends Controller
     {
         $task = $company->tasks()->create([
             ...$request->only(['title', 'description', 'deadline']),
-            'status' => TaskStatus::TO_BE_COMPLETED
+            'status' => TaskStatus::TO_BE_COMPLETED,
         ]);
 
         if ($request->hasFile('file')) {
             $path = $request->file('file')->store('task-files');
             $task->files()->create([
                 'name' => $request->validated('file_name'),
-                'url'  => $path,
+                'url' => $path,
             ]);
         }
 
@@ -74,7 +76,7 @@ class TaskController extends Controller
             ]);
         }
 
-        return redirect()->route('admin.exhibitions.tasks.index', [
+        return to_route('admin.exhibitions.tasks.index', [
             'exhibition' => $exhibition,
             'company' => $company,
         ]);
@@ -98,7 +100,7 @@ class TaskController extends Controller
             ]);
         }
 
-        return redirect()->route('admin.exhibitions.tasks.index', [
+        return to_route('admin.exhibitions.tasks.index', [
             'exhibition' => $exhibition,
             'company' => $company,
         ]);
@@ -112,7 +114,7 @@ class TaskController extends Controller
 
         $task->delete();
 
-        return redirect()->route('admin.exhibitions.tasks.index', [
+        return to_route('admin.exhibitions.tasks.index', [
             'exhibition' => $exhibition,
             'company' => $company,
         ]);

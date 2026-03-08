@@ -7,7 +7,7 @@ namespace App\Http\Requests\Admin\Theme;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class ThemeStoreRequest extends FormRequest
+final class ThemeStoreRequest extends FormRequest
 {
     public function authorize(): bool
     {

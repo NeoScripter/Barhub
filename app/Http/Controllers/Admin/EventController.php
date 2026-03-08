@@ -31,7 +31,7 @@ final class EventController extends Controller
             ->with([
                 'stage',
                 'themes',
-                'people:name,id'
+                'people:name,id',
             ])
             ->allowedSorts([
                 'title',
@@ -63,16 +63,16 @@ final class EventController extends Controller
             'exhibition' => $exhibition,
             'event' => $event,
             'eventPeople' => $formatPeople->execute($event),
-            'stages' => Stage::select(['id', 'name'])->get(),
+            'stages' => Stage::query()->select(['id', 'name'])->get(),
             'themes' => Theme::all(),
-            'availablePeople' => Person::select(['id', 'name'])->get(),
+            'availablePeople' => Person::query()->select(['id', 'name'])->get(),
             'roles' => PersonRole::toSelectList(),
         ]);
     }
 
     public function update(EventUpdateRequest $request, Exhibition $exhibition, Event $event)
     {
-        DB::transaction(function () use ($request, $event) {
+        DB::transaction(function () use ($request, $event): void {
             $event->update($request->only([
                 'title',
                 'description',
@@ -96,8 +96,7 @@ final class EventController extends Controller
             }
         });
 
-        return redirect()
-            ->route('admin.exhibitions.events.index', $exhibition)
+        return to_route('admin.exhibitions.events.index', $exhibition)
             ->with('success', 'Event updated successfully');
     }
 
@@ -105,9 +104,9 @@ final class EventController extends Controller
     {
         return Inertia::render('admin/Events/Create', [
             'exhibition' => $exhibition,
-            'stages' => Stage::select(['id', 'name'])->get(),
+            'stages' => Stage::query()->select(['id', 'name'])->get(),
             'themes' => Theme::all(),
-            'availablePeople' => Person::select(['id', 'name'])->get(),
+            'availablePeople' => Person::query()->select(['id', 'name'])->get(),
             'roles' => PersonRole::toSelectList(),
         ]);
     }
@@ -138,8 +137,7 @@ final class EventController extends Controller
             return $event;
         });
 
-        return redirect()
-            ->route('admin.exhibitions.events.index', $exhibition)
+        return to_route('admin.exhibitions.events.index', $exhibition)
             ->with('success', 'Событие успешно создано');
     }
 
@@ -147,8 +145,7 @@ final class EventController extends Controller
     {
         $event->delete();
 
-        return redirect()
-            ->route('admin.exhibitions.events.index', $exhibition)
+        return to_route('admin.exhibitions.events.index', $exhibition)
             ->with('success', 'Событие успешно удалено');
     }
 }

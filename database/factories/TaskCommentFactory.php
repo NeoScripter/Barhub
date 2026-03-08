@@ -1,13 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Database\Factories;
 
+use App\Models\TaskComment;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\TaskComment>
+ * @extends Factory<TaskComment>
  */
-class TaskCommentFactory extends Factory
+final class TaskCommentFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -17,7 +20,7 @@ class TaskCommentFactory extends Factory
     public function definition(): array
     {
         return [
-            'content' => fake()->sentences(3, true)
+            'content' => fake()->sentences(3, true),
         ];
     }
 }

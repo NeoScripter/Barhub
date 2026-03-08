@@ -1,8 +1,9 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers\Admin;
 
-use App\Enums\ServiceStatus;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Service\ServiceStoreRequest;
 use App\Http\Requests\Admin\Service\ServiceUpdateRequest;
@@ -10,10 +11,9 @@ use App\Models\Company;
 use App\Models\Exhibition;
 use App\Models\Service;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 
-class ServiceController extends Controller
+final class ServiceController extends Controller
 {
     public function index(Request $request, Exhibition $exhibition, Company $company)
     {
@@ -32,8 +32,8 @@ class ServiceController extends Controller
     {
         return Inertia::render('admin/Services/Edit', [
             'exhibition' => $exhibition,
-            'company'    => $company,
-            'service'       => $service,
+            'company' => $company,
+            'service' => $service,
         ]);
     }
 
@@ -41,7 +41,7 @@ class ServiceController extends Controller
     {
         return Inertia::render('admin/Services/Create', [
             'exhibition' => $exhibition,
-            'company'    => $company,
+            'company' => $company,
         ]);
     }
 
@@ -51,7 +51,7 @@ class ServiceController extends Controller
             $request->only(['name', 'id', 'placeholder', 'description'])
         );
 
-        return redirect()->route('admin.exhibitions.services.index', [
+        return to_route('admin.exhibitions.services.index', [
             'exhibition' => $exhibition,
             'company' => $company,
         ]);
@@ -61,7 +61,7 @@ class ServiceController extends Controller
     {
         $service->update($request->only(['name', 'id', 'placeholder', 'description']));
 
-        return redirect()->route('admin.exhibitions.services.index', [
+        return to_route('admin.exhibitions.services.index', [
             'exhibition' => $exhibition,
             'company' => $company,
         ]);
@@ -71,7 +71,7 @@ class ServiceController extends Controller
     {
         $service->delete();
 
-        return redirect()->route('admin.exhibitions.services.index', [
+        return to_route('admin.exhibitions.services.index', [
             'exhibition' => $exhibition,
             'company' => $company,
         ]);

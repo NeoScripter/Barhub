@@ -24,7 +24,7 @@ final class CompanyController extends Controller
     {
         /** @var LengthAwarePaginator<Company> $companies */
         $companies = QueryBuilder::for(
-            Company::select(['id', 'public_name', 'legal_name', 'stand_code'])
+            Company::query()->select(['id', 'public_name', 'legal_name', 'stand_code'])
                 ->where('exhibition_id', $exhibition->id)
                 ->with(['tags', 'tasks:id,status,company_id'])
         )
@@ -35,26 +35,26 @@ final class CompanyController extends Controller
 
         return Inertia::render('admin/Companies/Index', [
             'exhibition' => $exhibition,
-            'companies'  => $companies,
+            'companies' => $companies,
         ]);
     }
 
     public function create(Exhibition $exhibition)
     {
-        $tags = Tag::orderBy('name')->get();
+        $tags = Tag::query()->orderBy('name')->get();
 
         return Inertia::render('admin/Companies/Create', [
             'exhibition' => $exhibition,
-            'tags'       => $tags,
+            'tags' => $tags,
         ]);
     }
 
     public function store(CompanyStoreRequest $request, Exhibition $exhibition)
     {
-        DB::transaction(function () use ($request, $exhibition) {
+        DB::transaction(function () use ($request, $exhibition): void {
             $validated = $request->validated();
 
-            $company = Company::create([
+            $company = Company::query()->create([
                 ...Arr::except($validated, ['tags', 'logo', 'logo_alt']),
                 'exhibition_id' => $exhibition->id,
             ]);
@@ -75,27 +75,26 @@ final class CompanyController extends Controller
             }
         });
 
-        return redirect()
-            ->route('admin.exhibitions.companies.index', $exhibition)
+        return to_route('admin.exhibitions.companies.index', $exhibition)
             ->with('success', 'Компания успешно создана');
     }
 
     public function edit(Exhibition $exhibition, Company $company)
     {
-        $tags = Tag::orderBy('name')->get();
+        $tags = Tag::query()->orderBy('name')->get();
 
         $company->load(['tags']);
 
         return Inertia::render('admin/Companies/Edit', [
             'exhibition' => $exhibition,
-            'company'    => $company,
-            'tags'       => $tags,
+            'company' => $company,
+            'tags' => $tags,
         ]);
     }
 
     public function update(CompanyUpdateRequest $request, Exhibition $exhibition, Company $company)
     {
-        DB::transaction(function () use ($request, $company) {
+        DB::transaction(function () use ($request, $company): void {
             $validated = $request->validated();
             $company->update(Arr::except($validated, ['tags', 'logo', 'logo_alt']));
 
@@ -126,8 +125,7 @@ final class CompanyController extends Controller
             }
         });
 
-        return redirect()
-            ->route('admin.exhibitions.companies.index', $exhibition)
+        return to_route('admin.exhibitions.companies.index', $exhibition)
             ->with('success', 'Компания успешно обновлена');
     }
 
@@ -136,8 +134,7 @@ final class CompanyController extends Controller
         $company->logo?->delete();
         $company->delete();
 
-        return redirect()
-            ->route('admin.exhibitions.companies.index', $exhibition)
+        return to_route('admin.exhibitions.companies.index', $exhibition)
             ->with('success', 'Компания успешно удалена');
     }
 }

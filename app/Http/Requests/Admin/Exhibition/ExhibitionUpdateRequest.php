@@ -6,7 +6,6 @@ namespace App\Http\Requests\Admin\Exhibition;
 
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
 final class ExhibitionUpdateRequest extends FormRequest
 {

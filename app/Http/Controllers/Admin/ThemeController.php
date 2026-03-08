@@ -14,10 +14,9 @@ final class ThemeController extends Controller
 {
     public function store(ThemeStoreRequest $request): RedirectResponse
     {
-        Theme::create($request->validated());
+        Theme::query()->create($request->validated());
 
-        return redirect()
-            ->back()
+        return back()
             ->with('success', 'Направление успешно создано');
     }
 
@@ -25,8 +24,7 @@ final class ThemeController extends Controller
     {
         $theme->delete();
 
-        return redirect()
-            ->back()
+        return back()
             ->with('success', 'Направление успешно удалено');
     }
 }

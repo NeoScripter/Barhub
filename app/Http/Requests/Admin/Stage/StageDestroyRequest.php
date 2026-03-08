@@ -6,17 +6,13 @@ namespace App\Http\Requests\Admin\Stage;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StageDestroyRequest extends FormRequest
+final class StageDestroyRequest extends FormRequest
 {
     public function authorize(): bool
     {
         $stage = $this->route('stage');
 
-        if ($stage->events()->exists()) {
-            return false;
-        }
-
-        return true;
+        return ! $stage->events()->exists();
     }
 
     public function rules(): array

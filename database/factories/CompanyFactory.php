@@ -1,13 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Database\Factories;
 
+use App\Models\Company;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Company>
+ * @extends Factory<Company>
  */
-class CompanyFactory extends Factory
+final class CompanyFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -25,14 +28,14 @@ class CompanyFactory extends Factory
             'phone' => $faker->phoneNumber(),
             'email' => $faker->unique()->email(),
             'site_url' => $faker->url(),
-            'instagram' => substr($faker->url(), 0, 25),
-            'telegram' => substr($faker->url(), 0, 25),
+            'instagram' => mb_substr($faker->url(), 0, 25),
+            'telegram' => mb_substr($faker->url(), 0, 25),
             'activities' => $faker->sentence(),
             'stand_code' => $faker->numberBetween(101, 700),
             'show_on_site' => true,
             'stand_area' => $faker->numberBetween(10, 30),
             'power_kw' => $faker->numberBetween(10, 30),
-            'storage_enabled' => true
+            'storage_enabled' => true,
         ];
     }
 }

@@ -7,7 +7,7 @@ namespace App\Http\Requests\Admin\Stage;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class StageStoreRequest extends FormRequest
+final class StageStoreRequest extends FormRequest
 {
     public function authorize(): bool
     {

@@ -14,10 +14,9 @@ final class StageController extends Controller
 {
     public function store(StageStoreRequest $request): RedirectResponse
     {
-        Stage::create($request->validated());
+        Stage::query()->create($request->validated());
 
-        return redirect()
-            ->back()
+        return back()
             ->with('success', 'Площадка успешно создана');
     }
 
@@ -25,8 +24,7 @@ final class StageController extends Controller
     {
         $stage->delete();
 
-        return redirect()
-            ->back()
+        return back()
             ->with('success', 'Площадка успешно удалена');
     }
 }

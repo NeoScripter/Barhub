@@ -10,14 +10,12 @@ use App\Models\Person;
 use App\Models\Stage;
 use App\Models\Theme;
 use App\Models\User;
+use Illuminate\Support\Facades\DB;
 
 use function Pest\Laravel\actingAs;
 use function Pest\Laravel\assertDatabaseHas;
 use function Pest\Laravel\assertDatabaseMissing;
 use function Pest\Laravel\get;
-use function Pest\Laravel\post;
-use function Pest\Laravel\put;
-use function Pest\Laravel\delete;
 
 describe('Event CRUD - Access Control', function (): void {
     beforeEach(function (): void {
@@ -102,7 +100,7 @@ describe('Event Index', function (): void {
 
         $response->assertOk()
             ->assertInertia(
-                fn($page) => $page
+                fn ($page) => $page
                     ->component('admin/Events/Index')
                     ->has('events.data', 5)
             );
@@ -126,7 +124,7 @@ describe('Event Index', function (): void {
 
         $response->assertOk()
             ->assertInertia(
-                fn($page) => $page
+                fn ($page) => $page
                     ->has('events.data.0.stage')
                     ->has('events.data.0.themes')
                     ->has('events.data.0.people')
@@ -142,7 +140,7 @@ describe('Event Index', function (): void {
         $response = actingAs($this->superAdmin)
             ->get(route('admin.exhibitions.events.index', [
                 'exhibition' => $this->exhibition,
-                'search' => 'Innovation'
+                'search' => 'Innovation',
             ]));
 
         $response->assertOk();
@@ -159,7 +157,7 @@ describe('Event Index', function (): void {
         $response = actingAs($this->superAdmin)
             ->get(route('admin.exhibitions.events.index', [
                 'exhibition' => $this->exhibition,
-                'sort' => 'title'
+                'sort' => 'title',
             ]));
 
         $response->assertOk();
@@ -178,7 +176,7 @@ describe('Event Index', function (): void {
         $response = actingAs($this->superAdmin)
             ->get(route('admin.exhibitions.events.index', [
                 'exhibition' => $this->exhibition,
-                'sort' => '-starts_at'
+                'sort' => '-starts_at',
             ]));
 
         $response->assertOk();
@@ -196,7 +194,7 @@ describe('Event Index', function (): void {
         $response = actingAs($this->superAdmin)
             ->get(route('admin.exhibitions.events.index', [
                 'exhibition' => $this->exhibition,
-                'sort' => 'stage.name'
+                'sort' => 'stage.name',
             ]));
 
         $response->assertOk();
@@ -213,7 +211,7 @@ describe('Event Index', function (): void {
 
         $response->assertOk()
             ->assertInertia(
-                fn($page) => $page
+                fn ($page) => $page
                     ->has('events.data', 15) // Default pagination
                     ->has('events.links')
             );
@@ -233,7 +231,7 @@ describe('Event Create', function (): void {
 
         $response->assertOk()
             ->assertInertia(
-                fn($page) => $page
+                fn ($page) => $page
                     ->component('admin/Events/Create')
                     ->has('exhibition')
                     ->has('stages')
@@ -253,11 +251,11 @@ describe('Event Create', function (): void {
 
         $response->assertOk()
             ->assertInertia(
-                fn($page) => $page
-                    ->where('stages', fn($stages) => count($stages) === 3)
-                    ->where('themes', fn($themes) => count($themes) === 5)
-                    ->where('availablePeople', fn($people) => count($people) === 10)
-                    ->where('roles', fn($roles) => count($roles) === 5)
+                fn ($page) => $page
+                    ->where('stages', fn ($stages): bool => count($stages) === 3)
+                    ->where('themes', fn ($themes): bool => count($themes) === 5)
+                    ->where('availablePeople', fn ($people): bool => count($people) === 10)
+                    ->where('roles', fn ($roles): bool => count($roles) === 5)
             );
     });
 });
@@ -305,7 +303,7 @@ describe('Event Store', function (): void {
         actingAs($this->superAdmin)
             ->post(route('admin.exhibitions.events.store', $this->exhibition), $data);
 
-        $event = Event::where('title', 'Test Event')->first();
+        $event = Event::query()->where('title', 'Test Event')->first();
         expect($event->themes)->toHaveCount(3);
     });
 
@@ -328,7 +326,7 @@ describe('Event Store', function (): void {
         actingAs($this->superAdmin)
             ->post(route('admin.exhibitions.events.store', $this->exhibition), $data);
 
-        $event = Event::where('title', 'Test Event')->first();
+        $event = Event::query()->where('title', 'Test Event')->first();
 
         assertDatabaseHas('event_person', [
             'event_id' => $event->id,
@@ -493,7 +491,7 @@ describe('Event Edit', function (): void {
 
         $response->assertOk()
             ->assertInertia(
-                fn($page) => $page
+                fn ($page) => $page
                     ->component('admin/Events/Edit')
                     ->has('exhibition')
                     ->has('event')
@@ -515,9 +513,9 @@ describe('Event Edit', function (): void {
 
         $response->assertOk()
             ->assertInertia(
-                fn($page) => $page
+                fn ($page) => $page
                     ->where('eventPeople.0.person_id', $person->id)
-                    ->where('eventPeople.0.roles', fn($roles) => count($roles) === 2)
+                    ->where('eventPeople.0.roles', fn ($roles): bool => count($roles) === 2)
             );
     });
 });
@@ -780,8 +778,8 @@ describe('Event Edge Cases', function (): void {
 
         $response->assertOk()
             ->assertInertia(
-                fn($page) => $page
-                    ->where('events.data.0.themes', fn($themes) => count($themes) === 0)
+                fn ($page) => $page
+                    ->where('events.data.0.themes', fn ($themes): bool => count($themes) === 0)
             );
     });
 
@@ -793,8 +791,8 @@ describe('Event Edge Cases', function (): void {
 
         $response->assertOk()
             ->assertInertia(
-                fn($page) => $page
-                    ->where('events.data.0.people', fn($people) => count($people) === 0)
+                fn ($page) => $page
+                    ->where('events.data.0.people', fn ($people): bool => count($people) === 0)
             );
     });
 
@@ -804,8 +802,8 @@ describe('Event Edge Cases', function (): void {
 
         $response->assertOk()
             ->assertInertia(
-                fn($page) => $page
-                    ->where('events.data', fn($events) => count($events) === 0)
+                fn ($page) => $page
+                    ->where('events.data', fn ($events): bool => count($events) === 0)
             );
     });
 

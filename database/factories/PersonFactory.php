@@ -25,7 +25,7 @@ final class PersonFactory extends Factory
             'name' => $faker->firstName('male').' '.$faker->lastName('male'),
             'bio' => $faker->words(20, true),
             'regalia' => $faker->words(10, true),
-            'telegram' => substr($faker->url(), 0, 25),
+            'telegram' => mb_substr($faker->url(), 0, 25),
         ];
     }
 }

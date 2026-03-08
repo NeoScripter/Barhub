@@ -20,10 +20,10 @@ final class TaskFactory extends Factory
     public function definition(): array
     {
         return [
-            'title' => fake()->words(rand(2, 4), true),
-            'description' => fake()->words(rand(20, 30), true),
+            'title' => fake()->words(random_int(2, 4), true),
+            'description' => fake()->words(random_int(20, 30), true),
             'deadline' => fake()->dateTime(),
-            'status' => rand(1, 5),
+            'status' => random_int(1, 5),
         ];
     }
 }

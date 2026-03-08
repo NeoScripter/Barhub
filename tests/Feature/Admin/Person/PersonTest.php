@@ -48,7 +48,7 @@ describe('Person Panel Access Control', function (): void {
         $event = Event::factory()->for($exhibition)->create();
 
         $people = Person::factory(5)->create();
-        $people->each(fn($person) => $event->people()->attach($person->id, ['role' => PersonRole::SPEAKER->value]));
+        $people->each(fn ($person) => $event->people()->attach($person->id, ['role' => PersonRole::SPEAKER->value]));
 
         $response = actingAs($superAdmin)
             ->get(route('admin.exhibitions.people.index', $exhibition));
@@ -56,13 +56,13 @@ describe('Person Panel Access Control', function (): void {
         $response
             ->assertOk()
             ->assertInertia(
-                fn($page) => $page->component('admin/People/Index')
+                fn ($page) => $page->component('admin/People/Index')
                     ->has('exhibition')
                     ->has('people.data', 5)
             );
 
         $inertiaData = $response->viewData('page')['props']['people']['data'];
-        $people->each(function ($person) use ($inertiaData) {
+        $people->each(function ($person) use ($inertiaData): void {
             expect(collect($inertiaData)->pluck('name'))->toContain($person->name);
         });
     });
@@ -77,20 +77,20 @@ describe('Person Panel Access Control', function (): void {
         $assignedEvent = Event::factory()->for($assignedExhibition)->create();
 
         $assignedPeople = Person::factory(3)->create();
-        $assignedPeople->each(fn($person) => $assignedEvent->people()->attach($person->id, ['role' => PersonRole::SPEAKER->value]));
+        $assignedPeople->each(fn ($person) => $assignedEvent->people()->attach($person->id, ['role' => PersonRole::SPEAKER->value]));
 
         // Unassigned exhibition
         $unassignedExhibition = Exhibition::factory()->create();
         $unassignedEvent = Event::factory()->for($unassignedExhibition)->create();
 
         $unassignedPeople = Person::factory(2)->create();
-        $unassignedPeople->each(fn($person) => $unassignedEvent->people()->attach($person->id, ['role' => PersonRole::SPEAKER->value]));
+        $unassignedPeople->each(fn ($person) => $unassignedEvent->people()->attach($person->id, ['role' => PersonRole::SPEAKER->value]));
 
         actingAs($admin)
             ->get(route('admin.exhibitions.people.index', $assignedExhibition))
             ->assertOk()
             ->assertInertia(
-                fn($page) => $page->component('admin/People/Index')
+                fn ($page) => $page->component('admin/People/Index')
                     ->has('people.data', 3)
             );
 
@@ -229,7 +229,7 @@ describe('Person Events Count', function (): void {
 
         $response->assertOk()
             ->assertInertia(
-                fn($page) => $page->component('admin/People/Index')
+                fn ($page) => $page->component('admin/People/Index')
                     ->where('people.data.0.events_count', 3)
             );
     });
@@ -250,7 +250,7 @@ describe('Person Edit Page Access', function (): void {
             ->get(route('admin.exhibitions.people.edit', [$exhibition, $person]))
             ->assertOk()
             ->assertInertia(
-                fn($page) => $page->component('admin/People/Edit')
+                fn ($page) => $page->component('admin/People/Edit')
                     ->has('exhibition')
                     ->has('person')
             );

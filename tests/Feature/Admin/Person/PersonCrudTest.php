@@ -28,7 +28,7 @@ describe('Person Create', function (): void {
 
         $response->assertOk()
             ->assertInertia(
-                fn($page) => $page
+                fn ($page) => $page
                     ->component('admin/People/Create')
                     ->has('exhibition')
             );
@@ -78,7 +78,7 @@ describe('Person Store', function (): void {
         actingAs($this->superAdmin)
             ->post(route('admin.exhibitions.people.store', $this->exhibition), $data);
 
-        $person = Person::where('name', 'Test Person')->first();
+        $person = Person::query()->where('name', 'Test Person')->first();
         $person->load('avatar');
 
         expect($person->avatar)->not->toBeNull();
@@ -99,7 +99,7 @@ describe('Person Store', function (): void {
         actingAs($this->superAdmin)
             ->post(route('admin.exhibitions.people.store', $this->exhibition), $data);
 
-        $person = Person::where('name', 'Test Person')->first();
+        $person = Person::query()->where('name', 'Test Person')->first();
 
         expect($person?->logo)->not->toBeNull();
         expect($person?->logo?->alt)->toBe('Logo of Test Person');
@@ -122,7 +122,7 @@ describe('Person Store', function (): void {
         actingAs($this->superAdmin)
             ->post(route('admin.exhibitions.people.store', $this->exhibition), $data);
 
-        $person = Person::where('name', 'Test Person')->first();
+        $person = Person::query()->where('name', 'Test Person')->first();
 
         expect($person?->avatar)->not->toBeNull();
         expect($person?->logo)->not->toBeNull();
@@ -221,7 +221,7 @@ describe('Person Edit', function (): void {
 
         $response->assertOk()
             ->assertInertia(
-                fn($page) => $page
+                fn ($page) => $page
                     ->component('admin/People/Edit')
                     ->has('exhibition')
                     ->has('person')
@@ -258,7 +258,7 @@ describe('Person Edit', function (): void {
 
         $response->assertOk()
             ->assertInertia(
-                fn($page) => $page
+                fn ($page) => $page
                     ->where('person.avatar.alt', 'Avatar alt')
                     ->where('person.logo.alt', 'Logo alt')
             );
@@ -505,7 +505,7 @@ describe('Person Edge Cases', function (): void {
 
         $response->assertOk()
             ->assertInertia(
-                fn($page) => $page
+                fn ($page) => $page
                     ->where('person.avatar', null)
             );
     });
@@ -518,7 +518,7 @@ describe('Person Edge Cases', function (): void {
 
         $response->assertOk()
             ->assertInertia(
-                fn($page) => $page
+                fn ($page) => $page
                     ->where('person.logo', null)
             );
     });
@@ -529,8 +529,8 @@ describe('Person Edge Cases', function (): void {
 
         $response->assertOk()
             ->assertInertia(
-                fn($page) => $page
-                    ->where('people.data', fn($people) => count($people) === 0)
+                fn ($page) => $page
+                    ->where('people.data', fn ($people): bool => count($people) === 0)
             );
     });
 

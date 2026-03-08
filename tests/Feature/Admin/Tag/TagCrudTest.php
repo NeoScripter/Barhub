@@ -58,7 +58,7 @@ describe('Tag CRUD Test', function (): void {
 
         $page->assertSee($newTagName);
         $page->assertCount('#tag-list li', 4);
-        $page->click('@delete tag ' . $newTagName);
+        $page->click('@delete tag '.$newTagName);
 
         $page->assertCount('#tag-list li', 3);
         $page->assertDontSee($newTagName);

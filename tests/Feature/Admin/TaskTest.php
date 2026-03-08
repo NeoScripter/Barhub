@@ -8,8 +8,7 @@ use App\Models\Company;
 use App\Models\Exhibition;
 use App\Models\Task;
 use App\Models\User;
-
-use function PHPUnit\Framework\assertEquals;
+use Illuminate\Support\Facades\Date;
 
 describe('Admin Task Test', function (): void {
 
@@ -96,7 +95,7 @@ describe('Admin Task Test', function (): void {
             ->assertSee('Название')
             ->fill('title', generateTextWithChars(50))
             ->fill('description', generateTextWithChars(3))
-            ->fill('deadline', now()->addYear()->format('Y') . '-03-20T12:02')
+            ->fill('deadline', now()->addYear()->format('Y').'-03-20T12:02')
             ->click('@submit-create-task')
             ->assertSee('Описание задачи должно содержать не менее 10 символов');
     });
@@ -127,7 +126,7 @@ describe('Admin Task Test', function (): void {
             ->assertSee('Название')
             ->fill('title', generateTextWithChars(50))
             ->fill('description', generateTextWithChars(5004))
-            ->fill('deadline', now()->addYear()->format('Y') . '-03-20T12:02')
+            ->fill('deadline', now()->addYear()->format('Y').'-03-20T12:02')
             ->click('@submit-create-task')
             ->assertSee('Описание задачи не должно превышать 5000 символов');
     });
@@ -159,7 +158,7 @@ describe('Admin Task Test', function (): void {
             ->fill('title', generateTextWithChars(50))
             ->fill('description', generateTextWithChars(100))
             ->fill('comment', generateTextWithChars(2005))
-            ->fill('deadline', now()->addYear()->format('Y') . '-03-20T12:02')
+            ->fill('deadline', now()->addYear()->format('Y').'-03-20T12:02')
             ->click('@submit-create-task')
             ->assertSee('Комментарий не должен превышать 2000 символов');
     });
@@ -221,7 +220,7 @@ describe('Admin Task Test', function (): void {
             ->assertSee('Название')
             ->fill('title', generateTextWithChars(50))
             ->fill('description', generateTextWithChars(20))
-            ->fill('deadline', now()->addYear()->format('Y') . '-03-20T12:02')
+            ->fill('deadline', now()->addYear()->format('Y').'-03-20T12:02')
             ->fill('comment', generateTextWithChars(100))
             ->click('@submit-create-task')
             ->assertPathEndsWith($route);
@@ -253,7 +252,7 @@ describe('Admin Task Test', function (): void {
         $page->navigate($route)
             ->assertSee($company->public_name)
             ->assertSee($task->title)
-            ->click('@edit-task-' . $task->id)
+            ->click('@edit-task-'.$task->id)
             ->assertSee('Название')
             ->clear('title')
             ->fill('title', generateTextWithChars(1103))
@@ -287,7 +286,7 @@ describe('Admin Task Test', function (): void {
         $page->navigate($route)
             ->assertSee($company->public_name)
             ->assertSee($task->title)
-            ->click('@edit-task-' . $task->id)
+            ->click('@edit-task-'.$task->id)
             ->assertSee('Название')
             ->clear('description')
             ->fill('description', generateTextWithChars(3))
@@ -321,7 +320,7 @@ describe('Admin Task Test', function (): void {
         $page->navigate($route)
             ->assertSee($company->public_name)
             ->assertSee($task->title)
-            ->click('@edit-task-' . $task->id)
+            ->click('@edit-task-'.$task->id)
             ->assertSee('Название')
             ->clear('description')
             ->fill('description', generateTextWithChars(15003))
@@ -355,7 +354,7 @@ describe('Admin Task Test', function (): void {
         $page->navigate($route)
             ->assertSee($company->public_name)
             ->assertSee($task->title)
-            ->click('@edit-task-' . $task->id)
+            ->click('@edit-task-'.$task->id)
             ->assertSee('Название')
             ->clear('comment')
             ->fill('comment', generateTextWithChars(2005))
@@ -389,7 +388,7 @@ describe('Admin Task Test', function (): void {
         $page->navigate($route)
             ->assertSee($company->public_name)
             ->assertSee($task->title)
-            ->click('@edit-task-' . $task->id)
+            ->click('@edit-task-'.$task->id)
             ->assertSee('Название')
             ->clear('deadline')
             ->fill('deadline', '2020-03-20T12:02')
@@ -426,7 +425,7 @@ describe('Admin Task Test', function (): void {
         $page->navigate($route)
             ->assertSee($company->public_name)
             ->assertSee($task->title)
-            ->click('@edit-task-' . $task->id)
+            ->click('@edit-task-'.$task->id)
             ->assertSee('Название')
             ->clear('title')
             ->fill('title', $newTitle)
@@ -435,7 +434,7 @@ describe('Admin Task Test', function (): void {
             ->clear('comment')
             ->fill('comment', generateTextWithChars(100))
             ->clear('deadline')
-            ->fill('deadline', now()->addYear()->format('Y') . '-03-20T12:02')
+            ->fill('deadline', now()->addYear()->format('Y').'-03-20T12:02')
             ->click('@submit-update-task');
 
         $task = $task->fresh();
@@ -469,7 +468,7 @@ describe('Admin Task Test', function (): void {
         $page->navigate($route)
             ->assertSee($company->public_name)
             ->assertSee($task->title)
-            ->click('@edit-task-' . $task->id)
+            ->click('@edit-task-'.$task->id)
             ->assertSee('Название')
             ->click('@delete-task')
             ->click('@delete-btn')
@@ -490,7 +489,7 @@ describe('Admin Task Test', function (): void {
         $date2 = now()->addDay();
         $date3 = now()->addDays(2);
         $date1 = now();
-        Carbon\Carbon::setLocale('ru');
+        Date::setLocale('ru');
 
         $tasks = Task::factory()
             ->for($company)
@@ -541,7 +540,6 @@ describe('Admin Task Test', function (): void {
         $page->assertSeeIn('#tasks-table tr:nth-child(3) td:nth-child(3)', TaskStatus::DELAYED->label());
     });
 
-
     it('allows only super admin and admin with exhibition access to see the tasks index page', function (): void {
         $adminWithAccess = User::factory()->create([
             'email' => 'admin1@gmail.com',
@@ -583,7 +581,7 @@ describe('Admin Task Test', function (): void {
         $page->assertSee($tasks[0]->title);
 
         $page->click('@logout-dropdown');
-        $page->assertSee("Выйти");
+        $page->assertSee('Выйти');
         $page->click('@logout-button');
 
         $page = visit('/login');
@@ -599,7 +597,7 @@ describe('Admin Task Test', function (): void {
         $page->navigate($route)->assertSee('Unauthorized');
         $page->navigate('/admin/dashboard');
         $page->click('@logout-dropdown');
-        $page->assertSee("Выйти");
+        $page->assertSee('Выйти');
         $page->click('@logout-button');
 
         $page = visit('/login');

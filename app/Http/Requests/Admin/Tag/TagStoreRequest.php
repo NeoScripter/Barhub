@@ -7,7 +7,7 @@ namespace App\Http\Requests\Admin\Tag;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class TagStoreRequest extends FormRequest
+final class TagStoreRequest extends FormRequest
 {
     public function authorize(): bool
     {

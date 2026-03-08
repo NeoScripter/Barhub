@@ -12,6 +12,17 @@ enum PersonRole: int
     case HOST = 4;
     case RESIDENT = 5;
 
+    public static function toSelectList(): array
+    {
+        return array_map(
+            fn (self $role): array => [
+                'value' => $role->value,
+                'label' => $role->label(),
+            ],
+            self::cases()
+        );
+    }
+
     public function label(): string
     {
         return match ($this) {
@@ -21,16 +32,5 @@ enum PersonRole: int
             self::HOST => 'ведущий',
             self::RESIDENT => 'резидент',
         };
-    }
-
-    public static function toSelectList(): array
-    {
-        return array_map(
-            fn(self $role) => [
-                'value' => $role->value,
-                'label' => $role->label(),
-            ],
-            self::cases()
-        );
     }
 }

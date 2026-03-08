@@ -11,10 +11,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Facades\DB;
+
 final class Person extends Model
 {
     /** @use HasFactory<PersonFactory> */
     use HasFactory;
+
     use HasFilterSearch;
 
     protected $with = ['avatar', 'logo'];
@@ -51,7 +53,7 @@ final class Person extends Model
         }
 
         return $query->pluck('role')
-            ->map(fn($role) => PersonRole::from($role)->label())
+            ->map(fn ($role) => PersonRole::from($role)->label())
             ->values();
     }
 }

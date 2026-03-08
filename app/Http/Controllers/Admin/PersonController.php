@@ -24,14 +24,14 @@ final class PersonController extends Controller
 
         /** @var LengthAwarePaginator<Person> $people */
         $people = QueryBuilder::for(
-            Person::whereHas('events', fn($q) => $q->whereIn('events.id', $eventIds))
+            Person::query()->whereHas('events', fn ($q) => $q->whereIn('events.id', $eventIds))
         )
             ->select('people.*')
             ->withCount('events')
             ->allowedSorts(['name'])
             ->withSearch('name', $request->string('search'))
             ->paginate()
-            ->through(fn($person) => tap($person, function ($p) use ($eventIds) {
+            ->through(fn ($person) => tap($person, function ($p) use ($eventIds): void {
                 $p->roles = $p->roles($eventIds->toArray());
             }))
             ->appends($request->query());
@@ -51,8 +51,8 @@ final class PersonController extends Controller
 
     public function store(PersonStoreRequest $request, Exhibition $exhibition)
     {
-        $person = DB::transaction(function () use ($request) {
-            $person = Person::create($request->only([
+        DB::transaction(function () use ($request) {
+            $person = Person::query()->create($request->only([
                 'name',
                 'regalia',
                 'bio',
@@ -86,8 +86,7 @@ final class PersonController extends Controller
             return $person;
         });
 
-        return redirect()
-            ->route('admin.exhibitions.people.index', $exhibition)
+        return to_route('admin.exhibitions.people.index', $exhibition)
             ->with('success', 'Участник успешно создан');
     }
 
@@ -101,7 +100,7 @@ final class PersonController extends Controller
 
     public function update(PersonUpdateRequest $request, Exhibition $exhibition, Person $person)
     {
-        DB::transaction(function () use ($request, $person) {
+        DB::transaction(function () use ($request, $person): void {
             // Update basic fields
             $person->update($request->only([
                 'name',
@@ -159,8 +158,7 @@ final class PersonController extends Controller
             }
         });
 
-        return redirect()
-            ->route('admin.exhibitions.people.index', $exhibition)
+        return to_route('admin.exhibitions.people.index', $exhibition)
             ->with('success', 'Участник успешно обновлен');
     }
 
@@ -170,8 +168,7 @@ final class PersonController extends Controller
         $person->logo?->delete();
         $person->delete();
 
-        return redirect()
-            ->route('admin.exhibitions.people.index', $exhibition)
+        return to_route('admin.exhibitions.people.index', $exhibition)
             ->with('success', 'Участник успешно удален');
     }
 }
