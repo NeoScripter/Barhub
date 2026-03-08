@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\PersonController as AdminPersonController;
 use App\Http\Controllers\Admin\CompanyController as AdminCompanyController;
 use App\Http\Controllers\Admin\ExponentController as AdminExponentController;
 use App\Http\Controllers\Admin\TaskController as AdminTaskController;
+use App\Http\Controllers\Admin\ServiceController as AdminServiceController;
 use App\Http\Controllers\Admin\StageController;
 use App\Http\Controllers\Admin\TagController;
 use App\Http\Controllers\Admin\ThemeController;
@@ -75,6 +76,7 @@ Route::prefix('/admin')
                 Route::resource('companies/{company}/exponents', AdminExponentController::class)
                     ->only(['update', 'index', 'destroy']);
                 Route::resource('companies/{company}/tasks', AdminTaskController::class);
+                Route::resource('companies/{company}/services', AdminServiceController::class);
 
                 Route::resource('events', AdminEventController::class)->except('show');
                 Route::resource('people', AdminPersonController::class)->except(['show']);
