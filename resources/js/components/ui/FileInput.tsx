@@ -5,6 +5,7 @@ import UploadFileBtn from './UploadFileBtn';
 
 type FileInputProps = {
     src?: string;
+    name?: string;
     filename?: string;
     isEdited: boolean;
     onChange: (file: File | null) => void;
@@ -15,6 +16,7 @@ type FileInputProps = {
 export default function FileInput({
     src,
     filename,
+    name,
     isEdited,
     onChange,
     error,
@@ -52,7 +54,7 @@ export default function FileInput({
                         onChange={handleFile}
                         className="mt-1 hidden"
                         id={id}
-                        name={`file-input-${id}`}
+                        name={name ?? `file-input-${id}`}
                     />
                 )}
 

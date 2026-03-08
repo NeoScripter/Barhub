@@ -1,7 +1,6 @@
 import InputError from '@/components/form/InputError';
 import { Button } from '@/components/ui/Button';
 import { DeleteAlertDialog } from '@/components/ui/DeleteAlertDialog';
-import FileInput from '@/components/ui/FileInput';
 import { Input } from '@/components/ui/Input';
 import { Label } from '@/components/ui/Label';
 import { Spinner } from '@/components/ui/Spinner';
@@ -19,8 +18,7 @@ const Edit: FC<Inertia.Pages.Admin.Tasks.Edit> = ({
     company,
     task,
 }) => {
-    const { data, setData, post, processing, errors } = useForm({
-        _method: 'PUT',
+    const { data, setData, put, processing, errors } = useForm({
         title: task.title,
         description: task.description,
         deadline: convertDateToInputString(task.deadline),
@@ -33,16 +31,19 @@ const Edit: FC<Inertia.Pages.Admin.Tasks.Edit> = ({
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        post(update({ exhibition, company, task }).url, {
-            forceFormData: true,
-            onSuccess: () => toast.success('Задача успешно обновлена'),
+        put(update({ exhibition, company, task }).url, {
+            onSuccess: () => {
+                toast.success('Задача успешно обновлена');
+            },
         });
     };
 
     const handleDelete = () => {
         setIsDeleting(true);
         router.delete(destroy({ exhibition, company, task }).url, {
-            onSuccess: () => toast.success('Задача успешно удалена'),
+            onSuccess: () => {
+                toast.success('Задача успешно удалена');
+            },
             onError: () => {
                 toast.error('Ошибка при удалении задачи');
                 setIsDeleting(false);
@@ -58,6 +59,7 @@ const Edit: FC<Inertia.Pages.Admin.Tasks.Edit> = ({
                         <Button
                             variant="destructive"
                             type="button"
+                            data-test="delete-task"
                         >
                             Удалить задачу
                             <Trash2 />
@@ -81,8 +83,8 @@ const Edit: FC<Inertia.Pages.Admin.Tasks.Edit> = ({
                         <Label htmlFor="title">Название</Label>
                         <Input
                             id="title"
+                            name="title"
                             type="text"
-                            required
                             value={data.title}
                             onChange={(e) => setData('title', e.target.value)}
                         />
@@ -93,7 +95,7 @@ const Edit: FC<Inertia.Pages.Admin.Tasks.Edit> = ({
                         <Label htmlFor="description">Описание</Label>
                         <Textarea
                             id="description"
-                            required
+                            name="description"
                             value={data.description}
                             onChange={(e) =>
                                 setData('description', e.target.value)
@@ -108,7 +110,7 @@ const Edit: FC<Inertia.Pages.Admin.Tasks.Edit> = ({
                         <Input
                             id="deadline"
                             type="datetime-local"
-                            required
+                            name="deadline"
                             value={data.deadline}
                             onChange={(e) =>
                                 setData('deadline', e.target.value)
@@ -137,6 +139,7 @@ const Edit: FC<Inertia.Pages.Admin.Tasks.Edit> = ({
                         <Input
                             id="file_name"
                             type="text"
+                            name="file_name"
                             value={data.file_name}
                             onChange={(e) =>
                                 setData('file_name', e.target.value)
@@ -150,6 +153,7 @@ const Edit: FC<Inertia.Pages.Admin.Tasks.Edit> = ({
                         <Label htmlFor="comment">Добавить комментарий</Label>
                         <Textarea
                             id="comment"
+                            name="comment"
                             value={data.comment}
                             onChange={(e) => setData('comment', e.target.value)}
                             className="max-w-full"
@@ -163,6 +167,7 @@ const Edit: FC<Inertia.Pages.Admin.Tasks.Edit> = ({
                     <Button
                         type="submit"
                         className="w-fit"
+                        data-test="submit-update-task"
                         disabled={processing}
                     >
                         {processing && <Spinner />}

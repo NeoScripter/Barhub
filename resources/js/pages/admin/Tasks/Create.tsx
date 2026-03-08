@@ -5,9 +5,9 @@ import { Input } from '@/components/ui/Input';
 import { Label } from '@/components/ui/Label';
 import { Spinner } from '@/components/ui/Spinner';
 import { Textarea } from '@/components/ui/Textarea';
-import { store } from '@/wayfinder/routes/admin/exhibitions/tasks';
+import { index, store } from '@/wayfinder/routes/admin/exhibitions/tasks';
 import { Inertia } from '@/wayfinder/types';
-import { useForm } from '@inertiajs/react';
+import { router, useForm } from '@inertiajs/react';
 import { FC } from 'react';
 import { toast } from 'sonner';
 
@@ -27,7 +27,10 @@ const Create: FC<Inertia.Pages.Admin.Tasks.Create> = ({
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         post(store({ exhibition, company }).url, {
-            onSuccess: () => toast.success('Задача успешно создана'),
+            onSuccess: () => {
+                router.visit(index({ exhibition, company }));
+                toast.success('Задача успешно создана');
+            },
         });
     };
 
@@ -36,6 +39,7 @@ const Create: FC<Inertia.Pages.Admin.Tasks.Create> = ({
             <form
                 onSubmit={handleSubmit}
                 className="flex flex-col gap-6"
+                encType="multipart/form-data"
             >
                 <div className="grid gap-6">
                     <div className="grid gap-2">
@@ -44,6 +48,7 @@ const Create: FC<Inertia.Pages.Admin.Tasks.Create> = ({
                             id="title"
                             type="text"
                             required
+                            name="title"
                             value={data.title}
                             onChange={(e) => setData('title', e.target.value)}
                             placeholder="Введите название задачи"
@@ -56,8 +61,11 @@ const Create: FC<Inertia.Pages.Admin.Tasks.Create> = ({
                         <Textarea
                             id="description"
                             required
+                            name="description"
                             value={data.description}
-                            onChange={(e) => setData('description', e.target.value)}
+                            onChange={(e) =>
+                                setData('description', e.target.value)
+                            }
                             className="max-w-full"
                             placeholder="Введите описание задачи"
                         />
@@ -69,9 +77,11 @@ const Create: FC<Inertia.Pages.Admin.Tasks.Create> = ({
                         <Input
                             id="deadline"
                             type="datetime-local"
-                            required
+                            name="deadline"
                             value={data.deadline}
-                            onChange={(e) => setData('deadline', e.target.value)}
+                            onChange={(e) =>
+                                setData('deadline', e.target.value)
+                            }
                         />
                         <InputError message={errors.deadline} />
                     </div>
@@ -80,6 +90,7 @@ const Create: FC<Inertia.Pages.Admin.Tasks.Create> = ({
                         <Label htmlFor="file">Файл</Label>
                         <FileInput
                             isEdited={true}
+                            name="file"
                             error={errors.file}
                             onChange={(file) => {
                                 setData('file', file);
@@ -94,8 +105,11 @@ const Create: FC<Inertia.Pages.Admin.Tasks.Create> = ({
                         <Input
                             id="file_name"
                             type="text"
+                            name="file_name"
                             value={data.file_name}
-                            onChange={(e) => setData('file_name', e.target.value)}
+                            onChange={(e) =>
+                                setData('file_name', e.target.value)
+                            }
                             placeholder="Введите название файла"
                         />
                         <InputError message={errors.file_name} />
@@ -105,6 +119,7 @@ const Create: FC<Inertia.Pages.Admin.Tasks.Create> = ({
                         <Label htmlFor="comment">Комментарий</Label>
                         <Textarea
                             id="comment"
+                            name="comment"
                             value={data.comment}
                             onChange={(e) => setData('comment', e.target.value)}
                             className="max-w-full"
@@ -117,6 +132,7 @@ const Create: FC<Inertia.Pages.Admin.Tasks.Create> = ({
                 <div className="mt-2 flex items-center gap-4">
                     <Button
                         type="submit"
+                        data-test="submit-create-task"
                         className="w-fit"
                         disabled={processing}
                     >

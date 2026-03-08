@@ -17,7 +17,10 @@ const Index: FC<Inertia.Pages.Admin.Tasks.Index> = ({
 }) => {
     const CreateLink = () => (
         <Button asChild>
-            <Link href={create({ exhibition, company })}>
+            <Link
+                data-test="create-task"
+                href={create({ exhibition, company })}
+            >
                 <Plus />
                 Создать задачу
             </Link>

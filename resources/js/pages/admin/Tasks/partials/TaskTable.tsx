@@ -5,6 +5,7 @@ import { NodeProps } from '@/types/shared';
 import { edit } from '@/wayfinder/routes/admin/exhibitions/tasks';
 import { App } from '@/wayfinder/types';
 import { Link } from '@inertiajs/react';
+import { VisuallyHidden } from '@radix-ui/react-visually-hidden';
 import { PencilLine } from 'lucide-react';
 import { FC } from 'react';
 
@@ -54,12 +55,16 @@ const TaskTable: FC<
                         width={0.5}
                     >
                         <Link
+                            data-test={`edit-task-${task.id}`}
                             href={edit({
                                 task: task.id,
                                 exhibition: exhibition,
                                 company: company,
                             })}
                         >
+                            <VisuallyHidden>
+                                Редактировать задачу
+                            </VisuallyHidden>
                             <PencilLine />
                         </Link>
                     </Table.Cell>

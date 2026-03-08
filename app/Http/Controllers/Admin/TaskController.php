@@ -76,28 +76,34 @@ class TaskController extends Controller
             ]);
         }
 
-        return redirect()->back();
+        return redirect()->route('admin.exhibitions.tasks.index', [
+            'exhibition' => $exhibition,
+            'company' => $company,
+        ]);
     }
 
     public function update(TaskUpdateRequest $request, Exhibition $exhibition, Company $company, Task $task)
     {
         $task->update($request->only(['title', 'description', 'deadline']));
 
-        if ($request->hasFile('file')) {
-            $path = $request->file('file')->store('task-files');
-            $task->files()->create([
-                'name' => $request->validated('file_name'),
-                'url'  => $path,
-            ]);
-        }
-
-        // if ($request->filled('comment')) {
-        //     $task->comments()->oldest()->update([
-        //         'content' => $request->validated('comment'),
+        // if ($request->hasFile('file')) {
+        //     $path = $request->file('file')->store('task-files');
+        //     $task->files()->create([
+        //         'name' => $request->validated('file_name'),
+        //         'url'  => $path,
         //     ]);
         // }
 
-        return redirect()->back();
+        if ($request->filled('comment')) {
+            $task->comments()->oldest()->update([
+                'content' => $request->validated('comment'),
+            ]);
+        }
+
+        return redirect()->route('admin.exhibitions.tasks.index', [
+            'exhibition' => $exhibition,
+            'company' => $company,
+        ]);
     }
 
     public function destroy(Exhibition $exhibition, Company $company, Task $task)
@@ -108,6 +114,9 @@ class TaskController extends Controller
 
         $task->delete();
 
-        return redirect()->back();
+        return redirect()->route('admin.exhibitions.tasks.index', [
+            'exhibition' => $exhibition,
+            'company' => $company,
+        ]);
     }
 }

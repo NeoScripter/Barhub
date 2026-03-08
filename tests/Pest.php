@@ -32,7 +32,7 @@ pest()->browser()->timeout(2500);
 |
 */
 
-expect()->extend('toBeOne', fn () => $this->toBe(1));
+expect()->extend('toBeOne', fn() => $this->toBe(1));
 
 /*
 |--------------------------------------------------------------------------
@@ -48,4 +48,9 @@ expect()->extend('toBeOne', fn () => $this->toBe(1));
 function something(): void
 {
     // ..
+}
+
+function generateTextWithChars(int $count = 100): string
+{
+    return str('')->padRight($count, fake()->text())->toString();
 }

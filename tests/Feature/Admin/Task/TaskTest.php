@@ -6,9 +6,10 @@ use App\Enums\TaskStatus;
 use App\Enums\UserRole;
 use App\Models\Company;
 use App\Models\Exhibition;
-use App\Models\Tag;
 use App\Models\Task;
 use App\Models\User;
+
+use function PHPUnit\Framework\assertEquals;
 
 describe('Admin Task Test', function (): void {
 
@@ -36,6 +37,375 @@ describe('Admin Task Test', function (): void {
         $page->navigate($route);
         $page->assertSee($company->public_name);
         $page->assertSee($tasks[0]->title);
+    });
+
+    it('doesnt allow to create a task when the title is too long', function (): void {
+        $user = User::factory()->create([
+            'email' => 'super-admin@gmail.com',
+            'password' => 'password',
+        ]);
+        $user->assignRole(UserRole::SUPER_ADMIN);
+        $exhibition = Exhibition::factory()->create();
+        $company = Company::factory()->for($exhibition)->create();
+        $route = "/admin/exhibitions/{$exhibition->id}/companies/{$company->id}/tasks";
+
+        $page = visit('/login');
+
+        $page->assertSee('Вход в аккаунт')
+            ->fill('email', 'super-admin@gmail.com')
+            ->fill('password', 'password')
+            ->click('@login-button')
+            ->assertSee('super-admin@gmail.com');
+
+        $this->assertAuthenticated();
+
+        $page->navigate($route)
+            ->assertSee($company->public_name)
+            ->click('@create-task')
+            ->assertSee('Название')
+            ->fill('title', generateTextWithChars(104))
+            ->fill('description', generateTextWithChars(5004))
+            ->fill('deadline', '2020-03-20T12:02')
+            ->click('@submit-create-task')
+            ->assertSee('Название задачи не должно превышать 100 символов');
+    });
+
+    it('doesnt allow to create a task when the description is too short', function (): void {
+        $user = User::factory()->create([
+            'email' => 'super-admin@gmail.com',
+            'password' => 'password',
+        ]);
+        $user->assignRole(UserRole::SUPER_ADMIN);
+        $exhibition = Exhibition::factory()->create();
+        $company = Company::factory()->for($exhibition)->create();
+        $route = "/admin/exhibitions/{$exhibition->id}/companies/{$company->id}/tasks";
+
+        $page = visit('/login');
+
+        $page->assertSee('Вход в аккаунт')
+            ->fill('email', 'super-admin@gmail.com')
+            ->fill('password', 'password')
+            ->click('@login-button')
+            ->assertSee('super-admin@gmail.com');
+
+        $this->assertAuthenticated();
+
+        $page->navigate($route)
+            ->assertSee($company->public_name)
+            ->click('@create-task')
+            ->assertSee('Название')
+            ->fill('title', generateTextWithChars(50))
+            ->fill('description', generateTextWithChars(3))
+            ->fill('deadline', now()->addYear()->format('Y') . '-03-20T12:02')
+            ->click('@submit-create-task')
+            ->assertSee('Описание задачи должно содержать не менее 10 символов');
+    });
+
+    it('doesnt allow to create a task when the description is too long', function (): void {
+        $user = User::factory()->create([
+            'email' => 'super-admin@gmail.com',
+            'password' => 'password',
+        ]);
+        $user->assignRole(UserRole::SUPER_ADMIN);
+        $exhibition = Exhibition::factory()->create();
+        $company = Company::factory()->for($exhibition)->create();
+        $route = "/admin/exhibitions/{$exhibition->id}/companies/{$company->id}/tasks";
+
+        $page = visit('/login');
+
+        $page->assertSee('Вход в аккаунт')
+            ->fill('email', 'super-admin@gmail.com')
+            ->fill('password', 'password')
+            ->click('@login-button')
+            ->assertSee('super-admin@gmail.com');
+
+        $this->assertAuthenticated();
+
+        $page->navigate($route)
+            ->assertSee($company->public_name)
+            ->click('@create-task')
+            ->assertSee('Название')
+            ->fill('title', generateTextWithChars(50))
+            ->fill('description', generateTextWithChars(5004))
+            ->fill('deadline', now()->addYear()->format('Y') . '-03-20T12:02')
+            ->click('@submit-create-task')
+            ->assertSee('Описание задачи не должно превышать 5000 символов');
+    });
+
+    it('doesnt allow to create a task when the deadline is in the past', function (): void {
+        $user = User::factory()->create([
+            'email' => 'super-admin@gmail.com',
+            'password' => 'password',
+        ]);
+        $user->assignRole(UserRole::SUPER_ADMIN);
+        $exhibition = Exhibition::factory()->create();
+        $company = Company::factory()->for($exhibition)->create();
+        $route = "/admin/exhibitions/{$exhibition->id}/companies/{$company->id}/tasks";
+
+        $page = visit('/login');
+
+        $page->assertSee('Вход в аккаунт')
+            ->fill('email', 'super-admin@gmail.com')
+            ->fill('password', 'password')
+            ->click('@login-button')
+            ->assertSee('super-admin@gmail.com');
+
+        $this->assertAuthenticated();
+
+        $page->navigate($route)
+            ->assertSee($company->public_name)
+            ->click('@create-task')
+            ->assertSee('Название')
+            ->fill('title', generateTextWithChars(50))
+            ->fill('description', generateTextWithChars(20))
+            ->fill('deadline', '2020-03-20T12:02')
+            ->click('@submit-create-task')
+            ->assertSee('Срок выполнения должен быть в будущем');
+    });
+
+    it('allows to create a task with valid data', function (): void {
+        $user = User::factory()->create([
+            'email' => 'super-admin@gmail.com',
+            'password' => 'password',
+        ]);
+        $user->assignRole(UserRole::SUPER_ADMIN);
+        $exhibition = Exhibition::factory()->create();
+        $company = Company::factory()->for($exhibition)->create();
+        $route = "/admin/exhibitions/{$exhibition->id}/companies/{$company->id}/tasks";
+
+        $page = visit('/login');
+
+        $page->assertSee('Вход в аккаунт')
+            ->fill('email', 'super-admin@gmail.com')
+            ->fill('password', 'password')
+            ->click('@login-button')
+            ->assertSee('super-admin@gmail.com');
+
+        $this->assertAuthenticated();
+
+        $page->navigate($route)
+            ->assertSee($company->public_name)
+            ->click('@create-task')
+            ->assertSee('Название')
+            ->fill('title', generateTextWithChars(50))
+            ->fill('description', generateTextWithChars(20))
+            ->fill('deadline', now()->addYear()->format('Y') . '-03-20T12:02')
+            ->click('@submit-create-task')
+            ->assertPathEndsWith($route);
+    });
+
+    it('doesnt allow to update a task when the title is too long', function (): void {
+        $user = User::factory()->create([
+            'email' => 'super-admin@gmail.com',
+            'password' => 'password',
+        ]);
+        $user->assignRole(UserRole::SUPER_ADMIN);
+        $exhibition = Exhibition::factory()->create();
+        $company = Company::factory()->for($exhibition)->create();
+        $task = Task::factory()
+            ->for($company)
+            ->create(['title' => 'Zebra', 'deadline' => now()]);
+        $route = "/admin/exhibitions/{$exhibition->id}/companies/{$company->id}/tasks";
+
+        $page = visit('/login');
+
+        $page->assertSee('Вход в аккаунт')
+            ->fill('email', 'super-admin@gmail.com')
+            ->fill('password', 'password')
+            ->click('@login-button')
+            ->assertSee('super-admin@gmail.com');
+
+        $this->assertAuthenticated();
+
+        $page->navigate($route)
+            ->assertSee($company->public_name)
+            ->assertSee($task->title)
+            ->click('@edit-task-' . $task->id)
+            ->assertSee('Название')
+            ->clear('title')
+            ->fill('title', generateTextWithChars(1103))
+            ->click('@submit-update-task')
+            ->assertSee('Название задачи не должно превышать 100 символов');
+    });
+
+    it('doesnt allow to update a task when the description is too short', function (): void {
+        $user = User::factory()->create([
+            'email' => 'super-admin@gmail.com',
+            'password' => 'password',
+        ]);
+        $user->assignRole(UserRole::SUPER_ADMIN);
+        $exhibition = Exhibition::factory()->create();
+        $company = Company::factory()->for($exhibition)->create();
+        $task = Task::factory()
+            ->for($company)
+            ->create(['title' => 'Zebra', 'deadline' => now()]);
+        $route = "/admin/exhibitions/{$exhibition->id}/companies/{$company->id}/tasks";
+
+        $page = visit('/login');
+
+        $page->assertSee('Вход в аккаунт')
+            ->fill('email', 'super-admin@gmail.com')
+            ->fill('password', 'password')
+            ->click('@login-button')
+            ->assertSee('super-admin@gmail.com');
+
+        $this->assertAuthenticated();
+
+        $page->navigate($route)
+            ->assertSee($company->public_name)
+            ->assertSee($task->title)
+            ->click('@edit-task-' . $task->id)
+            ->assertSee('Название')
+            ->clear('description')
+            ->fill('description', generateTextWithChars(3))
+            ->click('@submit-update-task')
+            ->assertSee('Описание задачи должно содержать не менее 10 символов');
+    });
+
+    it('doesnt allow to update a task when the description is too long', function (): void {
+        $user = User::factory()->create([
+            'email' => 'super-admin@gmail.com',
+            'password' => 'password',
+        ]);
+        $user->assignRole(UserRole::SUPER_ADMIN);
+        $exhibition = Exhibition::factory()->create();
+        $company = Company::factory()->for($exhibition)->create();
+        $task = Task::factory()
+            ->for($company)
+            ->create(['title' => 'Zebra', 'deadline' => now()]);
+        $route = "/admin/exhibitions/{$exhibition->id}/companies/{$company->id}/tasks";
+
+        $page = visit('/login');
+
+        $page->assertSee('Вход в аккаунт')
+            ->fill('email', 'super-admin@gmail.com')
+            ->fill('password', 'password')
+            ->click('@login-button')
+            ->assertSee('super-admin@gmail.com');
+
+        $this->assertAuthenticated();
+
+        $page->navigate($route)
+            ->assertSee($company->public_name)
+            ->assertSee($task->title)
+            ->click('@edit-task-' . $task->id)
+            ->assertSee('Название')
+            ->clear('description')
+            ->fill('description', generateTextWithChars(15003))
+            ->click('@submit-update-task')
+            ->assertSee('Описание задачи не должно превышать 5000 символов');
+    });
+
+    it('doesnt allow to update a task when the deadline is in the past', function (): void {
+        $user = User::factory()->create([
+            'email' => 'super-admin@gmail.com',
+            'password' => 'password',
+        ]);
+        $user->assignRole(UserRole::SUPER_ADMIN);
+        $exhibition = Exhibition::factory()->create();
+        $company = Company::factory()->for($exhibition)->create();
+        $task = Task::factory()
+            ->for($company)
+            ->create(['title' => 'Zebra', 'deadline' => now()]);
+        $route = "/admin/exhibitions/{$exhibition->id}/companies/{$company->id}/tasks";
+
+        $page = visit('/login');
+
+        $page->assertSee('Вход в аккаунт')
+            ->fill('email', 'super-admin@gmail.com')
+            ->fill('password', 'password')
+            ->click('@login-button')
+            ->assertSee('super-admin@gmail.com');
+
+        $this->assertAuthenticated();
+
+        $page->navigate($route)
+            ->assertSee($company->public_name)
+            ->assertSee($task->title)
+            ->click('@edit-task-' . $task->id)
+            ->assertSee('Название')
+            ->clear('deadline')
+            ->fill('deadline', '2020-03-20T12:02')
+            ->click('@submit-update-task')
+            ->assertSee('Срок выполнения должен быть в будущем');
+    });
+
+    it('allows to update a task with valid data', function (): void {
+        $user = User::factory()->create([
+            'email' => 'super-admin@gmail.com',
+            'password' => 'password',
+        ]);
+        $user->assignRole(UserRole::SUPER_ADMIN);
+        $exhibition = Exhibition::factory()->create();
+        $company = Company::factory()->for($exhibition)->create();
+        $task = Task::factory()
+            ->for($company)
+            ->create(['title' => 'Zebra', 'deadline' => now()]);
+        $route = "/admin/exhibitions/{$exhibition->id}/companies/{$company->id}/tasks";
+
+        $page = visit('/login');
+
+        $page->assertSee('Вход в аккаунт')
+            ->fill('email', 'super-admin@gmail.com')
+            ->fill('password', 'password')
+            ->click('@login-button')
+            ->assertSee('super-admin@gmail.com');
+
+        $this->assertAuthenticated();
+
+        $newTitle = 'new title of the task';
+        $newDescription = 'new long description of the task';
+
+        $page->navigate($route)
+            ->assertSee($company->public_name)
+            ->assertSee($task->title)
+            ->click('@edit-task-' . $task->id)
+            ->assertSee('Название')
+            ->clear('title')
+            ->fill('title', $newTitle)
+            ->clear('description')
+            ->fill('description', $newDescription)
+            ->clear('deadline')
+            ->fill('deadline', now()->addYear()->format('Y') . '-03-20T12:02')
+            ->click('@submit-update-task');
+
+        $task = $task->fresh();
+        $this->assertEquals($task->title, $newTitle);
+        $this->assertEquals($task->description, $newDescription);
+    });
+
+    it('allows to delete a task', function (): void {
+        $user = User::factory()->create([
+            'email' => 'super-admin@gmail.com',
+            'password' => 'password',
+        ]);
+        $user->assignRole(UserRole::SUPER_ADMIN);
+        $exhibition = Exhibition::factory()->create();
+        $company = Company::factory()->for($exhibition)->create();
+        $task = Task::factory()
+            ->for($company)
+            ->create(['title' => 'Zebra', 'deadline' => now()]);
+        $route = "/admin/exhibitions/{$exhibition->id}/companies/{$company->id}/tasks";
+
+        $page = visit('/login');
+
+        $page->assertSee('Вход в аккаунт')
+            ->fill('email', 'super-admin@gmail.com')
+            ->fill('password', 'password')
+            ->click('@login-button')
+            ->assertSee('super-admin@gmail.com');
+
+        $this->assertAuthenticated();
+
+        $page->navigate($route)
+            ->assertSee($company->public_name)
+            ->assertSee($task->title)
+            ->click('@edit-task-' . $task->id)
+            ->assertSee('Название')
+            ->click('@delete-task')
+            ->click('@delete-btn')
+            ->assertPathEndsWith($route)
+            ->assertDontSee($task->title);
     });
 
     it('sorts the tasks by all the criteria', function (): void {
@@ -70,6 +440,7 @@ describe('Admin Task Test', function (): void {
 
         $this->assertAuthenticated();
 
+        // Test sorting by title
         $page->navigate($route);
         $page->assertSee($tasks[0]->title);
         $page->click('Задача');
