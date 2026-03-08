@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Enums\TaskStatus;
-use App\Enums\UserRole;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Task\TaskIndexRequest;
 use App\Http\Requests\Admin\Task\TaskStoreRequest;
@@ -11,7 +10,6 @@ use App\Http\Requests\Admin\Task\TaskUpdateRequest;
 use App\Models\Company;
 use App\Models\Exhibition;
 use App\Models\Task;
-use App\Models\User;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use Spatie\QueryBuilder\QueryBuilder;

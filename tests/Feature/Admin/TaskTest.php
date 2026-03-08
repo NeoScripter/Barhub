@@ -489,6 +489,8 @@ describe('Admin Task Test', function (): void {
         $date1 = now();
         $date2 = now()->addDay();
         $date3 = now()->addDays(2);
+        $date1 = now();
+        Carbon\Carbon::setLocale('ru');
 
         $tasks = Task::factory()
             ->for($company)
