@@ -1,6 +1,5 @@
 import AccentHeading from '@/components/ui/AccentHeading';
 import { useCurrentUrl } from '@/hooks/useCurrentUrl';
-import useMediaQuery from '@/hooks/useMediaQuery';
 import { renderNavItems } from '@/lib/data/navItems';
 import { cn } from '@/lib/utils';
 import { NodeProps } from '@/types/shared';

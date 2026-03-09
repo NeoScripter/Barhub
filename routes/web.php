@@ -13,6 +13,7 @@ use App\Http\Controllers\Admin\ServiceController as AdminServiceController;
 use App\Http\Controllers\Admin\StageController;
 use App\Http\Controllers\Admin\TagController;
 use App\Http\Controllers\Admin\TaskController as AdminTaskController;
+use App\Http\Controllers\Admin\PartnerController as AdminPartnerController;
 use App\Http\Controllers\Admin\ThemeController;
 use App\Http\Controllers\Admin\UpdatedExhibitionStatusController;
 use App\Http\Controllers\Exponent\DashboardController as ExponentDashboardController;
@@ -73,6 +74,8 @@ Route::prefix('/admin')
                 Route::get('/', (new AdminExhibitionController())->show(...))
                     ->name('show');
 
+                Route::resource('all-tasks', AdminPartnerController::class)
+                    ->only(['index', 'edit']);
                 Route::resource('companies/{company}/exponents', AdminExponentController::class)
                     ->only(['update', 'index', 'destroy']);
                 Route::resource('companies/{company}/tasks', AdminTaskController::class);

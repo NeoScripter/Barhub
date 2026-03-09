@@ -122,3 +122,17 @@ export function shortenDescription(desc: string, limit = 15) {
 export function range(start: number, end: number) {
     return Array.from({ length: end - start + 1 }, (_, i) => start + i);
 }
+
+export function getTaskStatus(status: string) {
+    switch (status) {
+        case 'Выполнена':
+            return 'success';
+        case 'На проверке':
+            return 'default';
+        case 'Просрочена':
+            return 'danger';
+        default:
+            return 'warning';
+    }
+}
+

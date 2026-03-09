@@ -16,7 +16,7 @@ final class PartnerController extends Controller
 {
     public function index(TaskIndexRequest $request, Exhibition $exhibition)
     {
-        $tasks = QueryBuilder::for(Task::select(['title', 'id', 'deadline', 'status'])->with('company.public_name'))
+        $tasks = QueryBuilder::for(Task::select(['title', 'id', 'deadline', 'status', 'company_id'])->with('company:public_name,id'))
             ->allowedSorts(['title', 'deadline', 'status'])
             ->paginate()
             ->through(fn ($task): array => [
