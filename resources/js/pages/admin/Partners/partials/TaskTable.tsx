@@ -2,7 +2,7 @@ import Table from '@/components/ui/Table';
 import TaskCard from '@/components/ui/TaskCard';
 import { formatDateAndTime, getTaskStatus } from '@/lib/utils';
 import { NodeProps } from '@/types/shared';
-import { edit } from '@/wayfinder/routes/admin/exhibitions/tasks';
+import { edit } from '@/wayfinder/routes/admin/exhibitions/all-tasks';
 import { App } from '@/wayfinder/types';
 import { Link } from '@inertiajs/react';
 import { VisuallyHidden } from '@radix-ui/react-visually-hidden';
@@ -26,6 +26,12 @@ const TaskTable: FC<
         >
             {tasks.map((task) => (
                 <Table.Row key={task.id}>
+                    <Table.Cell
+                        key="company"
+                        width={2}
+                    >
+                        {task?.company?.public_name}
+                    </Table.Cell>
                     <Table.Cell
                         key="title"
                         width={2}
@@ -53,20 +59,18 @@ const TaskTable: FC<
                         key="edit-btn"
                         width={0.5}
                     >
-                        TODO
-                        {/* <Link */}
-                        {/*     data-test={`edit-task-${task.id}`} */}
-                        {/*     href={edit({ */}
-                        {/*         task: task.id, */}
-                        {/*         exhibition: exhibition, */}
-                        {/*         company: company, */}
-                        {/*     })} */}
-                        {/* > */}
-                        {/*     <VisuallyHidden> */}
-                        {/*         Редактировать задачу */}
-                        {/*     </VisuallyHidden> */}
-                        {/*     <PencilLine /> */}
-                        {/* </Link> */}
+                        <Link
+                            data-test={`edit-task-${task.id}`}
+                            href={edit({
+                                all_task: task.id,
+                                exhibition: exhibition,
+                            })}
+                        >
+                            <VisuallyHidden>
+                                Редактировать задачу
+                            </VisuallyHidden>
+                            <PencilLine />
+                        </Link>
                     </Table.Cell>
                 </Table.Row>
             ))}

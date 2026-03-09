@@ -18,7 +18,7 @@ final class EventIndexRequest extends FormRequest
         return [
             'filter.stage.name' => ['sometimes', 'string', 'max:255'],
             'filter.themes.name' => ['sometimes', 'string', 'max:255'],
-            'filter.starts_at' => ['sometimes', 'date'],
+            'filter.starts_at' => ['sometimes'],
         ];
     }
 }

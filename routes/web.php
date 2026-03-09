@@ -75,7 +75,7 @@ Route::prefix('/admin')
                     ->name('show');
 
                 Route::resource('all-tasks', AdminPartnerController::class)
-                    ->only(['index', 'edit']);
+                    ->only(['index', 'edit', 'update']);
                 Route::resource('companies/{company}/exponents', AdminExponentController::class)
                     ->only(['update', 'index', 'destroy']);
                 Route::resource('companies/{company}/tasks', AdminTaskController::class);

@@ -27,6 +27,8 @@ final class TaskIndexRequest extends FormRequest
                     '-deadline',
                     'status',
                     '-status',
+                    'company.public_name',
+                    '-company.public_name',
                 ]),
             ],
             'page' => ['sometimes', 'integer', 'min:1'],

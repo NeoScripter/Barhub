@@ -9,17 +9,25 @@ use App\Http\Requests\Admin\Partner\PartnerUpdateRequest;
 use App\Http\Requests\Admin\Task\TaskIndexRequest;
 use App\Models\Exhibition;
 use App\Models\Task;
+use App\Sorts\RelationSort;
 use Inertia\Inertia;
+use Spatie\QueryBuilder\AllowedSort;
 use Spatie\QueryBuilder\QueryBuilder;
 
 final class PartnerController extends Controller
 {
     public function index(TaskIndexRequest $request, Exhibition $exhibition)
     {
-        $tasks = QueryBuilder::for(Task::select(['title', 'id', 'deadline', 'status', 'company_id'])->with('company:public_name,id'))
-            ->allowedSorts(['title', 'deadline', 'status'])
+        $tasks = QueryBuilder::for(Task::select(['title', 'id', 'deadline', 'status', 'company_id']))
+            ->with('company:public_name,id')
+            ->allowedSorts([
+                'title',
+                'deadline',
+                'status',
+                AllowedSort::custom('company.public_name', new RelationSort('companies', 'public_name', 'company_id')),
+            ])
             ->paginate()
-            ->through(fn ($task): array => [
+            ->through(fn($task): array => [
                 ...$task->toArray(),
                 'status' => $task->status->label(),
             ])
@@ -41,7 +49,5 @@ final class PartnerController extends Controller
         ]);
     }
 
-    public function update(PartnerUpdateRequest $request, Exhibition $exhibition)
-    {
-    }
+    public function update(PartnerUpdateRequest $request, Exhibition $exhibition) {}
 }
