@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Admin;
 
+use App\Enums\TaskStatus;
 use App\Enums\UserRole;
 use App\Http\Controllers\Controller;
 use App\Models\Exhibition;
@@ -34,6 +35,7 @@ final class DashboardController extends Controller
 
             if (Gate::check('viewAny', $expo)) {
                 $tasks = Task::select(['status', DB::raw('count(*) as count')])
+                    ->where('status', '!=', TaskStatus::COMPLETED)
                     ->join('companies', 'exhibition_id', '=', 'tasks.company_id')
                     ->where('companies.exhibition_id', $expo->id)
                     ->groupBy('status')
