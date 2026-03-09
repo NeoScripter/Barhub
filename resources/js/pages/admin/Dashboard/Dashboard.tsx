@@ -2,6 +2,8 @@ import CardLayout from '@/components/layout/CardLayout';
 import AccentHeading from '@/components/ui/AccentHeading';
 import Filler from '@/components/ui/Filler';
 import { cn } from '@/lib/utils';
+import DashboardController from '@/wayfinder/App/Http/Controllers/Admin/DashboardController';
+import { router } from '@inertiajs/react';
 import { useState } from 'react';
 import Actions from './partials/Actions';
 import ExpoSelector from './partials/ExpoSelector';
@@ -10,6 +12,15 @@ import Tasks from './partials/Tasks';
 
 const Dashboard = () => {
     const [selectedId, setSelectedId] = useState<string | null>(null);
+
+    const setter = (val: string) => {
+        router.get(
+            DashboardController.url(),
+            { selected: val },
+            { preserveState: true, preserveScroll: true },
+        );
+        setSelectedId(val);
+    };
 
     return (
         <>
@@ -31,7 +42,7 @@ const Dashboard = () => {
 
                             <CardLayout className="padding w-full sm:gap-6 lg:gap-8">
                                 <ExpoSelector
-                                    setter={(val) => setSelectedId(val)}
+                                    setter={setter}
                                     expoId={selectedId}
                                 />
                             </CardLayout>

@@ -19,23 +19,25 @@ const Actions: FC<NodeProps<{ expoId: string | null }>> = ({
 }) => {
     const disabled = !expoId || isNaN(Number(expoId));
     return disabled ? (
-        <TooltipProvider delayDuration={0}>
-            <Tooltip>
-                <TooltipTrigger>
-                    <ActionsContent
-                        expoId={expoId}
-                        className={className}
-                    />
-                </TooltipTrigger>
-                <TooltipContent
-                    side="left"
-                    align="start"
-                    className="p-4 text-xs text-foreground"
-                >
-                    <p className='max-w-50'>Выберите выставку для перехода на данную страницу</p>
-                </TooltipContent>
-            </Tooltip>
-        </TooltipProvider>
+        <ActionsContent
+            expoId={expoId}
+            className={className}
+        >
+            <TooltipProvider delayDuration={0}>
+                <Tooltip>
+                    <TooltipTrigger className="absolute inset-0" />
+                    <TooltipContent
+                        side="left"
+                        align="start"
+                        className="p-4 text-xs text-foreground"
+                    >
+                        <p className="max-w-50">
+                            Выберите выставку для перехода на данную страницу
+                        </p>
+                    </TooltipContent>
+                </Tooltip>
+            </TooltipProvider>
+        </ActionsContent>
     ) : (
         <ActionsContent expoId={expoId} />
     );
@@ -46,12 +48,13 @@ export default Actions;
 const ActionsContent: FC<NodeProps<{ expoId: string | null }>> = ({
     className,
     expoId,
+    children,
 }) => {
     const disabled = !expoId || isNaN(Number(expoId));
     return (
         <ul
             className={cn(
-                'flex flex-wrap items-start justify-center gap-3 lg:gap-6',
+                'relative flex flex-wrap items-start justify-center gap-3 lg:gap-6',
                 disabled && 'opacity-50',
                 className,
             )}
@@ -70,6 +73,7 @@ const ActionsContent: FC<NodeProps<{ expoId: string | null }>> = ({
                     </ActionCard.Btn>
                 </ActionCard>
             ))}
+            {children}
         </ul>
     );
 };

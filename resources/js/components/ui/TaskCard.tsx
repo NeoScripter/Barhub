@@ -17,7 +17,7 @@ type BadgeProps = {
 };
 
 type DigitProps = {
-    value: number;
+    value: number | string;
     className?: string;
 };
 

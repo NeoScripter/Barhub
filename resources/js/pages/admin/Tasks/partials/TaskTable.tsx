@@ -45,7 +45,7 @@ const TaskTable: FC<
                     >
                         <TaskCard.Badge
                             className="ml-0"
-                            variant={getStatus(task.status)}
+                            variant={getTaskStatus(task.status)}
                         >
                             {task.status}
                         </TaskCard.Badge>
@@ -76,7 +76,7 @@ const TaskTable: FC<
 
 export default TaskTable;
 
-function getStatus(status: string) {
+export function getTaskStatus(status: string) {
     switch (status) {
         case 'Выполнена':
             return 'success';
