@@ -1,3 +1,4 @@
+import DashboardController from '@/wayfinder/App/Http/Controllers/Admin/DashboardController';
 import AdminDash from '@/wayfinder/App/Http/Controllers/Admin/DashboardController';
 import AdminExpos from '@/wayfinder/App/Http/Controllers/Admin/ExhibitionController';
 import ExponentDash from '@/wayfinder/App/Http/Controllers/Exponent/DashboardController';
@@ -16,6 +17,8 @@ import {
     Star,
     UserCheck,
     Users,
+    UserPen,
+    UserSearch
 } from 'lucide-react';
 
 type NavLink = {
@@ -167,6 +170,22 @@ export const userNavItems: NavItemType[] = [
         label: 'Выставки',
         url: UserExpos.url(),
         icon: Martini,
+        isDynamic: false,
+    },
+    {
+        id: 'admin-panel',
+        type: 'link',
+        label: 'Админка руководителя',
+        url: DashboardController.url(),
+        icon: UserPen,
+        isDynamic: false,
+    },
+    {
+        id: 'admin-panel',
+        type: 'link',
+        label: 'Личный кабинет экспонента',
+        url: ExponentDash.url(),
+        icon: UserSearch,
         isDynamic: false,
     },
     {

@@ -4,15 +4,17 @@ import { SelectMenu } from '@/components/ui/SelectMenu';
 import UpdatedExhibitionStatusController from '@/wayfinder/App/Http/Controllers/Admin/UpdatedExhibitionStatusController';
 import { App } from '@/wayfinder/types';
 import { router, usePage } from '@inertiajs/react';
-import { useState } from 'react';
+import { FC } from 'react';
 import { toast } from 'sonner';
 import { formatExpoValue } from './utils';
 
-const ExpoSelector = () => {
+const ExpoSelector: FC<{
+    expoId: string | null;
+    setter: (val: string) => void;
+}> = ({ expoId, setter }) => {
     const { expos } = usePage<{ expos: App.Models.Exhibition[] }>().props;
-    const [selectedId, setSelectedId] = useState<string | null>(null);
 
-    const selectedExpo = expos.find((expo) => expo.id === Number(selectedId));
+    const selectedExpo = expos.find((expo) => expo.id === Number(expoId));
 
     const handleClick = () => {
         if (!selectedExpo) return;
@@ -26,7 +28,7 @@ const ExpoSelector = () => {
                         ? 'деактивирована'
                         : 'активирована';
                     toast(`Выставка успешно ${action}`);
-                    router.flush('exhibitions')
+                    router.flush('exhibitions');
                 },
                 preserveScroll: true,
                 preserveState: true,
@@ -51,7 +53,7 @@ const ExpoSelector = () => {
                         getLabel={(expo) => formatExpoValue(expo)}
                         placeholder="Выбрать выставку"
                         className="max-w-90"
-                        onValueChange={(value) => setSelectedId(value)}
+                        onValueChange={(value) => setter(value)}
                         variant="default"
                     />
                     <Button
@@ -59,7 +61,7 @@ const ExpoSelector = () => {
                         variant="default"
                         size="sm"
                         className="mx-auto"
-                        disabled={selectedId == null}
+                        disabled={expoId == null}
                     >
                         {selectedExpo?.is_active
                             ? 'Деактивировать'

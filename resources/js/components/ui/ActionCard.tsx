@@ -2,6 +2,8 @@ import { cn } from '@/lib/utils';
 import { NodeProps } from '@/types/shared';
 import { LucideIcon, Plus } from 'lucide-react';
 import CardLayout from '../layout/CardLayout';
+import { Button } from './Button';
+import { Slot } from '@radix-ui/react-slot';
 
 function ActionCard({ className, children }: NodeProps) {
     return (
@@ -25,20 +27,20 @@ function Icon({ icon, className }: IconProps) {
     return <Icon className={cn('size-9 sm:size-10 2xl:size-12', className)} />;
 }
 
-type BtnProps = NodeProps<{ onClick: () => void }>;
+type BtnProps = NodeProps;
 
-function Btn({ children, className, onClick }: BtnProps) {
+function Btn({ children, className, ...props }: BtnProps) {
     return (
-        <button
-            onClick={onClick}
+        <Slot
+            data-slot="button"
             className={cn(
-                'inline-flex w-full items-center justify-center gap-1.5 rounded-full bg-primary py-2 pr-6 pl-4 text-xs text-white hover:opacity-75 sm:text-sm 2xl:py-2.5 [&>svg]:size-3.5 sm:[&>svg]:size-4.5',
+                'inline-flex w-full text-center items-center justify-center gap-1.5 rounded-full bg-primary py-2 pr-6 pl-4 text-xs text-white hover:opacity-75 sm:text-sm 2xl:py-2.5 [&>svg]:size-3.5 sm:[&>svg]:size-4.5',
                 className,
             )}
+            {...props}
         >
-            <Plus />
             {children}
-        </button>
+        </Slot>
     );
 }
 

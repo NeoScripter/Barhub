@@ -2,12 +2,15 @@ import CardLayout from '@/components/layout/CardLayout';
 import AccentHeading from '@/components/ui/AccentHeading';
 import Filler from '@/components/ui/Filler';
 import { cn } from '@/lib/utils';
+import { useState } from 'react';
 import Actions from './partials/Actions';
 import ExpoSelector from './partials/ExpoSelector';
 import Footer from './partials/Footer';
 import Tasks from './partials/Tasks';
 
 const Dashboard = () => {
+    const [selectedId, setSelectedId] = useState<string | null>(null);
+
     return (
         <>
             <div className="spacing flex flex-col">
@@ -27,7 +30,10 @@ const Dashboard = () => {
                             </AccentHeading>
 
                             <CardLayout className="padding w-full sm:gap-6 lg:gap-8">
-                                <ExpoSelector />
+                                <ExpoSelector
+                                    setter={(val) => setSelectedId(val)}
+                                    expoId={selectedId}
+                                />
                             </CardLayout>
                         </article>
                         <div>
@@ -50,7 +56,7 @@ const Dashboard = () => {
                             <h2>Быстрые действия</h2>
                         </AccentHeading>
 
-                        <Actions />
+                        <Actions expoId={selectedId} />
                     </article>
                 </div>
 
