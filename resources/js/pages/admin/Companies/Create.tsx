@@ -11,6 +11,7 @@ import { useForm } from '@inertiajs/react';
 import { FC } from 'react';
 import { toast } from 'sonner';
 import { TagSelect } from './partials/TagSelect';
+import AccentHeading from '@/components/ui/AccentHeading';
 
 const Create: FC<Inertia.Pages.Admin.Companies.Create> = ({
     exhibition,
@@ -42,6 +43,14 @@ const Create: FC<Inertia.Pages.Admin.Companies.Create> = ({
 
     return (
         <div className="mx-auto w-full max-w-250">
+            <div className="mb-8 text-center md:mb-12">
+                <AccentHeading
+                    asChild
+                    className="mb-1 text-lg text-secondary"
+                >
+                    <h2>Создать компанию</h2>
+                </AccentHeading>
+            </div>
             <form
                 onSubmit={handleSubmit}
                 className="flex flex-col gap-6"

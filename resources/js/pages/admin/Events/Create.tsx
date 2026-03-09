@@ -1,9 +1,9 @@
+import FormButtons from '@/components/form/FormButtons';
 import InputError from '@/components/form/InputError';
-import { Button } from '@/components/ui/Button';
+import AccentHeading from '@/components/ui/AccentHeading';
 import { Input } from '@/components/ui/Input';
 import { Label } from '@/components/ui/Label';
 import { SelectMenu } from '@/components/ui/SelectMenu';
-import { Spinner } from '@/components/ui/Spinner';
 import { Textarea } from '@/components/ui/Textarea';
 import { index, store } from '@/wayfinder/routes/admin/exhibitions/events';
 import { Inertia } from '@/wayfinder/types';
@@ -11,10 +11,9 @@ import { useForm } from '@inertiajs/react';
 import { FC } from 'react';
 import { toast } from 'sonner';
 import { PersonSelect, PersonWithRoles } from './partials/PersonSelect';
-import { ThemeSelect } from './partials/ThemeSelect';
-import ThemeDialog from './partials/ThemeDialog';
 import StageDialog from './partials/StageDialog';
-import FormButtons from '@/components/form/FormButtons';
+import ThemeDialog from './partials/ThemeDialog';
+import { ThemeSelect } from './partials/ThemeSelect';
 
 const Create: FC<Inertia.Pages.Admin.Events.Create> = ({
     exhibition,
@@ -42,6 +41,14 @@ const Create: FC<Inertia.Pages.Admin.Events.Create> = ({
 
     return (
         <div className="mx-auto w-full max-w-250">
+            <div className="text-center mb-8 sm:mb-12">
+                <AccentHeading
+                    asChild
+                    className="mb-1 text-lg text-secondary"
+                >
+                    <h2>Создать мероприятие</h2>
+                </AccentHeading>
+            </div>
             <div className="mb-8 flex flex-col gap-8">
                 <ThemeDialog />
                 <StageDialog />

@@ -1,14 +1,19 @@
+import FormButtons from '@/components/form/FormButtons';
 import InputError from '@/components/form/InputError';
+import AccentHeading from '@/components/ui/AccentHeading';
 import { Button } from '@/components/ui/Button';
 import CopyLinkBtn from '@/components/ui/CopyLinkBtn';
 import { DeleteAlertDialog } from '@/components/ui/DeleteAlertDialog';
 import { Input } from '@/components/ui/Input';
 import { Label } from '@/components/ui/Label';
 import { SelectMenu } from '@/components/ui/SelectMenu';
-import { Spinner } from '@/components/ui/Spinner';
 import { Textarea } from '@/components/ui/Textarea';
 import { convertDateToInputString } from '@/lib/utils';
-import { destroy, index, update } from '@/wayfinder/routes/admin/exhibitions/events';
+import {
+    destroy,
+    index,
+    update,
+} from '@/wayfinder/routes/admin/exhibitions/events';
 import { Inertia } from '@/wayfinder/types';
 import { router, useForm } from '@inertiajs/react';
 import { Trash2 } from 'lucide-react';
@@ -18,7 +23,6 @@ import { PersonSelect, PersonWithRoles } from './partials/PersonSelect';
 import StageDialog from './partials/StageDialog';
 import ThemeDialog from './partials/ThemeDialog';
 import { ThemeSelect } from './partials/ThemeSelect';
-import FormButtons from '@/components/form/FormButtons';
 
 const Edit: FC<Inertia.Pages.Admin.Events.Edit> = ({
     event,
@@ -63,6 +67,15 @@ const Edit: FC<Inertia.Pages.Admin.Events.Edit> = ({
 
     return (
         <div className="mx-auto w-full max-w-250">
+            <div className="mb-8 md:mb-12 text-center">
+                <AccentHeading
+                    asChild
+                    className="mb-1 text-lg text-secondary"
+                >
+                    <h2>Редактировать мероприятие</h2>
+                </AccentHeading>
+            </div>
+
             <div className="mb-8 flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
                 <CopyLinkBtn
                     url={`${window.location.origin}/exhibitions/${exhibition.id}/events/${event.id}`}

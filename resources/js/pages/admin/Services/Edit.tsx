@@ -1,5 +1,6 @@
 import FormButtons from '@/components/form/FormButtons';
 import InputError from '@/components/form/InputError';
+import AccentHeading from '@/components/ui/AccentHeading';
 import { Button } from '@/components/ui/Button';
 import { DeleteAlertDialog } from '@/components/ui/DeleteAlertDialog';
 import { Input } from '@/components/ui/Input';
@@ -78,6 +79,14 @@ const Edit: FC<Inertia.Pages.Admin.Services.Edit> = ({
                 />
             </div>
 
+            <div className="mb-8 text-center md:mb-12">
+                <AccentHeading
+                    asChild
+                    className="mb-1 text-lg text-secondary"
+                >
+                    <h2>Редактировать услугу</h2>
+                </AccentHeading>
+            </div>
             <form
                 onSubmit={handleSubmit}
                 className="flex flex-col gap-6"

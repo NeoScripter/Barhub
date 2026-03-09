@@ -1,14 +1,18 @@
 import FormButtons from '@/components/form/FormButtons';
 import InputError from '@/components/form/InputError';
+import AccentHeading from '@/components/ui/AccentHeading';
 import { Button } from '@/components/ui/Button';
 import CopyLinkBtn from '@/components/ui/CopyLinkBtn';
 import { DeleteAlertDialog } from '@/components/ui/DeleteAlertDialog';
 import ImgInput from '@/components/ui/ImgInput';
 import { Input } from '@/components/ui/Input';
 import { Label } from '@/components/ui/Label';
-import { Spinner } from '@/components/ui/Spinner';
 import { Textarea } from '@/components/ui/Textarea';
-import { destroy, index, update } from '@/wayfinder/routes/admin/exhibitions/people';
+import {
+    destroy,
+    index,
+    update,
+} from '@/wayfinder/routes/admin/exhibitions/people';
 import { Inertia } from '@/wayfinder/types';
 import { router, useForm } from '@inertiajs/react';
 import { Trash2 } from 'lucide-react';
@@ -52,6 +56,15 @@ const Edit: FC<Inertia.Pages.Admin.People.Edit> = ({ person, exhibition }) => {
 
     return (
         <div className="mx-auto w-full max-w-250">
+            <div className="mb-8 text-center md:mb-12">
+                <AccentHeading
+                    asChild
+                    className="mb-1 text-lg text-secondary"
+                >
+                    <h2>Редактировать участника</h2>
+                </AccentHeading>
+            </div>
+
             <div className="mb-8 flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
                 <CopyLinkBtn
                     url={`${window.location.origin}/exhibitions/${exhibition.id}/people/${person.id}`}

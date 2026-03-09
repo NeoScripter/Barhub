@@ -1,6 +1,5 @@
 import FormButtons from '@/components/form/FormButtons';
 import InputError from '@/components/form/InputError';
-import AccentHeading from '@/components/ui/AccentHeading';
 import FileInput from '@/components/ui/FileInput';
 import { Input } from '@/components/ui/Input';
 import { Label } from '@/components/ui/Label';
@@ -36,14 +35,6 @@ const Create: FC<Inertia.Pages.Admin.Tasks.Create> = ({
 
     return (
         <div className="mx-auto w-full max-w-250">
-            <div className="mb-8 text-center md:mb-12">
-                <AccentHeading
-                    asChild
-                    className="mb-1 text-lg text-secondary"
-                >
-                    <h2>Создать задачу</h2>
-                </AccentHeading>
-            </div>
             <form
                 onSubmit={handleSubmit}
                 className="flex flex-col gap-6"

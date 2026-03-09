@@ -5,12 +5,11 @@ import {
     TooltipProvider,
     TooltipTrigger,
 } from '@/components/ui/Tooltip';
-import { cn } from '@/lib/utils';
+import { cn, getTaskStatus } from '@/lib/utils';
 import { NodeProps } from '@/types/shared';
 import { App } from '@/wayfinder/types';
 import { usePage } from '@inertiajs/react';
 import { FC } from 'react';
-import { getTaskStatus } from '../../Tasks/partials/TaskTable';
 
 const PLACEHOLDER_STATUSES = ['просрочено', 'на проверке', 'требуют доработки'];
 

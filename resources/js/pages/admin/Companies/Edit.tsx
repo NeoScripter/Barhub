@@ -16,6 +16,7 @@ import { FC, useState } from 'react';
 import { toast } from 'sonner';
 import TagDialog from './partials/TagDialog';
 import { TagSelect } from './partials/TagSelect';
+import AccentHeading from '@/components/ui/AccentHeading';
 
 const Edit: FC<Inertia.Pages.Admin.Companies.Edit> = ({
     company,
@@ -90,6 +91,14 @@ const Edit: FC<Inertia.Pages.Admin.Companies.Edit> = ({
                         isLoading={isDeleting}
                     />
                 </div>
+            <div className="mb-8 text-center md:mb-12">
+                <AccentHeading
+                    asChild
+                    className="mb-1 text-lg text-secondary"
+                >
+                    <h2>Редактировать компанию</h2>
+                </AccentHeading>
+            </div>
 
                 <div className="mb-8 flex flex-col gap-8">
                     <TagDialog />

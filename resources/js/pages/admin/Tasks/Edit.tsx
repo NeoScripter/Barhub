@@ -1,13 +1,17 @@
 import FormButtons from '@/components/form/FormButtons';
 import InputError from '@/components/form/InputError';
+import AccentHeading from '@/components/ui/AccentHeading';
 import { Button } from '@/components/ui/Button';
 import { DeleteAlertDialog } from '@/components/ui/DeleteAlertDialog';
 import { Input } from '@/components/ui/Input';
 import { Label } from '@/components/ui/Label';
-import { Spinner } from '@/components/ui/Spinner';
 import { Textarea } from '@/components/ui/Textarea';
 import { convertDateToInputString } from '@/lib/utils';
-import { destroy, index, update } from '@/wayfinder/routes/admin/exhibitions/tasks';
+import {
+    destroy,
+    index,
+    update,
+} from '@/wayfinder/routes/admin/exhibitions/tasks';
 import { Inertia } from '@/wayfinder/types';
 import { router, useForm } from '@inertiajs/react';
 import { Trash2 } from 'lucide-react';
@@ -74,7 +78,14 @@ const Edit: FC<Inertia.Pages.Admin.Tasks.Edit> = ({
                     isLoading={isDeleting}
                 />
             </div>
-
+            <div className="mb-8 text-center md:mb-12">
+                <AccentHeading
+                    asChild
+                    className="mb-1 text-lg text-secondary"
+                >
+                    <h2>Редактировать задачу</h2>
+                </AccentHeading>
+            </div>
             <form
                 onSubmit={handleSubmit}
                 className="flex flex-col gap-6"

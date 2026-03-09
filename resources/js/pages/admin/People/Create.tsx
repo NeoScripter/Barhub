@@ -1,10 +1,9 @@
 import FormButtons from '@/components/form/FormButtons';
 import InputError from '@/components/form/InputError';
-import { Button } from '@/components/ui/Button';
+import AccentHeading from '@/components/ui/AccentHeading';
 import ImgInput from '@/components/ui/ImgInput';
 import { Input } from '@/components/ui/Input';
 import { Label } from '@/components/ui/Label';
-import { Spinner } from '@/components/ui/Spinner';
 import { Textarea } from '@/components/ui/Textarea';
 import { index, store } from '@/wayfinder/routes/admin/exhibitions/people';
 import { Inertia } from '@/wayfinder/types';
@@ -33,6 +32,15 @@ const Create: FC<Inertia.Pages.Admin.People.Create> = ({ exhibition }) => {
 
     return (
         <div className="mx-auto w-full max-w-250">
+            <div className="mb-8 text-center md:mb-12">
+                <AccentHeading
+                    asChild
+                    className="mb-1 text-lg text-secondary"
+                >
+                    <h2>Создать участника</h2>
+                </AccentHeading>
+            </div>
+
             <form
                 onSubmit={handleSubmit}
                 className="flex flex-col gap-6"

@@ -13,9 +13,8 @@ const TaskTable: FC<
     NodeProps<{
         tasks: App.Models.Task[] | undefined;
         exhibition: App.Models.Exhibition;
-        company: App.Models.Company;
     }>
-> = ({ className, tasks, exhibition, company }) => {
+> = ({ className, tasks, exhibition }) => {
     if (!tasks) {
         return null;
     }
@@ -54,19 +53,20 @@ const TaskTable: FC<
                         key="edit-btn"
                         width={0.5}
                     >
-                        <Link
-                            data-test={`edit-task-${task.id}`}
-                            href={edit({
-                                task: task.id,
-                                exhibition: exhibition,
-                                company: company,
-                            })}
-                        >
-                            <VisuallyHidden>
-                                Редактировать задачу
-                            </VisuallyHidden>
-                            <PencilLine />
-                        </Link>
+                        TODO
+                        {/* <Link */}
+                        {/*     data-test={`edit-task-${task.id}`} */}
+                        {/*     href={edit({ */}
+                        {/*         task: task.id, */}
+                        {/*         exhibition: exhibition, */}
+                        {/*         company: company, */}
+                        {/*     })} */}
+                        {/* > */}
+                        {/*     <VisuallyHidden> */}
+                        {/*         Редактировать задачу */}
+                        {/*     </VisuallyHidden> */}
+                        {/*     <PencilLine /> */}
+                        {/* </Link> */}
                     </Table.Cell>
                 </Table.Row>
             ))}
