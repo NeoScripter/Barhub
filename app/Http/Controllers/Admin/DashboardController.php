@@ -34,16 +34,7 @@ final class DashboardController extends Controller
             $expo = Exhibition::findOrFail($request->integer('selected'));
 
             if (Gate::check('viewAny', $expo)) {
-                $tasks = Task::select(['status', DB::raw('count(*) as count')])
-                    ->where('status', '!=', TaskStatus::COMPLETED)
-                    ->join('companies', 'exhibition_id', '=', 'tasks.company_id')
-                    ->where('companies.exhibition_id', $expo->id)
-                    ->groupBy('status')
-                    ->get()
-                    ->map(fn($task): array => [
-                        'count' => $task->count,
-                        'status' => $task->status->label(),
-                    ]);
+                $tasks = Task::forExhibition($expo->id);
             }
         }
 

@@ -33,9 +33,12 @@ final class PartnerController extends Controller
             ])
             ->appends($request->query());
 
+        $summary = Task::forExhibition($exhibition->id);
+
         return Inertia::render('admin/Partners/Index', [
             'exhibition' => $exhibition,
             'tasks' => $tasks,
+            'summary' => $summary,
         ]);
     }
 
