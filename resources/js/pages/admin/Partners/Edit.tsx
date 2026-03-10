@@ -28,7 +28,9 @@ const Edit: FC<Inertia.Pages.Admin.Tasks.Edit> = ({ exhibition, task }) => {
         });
     };
 
-    const isToBeVefified = task.status === '3';
+    console.log(task.status)
+
+    const isToBeVefified = task.status === 3;
 
     return (
         <div className="mx-auto w-full max-w-250">

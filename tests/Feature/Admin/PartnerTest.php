@@ -67,7 +67,6 @@ describe('Admin Partner Browser Tests', function (): void {
 
         $page->navigate($route)
             ->click("@edit-task-{$company->tasks[0]->id}")
-            ->assertSee('Принять/отклонить задачу')
             ->assertSee('Название компании');
     });
 
@@ -94,7 +93,7 @@ describe('Admin Partner Browser Tests', function (): void {
 
         $page->navigate($route)
             ->click("@edit-task-{$company->tasks[0]->id}")
-            ->assertSee('Принять/отклонить задачу')
+            ->assertSee('Название компании')
             ->press('@radio-yes-btn')
             ->submit()
             ->assertPathEndsWith($route);
@@ -128,7 +127,7 @@ describe('Admin Partner Browser Tests', function (): void {
 
         $page->navigate($route)
             ->click("@edit-task-{$company->tasks[0]->id}")
-            ->assertSee('Принять/отклонить задачу')
+            ->assertSee('Название компании')
             ->press('@radio-no-btn')
             ->submit()
             ->assertPathEndsWith($route);

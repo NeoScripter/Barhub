@@ -17,8 +17,21 @@ final readonly class RelationSort implements Sort
 
     public function __invoke(Builder $query, bool $descending, string $property): void
     {
-        $query->leftJoin($this->table, "{$this->table}.id", '=', $query->getModel()->getTable().".{$this->foreignKey}")
+        $alreadyJoined = collect($query->getQuery()->joins ?? [])
+            ->pluck('table')
+            ->contains($this->table);
+
+        if (!$alreadyJoined) {
+            $query->leftJoin(
+                $this->table,
+                "{$this->table}.id",
+                '=',
+                $query->getModel()->getTable() . ".{$this->foreignKey}"
+            );
+        }
+
+        $query
             ->orderBy("{$this->table}.{$this->column}", $descending ? 'desc' : 'asc')
-            ->select($query->getModel()->getTable().'.*');
+            ->select($query->getModel()->getTable() . '.*');
     }
 }

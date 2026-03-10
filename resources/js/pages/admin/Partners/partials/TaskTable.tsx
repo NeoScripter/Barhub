@@ -6,7 +6,7 @@ import { edit } from '@/wayfinder/routes/admin/exhibitions/all-tasks';
 import { App } from '@/wayfinder/types';
 import { Link } from '@inertiajs/react';
 import { VisuallyHidden } from '@radix-ui/react-visually-hidden';
-import { PencilLine } from 'lucide-react';
+import { Eye, PencilLine } from 'lucide-react';
 import { FC } from 'react';
 
 const TaskTable: FC<
@@ -69,7 +69,12 @@ const TaskTable: FC<
                             <VisuallyHidden>
                                 Редактировать задачу
                             </VisuallyHidden>
-                            <PencilLine />
+                            {/* Status is to be verified */}
+                            {task.status === 'На проверке' ? (
+                                <PencilLine />
+                            ) : (
+                                <Eye />
+                            )}
                         </Link>
                     </Table.Cell>
                 </Table.Row>

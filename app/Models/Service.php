@@ -8,6 +8,7 @@ use Database\Factories\ServiceFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 final class Service extends Model
 {
@@ -17,5 +18,10 @@ final class Service extends Model
     public function company(): BelongsTo
     {
         return $this->belongsTo(Company::class);
+    }
+
+    public function requests(): HasMany
+    {
+        return $this->hasMany(ServiceRequest::class);
     }
 }

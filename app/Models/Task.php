@@ -29,11 +29,19 @@ final class Task extends Model
         return $this->belongsTo(Company::class);
     }
 
+    // public function scopeForExhibition(Builder $query, int $exhibitionId): Builder
+    // {
+    //     return $query->whereHas('company', function ($q) use ($exhibitionId) {
+    //         $q->where('exhibition_id', $exhibitionId);
+    //     });
+    // }
+
     public function scopeForExhibition(Builder $query, int $exhibitionId): Builder
     {
-        return $query->whereHas('company', function ($q) use ($exhibitionId) {
-            $q->where('exhibition_id', $exhibitionId);
-        });
+        return $query
+            ->join('companies', "tasks.company_id", '=', 'companies.id')
+            ->where('companies.exhibition_id', $exhibitionId)
+            ->select("tasks.*");
     }
 
     public function scopeForSummary(Builder $query, int $exhibitionId): Collection
