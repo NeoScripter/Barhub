@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('task_files', function (Blueprint $table): void {
             $table->id();
-            $table->foreignId('task_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('task_comment_id')->constrained()->cascadeOnDelete();
             $table->string('name');
             $table->string('url');
             $table->timestamps();

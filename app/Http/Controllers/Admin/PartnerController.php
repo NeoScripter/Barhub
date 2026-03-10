@@ -42,9 +42,10 @@ final class PartnerController extends Controller
         ]);
     }
 
-    public function edit(Exhibition $exhibition, Task $task)
+    public function edit(Exhibition $exhibition, Task $allTask)
     {
-        $task->load(['company.public_name']);
+        $task = $allTask;
+        $task->load(['company:public_name,id', 'comments.file' => fn($q) => $q->latest()]);
 
         return Inertia::render('admin/Partners/Edit', [
             'exhibition' => $exhibition,

@@ -12,7 +12,8 @@ use App\Http\Requests\Admin\Task\TaskUpdateRequest;
 use App\Models\Company;
 use App\Models\Exhibition;
 use App\Models\Task;
-use Illuminate\Support\Facades\Storage;
+use App\Models\TaskComment;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Spatie\QueryBuilder\QueryBuilder;
 
@@ -23,7 +24,7 @@ final class TaskController extends Controller
         $tasks = QueryBuilder::for($company->tasks()->select(['title', 'id', 'deadline', 'status']))
             ->allowedSorts(['title', 'deadline', 'status'])
             ->paginate()
-            ->through(fn ($task): array => [
+            ->through(fn($task): array => [
                 ...$task->toArray(),
                 'status' => $task->status->label(),
             ])
@@ -38,7 +39,12 @@ final class TaskController extends Controller
 
     public function edit(Exhibition $exhibition, Company $company, Task $task)
     {
-        $task->load(['comments', 'files']);
+        $user = Auth::user();
+        $task->load(['comments' => function ($q) use ($user) {
+            $q->where('user_id', $user->id)
+                ->latest()
+                ->limit(1);
+        }, 'comments.file']);
 
         return Inertia::render('admin/Tasks/Edit', [
             'exhibition' => $exhibition,
@@ -62,18 +68,19 @@ final class TaskController extends Controller
             'status' => TaskStatus::TO_BE_COMPLETED,
         ]);
 
-        if ($request->hasFile('file')) {
-            $path = $request->file('file')->store('task-files');
-            $task->files()->create([
-                'name' => $request->validated('file_name'),
-                'url' => $path,
-            ]);
-        }
 
         if ($request->filled('comment')) {
-            $task->comments()->create([
+            $comment = $task->comments()->create([
                 'content' => $request->validated('comment'),
             ]);
+
+            if ($request->hasFile('file')) {
+                $path = $request->file('file')->store('task-files');
+                $comment->file()->create([
+                    'name' => $request->validated('file_name'),
+                    'url' => $path,
+                ]);
+            }
         }
 
         return to_route('admin.exhibitions.tasks.index', [
@@ -86,18 +93,31 @@ final class TaskController extends Controller
     {
         $task->update($request->only(['title', 'description', 'deadline']));
 
-        // if ($request->hasFile('file')) {
-        //     $path = $request->file('file')->store('task-files');
-        //     $task->files()->create([
-        //         'name' => $request->validated('file_name'),
-        //         'url'  => $path,
-        //     ]);
-        // }
-
         if ($request->filled('comment')) {
-            $task->comments()->oldest()->update([
-                'content' => $request->validated('comment'),
-            ]);
+            $user = Auth::user();
+            $comment = $task->comments()->where('user_id', $user->id)
+                ->latest()
+                ->first();
+
+            if ($comment) {
+                $comment->update([
+                    'content' => $request->validated('comment'),
+                ]);
+            } else {
+                $comment = $task->comments()->create([
+                    'content' => $request->validated('comment'),
+                    'user_id' => $user->id
+                ]);
+            }
+
+            if ($request->hasFile('file')) {
+                $path = $request->file('file')->store('task-files');
+                $comment->file?->delete();
+                $comment->file()->create([
+                    'name' => $request->validated('file_name'),
+                    'url'  => $path,
+                ]);
+            }
         }
 
         return to_route('admin.exhibitions.tasks.index', [
@@ -108,10 +128,6 @@ final class TaskController extends Controller
 
     public function destroy(Exhibition $exhibition, Company $company, Task $task)
     {
-        foreach ($task->files as $file) {
-            Storage::delete($file->url);
-        }
-
         $task->delete();
 
         return to_route('admin.exhibitions.tasks.index', [

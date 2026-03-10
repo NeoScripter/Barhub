@@ -27,11 +27,18 @@ final class CompanySeeder extends Seeder
         }
 
         $exhibitions->each(
-            fn (Exhibition $exhibition) => Company::factory()
-                ->has(Task::factory()
-                    ->count(8)
-                    ->has(TaskFile::factory()->count(3), 'files')
-                    ->has(TaskComment::factory()->count(random_int(1, 3)), 'comments'))
+            fn(Exhibition $exhibition) => Company::factory()
+                ->has(
+                    Task::factory()
+                        ->count(8)
+                        ->has(TaskComment::factory()
+                            ->when(
+                                $exhibition->users()->first(),
+                                fn($factory, $user) => $factory->for($user)
+                            )
+                            ->has(TaskFile::factory(), 'file')
+                            ->count(random_int(1, 3)), 'comments')
+                )
                 ->has(Service::factory()->count(5))
                 ->count(10)
                 ->for($exhibition)

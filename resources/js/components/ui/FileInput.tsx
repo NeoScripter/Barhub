@@ -5,6 +5,7 @@ import UploadFileBtn from './UploadFileBtn';
 
 type FileInputProps = {
     src?: string;
+    id?: string;
     name?: string;
     filename?: string;
     isEdited: boolean;
@@ -15,6 +16,7 @@ type FileInputProps = {
 
 export default function FileInput({
     src,
+    id,
     filename,
     name,
     isEdited,
@@ -24,7 +26,7 @@ export default function FileInput({
 }: FileInputProps) {
     const [currentFilename, setCurrentFilename] = useState(filename);
     const [isUpdated, setIsUpdated] = useState(false);
-    const id = useId();
+    const generatedId = useId();
 
     useEffect(() => {
         const resetFile = () => {
@@ -60,7 +62,7 @@ export default function FileInput({
 
                 <div className="shrink-0">
                     <UploadFileBtn
-                        id={id}
+                        id={id || generatedId}
                         disabled={!isEdited}
                         label="Загрузить файл"
                     />

@@ -3,6 +3,7 @@ import InputError from '@/components/form/InputError';
 import AccentHeading from '@/components/ui/AccentHeading';
 import { Button } from '@/components/ui/Button';
 import { DeleteAlertDialog } from '@/components/ui/DeleteAlertDialog';
+import FileInput from '@/components/ui/FileInput';
 import { Input } from '@/components/ui/Input';
 import { Label } from '@/components/ui/Label';
 import { Textarea } from '@/components/ui/Textarea';
@@ -23,13 +24,15 @@ const Edit: FC<Inertia.Pages.Admin.Tasks.Edit> = ({
     company,
     task,
 }) => {
+    const comment = task.comments?.[0] ?? null;
+
     const { data, setData, put, processing, errors } = useForm({
         title: task.title,
         description: task.description,
         deadline: convertDateToInputString(task.deadline),
-        file: null as File | null,
-        file_name: '',
-        comment: '',
+        file: null,
+        file_name: comment?.file?.name ?? '',
+        comment: comment?.content ?? '',
     });
 
     const [isDeleting, setIsDeleting] = useState(false);
@@ -55,6 +58,8 @@ const Edit: FC<Inertia.Pages.Admin.Tasks.Edit> = ({
             },
         });
     };
+
+    const hasComment = data.comment != null && data.comment !== '';
 
     return (
         <div className="mx-auto w-full max-w-250">
@@ -131,36 +136,6 @@ const Edit: FC<Inertia.Pages.Admin.Tasks.Edit> = ({
                         <InputError message={errors.deadline} />
                     </div>
 
-                    {/* <div className="grid gap-2"> */}
-                    {/*     <Label htmlFor="file">Прикрепить новый файл</Label> */}
-                    {/*     <FileInput */}
-                    {/*         isEdited={true} */}
-                    {/*         src={task.file?.url} */}
-                    {/*         filename={task.file?.name} */}
-                    {/*         error={errors.file} */}
-                    {/*         onChange={(file) => { */}
-                    {/*             setData('file', file); */}
-                    {/*             if (file) setData('file_name', file.name); */}
-                    {/*         }} */}
-                    {/*     /> */}
-                    {/*     <InputError message={errors.file} /> */}
-                    {/* </div> */}
-
-                    <div className="grid gap-2">
-                        <Label htmlFor="file_name">Название файла</Label>
-                        <Input
-                            id="file_name"
-                            type="text"
-                            name="file_name"
-                            value={data.file_name}
-                            onChange={(e) =>
-                                setData('file_name', e.target.value)
-                            }
-                            placeholder="Введите название файла"
-                        />
-                        <InputError message={errors.file_name} />
-                    </div>
-
                     <div className="grid gap-2">
                         <Label htmlFor="comment">Добавить комментарий</Label>
                         <Textarea
@@ -173,6 +148,45 @@ const Edit: FC<Inertia.Pages.Admin.Tasks.Edit> = ({
                         />
                         <InputError message={errors.comment} />
                     </div>
+
+                    {hasComment && (
+                        <>
+                            <div className="grid gap-2">
+                                <Label htmlFor="file">
+                                    Прикрепить новый файл
+                                </Label>
+                                <FileInput
+                                    isEdited={true}
+                                    id="file"
+                                    src={comment?.file?.url}
+                                    filename={comment?.file?.name}
+                                    error={errors.file}
+                                    onChange={(file) => {
+                                        setData('file', file);
+                                        if (file)
+                                            setData('file_name', file.name);
+                                    }}
+                                />
+                                <InputError message={errors.file} />
+                            </div>
+                            <div className="grid gap-2">
+                                <Label htmlFor="file_name">
+                                    Название файла
+                                </Label>
+                                <Input
+                                    id="file_name"
+                                    type="text"
+                                    name="file_name"
+                                    value={data.file_name}
+                                    onChange={(e) =>
+                                        setData('file_name', e.target.value)
+                                    }
+                                    placeholder="Введите название файла"
+                                />
+                                <InputError message={errors.file_name} />
+                            </div>
+                        </>
+                    )}
                 </div>
 
                 <FormButtons

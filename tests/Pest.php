@@ -52,5 +52,5 @@ function something(): void
 
 function generateTextWithChars(int $count = 100): string
 {
-    return str('')->padRight($count, fake()->text())->toString();
+    return trim(str('')->padRight($count, fake()->text())->toString());
 }

@@ -7,10 +7,216 @@ use App\Enums\UserRole;
 use App\Models\Company;
 use App\Models\Exhibition;
 use App\Models\Task;
+use App\Models\TaskComment;
 use App\Models\User;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Date;
+use Inertia\Testing\AssertableInertia;
 
 describe('Admin Task Test', function (): void {
+    it('successfully updates the task when a file is passed to the request', function (): void {
+        Storage::fake('local');
+
+        $user = User::factory()->create([
+            'email' => 'super-admin@gmail.com',
+            'password' => 'password',
+        ]);
+        $user->assignRole(UserRole::SUPER_ADMIN);
+        $exhibition = Exhibition::factory()->create();
+        $company = Company::factory()->for($exhibition)->create();
+        $task = Task::factory()->for($company)->create();
+        $route = "/admin/exhibitions/{$exhibition->id}/companies/{$company->id}/tasks";
+
+        $this->actingAs($user)
+            ->get($route . "/{$task->id}/edit")
+            ->assertInertia(
+                fn(AssertableInertia $page) =>
+                $page->component('admin/Tasks/Edit')
+            );
+
+        $file = UploadedFile::fake()->create('document.pdf', 100);
+        $payload = [
+            'title'       => 'new title',
+            'description' => generateTextWithChars(50),
+            'deadline'    => now()->addYear()->format('Y') . '-03-20T12:02',
+            'comment'     => 'new comment',
+            'file'        => $file,
+            'file_name'   => 'document.pdf',
+        ];
+
+        $this->actingAs($user)
+            ->put($route . "/{$task->id}", $payload)
+            ->assertRedirect($route);
+
+        $this->assertDatabaseHas('tasks', [
+            'id'          => $task->id,
+            'title'       => $payload['title'],
+            'description' => $payload['description'],
+        ]);
+
+        $comment = TaskComment::where('content', $payload['comment'])->first();
+        expect($comment)->not->toBeNull();
+
+        $this->assertDatabaseHas('task_files', [
+            'task_comment_id' => $comment->id,
+            'name'            => $payload['file_name'],
+        ]);
+
+        Storage::assertExists($comment->file->url);
+    });
+
+    it('successfully creates a task with a file when the comment and file are passed to the request', function (): void {
+        Storage::fake('local');
+
+        $user = User::factory()->create([
+            'email' => 'super-admin@gmail.com',
+            'password' => 'password',
+        ]);
+        $user->assignRole(UserRole::SUPER_ADMIN);
+        $exhibition = Exhibition::factory()->create();
+        $company = Company::factory()->for($exhibition)->create();
+        $route = "/admin/exhibitions/{$exhibition->id}/companies/{$company->id}/tasks";
+
+        $file = UploadedFile::fake()->create('document.pdf', 100);
+        $payload = [
+            'title'       => 'new title',
+            'description' => generateTextWithChars(50),
+            'deadline'    => now()->addYear()->format('Y') . '-03-20T12:02',
+            'comment'     => 'new comment',
+            'file'        => $file,
+            'file_name'   => 'document.pdf',
+        ];
+
+        $this->actingAs($user)
+            ->post($route, $payload)
+            ->assertRedirect($route);
+
+        $task = Task::where('title', $payload['title'])->first();
+        expect($task)->not->toBeNull();
+
+        $this->assertDatabaseHas('task_comments', [
+            'task_id' => $task->id,
+            'content' => $payload['comment'],
+        ]);
+
+        $comment = $task->comments()->where('content', $payload['comment'])->first();
+
+        $this->assertDatabaseHas('task_files', [
+            'task_comment_id' => $comment->id,
+            'name'            => $payload['file_name'],
+        ]);
+
+        Storage::assertExists($comment->file->url);
+    });
+
+    it('successfully creates a task without a file and comment when a file is passed to the request without a comment', function (): void {
+        Storage::fake('local');
+
+        $user = User::factory()->create([
+            'email' => 'super-admin@gmail.com',
+            'password' => 'password',
+        ]);
+        $user->assignRole(UserRole::SUPER_ADMIN);
+        $exhibition = Exhibition::factory()->create();
+        $company = Company::factory()->for($exhibition)->create();
+        $route = "/admin/exhibitions/{$exhibition->id}/companies/{$company->id}/tasks";
+
+        $file = UploadedFile::fake()->create('document.pdf', 100);
+        $payload = [
+            'title'       => 'new title',
+            'description' => generateTextWithChars(50),
+            'deadline'    => now()->addYear()->format('Y') . '-03-20T12:02',
+            'file'        => $file,
+            'file_name'   => 'file name',
+        ];
+
+        $this->actingAs($user)
+            ->post($route, $payload)
+            ->assertRedirect($route);
+
+        $task = Task::where('title', $payload['title'])->first();
+        expect($task)->not->toBeNull();
+
+        $this->assertDatabaseCount('task_comments', 0);
+        $this->assertDatabaseCount('task_files', 0);
+    });
+
+    it('successfully updates the task when the task does not have a comment and a comment is passed to the request', function (): void {
+        $user = User::factory()->create([
+            'email' => 'super-admin@gmail.com',
+            'password' => 'password',
+        ]);
+
+        $user->assignRole(UserRole::SUPER_ADMIN);
+        $exhibition = Exhibition::factory()->create();
+        $company = Company::factory()->for($exhibition)->create();
+        $task = Task::factory()->for($company)->create();
+        $route = "/admin/exhibitions/{$exhibition->id}/companies/{$company->id}/tasks";
+
+        $this->actingAs($user)
+            ->get($route . "/{$task->id}/edit")
+            ->assertInertia(
+                fn(AssertableInertia $page) =>
+                $page->component('admin/Tasks/Edit')
+            );
+
+        $payload = [
+            'title' => 'new title',
+            'description' => generateTextWithChars(50),
+            'deadline' => now()->addYear()->format('Y') . '-03-20T12:02',
+            'comment' => 'new comment',
+        ];
+
+        $this->actingAs($user)
+            ->put($route . "/{$task->id}", $payload)
+            ->assertRedirect($route);
+
+        $this->assertDatabaseHas('tasks', [
+            'id' => $task->id,
+            'title' => $payload['title'],
+            'description' => $payload['description'],
+        ]);
+
+        $this->assertDatabaseHas('task_comments', [
+            'content' => $payload['comment']
+        ]);
+    });
+
+    it('successfully updates the task when the task has a comment and no comment is passed to the request', function (): void {
+        $user = User::factory()->create([
+            'email' => 'super-admin@gmail.com',
+            'password' => 'password',
+        ]);
+
+        $user->assignRole(UserRole::SUPER_ADMIN);
+        $exhibition = Exhibition::factory()->create();
+        $company = Company::factory()->for($exhibition)->create();
+        $task = Task::factory()->for($company)->create();
+        TaskComment::factory()->for($task)->create();
+        $route = "/admin/exhibitions/{$exhibition->id}/companies/{$company->id}/tasks";
+
+        $this->actingAs($user)
+            ->get($route . "/{$task->id}/edit")
+            ->assertInertia(
+                fn(AssertableInertia $page) =>
+                $page->component('admin/Tasks/Edit')
+            );
+
+        $payload = [
+            'title' => generateTextWithChars(50),
+            'description' => generateTextWithChars(50),
+            'deadline' => now()->addYear()->format('Y') . '-03-20T12:02',
+        ];
+
+        $this->actingAs($user)
+            ->put($route . "/{$task->id}", $payload)
+            ->assertRedirect($route);
+
+        $this->assertDatabaseHas('tasks', [
+            'id' => $task->id,
+            'title' => $payload['title']
+        ]);
+    });
 
     it('renders the task index page', function (): void {
         $user = User::factory()->create([
@@ -95,7 +301,7 @@ describe('Admin Task Test', function (): void {
             ->assertSee('Название')
             ->fill('title', generateTextWithChars(50))
             ->fill('description', generateTextWithChars(3))
-            ->fill('deadline', now()->addYear()->format('Y').'-03-20T12:02')
+            ->fill('deadline', now()->addYear()->format('Y') . '-03-20T12:02')
             ->submit()
             ->assertSee('Описание задачи должно содержать не менее 10 символов');
     });
@@ -126,7 +332,7 @@ describe('Admin Task Test', function (): void {
             ->assertSee('Название')
             ->fill('title', generateTextWithChars(50))
             ->fill('description', generateTextWithChars(5004))
-            ->fill('deadline', now()->addYear()->format('Y').'-03-20T12:02')
+            ->fill('deadline', now()->addYear()->format('Y') . '-03-20T12:02')
             ->submit()
             ->assertSee('Описание задачи не должно превышать 5000 символов');
     });
@@ -158,7 +364,7 @@ describe('Admin Task Test', function (): void {
             ->fill('title', generateTextWithChars(50))
             ->fill('description', generateTextWithChars(100))
             ->fill('comment', generateTextWithChars(2005))
-            ->fill('deadline', now()->addYear()->format('Y').'-03-20T12:02')
+            ->fill('deadline', now()->addYear()->format('Y') . '-03-20T12:02')
             ->submit()
             ->assertSee('Комментарий не должен превышать 2000 символов');
     });
@@ -220,7 +426,7 @@ describe('Admin Task Test', function (): void {
             ->assertSee('Название')
             ->fill('title', generateTextWithChars(50))
             ->fill('description', generateTextWithChars(20))
-            ->fill('deadline', now()->addYear()->format('Y').'-03-20T12:02')
+            ->fill('deadline', now()->addYear()->format('Y') . '-03-20T12:02')
             ->fill('comment', generateTextWithChars(100))
             ->submit()
             ->assertPathEndsWith($route);
@@ -252,7 +458,7 @@ describe('Admin Task Test', function (): void {
         $page->navigate($route)
             ->assertSee($company->public_name)
             ->assertSee($task->title)
-            ->click('@edit-task-'.$task->id)
+            ->click('@edit-task-' . $task->id)
             ->assertSee('Название')
             ->clear('title')
             ->fill('title', generateTextWithChars(1103))
@@ -286,7 +492,7 @@ describe('Admin Task Test', function (): void {
         $page->navigate($route)
             ->assertSee($company->public_name)
             ->assertSee($task->title)
-            ->click('@edit-task-'.$task->id)
+            ->click('@edit-task-' . $task->id)
             ->assertSee('Название')
             ->clear('description')
             ->fill('description', generateTextWithChars(3))
@@ -320,7 +526,7 @@ describe('Admin Task Test', function (): void {
         $page->navigate($route)
             ->assertSee($company->public_name)
             ->assertSee($task->title)
-            ->click('@edit-task-'.$task->id)
+            ->click('@edit-task-' . $task->id)
             ->assertSee('Название')
             ->clear('description')
             ->fill('description', generateTextWithChars(15003))
@@ -354,7 +560,7 @@ describe('Admin Task Test', function (): void {
         $page->navigate($route)
             ->assertSee($company->public_name)
             ->assertSee($task->title)
-            ->click('@edit-task-'.$task->id)
+            ->click('@edit-task-' . $task->id)
             ->assertSee('Название')
             ->clear('comment')
             ->fill('comment', generateTextWithChars(2005))
@@ -388,7 +594,7 @@ describe('Admin Task Test', function (): void {
         $page->navigate($route)
             ->assertSee($company->public_name)
             ->assertSee($task->title)
-            ->click('@edit-task-'.$task->id)
+            ->click('@edit-task-' . $task->id)
             ->assertSee('Название')
             ->clear('deadline')
             ->fill('deadline', '2020-03-20T12:02')
@@ -425,7 +631,7 @@ describe('Admin Task Test', function (): void {
         $page->navigate($route)
             ->assertSee($company->public_name)
             ->assertSee($task->title)
-            ->click('@edit-task-'.$task->id)
+            ->click('@edit-task-' . $task->id)
             ->assertSee('Название')
             ->clear('title')
             ->fill('title', $newTitle)
@@ -434,7 +640,7 @@ describe('Admin Task Test', function (): void {
             ->clear('comment')
             ->fill('comment', generateTextWithChars(100))
             ->clear('deadline')
-            ->fill('deadline', now()->addYear()->format('Y').'-03-20T12:02')
+            ->fill('deadline', now()->addYear()->format('Y') . '-03-20T12:02')
             ->submit();
 
         $task = $task->fresh();
@@ -468,7 +674,7 @@ describe('Admin Task Test', function (): void {
         $page->navigate($route)
             ->assertSee($company->public_name)
             ->assertSee($task->title)
-            ->click('@edit-task-'.$task->id)
+            ->click('@edit-task-' . $task->id)
             ->assertSee('Название')
             ->click('@delete-task')
             ->click('@delete-btn')

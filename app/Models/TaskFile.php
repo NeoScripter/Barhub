@@ -8,14 +8,22 @@ use Database\Factories\TaskFileFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Facades\Storage;
 
 final class TaskFile extends Model
 {
     /** @use HasFactory<TaskFileFactory> */
     use HasFactory;
 
-    public function task(): BelongsTo
+    public function comment(): BelongsTo
     {
-        return $this->belongsTo(Task::class);
+        return $this->belongsTo(TaskComment::class);
+    }
+
+    protected static function booted(): void
+    {
+        static::deleting(function (TaskFile $file) {
+            Storage::delete($file->url);
+        });
     }
 }
