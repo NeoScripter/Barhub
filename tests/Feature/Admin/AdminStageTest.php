@@ -8,7 +8,7 @@ use App\Models\Exhibition;
 use App\Models\Stage;
 use App\Models\User;
 
-describe('Stage CRUD Test', function (): void {
+describe('Admin Stage Test', function (): void {
     it('allows super-admin to create and delete stages', function (): void {
         // Create user and authenticate
         $user = User::factory()->create([

@@ -7,7 +7,7 @@ use App\Models\Company;
 use App\Models\Exhibition;
 use App\Models\User;
 
-describe('Exponent Assignment Test', function (): void {
+describe('Admin Exponent Test', function (): void {
 
     it('allows super-admin to assign and revoke exponent status', function (): void {
         $user = User::factory()->create([

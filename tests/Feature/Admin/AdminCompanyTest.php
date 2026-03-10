@@ -17,7 +17,7 @@ use function Pest\Laravel\get;
 // Access Control
 // ─────────────────────────────────────────────────────────────
 
-describe('Company CRUD - Access Control', function (): void {
+describe('Admin Company Test - Access Control', function (): void {
     beforeEach(function (): void {
         $this->exhibition = Exhibition::factory()->create();
         $this->company = Company::factory()->for($this->exhibition)->create();

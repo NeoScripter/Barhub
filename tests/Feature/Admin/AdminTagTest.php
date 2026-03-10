@@ -8,7 +8,7 @@ use App\Models\Exhibition;
 use App\Models\Tag;
 use App\Models\User;
 
-describe('Tag CRUD Test', function (): void {
+describe('Admin Tag Test', function (): void {
 
     it('allows super-admin to create and delete tags', function (): void {
         $user = User::factory()->create([
