@@ -83,7 +83,9 @@ const CompanyTable: FC<
                         key="services"
                         width={1.5}
                     >
-                        TODO
+                        <span className='text-sm'>
+                            Услуги: <strong>{company.followups_count}</strong>
+                        </span>
                     </Table.Cell>
                     <Table.Cell
                         key="edit-btn"

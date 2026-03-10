@@ -27,6 +27,7 @@ final class CompanyController extends Controller
             Company::query()->select(['id', 'public_name', 'legal_name', 'stand_code'])
                 ->where('exhibition_id', $exhibition->id)
                 ->with(['tags', 'tasks:id,status,company_id'])
+                ->withCount('followups')
         )
             ->allowedSorts(['public_name'])
             ->withSearch('public_name', $request->string('search'))

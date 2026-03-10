@@ -18,7 +18,7 @@ const TaskStatusLine: FC<{
     if (matchingTasks === 0) return null;
 
     return (
-        <span className='block text-xs'>
+        <span className='block text-sm'>
             {taskStatusMap[status]} : <strong>{matchingTasks}</strong>
         </span>
     );

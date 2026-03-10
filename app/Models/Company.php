@@ -55,4 +55,14 @@ final class Company extends Model
     {
         return $this->hasMany(Service::class);
     }
+
+    public function followups()
+    {
+        return $this->hasManyThrough(
+            Followup::class,
+            Service::class,
+            'company_id',
+            'service_id'
+        );
+    }
 }
