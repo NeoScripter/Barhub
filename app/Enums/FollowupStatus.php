@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Enums;
 
-enum ServiceRequestStatus: int
+enum FollowupStatus: int
 {
     case COMPLETED = 1;
     case IMCOMPLETE = 2;

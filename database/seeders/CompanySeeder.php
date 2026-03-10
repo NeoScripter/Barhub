@@ -4,14 +4,16 @@ declare(strict_types=1);
 
 namespace Database\Seeders;
 
+use App\Enums\UserRole;
 use App\Models\Company;
 use App\Models\Exhibition;
 use App\Models\Service;
-use App\Models\ServiceRequest;
+use App\Models\Followup;
 use App\Models\Tag;
 use App\Models\Task;
 use App\Models\TaskComment;
 use App\Models\TaskFile;
+use App\Models\User;
 use Illuminate\Database\Seeder;
 
 final class CompanySeeder extends Seeder
@@ -41,7 +43,6 @@ final class CompanySeeder extends Seeder
                             ->count(random_int(1, 3)), 'comments')
                 )
                 ->has(Service::factory()
-                    ->has(ServiceRequest::factory()->count(5))
                     ->count(5))
                 ->count(10)
                 ->for($exhibition)
@@ -59,6 +60,21 @@ final class CompanySeeder extends Seeder
                         'alt' => 'alt',
                         'type' => 'logo',
                     ]);
+
+                    $company->services()->each(function ($service) use ($company) {
+                        $data = User::factory()->make([
+                            'role' => UserRole::EXPONENT->value
+                        ])->getAttributes();
+
+                        $user = $company->users()->firstOrCreate(
+                            ['email' => $data['email']],
+                            $data
+                        );
+                        Followup::factory([
+                            'user_id' => $user->id,
+                            'service_id' => $service->id,
+                        ])->create();
+                    });
                 })
                 ->create()
         );

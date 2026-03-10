@@ -20,8 +20,8 @@ final class Service extends Model
         return $this->belongsTo(Company::class);
     }
 
-    public function requests(): HasMany
+    public function followups(): HasMany
     {
-        return $this->hasMany(ServiceRequest::class);
+        return $this->hasMany(Followup::class);
     }
 }
