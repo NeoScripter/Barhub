@@ -13,16 +13,167 @@ use Inertia\Testing\AssertableInertia;
 
 describe('Admin Partner Browser Tests', function (): void {
 
-    it('renders the partners index page', function () {});
-    it('renders the partners edit page', function () {});
-    it('successfully updates the status of a task', function () {});
-    it('does not display complete tasks on the index page', function () {});
-    it('displays the correct number of tasks in each category', function () {});
-    it('displays only the tasks that belong to this exhibition', function () {});
-})->group('browser')->todo();
+    it('renders the partners index page', function () {
+        $user = User::factory()->create([
+            'email' => 'super-admin@gmail.com',
+            'password' => 'password',
+        ]);
+        $user->assignRole(UserRole::SUPER_ADMIN);
+        $exhibition = Exhibition::factory()->create();
+        Company::factory()->for($exhibition)
+            ->has(Task::factory()->count(4))
+            ->count(3)
+            ->create();
+
+        $route = "/admin/exhibitions/{$exhibition->id}/all-tasks";
+
+        $page = visit('/login');
+
+        $page->assertSee('Вход в аккаунт')
+            ->fill('email', 'super-admin@gmail.com')
+            ->fill('password', 'password')
+            ->click('@login-button')
+            ->assertSee('super-admin@gmail.com');
+
+        $this->assertAuthenticated();
+
+        $page->navigate($route);
+        $page->assertSee('Работа с партнерами');
+        $page->assertSee('Задачи на проверке');
+    });
+
+    it('renders the partners edit page', function () {
+        $user = User::factory()->create([
+            'email' => 'super-admin@gmail.com',
+            'password' => 'password',
+        ]);
+        $user->assignRole(UserRole::SUPER_ADMIN);
+        $exhibition = Exhibition::factory()->create();
+        $company = Company::factory()->for($exhibition)
+            ->has(Task::factory(['status' => TaskStatus::TO_BE_VERIFIED]))
+            ->create();
+
+        $route = "/admin/exhibitions/{$exhibition->id}/all-tasks";
+
+        $page = visit('/login');
+
+        $page->assertSee('Вход в аккаунт')
+            ->fill('email', 'super-admin@gmail.com')
+            ->fill('password', 'password')
+            ->click('@login-button')
+            ->assertSee('super-admin@gmail.com');
+
+        $this->assertAuthenticated();
+
+        $page->navigate($route)
+            ->click("@edit-task-{$company->tasks[0]->id}")
+            ->assertSee('Принять/отклонить задачу')
+            ->assertSee('Название компании');
+    });
+
+    it('successfully accepts a task', function () {
+        $user = User::factory()->create([
+            'email' => 'super-admin@gmail.com',
+            'password' => 'password',
+        ]);
+        $user->assignRole(UserRole::SUPER_ADMIN);
+        $exhibition = Exhibition::factory()->create();
+        $company = Company::factory()->for($exhibition)
+            ->has(Task::factory()->state(['status' => TaskStatus::TO_BE_VERIFIED]))
+            ->create();
+        $route = "/admin/exhibitions/{$exhibition->id}/all-tasks";
+
+        $page = visit('/login');
+        $page->assertSee('Вход в аккаунт')
+            ->fill('email', 'super-admin@gmail.com')
+            ->fill('password', 'password')
+            ->click('@login-button')
+            ->assertSee('super-admin@gmail.com');
+
+        $this->assertAuthenticated();
+
+        $page->navigate($route)
+            ->click("@edit-task-{$company->tasks[0]->id}")
+            ->assertSee('Принять/отклонить задачу')
+            ->press('@radio-yes-btn')
+            ->submit()
+            ->assertPathEndsWith($route);
+
+        $this->assertDatabaseHas('tasks', [
+            'id'     => $company->tasks[0]->id,
+            'status' => TaskStatus::COMPLETED->value,
+        ]);
+    });
+
+    it('successfully rejects a task', function () {
+        $user = User::factory()->create([
+            'email' => 'super-admin@gmail.com',
+            'password' => 'password',
+        ]);
+        $user->assignRole(UserRole::SUPER_ADMIN);
+        $exhibition = Exhibition::factory()->create();
+        $company = Company::factory()->for($exhibition)
+            ->has(Task::factory()->state(['status' => TaskStatus::TO_BE_VERIFIED]))
+            ->create();
+        $route = "/admin/exhibitions/{$exhibition->id}/all-tasks";
+
+        $page = visit('/login');
+        $page->assertSee('Вход в аккаунт')
+            ->fill('email', 'super-admin@gmail.com')
+            ->fill('password', 'password')
+            ->click('@login-button')
+            ->assertSee('super-admin@gmail.com');
+
+        $this->assertAuthenticated();
+
+        $page->navigate($route)
+            ->click("@edit-task-{$company->tasks[0]->id}")
+            ->assertSee('Принять/отклонить задачу')
+            ->press('@radio-no-btn')
+            ->submit()
+            ->assertPathEndsWith($route);
+
+        $this->assertDatabaseHas('tasks', [
+            'id'     => $company->tasks[0]->id,
+            'status' => TaskStatus::IMCOMPLETE->value,
+        ]);
+    });
+
+    it('displays only the tasks that belong to this exhibition', function () {
+        $user = User::factory()->create([
+            'email' => 'admin@gmail.com',
+            'password' => 'password',
+        ]);
+        $user->assignRole(UserRole::ADMIN);
+
+        $exhibition = Exhibition::factory()->create();
+        $exhibition->users()->attach($user->id);
+        $otherExhibition = Exhibition::factory()->create();
+
+        $company = Company::factory()->for($exhibition)->create();
+        $otherCompany = Company::factory()->for($otherExhibition)->create();
+
+        Task::factory()->for($company)->create(['title' => 'Belongs To This Exhibition', 'status' => TaskStatus::TO_BE_VERIFIED]);
+        Task::factory()->for($otherCompany)->create(['title' => 'Belongs To Other Exhibition', 'status' => TaskStatus::TO_BE_VERIFIED]);
+
+        $route = "/admin/exhibitions/{$exhibition->id}/all-tasks";
+
+        $page = visit('/login');
+        $page->assertSee('Вход в аккаунт')
+            ->fill('email', 'admin@gmail.com')
+            ->fill('password', 'password')
+            ->click('@login-button')
+            ->assertSee('admin@gmail.com');
+
+        $this->assertAuthenticated();
+
+        $page->navigate($route)
+            ->assertSee('Belongs To This Exhibition')
+            ->assertDontSee('Belongs To Other Exhibition');
+    });
+})->group('browser');
 
 describe('Admin Partner Feature Tests', function (): void {
-
     beforeEach(function (): void {
         $this->superAdmin = User::factory()->create([
             'email' => 'super-admin@gmail.com',
@@ -39,9 +190,9 @@ describe('Admin Partner Feature Tests', function (): void {
             ->count(3)
             ->for($company)
             ->sequence(
-                ['title' => 'Zebra'],
-                ['title' => 'Alpha'],
-                ['title' => 'Beta'],
+                ['title' => 'Zebra', 'status' => TaskStatus::TO_BE_VERIFIED],
+                ['title' => 'Alpha', 'status' => TaskStatus::TO_BE_VERIFIED],
+                ['title' => 'Beta', 'status' => TaskStatus::TO_BE_VERIFIED],
             )
             ->create();
 
@@ -65,9 +216,9 @@ describe('Admin Partner Feature Tests', function (): void {
             ->count(3)
             ->for($company)
             ->sequence(
-                ['title' => 'Zebra'],
-                ['title' => 'Alpha'],
-                ['title' => 'Beta'],
+                ['title' => 'Zebra', 'status' => TaskStatus::TO_BE_VERIFIED],
+                ['title' => 'Alpha', 'status' => TaskStatus::TO_BE_VERIFIED],
+                ['title' => 'Beta', 'status' => TaskStatus::TO_BE_VERIFIED],
             )
             ->create();
 
@@ -87,7 +238,7 @@ describe('Admin Partner Feature Tests', function (): void {
 
     it('sorts tasks by company name in desc order', function () {
         Company::factory()->for($this->exhibition)
-            ->has(Task::factory())
+            ->has(Task::factory(['status' => TaskStatus::TO_BE_VERIFIED]))
             ->count(3)
             ->sequence(
                 ['public_name' => 'Zebra'],
@@ -112,7 +263,7 @@ describe('Admin Partner Feature Tests', function (): void {
 
     it('sorts tasks by company name in asc order', function () {
         Company::factory()->for($this->exhibition)
-            ->has(Task::factory())
+            ->has(Task::factory(['status' => TaskStatus::TO_BE_VERIFIED]))
             ->count(3)
             ->sequence(
                 ['public_name' => 'Zebra'],
@@ -141,9 +292,9 @@ describe('Admin Partner Feature Tests', function (): void {
             ->count(3)
             ->for($company)
             ->sequence(
-                ['deadline' => now()->addDays(10)],
-                ['deadline' => now()->addDays(1)],
-                ['deadline' => now()->addDays(5)],
+                ['deadline' => now()->addDays(10), 'status' => TaskStatus::TO_BE_VERIFIED],
+                ['deadline' => now()->addDays(1), 'status' => TaskStatus::TO_BE_VERIFIED],
+                ['deadline' => now()->addDays(5), 'status' => TaskStatus::TO_BE_VERIFIED],
             )
             ->create();
 
@@ -207,7 +358,7 @@ describe('Admin Partner Feature Tests', function (): void {
 
     it('displays the comments on the edit page from oldest to newest', function () {
         $company  = Company::factory()->for($this->exhibition)->create();
-        $task     = Task::factory()->for($company)->create();
+        $task     = Task::factory(['status' => TaskStatus::TO_BE_VERIFIED])->for($company)->create();
         $route    = "/admin/exhibitions/{$this->exhibition->id}/all-tasks";
 
         TaskComment::factory()
@@ -242,9 +393,9 @@ describe('Admin Partner Feature Tests', function (): void {
             ->assertOk();
     });
 
-    it('allows super admin to update the status of a task', function () {
+    it('allows super admin to update the status of a task whose status is to be verified', function () {
         $company = Company::factory()->for($this->exhibition)->create();
-        $task = Task::factory(['status' => TaskStatus::IMCOMPLETE->value])
+        $task = Task::factory(['status' => TaskStatus::TO_BE_VERIFIED->value])
             ->for($company)
             ->create();
 
@@ -256,6 +407,38 @@ describe('Admin Partner Feature Tests', function (): void {
             'id'          => $task->id,
             'status' => TaskStatus::COMPLETED->value
         ]);
+    });
+
+    it('forbids users to update the status of a task whose status is not to be verified', function () {
+        $company = Company::factory()->for($this->exhibition)->create();
+        $task = Task::factory(['status' => TaskStatus::IMCOMPLETE->value])
+            ->for($company)
+            ->create();
+
+        $this->actingAs($this->superAdmin)
+            ->patch($this->route . "/$task->id", ['is_accepted' => true])
+            ->assertForbidden();
+
+        $task->update(['status' => TaskStatus::DELAYED->value]);
+        $task = $task->refresh();
+
+        $this->actingAs($this->superAdmin)
+            ->patch($this->route . "/$task->id", ['is_accepted' => true])
+            ->assertForbidden();
+
+        $task->update(['status' => TaskStatus::TO_BE_COMPLETED->value]);
+        $task = $task->refresh();
+
+        $this->actingAs($this->superAdmin)
+            ->patch($this->route . "/$task->id", ['is_accepted' => true])
+            ->assertForbidden();
+
+        $task->update(['status' => TaskStatus::COMPLETED->value]);
+        $task = $task->refresh();
+
+        $this->actingAs($this->superAdmin)
+            ->patch($this->route . "/$task->id", ['is_accepted' => false])
+            ->assertForbidden();
     });
 
     it('allows admins with access to this exhibition to enter this page', function () {
@@ -367,5 +550,68 @@ describe('Admin Partner Feature Tests', function (): void {
             'id'          => $task->id,
             'status' => TaskStatus::IMCOMPLETE->value
         ]);
+    });
+
+    it('forbids from entering an edit page of a task whose status is not to be verified', function () {
+        $company = Company::factory()->for($this->exhibition)->create();
+        $task = Task::factory(['status' => TaskStatus::COMPLETED->value])
+            ->for($company)
+            ->create();
+
+        $this->actingAs($this->superAdmin)
+            ->get($this->route . "/$task->id/edit")
+            ->assertForbidden();
+    });
+
+    it('does not display complete tasks in the summary section on the index page', function () {
+        $company = Company::factory()->for($this->exhibition)->create();
+
+        Task::factory()->for($company)->create(['status' => TaskStatus::TO_BE_VERIFIED]);
+        Task::factory()->for($company)->create(['status' => TaskStatus::COMPLETED]);
+
+        $response = $this->actingAs($this->superAdmin)
+            ->get($this->route)
+            ->assertOk();
+
+        $tasks = $response->viewData('page')['props']['summary'];
+
+        expect(collect($tasks)->pluck('status')->contains(TaskStatus::COMPLETED->label()))->toBeFalse();
+    });
+
+    it('displays only to be verified tasks in the list category on the index page', function () {
+        $company = Company::factory()->for($this->exhibition)->create();
+
+        Task::factory()->for($company)->create(['status' => TaskStatus::TO_BE_VERIFIED]);
+        Task::factory()->for($company)->create(['status' => TaskStatus::DELAYED]);
+        Task::factory()->for($company)->create(['status' => TaskStatus::COMPLETED]);
+        Task::factory()->for($company)->create(['status' => TaskStatus::IMCOMPLETE]);
+
+        $response = $this->actingAs($this->superAdmin)
+            ->get($this->route)
+            ->assertOk();
+
+        $tasks = $response->viewData('page')['props']['tasks']['data'];
+
+        expect($tasks)->toHaveCount(1)
+            ->and($tasks[0]['status'])->toBe(TaskStatus::TO_BE_VERIFIED->label());
+    });
+
+    it('displays the correct number of tasks in each category', function () {
+        $company = Company::factory()->for($this->exhibition)->create();
+
+        Task::factory()->count(3)->for($company)->create(['status' => TaskStatus::TO_BE_VERIFIED]);
+        Task::factory()->count(2)->for($company)->create(['status' => TaskStatus::DELAYED]);
+        Task::factory()->count(1)->for($company)->create(['status' => TaskStatus::IMCOMPLETE]);
+        Task::factory()->count(4)->for($company)->create(['status' => TaskStatus::COMPLETED]);
+
+        $response = $this->actingAs($this->superAdmin)
+            ->get($this->route)
+            ->assertOk();
+
+        $summary = $response->viewData('page')['props']['summary'];
+
+        expect(collect($summary)->firstWhere('status', TaskStatus::TO_BE_VERIFIED->label())['count'])->toBe(3)
+            ->and(collect($summary)->firstWhere('status', TaskStatus::DELAYED->label())['count'])->toBe(2)
+            ->and(collect($summary)->firstWhere('status', TaskStatus::IMCOMPLETE->label())['count'])->toBe(1);
     });
 })->group('feature');;

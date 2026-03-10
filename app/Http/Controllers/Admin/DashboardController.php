@@ -34,7 +34,7 @@ final class DashboardController extends Controller
             $expo = Exhibition::findOrFail($request->integer('selected'));
 
             if (Gate::check('viewAny', $expo)) {
-                $tasks = Task::forExhibition($expo->id);
+                $tasks = Task::forSummary($expo->id);
             }
         }
 

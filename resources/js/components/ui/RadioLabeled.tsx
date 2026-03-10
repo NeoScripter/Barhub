@@ -23,6 +23,7 @@ const RadioLabeled: FC<Props> = ({ className, value, onChange }) => {
                     <Radio
                         value={option}
                         className="group flex size-7 items-center justify-center rounded-full border bg-white"
+                        data-test={option ? 'radio-yes-btn' : 'radio-no-btn'}
                     >
                         <span className="invisible size-5 rounded-full bg-black group-data-checked:visible" />
                     </Radio>

@@ -29,7 +29,14 @@ final class Task extends Model
         return $this->belongsTo(Company::class);
     }
 
-    public function scopeForExhibition(Builder $query, int $exhibitionId): Collection
+    public function scopeForExhibition(Builder $query, int $exhibitionId): Builder
+    {
+        return $query->whereHas('company', function ($q) use ($exhibitionId) {
+            $q->where('exhibition_id', $exhibitionId);
+        });
+    }
+
+    public function scopeForSummary(Builder $query, int $exhibitionId): Collection
     {
         return $query
             ->select(['tasks.status', DB::raw('count(*) as count')])
@@ -43,7 +50,6 @@ final class Task extends Model
                 'status' => $task->status->label(),
             ]);
     }
-
     /**
      * Get the attributes that should be cast.
      *

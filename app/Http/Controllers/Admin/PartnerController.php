@@ -19,8 +19,10 @@ final class PartnerController extends Controller
 {
     public function index(TaskIndexRequest $request, Exhibition $exhibition)
     {
-        $tasks = QueryBuilder::for(Task::select(['title', 'id', 'deadline', 'status', 'company_id']))
+        $tasks = QueryBuilder::for(Task::select(['tasks.title', 'tasks.id', 'tasks.deadline', 'tasks.status', 'tasks.company_id'])
+            ->forExhibition($exhibition->id))
             ->with('company:public_name,id')
+            ->where('status', TaskStatus::TO_BE_VERIFIED)
             ->allowedSorts([
                 'title',
                 'deadline',
@@ -34,7 +36,7 @@ final class PartnerController extends Controller
             ])
             ->appends($request->query());
 
-        $summary = Task::forExhibition($exhibition->id);
+        $summary = Task::forSummary($exhibition->id);
 
         return Inertia::render('admin/Partners/Index', [
             'exhibition' => $exhibition,
@@ -45,6 +47,10 @@ final class PartnerController extends Controller
 
     public function edit(Exhibition $exhibition, Task $allTask)
     {
+        if ($allTask->status !== TaskStatus::TO_BE_VERIFIED) {
+            abort(403);
+        }
+
         $task = $allTask;
         $task->load([
             'company:public_name,id',
@@ -59,6 +65,9 @@ final class PartnerController extends Controller
 
     public function update(PartnerUpdateRequest $request, Exhibition $exhibition, Task $allTask)
     {
+        if ($allTask->status !== TaskStatus::TO_BE_VERIFIED) {
+            abort(403);
+        }
         $task = $allTask;
         $newStatus = $request->boolean('is_accepted') === true ? TaskStatus::COMPLETED : TaskStatus::IMCOMPLETE;
         $task->update(['status' => $newStatus]);
