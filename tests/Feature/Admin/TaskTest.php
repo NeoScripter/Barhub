@@ -15,9 +15,48 @@ use Inertia\Testing\AssertableInertia;
 
 describe('Admin Task Test', function (): void {
 
-    it('displays the newest comment for the current user when editing the task', function() {
+    it('displays the newest comment for the current user when editing the task', function () {
 
-    })->todo();
+        $user = User::factory()->create([
+            'email' => 'super-admin@gmail.com',
+            'password' => 'password',
+        ]);
+        $user->assignRole(UserRole::SUPER_ADMIN);
+        $exhibition = Exhibition::factory()->create();
+        $company = Company::factory()->for($exhibition)->create();
+        $task = Task::factory()->for($company)->create();
+        $route = "/admin/exhibitions/{$exhibition->id}/companies/{$company->id}/tasks/{$task->id}/edit";
+
+        $task->comments()->createMany([[
+            'content' => 'comment one name',
+            'user_id' => $user->id,
+            'created_at' => now()->subMonths(2),
+        ], [
+            'content' => 'comment two name',
+            'user_id' => $user->id,
+            'created_at' => now()->subMonths(1),
+        ], [
+            'content' => 'comment three name',
+            'user_id' => $user->id,
+            'created_at' => now(),
+        ]]);
+
+        $page = visit('/login');
+
+        $page->assertSee('Вход в аккаунт')
+            ->fill('email', 'super-admin@gmail.com')
+            ->fill('password', 'password')
+            ->click('@login-button')
+            ->assertSee('super-admin@gmail.com');
+
+        $this->assertAuthenticated();
+
+        $page->navigate($route)
+            ->assertSee('Редактировать задачу')
+            ->assertDontSee('comment one name')
+            ->assertDontSee('comment two name')
+            ->assertSee('comment three name');
+    });
 
     it('displays the filename of the comment file and the comment content in the task edit form when a task has a file', function (): void {
         Storage::fake('local');
