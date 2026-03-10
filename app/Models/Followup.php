@@ -18,6 +18,11 @@ class Followup extends Model
         return $this->belongsTo(Service::class);
     }
 
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
+
     /**
      * Get the attributes that should be cast.
      *

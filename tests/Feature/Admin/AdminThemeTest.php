@@ -9,7 +9,7 @@ use App\Models\Stage;
 use App\Models\Theme;
 use App\Models\User;
 
-describe('Theme CRUD Test', function (): void {
+describe('Admin Theme Test', function (): void {
     it('allows super-admin to create and delete themes', function (): void {
         // Create user and authenticate
         $user = User::factory()->create([

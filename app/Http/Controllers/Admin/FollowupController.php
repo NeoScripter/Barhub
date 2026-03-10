@@ -7,7 +7,6 @@ namespace App\Http\Controllers\Admin;
 use App\Enums\FollowupStatus;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Followup\FollowupIndexRequest;
-use App\Http\Requests\Admin\Followup\FollowupUpdateRequest;
 use App\Models\Exhibition;
 use App\Models\Followup;
 use App\Sorts\RelationSort;
@@ -57,7 +56,7 @@ final class FollowupController extends Controller
         }
         $followup->update(['status' => FollowupStatus::COMPLETED]);
 
-        return to_route('admin.exhibitions.all-followups.index', [
+        return to_route('admin.exhibitions.followups.index', [
             'exhibition' => $exhibition
         ]);
     }
