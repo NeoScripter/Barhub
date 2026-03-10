@@ -42,7 +42,7 @@ final class FollowupController extends Controller
     public function edit(Exhibition $exhibition, Followup $followup)
     {
         $followup = $followup;
-        $followup->load(['service']);
+        $followup->load(['service.company:public_name,id']);
 
         return Inertia::render('admin/Followups/Edit', [
             'exhibition' => $exhibition,
@@ -50,14 +50,12 @@ final class FollowupController extends Controller
         ]);
     }
 
-    public function update(FollowupUpdateRequest $request, Exhibition $exhibition, Followup $followup)
+    public function update(Exhibition $exhibition, Followup $followup)
     {
         if ($followup->status !== FollowupStatus::IMCOMPLETE) {
             abort(403);
         }
-        $followup = $followup;
-        $newStatus = $request->boolean('is_accepted') === true ? FollowupStatus::COMPLETED : FollowupStatus::IMCOMPLETE;
-        $followup->update(['status' => $newStatus]);
+        $followup->update(['status' => FollowupStatus::COMPLETED]);
 
         return to_route('admin.exhibitions.all-followups.index', [
             'exhibition' => $exhibition

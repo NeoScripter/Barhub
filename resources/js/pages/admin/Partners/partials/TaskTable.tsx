@@ -67,7 +67,9 @@ const TaskTable: FC<
                             })}
                         >
                             <VisuallyHidden>
-                                Редактировать задачу
+                                {task.status === 'На проверке'
+                                    ? 'Редактировать задачу'
+                                    : 'Посмотреть задачу'}{' '}
                             </VisuallyHidden>
                             {/* Status is to be verified */}
                             {task.status === 'На проверке' ? (

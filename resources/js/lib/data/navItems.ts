@@ -96,17 +96,10 @@ export const adminNavItems: NavItemType[] = [
                 isDynamic: true,
             },
             {
-                id: 'partner-services',
+                id: 'followups',
                 type: 'link',
                 label: 'Услуги',
-                url: '/admin/exhibitions/{exhibition}/partner-services',
-                isDynamic: true,
-            },
-            {
-                id: 'partner-company-tags',
-                type: 'link',
-                label: 'Теги компаний',
-                url: '/admin/exhibitions/{exhibition}/partner-company-tags',
+                url: '/admin/exhibitions/{exhibition}/followups',
                 isDynamic: true,
             },
             {
