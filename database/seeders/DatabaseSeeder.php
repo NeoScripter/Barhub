@@ -21,6 +21,7 @@ final class DatabaseSeeder extends Seeder
             StageSeeder::class,
             EventSeeder::class,
             CompanySeeder::class,
+            TaskTemplateSeeder::class,
         ]);
     }
 }
