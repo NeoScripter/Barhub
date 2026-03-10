@@ -7,6 +7,7 @@ namespace Database\Seeders;
 use App\Models\Company;
 use App\Models\Exhibition;
 use App\Models\Service;
+use App\Models\ServiceRequest;
 use App\Models\Tag;
 use App\Models\Task;
 use App\Models\TaskComment;
@@ -39,7 +40,9 @@ final class CompanySeeder extends Seeder
                             ->has(TaskFile::factory(), 'file')
                             ->count(random_int(1, 3)), 'comments')
                 )
-                ->has(Service::factory()->count(5))
+                ->has(Service::factory()
+                    ->has(ServiceRequest::factory()->count(5))
+                    ->count(5))
                 ->count(10)
                 ->for($exhibition)
                 ->hasAttached($tags->random(random_int(1, 3)))
