@@ -28,6 +28,8 @@ const Edit: FC<Inertia.Pages.Admin.Tasks.Edit> = ({ exhibition, task }) => {
         });
     };
 
+    const isToBeVefified = task.status === '3';
+
     return (
         <div className="mx-auto w-full max-w-250">
             <div className="mb-8 text-center md:mb-12">
@@ -35,7 +37,11 @@ const Edit: FC<Inertia.Pages.Admin.Tasks.Edit> = ({ exhibition, task }) => {
                     asChild
                     className="mb-1 text-lg text-secondary"
                 >
-                    <h2>Принять/отклонить задачу</h2>
+                    <h2>
+                        {isToBeVefified
+                            ? 'Принять/отклонить задачу'
+                            : 'Описание задачи'}
+                    </h2>
                 </AccentHeading>
             </div>
 
@@ -84,20 +90,22 @@ const Edit: FC<Inertia.Pages.Admin.Tasks.Edit> = ({ exhibition, task }) => {
                     </ul>
                 </LabeledContent>
             </div>
-            <form
-                className="flex flex-col gap-6"
-                onSubmit={handleSubmit}
-            >
-                <RadioLabeled
-                    value={data.is_accepted}
-                    onChange={(val) => setData('is_accepted', val)}
-                />
-                <FormButtons
-                    label="Сохранить"
-                    processing={processing}
-                    backUrl={PartnerController.index({ exhibition }).url}
-                />
-            </form>
+            {isToBeVefified && (
+                <form
+                    className="flex flex-col gap-6"
+                    onSubmit={handleSubmit}
+                >
+                    <RadioLabeled
+                        value={data.is_accepted}
+                        onChange={(val) => setData('is_accepted', val)}
+                    />
+                    <FormButtons
+                        label="Сохранить"
+                        processing={processing}
+                        backUrl={PartnerController.index({ exhibition }).url}
+                    />
+                </form>
+            )}
         </div>
     );
 };

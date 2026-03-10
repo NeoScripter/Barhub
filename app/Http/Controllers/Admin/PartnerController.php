@@ -22,7 +22,7 @@ final class PartnerController extends Controller
         $tasks = QueryBuilder::for(Task::select(['tasks.title', 'tasks.id', 'tasks.deadline', 'tasks.status', 'tasks.company_id'])
             ->forExhibition($exhibition->id))
             ->with('company:public_name,id')
-            ->where('status', TaskStatus::TO_BE_VERIFIED)
+            ->where('status', '!=', TaskStatus::COMPLETED)
             ->allowedSorts([
                 'title',
                 'deadline',
@@ -47,10 +47,6 @@ final class PartnerController extends Controller
 
     public function edit(Exhibition $exhibition, Task $allTask)
     {
-        if ($allTask->status !== TaskStatus::TO_BE_VERIFIED) {
-            abort(403);
-        }
-
         $task = $allTask;
         $task->load([
             'company:public_name,id',

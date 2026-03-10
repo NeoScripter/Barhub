@@ -552,17 +552,6 @@ describe('Admin Partner Feature Tests', function (): void {
         ]);
     });
 
-    it('forbids from entering an edit page of a task whose status is not to be verified', function () {
-        $company = Company::factory()->for($this->exhibition)->create();
-        $task = Task::factory(['status' => TaskStatus::COMPLETED->value])
-            ->for($company)
-            ->create();
-
-        $this->actingAs($this->superAdmin)
-            ->get($this->route . "/$task->id/edit")
-            ->assertForbidden();
-    });
-
     it('does not display complete tasks in the summary section on the index page', function () {
         $company = Company::factory()->for($this->exhibition)->create();
 
@@ -578,13 +567,16 @@ describe('Admin Partner Feature Tests', function (): void {
         expect(collect($tasks)->pluck('status')->contains(TaskStatus::COMPLETED->label()))->toBeFalse();
     });
 
-    it('displays only to be verified tasks in the list category on the index page', function () {
+    it('does not display completed tasks in the list category on the index page', function () {
         $company = Company::factory()->for($this->exhibition)->create();
 
-        Task::factory()->for($company)->create(['status' => TaskStatus::TO_BE_VERIFIED]);
-        Task::factory()->for($company)->create(['status' => TaskStatus::DELAYED]);
-        Task::factory()->for($company)->create(['status' => TaskStatus::COMPLETED]);
-        Task::factory()->for($company)->create(['status' => TaskStatus::IMCOMPLETE]);
+        Task::factory()->for($company)->createMany([
+            ['status' => TaskStatus::TO_BE_VERIFIED],
+            ['status' => TaskStatus::DELAYED],
+            ['status' => TaskStatus::TO_BE_COMPLETED],
+            ['status' => TaskStatus::COMPLETED],
+            ['status' => TaskStatus::IMCOMPLETE],
+        ]);
 
         $response = $this->actingAs($this->superAdmin)
             ->get($this->route)
@@ -592,8 +584,8 @@ describe('Admin Partner Feature Tests', function (): void {
 
         $tasks = $response->viewData('page')['props']['tasks']['data'];
 
-        expect($tasks)->toHaveCount(1)
-            ->and($tasks[0]['status'])->toBe(TaskStatus::TO_BE_VERIFIED->label());
+        expect($tasks)->toHaveCount(4)
+            ->and($tasks)->each(fn($task) => $task->status->not->toBe(TaskStatus::COMPLETED->label()));
     });
 
     it('displays the correct number of tasks in each category', function () {
