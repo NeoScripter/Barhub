@@ -12,7 +12,6 @@ use App\Http\Requests\Admin\Task\TaskUpdateRequest;
 use App\Models\Company;
 use App\Models\Exhibition;
 use App\Models\Task;
-use App\Models\TaskComment;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Spatie\QueryBuilder\QueryBuilder;
@@ -43,8 +42,9 @@ final class TaskController extends Controller
         $task->load(['comments' => function ($q) use ($user) {
             $q->where('user_id', $user->id)
                 ->latest()
-                ->limit(1);
-        }, 'comments.file']);
+                ->limit(1)
+                ->with('file');
+        }]);
 
         return Inertia::render('admin/Tasks/Edit', [
             'exhibition' => $exhibition,

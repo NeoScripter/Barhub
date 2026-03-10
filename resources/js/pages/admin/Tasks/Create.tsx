@@ -27,12 +27,15 @@ const Create: FC<Inertia.Pages.Admin.Tasks.Create> = ({
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         post(store({ exhibition, company }).url, {
+            preserveScroll: false,
             onSuccess: () => {
                 router.visit(index({ exhibition, company }));
                 toast.success('Задача успешно создана');
             },
         });
     };
+
+    const hasComment = data.comment != null && data.comment !== '';
 
     return (
         <div className="mx-auto w-full max-w-250">
@@ -94,34 +97,42 @@ const Create: FC<Inertia.Pages.Admin.Tasks.Create> = ({
                         <InputError message={errors.deadline} />
                     </div>
 
-                    <div className="grid gap-2">
-                        <Label htmlFor="file">Файл</Label>
-                        <FileInput
-                            isEdited={true}
-                            name="file"
-                            error={errors.file}
-                            onChange={(file) => {
-                                setData('file', file);
-                                if (file) setData('file_name', file.name);
-                            }}
-                        />
-                        <InputError message={errors.file} />
-                    </div>
-
-                    <div className="grid gap-2">
-                        <Label htmlFor="file_name">Название файла</Label>
-                        <Input
-                            id="file_name"
-                            type="text"
-                            name="file_name"
-                            value={data.file_name}
-                            onChange={(e) =>
-                                setData('file_name', e.target.value)
-                            }
-                            placeholder="Введите название файла"
-                        />
-                        <InputError message={errors.file_name} />
-                    </div>
+                    {hasComment && (
+                        <>
+                            <div className="grid gap-2">
+                                <Label htmlFor="file">
+                                    Прикрепить новый файл
+                                </Label>
+                                <FileInput
+                                    isEdited={true}
+                                    id="file"
+                                    error={errors.file}
+                                    onChange={(file) => {
+                                        setData('file', file);
+                                        if (file)
+                                            setData('file_name', file.name);
+                                    }}
+                                />
+                                <InputError message={errors.file} />
+                            </div>
+                            <div className="grid gap-2">
+                                <Label htmlFor="file_name">
+                                    Название файла
+                                </Label>
+                                <Input
+                                    id="file_name"
+                                    type="text"
+                                    name="file_name"
+                                    value={data.file_name}
+                                    onChange={(e) =>
+                                        setData('file_name', e.target.value)
+                                    }
+                                    placeholder="Введите название файла"
+                                />
+                                <InputError message={errors.file_name} />
+                            </div>
+                        </>
+                    )}
 
                     <div className="grid gap-2">
                         <Label htmlFor="comment">Комментарий</Label>

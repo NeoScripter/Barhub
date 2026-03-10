@@ -26,7 +26,8 @@ const Edit: FC<Inertia.Pages.Admin.Tasks.Edit> = ({
 }) => {
     const comment = task.comments?.[0] ?? null;
 
-    const { data, setData, put, processing, errors } = useForm({
+    const { data, setData, post, processing, errors } = useForm({
+        _method: 'put',
         title: task.title,
         description: task.description,
         deadline: convertDateToInputString(task.deadline),
@@ -39,7 +40,8 @@ const Edit: FC<Inertia.Pages.Admin.Tasks.Edit> = ({
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        put(update({ exhibition, company, task }).url, {
+        post(update({ exhibition, company, task }).url, {
+            preserveScroll: false,
             onSuccess: () => {
                 toast.success('Задача успешно обновлена');
             },
@@ -94,6 +96,7 @@ const Edit: FC<Inertia.Pages.Admin.Tasks.Edit> = ({
             <form
                 onSubmit={handleSubmit}
                 className="flex flex-col gap-6"
+                encType="multipart/form-data"
             >
                 <div className="grid gap-6">
                     <div className="grid gap-2">

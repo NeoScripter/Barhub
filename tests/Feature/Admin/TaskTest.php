@@ -14,6 +14,56 @@ use Illuminate\Support\Facades\Date;
 use Inertia\Testing\AssertableInertia;
 
 describe('Admin Task Test', function (): void {
+
+    it('displays the newest comment for the current user when editing the task', function() {
+
+    })->todo();
+
+    it('displays the filename of the comment file and the comment content in the task edit form when a task has a file', function (): void {
+        Storage::fake('local');
+
+        $user = User::factory()->create([
+            'email' => 'super-admin@gmail.com',
+            'password' => 'password',
+        ]);
+        $user->assignRole(UserRole::SUPER_ADMIN);
+        $exhibition = Exhibition::factory()->create();
+        $company = Company::factory()->for($exhibition)->create();
+        $task = Task::factory()->for($company)->create();
+        $route = "/admin/exhibitions/{$exhibition->id}/companies/{$company->id}/tasks";
+
+        $comment = $task->comments()->create([
+            'content' => 'new content',
+            'user_id' => $user->id
+        ]);
+
+        $comment->file()->create([
+            'name' => 'document.pdf',
+            'url' => Storage::fake('local')->put('task-files', UploadedFile::fake()->create('document.pdf', 100))
+        ]);
+
+        $page = visit('/login');
+
+        $page->assertSee('Вход в аккаунт')
+            ->fill('email', 'super-admin@gmail.com')
+            ->fill('password', 'password')
+            ->click('@login-button')
+            ->assertSee('super-admin@gmail.com');
+
+        $this->assertAuthenticated();
+
+        $page->navigate($route)
+            ->assertSee($company->public_name)
+            ->click("@edit-task-{$task->id}")
+            ->assertSee('Редактировать задачу')
+            ->assertSee('document.pdf')
+            ->fill('comment',  'new content 2')
+            ->fill('deadline', now()->addYear()->format('Y') . '-03-20T12:02')
+            ->submit()
+            ->click("@edit-task-{$task->id}")
+            ->assertSee('new content 2');
+    });
+
     it('successfully updates the task when a file is passed to the request', function (): void {
         Storage::fake('local');
 
