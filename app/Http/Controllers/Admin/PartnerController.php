@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Admin;
 
+use App\Enums\TaskStatus;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Partner\PartnerUpdateRequest;
 use App\Http\Requests\Admin\Task\TaskIndexRequest;
@@ -45,7 +46,10 @@ final class PartnerController extends Controller
     public function edit(Exhibition $exhibition, Task $allTask)
     {
         $task = $allTask;
-        $task->load(['company:public_name,id', 'comments.file' => fn($q) => $q->latest()]);
+        $task->load([
+            'company:public_name,id',
+            'comments' => fn($q) => $q->with(['file', 'user'])->orderBy('created_at')
+        ]);
 
         return Inertia::render('admin/Partners/Edit', [
             'exhibition' => $exhibition,
@@ -53,5 +57,14 @@ final class PartnerController extends Controller
         ]);
     }
 
-    public function update(PartnerUpdateRequest $request, Exhibition $exhibition) {}
+    public function update(PartnerUpdateRequest $request, Exhibition $exhibition, Task $allTask)
+    {
+        $task = $allTask;
+        $newStatus = $request->boolean('is_accepted') === true ? TaskStatus::COMPLETED : TaskStatus::IMCOMPLETE;
+        $task->update(['status' => $newStatus]);
+
+        return to_route('admin.exhibitions.all-tasks.index', [
+            'exhibition' => $exhibition
+        ]);
+    }
 }

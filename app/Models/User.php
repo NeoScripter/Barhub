@@ -7,6 +7,7 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Enums\UserRole;
 use Database\Factories\UserFactory;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -85,4 +86,9 @@ final class User extends Authenticatable
             'role' => UserRole::class,
         ];
     }
+
+    // public function scopeVerified(Builder $query): Builder
+    // {
+    //     return $query->whereNotNull('email_verified_at');
+    // }
 }

@@ -1,5 +1,6 @@
 import type { AxiosProgressEvent } from 'axios';
 import React, { useEffect, useId, useState } from 'react';
+import DownloadFileLink from './DownloadFileLink';
 import LoadingRing from './LoadingRing';
 import UploadFileBtn from './UploadFileBtn';
 
@@ -70,14 +71,12 @@ export default function FileInput({
 
                 <div>
                     {currentFilename ? (
-                        <a
+                        <DownloadFileLink
                             href={isUpdated ? undefined : src}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="flex items-center gap-2 text-sm text-primary underline underline-offset-2"
-                        >
-                            📄 {currentFilename}
-                        </a>
+                            filename={currentFilename}
+                        />
                     ) : (
                         <span className="text-sm text-zinc-400">
                             Файл не выбран
