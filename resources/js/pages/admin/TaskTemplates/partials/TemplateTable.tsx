@@ -42,7 +42,7 @@ const TemplateTable: FC<
                         width={0.5}
                     >
                         <Link
-                            data-test={`edit-template-${template.id}`}
+                            data-test={`edit-task-${template.id}`}
                             href={edit({
                                 task_template: template.id,
                                 exhibition: exhibition,

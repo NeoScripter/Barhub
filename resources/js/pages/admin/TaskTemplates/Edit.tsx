@@ -12,35 +12,32 @@ import {
     destroy,
     index,
     update,
-} from '@/wayfinder/routes/admin/exhibitions/tasks';
+} from '@/wayfinder/routes/admin/exhibitions/task-templates';
 import { Inertia } from '@/wayfinder/types';
 import { router, useForm } from '@inertiajs/react';
 import { Trash2 } from 'lucide-react';
 import { FC, useState } from 'react';
 import { toast } from 'sonner';
 
-const Edit: FC<Inertia.Pages.Admin.Tasks.Edit> = ({
+const Edit: FC<Inertia.Pages.Admin.TaskTemplates.Edit> = ({
     exhibition,
-    company,
-    task,
+    template,
 }) => {
-    const comment = task.comments?.[0] ?? null;
-
     const { data, setData, post, processing, errors } = useForm({
         _method: 'put',
-        title: task.title,
-        description: task.description,
-        deadline: convertDateToInputString(task.deadline),
-        file: null,
-        file_name: comment?.file?.name ?? '',
-        comment: comment?.content ?? '',
+        title: template.title ?? '',
+        description: template.description ?? '',
+        deadline: convertDateToInputString(template.deadline),
+        file_url: null,
+        file_name: template.file_name ?? '',
+        comment: template.comment ?? '',
     });
 
     const [isDeleting, setIsDeleting] = useState(false);
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        post(update({ exhibition, company, task }).url, {
+        post(update({ exhibition, task_template: template.id }).url, {
             preserveScroll: false,
             onSuccess: () => {
                 toast.success('Задача успешно обновлена');
@@ -50,7 +47,7 @@ const Edit: FC<Inertia.Pages.Admin.Tasks.Edit> = ({
 
     const handleDelete = () => {
         setIsDeleting(true);
-        router.delete(destroy({ exhibition, company, task }).url, {
+        router.delete(destroy({ exhibition, task_template: template.id }).url, {
             onSuccess: () => {
                 toast.success('Задача успешно удалена');
             },
@@ -60,8 +57,6 @@ const Edit: FC<Inertia.Pages.Admin.Tasks.Edit> = ({
             },
         });
     };
-
-    const hasComment = data.comment != null && data.comment !== '';
 
     return (
         <div className="mx-auto w-full max-w-250">
@@ -78,7 +73,7 @@ const Edit: FC<Inertia.Pages.Admin.Tasks.Edit> = ({
                         </Button>
                     }
                     title="Удалить задачу?"
-                    description={`Вы уверены, что хотите удалить задачу "${task.title}"? Это действие нельзя отменить.`}
+                    description={`Вы уверены, что хотите удалить задачу "${template.title}"? Это действие нельзя отменить.`}
                     onConfirm={handleDelete}
                     confirmText="Удалить"
                     cancelText="Отмена"
@@ -90,7 +85,7 @@ const Edit: FC<Inertia.Pages.Admin.Tasks.Edit> = ({
                     asChild
                     className="mb-1 text-lg text-secondary"
                 >
-                    <h2>Редактировать задачу</h2>
+                    <h2>Редактировать общую задачу</h2>
                 </AccentHeading>
             </div>
             <form
@@ -152,50 +147,41 @@ const Edit: FC<Inertia.Pages.Admin.Tasks.Edit> = ({
                         <InputError message={errors.comment} />
                     </div>
 
-                    {hasComment && (
-                        <>
-                            <div className="grid gap-2">
-                                <Label htmlFor="file">
-                                    Прикрепить новый файл
-                                </Label>
-                                <FileInput
-                                    isEdited={true}
-                                    id="file"
-                                    src={comment?.file?.url}
-                                    filename={comment?.file?.name}
-                                    error={errors.file}
-                                    onChange={(file) => {
-                                        setData('file', file);
-                                        if (file)
-                                            setData('file_name', file.name);
-                                    }}
-                                />
-                                <InputError message={errors.file} />
-                            </div>
-                            <div className="grid gap-2">
-                                <Label htmlFor="file_name">
-                                    Название файла
-                                </Label>
-                                <Input
-                                    id="file_name"
-                                    type="text"
-                                    name="file_name"
-                                    value={data.file_name}
-                                    onChange={(e) =>
-                                        setData('file_name', e.target.value)
-                                    }
-                                    placeholder="Введите название файла"
-                                />
-                                <InputError message={errors.file_name} />
-                            </div>
-                        </>
-                    )}
+                    <div className="grid gap-2">
+                        <Label htmlFor="file_url">Прикрепить файл</Label>
+                        <FileInput
+                            isEdited={true}
+                            id="file_url"
+                            src={template?.file_url}
+                            filename={template?.file_name}
+                            error={errors.file_url}
+                            onChange={(file) => {
+                                setData('file_url', file);
+                                if (file) setData('file_name', file.name);
+                            }}
+                        />
+                        <InputError message={errors.file_url} />
+                    </div>
+                    <div className="grid gap-2">
+                        <Label htmlFor="file_name">Название файла</Label>
+                        <Input
+                            id="file_name"
+                            type="text"
+                            name="file_name"
+                            value={data.file_name}
+                            onChange={(e) =>
+                                setData('file_name', e.target.value)
+                            }
+                            placeholder="Введите название файла"
+                        />
+                        <InputError message={errors.file_name} />
+                    </div>
                 </div>
 
                 <FormButtons
                     label="Сохранить"
                     processing={processing}
-                    backUrl={index({ exhibition, company }).url}
+                    backUrl={index({ exhibition }).url}
                 />
             </form>
         </div>

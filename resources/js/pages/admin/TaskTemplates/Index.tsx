@@ -8,6 +8,8 @@ import { Plus } from 'lucide-react';
 import { FC } from 'react';
 import TemplateTable from './partials/TemplateTable';
 import TemplateTableHeader from './partials/TemplateTableHeader';
+import { Link } from '@inertiajs/react';
+import { create } from '@/wayfinder/routes/admin/exhibitions/task-templates';
 
 const Index: FC<Inertia.Pages.Admin.TaskTemplates.Index> = ({
     templates,
@@ -17,15 +19,21 @@ const Index: FC<Inertia.Pages.Admin.TaskTemplates.Index> = ({
         <>
             <IndexToolbar>
                 <div>
-                    <AccentHeading className="mb-2 sm:mb-3 xl:mb-5 text-xl">
+                    <AccentHeading className="mb-2 text-xl sm:mb-3 xl:mb-5">
                         Общие задачи
                     </AccentHeading>
                     <AccentHeading className="text-lg text-secondary 2xl:text-xl">
                         Услуги
                     </AccentHeading>
                 </div>
-                <Button>
-                    <Plus /> Добавить задачу
+                <Button asChild>
+                    <Link
+                        data-test="create-task"
+                        href={create({ exhibition })}
+                    >
+                        <Plus />
+                        Добавить задачу
+                    </Link>
                 </Button>
             </IndexToolbar>
 

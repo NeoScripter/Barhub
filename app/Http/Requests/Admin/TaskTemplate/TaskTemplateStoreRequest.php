@@ -10,7 +10,7 @@ final class TaskTemplateStoreRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return $this->exhibition->users()->has($this->user());
+        return true;
     }
 
     public function rules(): array

@@ -56,7 +56,7 @@ final class TaskTemplateController extends Controller
         if ($request->hasFile('file_url')) {
             $path = $request->file('file_url')->store('task-template-files');
             $template->update([
-                'url' => $path,
+                'file_url' => $path,
             ]);
         }
 
@@ -70,8 +70,10 @@ final class TaskTemplateController extends Controller
         $taskTemplate->update($request->only(['title', 'description', 'deadline', 'comment', 'file_name']));
 
         if ($request->hasFile('file_url')) {
+            if ($taskTemplate->file_url) {
+                Storage::delete($taskTemplate->file_url);
+            }
             $path = $request->file('file_url')->store('task-template-files');
-            Storage::delete($path);
             $taskTemplate->update(['file_url' => $path]);
         }
 
