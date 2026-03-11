@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\EventController as AdminEventController;
 use App\Http\Controllers\Admin\ExhibitionController as AdminExhibitionController;
 use App\Http\Controllers\Admin\ExponentController as AdminExponentController;
 use App\Http\Controllers\Admin\FollowupController as AdminFollowupController;
+use App\Http\Controllers\Admin\InfoItemController;
 use App\Http\Controllers\Admin\PartnerController as AdminPartnerController;
 use App\Http\Controllers\Admin\PersonController as AdminPersonController;
 use App\Http\Controllers\Admin\ServiceController as AdminServiceController;
@@ -84,6 +85,7 @@ Route::prefix('/admin')
                     ->only(['update', 'index', 'destroy']);
                 Route::resource('companies/{company}/tasks', AdminTaskController::class);
                 Route::resource('task-templates', TaskTemplateController::class);
+                Route::resource('info-items', InfoItemController::class);
                 Route::resource('companies/{company}/services', AdminServiceController::class);
 
                 Route::resource('events', AdminEventController::class)->except('show');

@@ -11,6 +11,8 @@ class InfoItem extends Model
     /** @use HasFactory<\Database\Factories\InfoItemFactory> */
     use HasFactory;
 
+    protected $with = ['image'];
+
     public function image()
     {
         return $this->morphOne(Image::class, 'imageable');

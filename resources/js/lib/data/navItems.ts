@@ -103,10 +103,10 @@ export const adminNavItems: NavItemType[] = [
                 isDynamic: true,
             },
             {
-                id: 'partner-materials',
+                id: 'info-items',
                 type: 'link',
                 label: 'Информация и материалы',
-                url: '/admin/exhibitions/{exhibition}/partner-materials',
+                url: '/admin/exhibitions/{exhibition}/info-items',
                 isDynamic: true,
             },
         ],
