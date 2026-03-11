@@ -82,17 +82,17 @@ export const adminNavItems: NavItemType[] = [
         isDynamic: true,
         links: [
             {
-                id: 'partner-review-tasks',
+                id: 'all-tasks',
                 type: 'link',
                 label: 'Задачи на проверке',
                 url: '/admin/exhibitions/{exhibition}/all-tasks',
                 isDynamic: true,
             },
             {
-                id: 'partner-all-tasks',
+                id: 'task-templates',
                 type: 'link',
                 label: 'Общие задачи',
-                url: '/admin/exhibitions/{exhibition}/common-tasks',
+                url: '/admin/exhibitions/{exhibition}/task-templates',
                 isDynamic: true,
             },
             {

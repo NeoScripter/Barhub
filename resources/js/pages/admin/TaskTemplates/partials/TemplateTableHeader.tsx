@@ -6,13 +6,12 @@ import { ChevronsUpDown } from 'lucide-react';
 type Column = { label: string; query?: string };
 
 const HEADER_COLS: Column[] = [
-    { label: 'Задача', query: 'title' },
+    { label: 'Заголовок', query: 'title' },
     { label: 'Дедлайн', query: 'deadline' },
-    { label: 'Статус', query: 'status' },
     { label: 'Действия' },
 ] as const;
 
-const TaskTableHeader = () => {
+const TemplateTableHeader = () => {
     return (
         <Table.Header>
             <Table.Row>
@@ -40,4 +39,4 @@ const TaskTableHeader = () => {
     );
 };
 
-export default TaskTableHeader;
+export default TemplateTableHeader;

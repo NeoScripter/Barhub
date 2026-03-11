@@ -19,14 +19,14 @@ final class TaskTemplateController extends Controller
 {
     public function index(TaskTemplateIndexRequest $request, Exhibition $exhibition)
     {
-        $templates = QueryBuilder::for($exhibition->tasks()->select(['title', 'id', 'deadline']))
+        $templates = QueryBuilder::for($exhibition->taskTemplates()->select(['title', 'id', 'deadline']))
             ->allowedSorts(['title', 'deadline'])
             ->paginate()
             ->appends($request->query());
 
         return Inertia::render('admin/TaskTemplates/Index', [
             'exhibition' => $exhibition,
-            'tasks' => $templates,
+            'templates' => $templates,
         ]);
     }
 

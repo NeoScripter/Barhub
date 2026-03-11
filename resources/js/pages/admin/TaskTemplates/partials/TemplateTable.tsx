@@ -1,65 +1,51 @@
 import Table from '@/components/ui/Table';
-import TaskCard from '@/components/ui/TaskCard';
-import { formatDateAndTime, getTaskStatus } from '@/lib/utils';
+import { formatDateAndTime } from '@/lib/utils';
 import { NodeProps } from '@/types/shared';
-import { edit } from '@/wayfinder/routes/admin/exhibitions/tasks';
+import { edit } from '@/wayfinder/routes/admin/exhibitions/task-templates';
 import { App } from '@/wayfinder/types';
 import { Link } from '@inertiajs/react';
 import { VisuallyHidden } from '@radix-ui/react-visually-hidden';
 import { PencilLine } from 'lucide-react';
 import { FC } from 'react';
 
-const TaskTable: FC<
+const TemplateTable: FC<
     NodeProps<{
-        tasks: App.Models.Task[] | undefined;
+        templates: App.Models.TaskTemplate[] | undefined;
         exhibition: App.Models.Exhibition;
-        company: App.Models.Company;
     }>
-> = ({ className, tasks, exhibition, company }) => {
-    if (!tasks) {
+> = ({ className, templates, exhibition }) => {
+    if (!templates) {
         return null;
     }
 
     return (
         <Table.Body
-            id="tasks-table"
+            id="templates-table"
             className={className}
         >
-            {tasks.map((task) => (
-                <Table.Row key={task.id}>
+            {templates.map((template) => (
+                <Table.Row key={template.id}>
                     <Table.Cell
                         key="title"
                         width={2}
                     >
-                        {task.title}
+                        {template.title}
                     </Table.Cell>
                     <Table.Cell
                         key="deadline"
                         width={1.4}
                     >
-                        {formatDateAndTime(new Date(task.deadline))}
-                    </Table.Cell>
-                    <Table.Cell
-                        width={0.5}
-                        key="status"
-                    >
-                        <TaskCard.Badge
-                            className="ml-0"
-                            variant={getTaskStatus(task.status)}
-                        >
-                            {task.status}
-                        </TaskCard.Badge>
+                        {formatDateAndTime(new Date(template.deadline))}
                     </Table.Cell>
                     <Table.Cell
                         key="edit-btn"
                         width={0.5}
                     >
                         <Link
-                            data-test={`edit-task-${task.id}`}
+                            data-test={`edit-template-${template.id}`}
                             href={edit({
-                                task: task.id,
+                                task_template: template.id,
                                 exhibition: exhibition,
-                                company: company,
                             })}
                         >
                             <VisuallyHidden>
@@ -74,4 +60,4 @@ const TaskTable: FC<
     );
 };
 
-export default TaskTable;
+export default TemplateTable;

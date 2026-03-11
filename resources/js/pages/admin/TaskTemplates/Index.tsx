@@ -1,49 +1,46 @@
+import AccentHeading from '@/components/ui/AccentHeading';
 import { Button } from '@/components/ui/Button';
+import IndexToolbar from '@/components/ui/IndexToolbar';
 import Pagination from '@/components/ui/Pagination';
 import Table from '@/components/ui/Table';
-import CompanyLayout from '@/layouts/app/CompanyLayout';
-import { create } from '@/wayfinder/routes/admin/exhibitions/tasks';
 import { Inertia } from '@/wayfinder/types';
-import { Link } from '@inertiajs/react';
 import { Plus } from 'lucide-react';
 import { FC } from 'react';
-import TaskTable from './partials/TaskTemplateTable';
-import TaskTableHeader from './partials/TaskTemplateTableHeader';
+import TemplateTable from './partials/TemplateTable';
+import TemplateTableHeader from './partials/TemplateTableHeader';
 
-const Index: FC<Inertia.Pages.Admin.Tasks.Index> = ({
-    tasks,
+const Index: FC<Inertia.Pages.Admin.TaskTemplates.Index> = ({
+    templates,
     exhibition,
-    company,
 }) => {
-    const CreateLink = () => (
-        <Button asChild>
-            <Link
-                data-test="create-task"
-                href={create({ exhibition, company })}
-            >
-                Создать задачу
-                <Plus />
-            </Link>
-        </Button>
-    );
     return (
-        <CompanyLayout
-            className="space-y-30!"
-            createLink={CreateLink}
-        >
+        <>
+            <IndexToolbar>
+                <div>
+                    <AccentHeading className="mb-2 sm:mb-3 xl:mb-5 text-xl">
+                        Общие задачи
+                    </AccentHeading>
+                    <AccentHeading className="text-lg text-secondary 2xl:text-xl">
+                        Услуги
+                    </AccentHeading>
+                </div>
+                <Button>
+                    <Plus /> Добавить задачу
+                </Button>
+            </IndexToolbar>
+
             <Table
-                isEmpty={tasks?.data?.length === 0}
-                placeholder="По вашему запросу не найдено ни одной задачи"
+                isEmpty={templates?.data?.length === 0}
+                placeholder="По вашему запросу не найдено ни одной общейс задачи"
             >
-                <TaskTableHeader />
-                <TaskTable
-                    tasks={tasks.data}
+                <TemplateTableHeader />
+                <TemplateTable
+                    templates={templates.data}
                     exhibition={exhibition}
-                    company={company}
                 />
             </Table>
-            <Pagination data={tasks} />
-        </CompanyLayout>
+            <Pagination data={templates} />
+        </>
     );
 };
 

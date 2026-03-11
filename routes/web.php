@@ -83,7 +83,7 @@ Route::prefix('/admin')
                 Route::resource('companies/{company}/exponents', AdminExponentController::class)
                     ->only(['update', 'index', 'destroy']);
                 Route::resource('companies/{company}/tasks', AdminTaskController::class);
-                Route::resource('template-tasks', TaskTemplateController::class);
+                Route::resource('task-templates', TaskTemplateController::class);
                 Route::resource('companies/{company}/services', AdminServiceController::class);
 
                 Route::resource('events', AdminEventController::class)->except('show');
