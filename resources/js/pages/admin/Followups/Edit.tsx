@@ -1,6 +1,7 @@
 import FormButtons from '@/components/form/FormButtons';
 import AccentHeading from '@/components/ui/AccentHeading';
 import LabeledContent from '@/components/ui/LabeledContent';
+import { formatDateAndTime } from '@/lib/utils';
 import FollowupController from '@/wayfinder/App/Http/Controllers/Admin/FollowupController';
 import { update } from '@/wayfinder/routes/admin/exhibitions/followups';
 import { Inertia } from '@/wayfinder/types';
@@ -30,9 +31,7 @@ const Edit: FC<Inertia.Pages.Admin.Followups.Edit> = ({
                     asChild
                     className="mb-1 text-lg text-secondary"
                 >
-                    <h2>
-                        Подтвердить получение услуги
-                    </h2>
+                    <h2>Подтвердить получение услуги</h2>
                 </AccentHeading>
             </div>
 
@@ -47,19 +46,28 @@ const Edit: FC<Inertia.Pages.Admin.Followups.Edit> = ({
                     <p>{followup.service?.description}</p>
                 </LabeledContent>
                 <LabeledContent label="Комментарий экспонента">
+                    {followup.user && (
+                        <small className="mb-2 block">
+                            {followup.user?.name}
+                        </small>
+                    )}
+                    <small className="block mb-2">
+                        {formatDateAndTime(new Date(followup.created_at)!)}
+                    </small>
+
                     <p>{followup.comment}</p>
                 </LabeledContent>
             </div>
-                <form
-                    className="flex flex-col gap-6"
-                    onSubmit={handleSubmit}
-                >
-                    <FormButtons
-                        label="Подтвердить"
-                        processing={processing}
-                        backUrl={FollowupController.index({ exhibition }).url}
-                    />
-                </form>
+            <form
+                className="flex flex-col gap-6"
+                onSubmit={handleSubmit}
+            >
+                <FormButtons
+                    label="Подтвердить"
+                    processing={processing}
+                    backUrl={FollowupController.index({ exhibition }).url}
+                />
+            </form>
         </div>
     );
 };

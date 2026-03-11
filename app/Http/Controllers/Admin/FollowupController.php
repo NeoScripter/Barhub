@@ -41,7 +41,7 @@ final class FollowupController extends Controller
     public function edit(Exhibition $exhibition, Followup $followup)
     {
         $followup = $followup;
-        $followup->load(['service.company:public_name,id']);
+        $followup->load(['service.company:public_name,id', 'user:name,id']);
 
         return Inertia::render('admin/Followups/Edit', [
             'exhibition' => $exhibition,
