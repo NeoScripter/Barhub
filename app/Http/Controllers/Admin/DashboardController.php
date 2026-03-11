@@ -4,13 +4,11 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Admin;
 
-use App\Enums\TaskStatus;
 use App\Enums\UserRole;
 use App\Http\Controllers\Controller;
 use App\Models\Exhibition;
 use App\Models\Task;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Inertia\Inertia;
 
@@ -31,7 +29,7 @@ final class DashboardController extends Controller
         }
 
         if ($request->has('selected')) {
-            $expo = Exhibition::findOrFail($request->integer('selected'));
+            $expo = Exhibition::query()->findOrFail($request->integer('selected'));
 
             if (Gate::check('viewAny', $expo)) {
                 $tasks = Task::forSummary($expo->id);

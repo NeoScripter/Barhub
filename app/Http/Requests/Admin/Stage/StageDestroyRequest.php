@@ -20,7 +20,7 @@ final class StageDestroyRequest extends FormRequest
         return [];
     }
 
-    protected function failedAuthorization()
+    protected function failedAuthorization(): void
     {
         abort(403, 'Невозможно удалить площадку, так как она используется в событиях');
     }

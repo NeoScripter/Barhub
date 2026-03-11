@@ -23,7 +23,7 @@ final class TaskController extends Controller
         $tasks = QueryBuilder::for($company->tasks()->select(['title', 'id', 'deadline', 'status']))
             ->allowedSorts(['title', 'deadline', 'status'])
             ->paginate()
-            ->through(fn($task): array => [
+            ->through(fn ($task): array => [
                 ...$task->toArray(),
                 'status' => $task->status->label(),
             ])
@@ -39,7 +39,7 @@ final class TaskController extends Controller
     public function edit(Exhibition $exhibition, Company $company, Task $task)
     {
         $user = Auth::user();
-        $task->load(['comments' => function ($q) use ($user) {
+        $task->load(['comments' => function ($q) use ($user): void {
             $q->where('user_id', $user->id)
                 ->latest()
                 ->limit(1)
@@ -67,7 +67,6 @@ final class TaskController extends Controller
             ...$request->only(['title', 'description', 'deadline']),
             'status' => TaskStatus::TO_BE_COMPLETED,
         ]);
-
 
         if ($request->filled('comment')) {
             $comment = $task->comments()->create([
@@ -106,7 +105,7 @@ final class TaskController extends Controller
             } else {
                 $comment = $task->comments()->create([
                     'content' => $request->validated('comment'),
-                    'user_id' => $user->id
+                    'user_id' => $user->id,
                 ]);
             }
 
@@ -115,7 +114,7 @@ final class TaskController extends Controller
                 $comment->file?->delete();
                 $comment->file()->create([
                     'name' => $request->validated('file_name'),
-                    'url'  => $path,
+                    'url' => $path,
                 ]);
             }
         }

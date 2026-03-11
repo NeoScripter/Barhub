@@ -7,8 +7,8 @@ namespace Database\Seeders;
 use App\Enums\UserRole;
 use App\Models\Company;
 use App\Models\Exhibition;
-use App\Models\Service;
 use App\Models\Followup;
+use App\Models\Service;
 use App\Models\Tag;
 use App\Models\Task;
 use App\Models\TaskComment;
@@ -30,14 +30,14 @@ final class CompanySeeder extends Seeder
         }
 
         $exhibitions->each(
-            fn(Exhibition $exhibition) => Company::factory()
+            fn (Exhibition $exhibition) => Company::factory()
                 ->has(
                     Task::factory()
                         ->count(8)
                         ->has(TaskComment::factory()
                             ->when(
                                 $exhibition->users()->first(),
-                                fn($factory, $user) => $factory->for($user)
+                                fn ($factory, $user) => $factory->for($user)
                             )
                             ->has(TaskFile::factory(), 'file')
                             ->count(random_int(1, 3)), 'comments')
@@ -61,9 +61,9 @@ final class CompanySeeder extends Seeder
                         'type' => 'logo',
                     ]);
 
-                    $company->services()->each(function ($service) use ($company) {
+                    $company->services()->each(function ($service) use ($company): void {
                         $data = User::factory()->make([
-                            'role' => UserRole::EXPONENT->value
+                            'role' => UserRole::EXPONENT->value,
                         ])->getAttributes();
 
                         $user = $company->users()->firstOrCreate(

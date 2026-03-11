@@ -19,7 +19,7 @@ final class PartnerController extends Controller
 {
     public function index(TaskIndexRequest $request, Exhibition $exhibition)
     {
-        $tasks = QueryBuilder::for(Task::select(['tasks.title', 'tasks.id', 'tasks.deadline', 'tasks.status', 'tasks.company_id'])
+        $tasks = QueryBuilder::for(Task::query()->select(['tasks.title', 'tasks.id', 'tasks.deadline', 'tasks.status', 'tasks.company_id'])
             ->forExhibition($exhibition->id))
             ->with('company:public_name,id')
             ->where('status', '!=', TaskStatus::COMPLETED)
@@ -30,7 +30,7 @@ final class PartnerController extends Controller
                 AllowedSort::custom('company.public_name', new RelationSort('companies', 'public_name', 'company_id')),
             ])
             ->paginate()
-            ->through(fn($task): array => [
+            ->through(fn ($task): array => [
                 ...$task->toArray(),
                 'status' => $task->status->label(),
             ])
@@ -50,7 +50,7 @@ final class PartnerController extends Controller
         $task = $allTask;
         $task->load([
             'company:public_name,id',
-            'comments' => fn($q) => $q->with(['file', 'user'])->orderBy('created_at')
+            'comments' => fn ($q) => $q->with(['file', 'user'])->orderBy('created_at'),
         ]);
 
         return Inertia::render('admin/Partners/Edit', [
@@ -61,15 +61,13 @@ final class PartnerController extends Controller
 
     public function update(PartnerUpdateRequest $request, Exhibition $exhibition, Task $allTask)
     {
-        if ($allTask->status !== TaskStatus::TO_BE_VERIFIED) {
-            abort(403);
-        }
+        abort_if($allTask->status !== TaskStatus::TO_BE_VERIFIED, 403);
         $task = $allTask;
         $newStatus = $request->boolean('is_accepted') === true ? TaskStatus::COMPLETED : TaskStatus::IMCOMPLETE;
         $task->update(['status' => $newStatus]);
 
         return to_route('admin.exhibitions.all-tasks.index', [
-            'exhibition' => $exhibition
+            'exhibition' => $exhibition,
         ]);
     }
 }

@@ -13,7 +13,7 @@ use Inertia\Testing\AssertableInertia;
 
 describe('Admin Partner Browser Tests', function (): void {
 
-    it('renders the partners index page', function () {
+    it('renders the partners index page', function (): void {
         $user = User::factory()->create([
             'email' => 'super-admin@gmail.com',
             'password' => 'password',
@@ -42,7 +42,7 @@ describe('Admin Partner Browser Tests', function (): void {
         $page->assertSee('Задачи на проверке');
     });
 
-    it('renders the partners edit page', function () {
+    it('renders the partners edit page', function (): void {
         $user = User::factory()->create([
             'email' => 'super-admin@gmail.com',
             'password' => 'password',
@@ -70,7 +70,7 @@ describe('Admin Partner Browser Tests', function (): void {
             ->assertSee('Название компании');
     });
 
-    it('successfully accepts a task', function () {
+    it('successfully accepts a task', function (): void {
         $user = User::factory()->create([
             'email' => 'super-admin@gmail.com',
             'password' => 'password',
@@ -99,12 +99,12 @@ describe('Admin Partner Browser Tests', function (): void {
             ->assertPathEndsWith($route);
 
         $this->assertDatabaseHas('tasks', [
-            'id'     => $company->tasks[0]->id,
+            'id' => $company->tasks[0]->id,
             'status' => TaskStatus::COMPLETED->value,
         ]);
     });
 
-    it('successfully rejects a task', function () {
+    it('successfully rejects a task', function (): void {
         $user = User::factory()->create([
             'email' => 'super-admin@gmail.com',
             'password' => 'password',
@@ -133,12 +133,12 @@ describe('Admin Partner Browser Tests', function (): void {
             ->assertPathEndsWith($route);
 
         $this->assertDatabaseHas('tasks', [
-            'id'     => $company->tasks[0]->id,
+            'id' => $company->tasks[0]->id,
             'status' => TaskStatus::IMCOMPLETE->value,
         ]);
     });
 
-    it('displays only the tasks that belong to this exhibition', function () {
+    it('displays only the tasks that belong to this exhibition', function (): void {
         $user = User::factory()->create([
             'email' => 'admin@gmail.com',
             'password' => 'password',
@@ -183,7 +183,7 @@ describe('Admin Partner Feature Tests', function (): void {
         $this->route = "/admin/exhibitions/{$this->exhibition->id}/all-tasks";
     });
 
-    it('sorts tasks by title in desc order', function () {
+    it('sorts tasks by title in desc order', function (): void {
         $company = Company::factory()->for($this->exhibition)->create();
         Task::factory()
             ->count(3)
@@ -209,7 +209,7 @@ describe('Admin Partner Feature Tests', function (): void {
             ->and($tasks[2]['title'])->toBe('Alpha');
     });
 
-    it('sorts tasks by title in asc order', function () {
+    it('sorts tasks by title in asc order', function (): void {
         $company = Company::factory()->for($this->exhibition)->create();
         Task::factory()
             ->count(3)
@@ -235,7 +235,7 @@ describe('Admin Partner Feature Tests', function (): void {
             ->and($tasks[2]['title'])->toBe('Zebra');
     });
 
-    it('sorts tasks by company name in desc order', function () {
+    it('sorts tasks by company name in desc order', function (): void {
         Company::factory()->for($this->exhibition)
             ->has(Task::factory(['status' => TaskStatus::TO_BE_VERIFIED]))
             ->count(3)
@@ -260,7 +260,7 @@ describe('Admin Partner Feature Tests', function (): void {
             ->and($tasks[2]['company']['public_name'])->toBe('Alpha');
     });
 
-    it('sorts tasks by company name in asc order', function () {
+    it('sorts tasks by company name in asc order', function (): void {
         Company::factory()->for($this->exhibition)
             ->has(Task::factory(['status' => TaskStatus::TO_BE_VERIFIED]))
             ->count(3)
@@ -285,7 +285,7 @@ describe('Admin Partner Feature Tests', function (): void {
             ->and($tasks[2]['company']['public_name'])->toBe('Zebra');
     });
 
-    it('sorts tasks by deadline in asc and desc order', function () {
+    it('sorts tasks by deadline in asc and desc order', function (): void {
         $company = Company::factory()->for($this->exhibition)->create();
         Task::factory()
             ->count(3)
@@ -300,7 +300,7 @@ describe('Admin Partner Feature Tests', function (): void {
         $tasks = $this->actingAs($this->superAdmin)
             ->get(route('admin.exhibitions.all-tasks.index', [
                 'exhibition' => $this->exhibition,
-                'sort'       => 'deadline',
+                'sort' => 'deadline',
             ]))
             ->assertOk()
             ->viewData('page')['props']['tasks']['data'];
@@ -311,7 +311,7 @@ describe('Admin Partner Feature Tests', function (): void {
         $tasks = $this->actingAs($this->superAdmin)
             ->get(route('admin.exhibitions.all-tasks.index', [
                 'exhibition' => $this->exhibition,
-                'sort'       => '-deadline',
+                'sort' => '-deadline',
             ]))
             ->assertOk()
             ->viewData('page')['props']['tasks']['data'];
@@ -320,7 +320,7 @@ describe('Admin Partner Feature Tests', function (): void {
             ->and($tasks[1]['deadline'])->toBeGreaterThan($tasks[2]['deadline']);
     });
 
-    it('sorts tasks by status in asc and desc order', function () {
+    it('sorts tasks by status in asc and desc order', function (): void {
         $company = Company::factory()->for($this->exhibition)->create();
         Task::factory()
             ->count(3)
@@ -335,7 +335,7 @@ describe('Admin Partner Feature Tests', function (): void {
         $tasks = $this->actingAs($this->superAdmin)
             ->get(route('admin.exhibitions.all-tasks.index', [
                 'exhibition' => $this->exhibition,
-                'sort'       => 'status',
+                'sort' => 'status',
             ]))
             ->assertOk()
             ->viewData('page')['props']['tasks']['data'];
@@ -346,7 +346,7 @@ describe('Admin Partner Feature Tests', function (): void {
         $tasks = $this->actingAs($this->superAdmin)
             ->get(route('admin.exhibitions.all-tasks.index', [
                 'exhibition' => $this->exhibition,
-                'sort'       => '-status',
+                'sort' => '-status',
             ]))
             ->assertOk()
             ->viewData('page')['props']['tasks']['data'];
@@ -355,10 +355,10 @@ describe('Admin Partner Feature Tests', function (): void {
         expect($statuses)->toBe(collect($statuses)->sortDesc()->values()->all());
     });
 
-    it('displays the comments on the edit page from oldest to newest', function () {
-        $company  = Company::factory()->for($this->exhibition)->create();
-        $task     = Task::factory(['status' => TaskStatus::TO_BE_VERIFIED])->for($company)->create();
-        $route    = "/admin/exhibitions/{$this->exhibition->id}/all-tasks";
+    it('displays the comments on the edit page from oldest to newest', function (): void {
+        $company = Company::factory()->for($this->exhibition)->create();
+        $task = Task::factory(['status' => TaskStatus::TO_BE_VERIFIED])->for($company)->create();
+        $route = "/admin/exhibitions/{$this->exhibition->id}/all-tasks";
 
         TaskComment::factory()
             ->count(3)
@@ -375,7 +375,7 @@ describe('Admin Partner Feature Tests', function (): void {
             ->get("$route/$task->id/edit")
             ->assertOk()
             ->assertInertia(
-                fn(AssertableInertia $page) => $page
+                fn (AssertableInertia $page): AssertableInertia => $page
                     ->component('admin/Partners/Edit')
                     ->has('task.comments', 3)
             )
@@ -386,61 +386,61 @@ describe('Admin Partner Feature Tests', function (): void {
             ->and($comments[2]['content'])->toBe('newest comment');
     });
 
-    it('allows super admin to enter this page', function () {
+    it('allows super admin to enter this page', function (): void {
         $this->actingAs($this->superAdmin)
             ->get($this->route)
             ->assertOk();
     });
 
-    it('allows super admin to update the status of a task whose status is to be verified', function () {
+    it('allows super admin to update the status of a task whose status is to be verified', function (): void {
         $company = Company::factory()->for($this->exhibition)->create();
         $task = Task::factory(['status' => TaskStatus::TO_BE_VERIFIED->value])
             ->for($company)
             ->create();
 
         $this->actingAs($this->superAdmin)
-            ->patch($this->route . "/$task->id", ['is_accepted' => true])
+            ->patch($this->route."/$task->id", ['is_accepted' => true])
             ->assertRedirect($this->route);
 
         $this->assertDatabaseHas('tasks', [
-            'id'          => $task->id,
-            'status' => TaskStatus::COMPLETED->value
+            'id' => $task->id,
+            'status' => TaskStatus::COMPLETED->value,
         ]);
     });
 
-    it('forbids users to update the status of a task whose status is not to be verified', function () {
+    it('forbids users to update the status of a task whose status is not to be verified', function (): void {
         $company = Company::factory()->for($this->exhibition)->create();
         $task = Task::factory(['status' => TaskStatus::IMCOMPLETE->value])
             ->for($company)
             ->create();
 
         $this->actingAs($this->superAdmin)
-            ->patch($this->route . "/$task->id", ['is_accepted' => true])
+            ->patch($this->route."/$task->id", ['is_accepted' => true])
             ->assertForbidden();
 
         $task->update(['status' => TaskStatus::DELAYED->value]);
         $task = $task->refresh();
 
         $this->actingAs($this->superAdmin)
-            ->patch($this->route . "/$task->id", ['is_accepted' => true])
+            ->patch($this->route."/$task->id", ['is_accepted' => true])
             ->assertForbidden();
 
         $task->update(['status' => TaskStatus::TO_BE_COMPLETED->value]);
         $task = $task->refresh();
 
         $this->actingAs($this->superAdmin)
-            ->patch($this->route . "/$task->id", ['is_accepted' => true])
+            ->patch($this->route."/$task->id", ['is_accepted' => true])
             ->assertForbidden();
 
         $task->update(['status' => TaskStatus::COMPLETED->value]);
         $task = $task->refresh();
 
         $this->actingAs($this->superAdmin)
-            ->patch($this->route . "/$task->id", ['is_accepted' => false])
+            ->patch($this->route."/$task->id", ['is_accepted' => false])
             ->assertForbidden();
     });
 
-    it('allows admins with access to this exhibition to enter this page', function () {
+    it('allows admins with access to this exhibition to enter this page', function (): void {
         $admin = User::factory()->create();
         $admin->assignRole(UserRole::ADMIN);
         $this->exhibition->users()->attach($admin->id);
@@ -450,7 +450,7 @@ describe('Admin Partner Feature Tests', function (): void {
             ->assertOk();
     });
 
-    it('forbids admins without access to this exhibition from entering this page', function () {
+    it('forbids admins without access to this exhibition from entering this page', function (): void {
         $admin = User::factory()->create();
         $admin->assignRole(UserRole::ADMIN);
 
@@ -459,7 +459,7 @@ describe('Admin Partner Feature Tests', function (): void {
             ->assertForbidden();
     });
 
-    it('forbids admins without access from updating the status of a task', function () {
+    it('forbids admins without access from updating the status of a task', function (): void {
         $admin = User::factory()->create();
         $admin->assignRole(UserRole::ADMIN);
         $company = Company::factory()->for($this->exhibition)->create();
@@ -468,16 +468,16 @@ describe('Admin Partner Feature Tests', function (): void {
             ->create();
 
         $this->actingAs($admin)
-            ->patch($this->route . "/$task->id", ['is_accepted' => true])
+            ->patch($this->route."/$task->id", ['is_accepted' => true])
             ->assertForbidden();
 
         $this->assertDatabaseHas('tasks', [
-            'id'          => $task->id,
-            'status' => TaskStatus::IMCOMPLETE->value
+            'id' => $task->id,
+            'status' => TaskStatus::IMCOMPLETE->value,
         ]);
     });
 
-    it('forbids exponents from entering this page', function () {
+    it('forbids exponents from entering this page', function (): void {
         $exponent = User::factory()->create();
         $exponent->assignRole(UserRole::EXPONENT);
 
@@ -486,7 +486,7 @@ describe('Admin Partner Feature Tests', function (): void {
             ->assertForbidden();
     });
 
-    it('forbids exponents from updating the status of a task', function () {
+    it('forbids exponents from updating the status of a task', function (): void {
         $exponent = User::factory()->create();
         $exponent->assignRole(UserRole::EXPONENT);
         $company = Company::factory()->for($this->exhibition)->create();
@@ -495,16 +495,16 @@ describe('Admin Partner Feature Tests', function (): void {
             ->create();
 
         $this->actingAs($exponent)
-            ->patch($this->route . "/$task->id", ['is_accepted' => true])
+            ->patch($this->route."/$task->id", ['is_accepted' => true])
             ->assertForbidden();
 
         $this->assertDatabaseHas('tasks', [
-            'id'          => $task->id,
-            'status' => TaskStatus::IMCOMPLETE->value
+            'id' => $task->id,
+            'status' => TaskStatus::IMCOMPLETE->value,
         ]);
     });
 
-    it('forbids users from entering this page', function () {
+    it('forbids users from entering this page', function (): void {
         $user = User::factory()->create();
         $user->assignRole(UserRole::USER);
 
@@ -513,7 +513,7 @@ describe('Admin Partner Feature Tests', function (): void {
             ->assertForbidden();
     });
 
-    it('forbids users from updating the status of a task', function () {
+    it('forbids users from updating the status of a task', function (): void {
         $user = User::factory()->create();
         $user->assignRole(UserRole::USER);
         $company = Company::factory()->for($this->exhibition)->create();
@@ -522,36 +522,36 @@ describe('Admin Partner Feature Tests', function (): void {
             ->create();
 
         $this->actingAs($user)
-            ->patch($this->route . "/$task->id", ['is_accepted' => true])
+            ->patch($this->route."/$task->id", ['is_accepted' => true])
             ->assertForbidden();
 
         $this->assertDatabaseHas('tasks', [
-            'id'          => $task->id,
-            'status' => TaskStatus::IMCOMPLETE->value
+            'id' => $task->id,
+            'status' => TaskStatus::IMCOMPLETE->value,
         ]);
     });
 
-    it('forbids unregistered users to enter this page', function () {
+    it('forbids unregistered users to enter this page', function (): void {
         $this->get($this->route)
             ->assertRedirect('/login');
     });
 
-    it('forbids unregistered users to update the status of a task', function () {
+    it('forbids unregistered users to update the status of a task', function (): void {
         $company = Company::factory()->for($this->exhibition)->create();
         $task = Task::factory(['status' => TaskStatus::IMCOMPLETE->value])
             ->for($company)
             ->create();
 
-        $this->patch($this->route . "/$task->id", ['is_accepted' => true])
+        $this->patch($this->route."/$task->id", ['is_accepted' => true])
             ->assertRedirect('/login');
 
         $this->assertDatabaseHas('tasks', [
-            'id'          => $task->id,
-            'status' => TaskStatus::IMCOMPLETE->value
+            'id' => $task->id,
+            'status' => TaskStatus::IMCOMPLETE->value,
         ]);
     });
 
-    it('does not display complete tasks in the summary section on the index page', function () {
+    it('does not display complete tasks in the summary section on the index page', function (): void {
         $company = Company::factory()->for($this->exhibition)->create();
 
         Task::factory()->for($company)->create(['status' => TaskStatus::TO_BE_VERIFIED]);
@@ -566,7 +566,7 @@ describe('Admin Partner Feature Tests', function (): void {
         expect(collect($tasks)->pluck('status')->contains(TaskStatus::COMPLETED->label()))->toBeFalse();
     });
 
-    it('does not display completed tasks in the list category on the index page', function () {
+    it('does not display completed tasks in the list category on the index page', function (): void {
         $company = Company::factory()->for($this->exhibition)->create();
 
         Task::factory()->for($company)->createMany([
@@ -584,10 +584,10 @@ describe('Admin Partner Feature Tests', function (): void {
         $tasks = $response->viewData('page')['props']['tasks']['data'];
 
         expect($tasks)->toHaveCount(4)
-            ->and($tasks)->each(fn($task) => $task->status->not->toBe(TaskStatus::COMPLETED->label()));
+            ->and($tasks)->each(fn ($task) => $task->status->not->toBe(TaskStatus::COMPLETED->label()));
     });
 
-    it('displays the correct number of tasks in each category', function () {
+    it('displays the correct number of tasks in each category', function (): void {
         $company = Company::factory()->for($this->exhibition)->create();
 
         Task::factory()->count(3)->for($company)->create(['status' => TaskStatus::TO_BE_VERIFIED]);
@@ -605,4 +605,4 @@ describe('Admin Partner Feature Tests', function (): void {
             ->and(collect($summary)->firstWhere('status', TaskStatus::DELAYED->label())['count'])->toBe(2)
             ->and(collect($summary)->firstWhere('status', TaskStatus::IMCOMPLETE->label())['count'])->toBe(1);
     });
-})->group('feature');;
+})->group('feature');

@@ -1,13 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Database\Factories;
 
+use App\Models\TaskTemplate;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\TaskTemplate>
+ * @extends Factory<TaskTemplate>
  */
-class TaskTemplateFactory extends Factory
+final class TaskTemplateFactory extends Factory
 {
     /**
      * Define the model's default state.

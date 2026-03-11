@@ -22,7 +22,7 @@ final class TaskFile extends Model
 
     protected static function booted(): void
     {
-        static::deleting(function (TaskFile $file) {
+        self::deleting(function (TaskFile $file): void {
             Storage::delete($file->url);
         });
     }

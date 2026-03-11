@@ -18,7 +18,7 @@ final class FollowupController extends Controller
 {
     public function index(FollowupIndexRequest $request, Exhibition $exhibition)
     {
-        $followups = QueryBuilder::for(Followup::select(['followup.comment', 'followup.status', 'followup.id'])
+        $followups = QueryBuilder::for(Followup::query()->select(['followup.comment', 'followup.status', 'followup.id'])
             ->forExhibition($exhibition->id))
             ->with('service')
             ->where('status', '!=', FollowupStatus::COMPLETED)
@@ -26,7 +26,7 @@ final class FollowupController extends Controller
                 AllowedSort::custom('service.name', new RelationSort('services', 'name', 'service_id')),
             ])
             ->paginate()
-            ->through(fn($followup): array => [
+            ->through(fn ($followup): array => [
                 ...$followup->toArray(),
                 'status' => $followup->status->label(),
             ])
@@ -40,7 +40,6 @@ final class FollowupController extends Controller
 
     public function edit(Exhibition $exhibition, Followup $followup)
     {
-        $followup = $followup;
         $followup->load(['service.company:public_name,id', 'user:name,id']);
 
         return Inertia::render('admin/Followups/Edit', [
@@ -51,13 +50,11 @@ final class FollowupController extends Controller
 
     public function update(Exhibition $exhibition, Followup $followup)
     {
-        if ($followup->status !== FollowupStatus::IMCOMPLETE) {
-            abort(403);
-        }
+        abort_if($followup->status !== FollowupStatus::IMCOMPLETE, 403);
         $followup->update(['status' => FollowupStatus::COMPLETED]);
 
         return to_route('admin.exhibitions.followups.index', [
-            'exhibition' => $exhibition
+            'exhibition' => $exhibition,
         ]);
     }
 }

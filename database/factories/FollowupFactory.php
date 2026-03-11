@@ -1,13 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Database\Factories;
 
+use App\Models\Followup;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Followup>
+ * @extends Factory<Followup>
  */
-class FollowupFactory extends Factory
+final class FollowupFactory extends Factory
 {
     /**
      * Define the model's default state.

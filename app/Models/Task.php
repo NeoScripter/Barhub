@@ -6,6 +6,7 @@ namespace App\Models;
 
 use App\Enums\TaskStatus;
 use Database\Factories\TaskFactory;
+use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -29,22 +30,17 @@ final class Task extends Model
         return $this->belongsTo(Company::class);
     }
 
-    // public function scopeForExhibition(Builder $query, int $exhibitionId): Builder
-    // {
-    //     return $query->whereHas('company', function ($q) use ($exhibitionId) {
-    //         $q->where('exhibition_id', $exhibitionId);
-    //     });
-    // }
-
-    public function scopeForExhibition(Builder $query, int $exhibitionId): Builder
+    #[Scope]
+    protected function forExhibition(Builder $query, int $exhibitionId): Builder
     {
         return $query
-            ->join('companies', "tasks.company_id", '=', 'companies.id')
+            ->join('companies', 'tasks.company_id', '=', 'companies.id')
             ->where('companies.exhibition_id', $exhibitionId)
-            ->select("tasks.*");
+            ->select('tasks.*');
     }
 
-    public function scopeForSummary(Builder $query, int $exhibitionId): Collection
+    #[Scope]
+    protected function forSummary(Builder $query, int $exhibitionId): Collection
     {
         return $query
             ->select(['tasks.status', DB::raw('count(*) as count')])
@@ -53,11 +49,12 @@ final class Task extends Model
             ->where('tasks.status', '!=', TaskStatus::COMPLETED)
             ->groupBy('tasks.status')
             ->get()
-            ->map(fn($task): array => [
-                'count'  => $task->count,
+            ->map(fn ($task): array => [
+                'count' => $task->count,
                 'status' => $task->status->label(),
             ]);
     }
+
     /**
      * Get the attributes that should be cast.
      *

@@ -20,7 +20,7 @@ final class ThemeDestroyRequest extends FormRequest
         return [];
     }
 
-    protected function failedAuthorization()
+    protected function failedAuthorization(): void
     {
         abort(403, 'Невозможно удалить направление, так как оно используется в событиях');
     }

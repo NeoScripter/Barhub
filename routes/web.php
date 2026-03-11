@@ -8,13 +8,14 @@ use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\EventController as AdminEventController;
 use App\Http\Controllers\Admin\ExhibitionController as AdminExhibitionController;
 use App\Http\Controllers\Admin\ExponentController as AdminExponentController;
+use App\Http\Controllers\Admin\FollowupController as AdminFollowupController;
+use App\Http\Controllers\Admin\PartnerController as AdminPartnerController;
 use App\Http\Controllers\Admin\PersonController as AdminPersonController;
 use App\Http\Controllers\Admin\ServiceController as AdminServiceController;
 use App\Http\Controllers\Admin\StageController;
 use App\Http\Controllers\Admin\TagController;
 use App\Http\Controllers\Admin\TaskController as AdminTaskController;
-use App\Http\Controllers\Admin\PartnerController as AdminPartnerController;
-use App\Http\Controllers\Admin\FollowupController as AdminFollowupController;
+use App\Http\Controllers\Admin\TaskTemplateController;
 use App\Http\Controllers\Admin\ThemeController;
 use App\Http\Controllers\Admin\UpdatedExhibitionStatusController;
 use App\Http\Controllers\Exponent\DashboardController as ExponentDashboardController;
@@ -82,20 +83,11 @@ Route::prefix('/admin')
                 Route::resource('companies/{company}/exponents', AdminExponentController::class)
                     ->only(['update', 'index', 'destroy']);
                 Route::resource('companies/{company}/tasks', AdminTaskController::class);
+                Route::resource('template-tasks', TaskTemplateController::class);
                 Route::resource('companies/{company}/services', AdminServiceController::class);
 
                 Route::resource('events', AdminEventController::class)->except('show');
                 Route::resource('people', AdminPersonController::class)->except(['show']);
                 Route::resource('companies', AdminCompanyController::class)->except(['show']);
-
-                /*
-                |--------------------------------------------------------------------------
-                | Models Belonging To Exhibition
-                |--------------------------------------------------------------------------
-                */
-
-                // Route::resource('speakers', ExhibitionSpeakerController::class);
-                // Route::resource('tickets', ExhibitionTicketController::class);
-                // Route::resource('partners', ExhibitionPartnerController::class);
             });
     });

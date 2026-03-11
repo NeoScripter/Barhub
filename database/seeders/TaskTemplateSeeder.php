@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Database\Seeders;
 
 use App\Enums\UserRole;
@@ -7,7 +9,7 @@ use App\Models\TaskTemplate;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 
-class TaskTemplateSeeder extends Seeder
+final class TaskTemplateSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -15,12 +17,14 @@ class TaskTemplateSeeder extends Seeder
     public function run(): void
     {
         $admin = User::query()
+            ->whereHas('exhibitions')
             ->where('role', UserRole::ADMIN)
             ->first();
 
         TaskTemplate::factory()
-            ->count(rand(2, 5))
+            ->count(random_int(2, 5))
             ->for($admin, 'user')
+            ->for($admin->exhibitions()->first(), 'exhibition')
             ->create();
     }
 }
