@@ -219,6 +219,8 @@ describe('Admin Task Template Test', function (): void {
 
     it('has a default task template that requires each new exponent to fill in the information about their company', function (): void {})->todo();
 
+    it('deletes a file in the storage after the model is deleted', function (): void {})->todo();
+
     it('displays the filename of the comment file and the comment comment in the task edit form when a task has a file', function (): void {
         Storage::fake('local');
 

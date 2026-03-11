@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Providers;
 
 use App\Models\Company;
+use App\Models\InfoItem;
 use App\Models\Person;
 use Carbon\CarbonImmutable;
 use Illuminate\Auth\Events\Login;
@@ -60,6 +61,7 @@ final class AppServiceProvider extends ServiceProvider
         Relation::enforceMorphMap([
             'person' => Person::class,
             'company' => Company::class,
+            'info_item' => InfoItem::class,
         ]);
     }
 

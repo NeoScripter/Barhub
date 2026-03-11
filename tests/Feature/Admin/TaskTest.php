@@ -16,6 +16,8 @@ use Inertia\Testing\AssertableInertia;
 
 describe('Admin Task Test', function (): void {
 
+    it('deletes all the files in the storage after the model is deleted', function (): void {})->todo();
+
     it('displays the newest comment for the current user when editing the task', function (): void {
 
         $user = User::factory()->create([

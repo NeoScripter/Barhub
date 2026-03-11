@@ -22,6 +22,7 @@ final class DatabaseSeeder extends Seeder
             EventSeeder::class,
             CompanySeeder::class,
             TaskTemplateSeeder::class,
+            InfoItemSeeder::class,
         ]);
     }
 }
