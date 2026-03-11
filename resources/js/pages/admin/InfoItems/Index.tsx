@@ -4,25 +4,17 @@ import IndexToolbar from '@/components/ui/IndexToolbar';
 import Pagination from '@/components/ui/Pagination';
 import {
     create,
-    destroy,
     edit,
 } from '@/wayfinder/routes/admin/exhibitions/info-items';
 import { Inertia } from '@/wayfinder/types';
-import { Link, router } from '@inertiajs/react';
+import { Link } from '@inertiajs/react';
 import { Plus } from 'lucide-react';
 import { FC } from 'react';
-import { toast } from 'sonner';
 
 const Index: FC<Inertia.Pages.Admin.InfoItems.Index> = ({
     infoItems,
     exhibition,
 }) => {
-    const handleDelete = (id: number) => {
-        router.delete(destroy({ exhibition, info_item: id }).url, {
-            onSuccess: () => toast.success('Элемент успешно удалён'),
-            onError: () => toast.error('Ошибка при удалении элемента'),
-        });
-    };
 
     return (
         <>
@@ -87,13 +79,6 @@ const Index: FC<Inertia.Pages.Admin.InfoItems.Index> = ({
                                     >
                                         Редактировать
                                     </Link>
-                                </Button>
-                                <Button
-                                    variant="destructive"
-                                    size="sm"
-                                    onClick={() => handleDelete(item.id)}
-                                >
-                                    Удалить
                                 </Button>
                             </div>
                         </li>

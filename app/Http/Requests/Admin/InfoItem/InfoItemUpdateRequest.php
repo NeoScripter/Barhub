@@ -21,4 +21,8 @@ final class InfoItemUpdateRequest extends FormRequest
             'image' => ['nullable', 'image', 'max:10240', 'mimes:jpg,jpeg,png,gif,webp,svg'],
         ];
     }
+    public function messages(): array
+    {
+        return (new InfoItemStoreRequest())->messages();
+    }
 }
