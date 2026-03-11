@@ -59,4 +59,21 @@ final class ExhibitionController extends Controller
 
         return back();
     }
+
+    public function create(): Response
+    {
+        return Inertia::render('admin/Exhibitions/Create');
+    }
+
+    public function store(ExhibitionStoreRequest $request): RedirectResponse
+    {
+        Exhibition::create($request->validated());
+        return to_route('admin.exhibitions.index');
+    }
+
+    public function destroy(Exhibition $exhibition): RedirectResponse
+    {
+        $exhibition->delete();
+        return to_route('admin.exhibitions.index');
+    }
 }

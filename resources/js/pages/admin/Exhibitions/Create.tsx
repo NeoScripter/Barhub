@@ -1,49 +1,28 @@
 import FormButtons from '@/components/form/FormButtons';
 import InputError from '@/components/form/InputError';
 import AccentHeading from '@/components/ui/AccentHeading';
-import { Button } from '@/components/ui/Button';
-import { DeleteAlertDialog } from '@/components/ui/DeleteAlertDialog';
 import { Input } from '@/components/ui/Input';
 import { Label } from '@/components/ui/Label';
-import { convertDateToInputString } from '@/lib/utils';
-import {
-    destroy,
-    index,
-    update,
-} from '@/wayfinder/routes/admin/exhibitions';
+import { index, store } from '@/wayfinder/routes/admin/exhibitions';
 import { Inertia } from '@/wayfinder/types';
-import { router, useForm } from '@inertiajs/react';
-import { Trash2 } from 'lucide-react';
-import { FC, useState } from 'react';
+import { useForm } from '@inertiajs/react';
+import { FC } from 'react';
 import { toast } from 'sonner';
 
-const Edit: FC<Inertia.Pages.Admin.Exhibitions.Edit> = ({ exhibition }) => {
-    const { data, setData, put, processing, errors } = useForm({
-        name:               exhibition.name,
-        starts_at:          convertDateToInputString(exhibition.starts_at),
-        ends_at:            convertDateToInputString(exhibition.ends_at),
-        location:           exhibition.location,
-        buildin_folder_url: exhibition.buildin_folder_url,
-        is_active:          exhibition.is_active,
+const Create: FC<Inertia.Pages.Admin.Exhibitions.Create> = () => {
+    const { data, setData, post, processing, errors } = useForm({
+        name:               '',
+        starts_at:          '',
+        ends_at:            '',
+        location:           '',
+        buildin_folder_url: '',
+        is_active:          false,
     });
-
-    const [isDeleting, setIsDeleting] = useState(false);
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        put(update({ exhibition }).url, {
-            onSuccess: () => toast.success('Выставка успешно обновлена'),
-        });
-    };
-
-    const handleDelete = () => {
-        setIsDeleting(true);
-        router.delete(destroy({ exhibition }).url, {
-            onSuccess: () => toast.success('Выставка успешно удалена'),
-            onError: () => {
-                toast.error('Ошибка при удалении выставки');
-                setIsDeleting(false);
-            },
+        post(store({}).url, {
+            onSuccess: () => toast.success('Выставка успешно создана'),
         });
     };
 
@@ -51,25 +30,8 @@ const Edit: FC<Inertia.Pages.Admin.Exhibitions.Edit> = ({ exhibition }) => {
         <div className="mx-auto w-full max-w-250">
             <div className="mb-8 text-center md:mb-12">
                 <AccentHeading asChild className="mb-1 text-lg text-secondary">
-                    <h2>Редактировать выставку</h2>
+                    <h2>Создать выставку</h2>
                 </AccentHeading>
-            </div>
-
-            <div className="mb-8 flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
-                <DeleteAlertDialog
-                    trigger={
-                        <Button variant="destructive" type="button">
-                            Удалить выставку
-                            <Trash2 />
-                        </Button>
-                    }
-                    title="Удалить выставку?"
-                    description={`Вы уверены, что хотите удалить выставку "${exhibition.name}"? Это действие нельзя отменить.`}
-                    onConfirm={handleDelete}
-                    confirmText="Удалить"
-                    cancelText="Отмена"
-                    isLoading={isDeleting}
-                />
             </div>
 
             <form onSubmit={handleSubmit} className="flex flex-col gap-6">
@@ -81,6 +43,7 @@ const Edit: FC<Inertia.Pages.Admin.Exhibitions.Edit> = ({ exhibition }) => {
                             type="text"
                             value={data.name}
                             onChange={(e) => setData('name', e.target.value)}
+                            placeholder="Введите название выставки"
                         />
                         <InputError message={errors.name} />
                     </div>
@@ -116,6 +79,7 @@ const Edit: FC<Inertia.Pages.Admin.Exhibitions.Edit> = ({ exhibition }) => {
                             type="text"
                             value={data.location}
                             onChange={(e) => setData('location', e.target.value)}
+                            placeholder="Введите место проведения"
                         />
                         <InputError message={errors.location} />
                     </div>
@@ -127,6 +91,7 @@ const Edit: FC<Inertia.Pages.Admin.Exhibitions.Edit> = ({ exhibition }) => {
                             type="url"
                             value={data.buildin_folder_url}
                             onChange={(e) => setData('buildin_folder_url', e.target.value)}
+                            placeholder="https://example.com/folder"
                         />
                         <InputError message={errors.buildin_folder_url} />
                     </div>
@@ -143,7 +108,7 @@ const Edit: FC<Inertia.Pages.Admin.Exhibitions.Edit> = ({ exhibition }) => {
                 </div>
 
                 <FormButtons
-                    label="Сохранить"
+                    label="Создать"
                     processing={processing}
                     backUrl={index({}).url}
                 />
@@ -152,4 +117,4 @@ const Edit: FC<Inertia.Pages.Admin.Exhibitions.Edit> = ({ exhibition }) => {
     );
 };
 
-export default Edit;
+export default Create;

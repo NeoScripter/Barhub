@@ -58,8 +58,7 @@ Route::prefix('/admin')
             ->name('update.status');
 
         Route::resource('/exhibitions', AdminExhibitionController::class)
-            ->middleware(['can:viewAny,'.Exhibition::class])
-            ->only(['index', 'update']);
+            ->middleware(['can:viewAny,'.Exhibition::class]);
 
         Route::resource('themes', ThemeController::class)->only(['store', 'destroy']);
         Route::resource('stages', StageController::class)->only(['store', 'destroy']);
