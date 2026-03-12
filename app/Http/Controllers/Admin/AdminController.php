@@ -6,7 +6,6 @@ namespace App\Http\Controllers\Admin;
 
 use App\Enums\UserRole;
 use App\Http\Controllers\Controller;
-use App\Models\Company;
 use App\Models\Exhibition;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
@@ -14,9 +13,9 @@ use Inertia\Inertia;
 
 final class AdminController extends Controller
 {
-    public function index(Exhibition $exhibition, Company $company)
+    public function index(Exhibition $exhibition)
     {
-        $admins = $company->users()->get();
+        $admins = $exhibition->users()->get();
         $users = User::query()->select(['email', 'id', 'name', 'last_login_at'])
             ->where('role', UserRole::USER)
             ->whereNotIn('id', $admins->pluck('id'))

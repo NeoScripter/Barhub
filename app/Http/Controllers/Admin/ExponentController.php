@@ -18,7 +18,9 @@ final class ExponentController extends Controller
     {
         $exponents = $company->users()->get();
         $users = User::query()->select(['email', 'id', 'name', 'last_login_at'])
-            ->where('role', UserRole::USER)->get();
+            ->where('role', UserRole::USER)
+            ->whereNotIn('id', $exponents->pluck('id'))
+            ->get();
 
         return Inertia::render('admin/Exponents/Index', [
             'exhibition' => $exhibition,

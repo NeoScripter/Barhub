@@ -3,6 +3,7 @@ import Table from '@/components/ui/Table';
 import { formatDateShort } from '@/lib/utils';
 import { NodeProps } from '@/types/shared';
 import { edit, show } from '@/wayfinder/routes/admin/exhibitions';
+import { index } from '@/wayfinder/routes/admin/exhibitions/admins';
 import { App } from '@/wayfinder/types';
 import { Link } from '@inertiajs/react';
 import { PencilLine, Shield } from 'lucide-react';
@@ -77,10 +78,10 @@ const ExpoTable: FC<
                                 width={0.5}
                             >
                                 <Link
-                                    href={edit({
+                                    href={index({
                                         exhibition: expo.id,
                                     })}
-                                    data-test={`edit-expo-${expo.id}`}
+                                    data-test={`edit-admins-${expo.id}`}
                                 >
                                     <Shield />
                                 </Link>
