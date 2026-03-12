@@ -3,6 +3,7 @@ import InputError from '@/components/form/InputError';
 import AccentHeading from '@/components/ui/AccentHeading';
 import { Input } from '@/components/ui/Input';
 import { Label } from '@/components/ui/Label';
+import RadioCheckbox from '@/components/ui/RadioCheckbox';
 import { index, store } from '@/wayfinder/routes/admin/exhibitions';
 import { Inertia } from '@/wayfinder/types';
 import { useForm } from '@inertiajs/react';
@@ -48,7 +49,7 @@ const Create: FC<Inertia.Pages.Admin.Exhibitions.Create> = () => {
                         <InputError message={errors.name} />
                     </div>
 
-                    <div className="grid gap-6 sm:grid-cols-2">
+                    <div className="grid gap-6">
                         <div className="grid gap-2">
                             <Label htmlFor="starts_at">Дата начала</Label>
                             <Input
@@ -85,7 +86,7 @@ const Create: FC<Inertia.Pages.Admin.Exhibitions.Create> = () => {
                     </div>
 
                     <div className="grid gap-2">
-                        <Label htmlFor="buildin_folder_url">Ссылка на папку</Label>
+                        <Label htmlFor="buildin_folder_url">Ссылка на информацию и материалы</Label>
                         <Input
                             id="buildin_folder_url"
                             type="url"
@@ -96,15 +97,14 @@ const Create: FC<Inertia.Pages.Admin.Exhibitions.Create> = () => {
                         <InputError message={errors.buildin_folder_url} />
                     </div>
 
-                    {/* <div className="flex items-center gap-3"> */}
-                    {/*     <Switch */}
-                    {/*         id="is_active" */}
-                    {/*         checked={data.is_active} */}
-                    {/*         onCheckedChange={(checked) => setData('is_active', checked)} */}
-                    {/*     /> */}
-                    {/*     <Label htmlFor="is_active">Активна</Label> */}
-                    {/*     <InputError message={errors.is_active} /> */}
-                    {/* </div> */}
+                    <div>
+                        <RadioCheckbox
+                            label='Статус публикации'
+                            value={data.is_active}
+                            onChange={(val) => setData('is_active', val)}
+                        />
+                        <InputError message={errors.is_active} />
+                    </div>
                 </div>
 
                 <FormButtons

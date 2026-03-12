@@ -7,6 +7,8 @@ import { App } from '@/wayfinder/types';
 import { Plus } from 'lucide-react';
 import ExpoTable from './partials/ExpoTable';
 import ExpoTableHeader from './partials/ExpoTableHeader';
+import { Link } from '@inertiajs/react';
+import { create } from '@/wayfinder/routes/admin/exhibitions';
 
 type Props = {
     expos: LaravelPaginator<App.Models.Exhibition>;
@@ -19,8 +21,14 @@ const Index = ({ expos, isSuperAdmin }: Props) => {
             <IndexToolbar>
                 <AccentHeading className="text-xl">Выставки</AccentHeading>
                 {isSuperAdmin && (
-                    <Button>
-                        <Plus /> Добавить выставку
+                    <Button asChild>
+                        <Link
+                            data-test="create-exhibition"
+                            href={create().url}
+                        >
+                            <Plus />
+                            Добавить выставку
+                        </Link>
                     </Button>
                 )}
             </IndexToolbar>

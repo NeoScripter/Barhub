@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/Button';
 import { DeleteAlertDialog } from '@/components/ui/DeleteAlertDialog';
 import { Input } from '@/components/ui/Input';
 import { Label } from '@/components/ui/Label';
+import RadioCheckbox from '@/components/ui/RadioCheckbox';
 import { convertDateToInputString } from '@/lib/utils';
 import {
     destroy,
@@ -24,7 +25,7 @@ const Edit: FC<Inertia.Pages.Admin.Exhibitions.Edit> = ({ exhibition }) => {
         ends_at:            convertDateToInputString(exhibition.ends_at),
         location:           exhibition.location,
         buildin_folder_url: exhibition.buildin_folder_url,
-        is_active:          exhibition.is_active,
+        is_active:          !!exhibition.is_active,
     });
 
     const [isDeleting, setIsDeleting] = useState(false);
@@ -85,7 +86,7 @@ const Edit: FC<Inertia.Pages.Admin.Exhibitions.Edit> = ({ exhibition }) => {
                         <InputError message={errors.name} />
                     </div>
 
-                    <div className="grid gap-6 sm:grid-cols-2">
+                    <div className="grid gap-6">
                         <div className="grid gap-2">
                             <Label htmlFor="starts_at">Дата начала</Label>
                             <Input
@@ -121,7 +122,7 @@ const Edit: FC<Inertia.Pages.Admin.Exhibitions.Edit> = ({ exhibition }) => {
                     </div>
 
                     <div className="grid gap-2">
-                        <Label htmlFor="buildin_folder_url">Ссылка на папку</Label>
+                        <Label htmlFor="buildin_folder_url">Ссылка на информацию и материалы</Label>
                         <Input
                             id="buildin_folder_url"
                             type="url"
@@ -130,16 +131,15 @@ const Edit: FC<Inertia.Pages.Admin.Exhibitions.Edit> = ({ exhibition }) => {
                         />
                         <InputError message={errors.buildin_folder_url} />
                     </div>
+                    <div>
+                        <RadioCheckbox
+                            label='Статус публикации'
+                            value={data.is_active}
+                            onChange={(val) => setData('is_active', val)}
+                        />
+                        <InputError message={errors.is_active} />
+                    </div>
 
-                    {/* <div className="flex items-center gap-3"> */}
-                    {/*     <Switch */}
-                    {/*         id="is_active" */}
-                    {/*         checked={data.is_active} */}
-                    {/*         onCheckedChange={(checked) => setData('is_active', checked)} */}
-                    {/*     /> */}
-                    {/*     <Label htmlFor="is_active">Активна</Label> */}
-                    {/*     <InputError message={errors.is_active} /> */}
-                    {/* </div> */}
                 </div>
 
                 <FormButtons
