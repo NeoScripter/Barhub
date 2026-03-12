@@ -52,7 +52,7 @@ const ExpoSelector: FC<{
                         getValue={(expo) => expo.id.toString()}
                         getLabel={(expo) => formatExpoValue(expo)}
                         placeholder="Выбрать выставку"
-                        className="max-w-90"
+                        className="max-w-70 sm:max-w-90"
                         onValueChange={(value) => setter(value)}
                         variant="default"
                     />
