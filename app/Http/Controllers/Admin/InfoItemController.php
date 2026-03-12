@@ -8,8 +8,10 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\InfoItem\InfoItemStoreRequest;
 use App\Http\Requests\Admin\InfoItem\InfoItemUpdateRequest;
 use App\Models\Exhibition;
+use App\Models\Image;
 use App\Models\InfoItem;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 
@@ -44,14 +46,22 @@ final class InfoItemController extends Controller
 
     public function store(InfoItemStoreRequest $request, Exhibition $exhibition)
     {
-        $infoItem = $exhibition->infoItems()->create(
-            $request->only(['title', 'url']),
-        );
+        DB::transaction(function () use ($request, $exhibition) {
+            $exhibition->infoItems()->create(
+                $request->only(['title', 'url']),
+            );
 
-        if ($request->hasFile('image')) {
-            $path = $request->file('image')->store('info-item-images');
-            $infoItem->image()->create(['url' => $path]);
-        }
+            if ($request->hasFile('image')) {
+                Image::attachToModel(
+                    $infoItem,
+                    $request->file('image'),
+                    'image',
+                    'info-items/images',
+                    80,
+                    $request->string('title', '')
+                );
+            }
+        });
 
         return to_route('admin.exhibitions.info-items.index', [
             'exhibition' => $exhibition,
@@ -60,16 +70,30 @@ final class InfoItemController extends Controller
 
     public function update(InfoItemUpdateRequest $request, Exhibition $exhibition, InfoItem $infoItem)
     {
-        $infoItem->update($request->only(['title', 'url']));
 
-        if ($request->hasFile('image')) {
-            if ($infoItem->image) {
-                Storage::delete($infoItem->image->url);
-                $infoItem->image->delete();
+        DB::transaction(function () use ($request, $infoItem): void {
+            $infoItem->update($request->only(['title', 'url']));
+
+            if ($request->hasFile('image')) {
+                if ($infoItem->image) {
+                    $infoItem->image->updateImage(
+                        $request->file('image'),
+                        $request->string('title', $infoItem->title),
+                        'info-items/images',
+                        80
+                    );
+                } else {
+                    Image::attachToModel(
+                        $infoItem,
+                        $request->file('image'),
+                        'image',
+                        'info-items/images',
+                        80,
+                        $request->string('title', '')
+                    );
+                }
             }
-            $path = $request->file('image')->store('info-item-images');
-            $infoItem->image()->create(['url' => $path]);
-        }
+        });
 
         return to_route('admin.exhibitions.info-items.index', [
             'exhibition' => $exhibition,
