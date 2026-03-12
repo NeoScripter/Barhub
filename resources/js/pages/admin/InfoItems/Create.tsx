@@ -1,7 +1,7 @@
 import FormButtons from '@/components/form/FormButtons';
 import InputError from '@/components/form/InputError';
 import AccentHeading from '@/components/ui/AccentHeading';
-import FileInput from '@/components/ui/FileInput';
+import ImgInput from '@/components/ui/ImgInput';
 import { Input } from '@/components/ui/Input';
 import { Label } from '@/components/ui/Label';
 import { index, store } from '@/wayfinder/routes/admin/exhibitions/info-items';
@@ -15,6 +15,7 @@ const Create: FC<Inertia.Pages.Admin.InfoItems.Create> = ({ exhibition }) => {
         title: '',
         url: '',
         image: null as File | null,
+        alt: '',
     });
 
     const handleSubmit = (e: React.FormEvent) => {
@@ -27,7 +28,10 @@ const Create: FC<Inertia.Pages.Admin.InfoItems.Create> = ({ exhibition }) => {
     return (
         <div className="mx-auto w-full max-w-250">
             <div className="mb-8 text-center md:mb-12">
-                <AccentHeading asChild className="mb-1 text-lg text-secondary">
+                <AccentHeading
+                    asChild
+                    className="mb-1 text-lg text-secondary"
+                >
                     <h2>Создать информационный элемент</h2>
                 </AccentHeading>
             </div>
@@ -64,13 +68,15 @@ const Create: FC<Inertia.Pages.Admin.InfoItems.Create> = ({ exhibition }) => {
                     </div>
 
                     <div className="grid gap-2">
-                        <Label htmlFor="image">Изображение</Label>
-                        <FileInput
+                        <ImgInput
                             isEdited={true}
-                            id="image"
                             error={errors.image}
+                            label='Изображение'
                             onChange={(file) => setData('image', file)}
+                            altText={data.alt ?? ''}
+                            onAltChange={(alt) => setData('alt', alt)}
                         />
+
                         <InputError message={errors.image} />
                     </div>
                 </div>

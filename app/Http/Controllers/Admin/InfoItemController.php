@@ -47,7 +47,7 @@ final class InfoItemController extends Controller
     public function store(InfoItemStoreRequest $request, Exhibition $exhibition)
     {
         DB::transaction(function () use ($request, $exhibition) {
-            $exhibition->infoItems()->create(
+            $infoItem = $exhibition->infoItems()->create(
                 $request->only(['title', 'url']),
             );
 
@@ -58,7 +58,7 @@ final class InfoItemController extends Controller
                     'image',
                     'info-items/images',
                     80,
-                    $request->string('title', '')
+                    $request->input('alt', '')
                 );
             }
         });
@@ -78,7 +78,7 @@ final class InfoItemController extends Controller
                 if ($infoItem->image) {
                     $infoItem->image->updateImage(
                         $request->file('image'),
-                        $request->string('title', $infoItem->title),
+                        $request->input('alt', ''),
                         'info-items/images',
                         80
                     );
@@ -89,9 +89,11 @@ final class InfoItemController extends Controller
                         'image',
                         'info-items/images',
                         80,
-                        $request->string('title', '')
+                        $request->input('alt', '')
                     );
                 }
+            } elseif ($request->has('alt') && $infoItem->image) {
+                $infoItem->image->updateImage(null, $request->input('alt'));
             }
         });
 

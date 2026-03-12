@@ -4,6 +4,7 @@ import AccentHeading from '@/components/ui/AccentHeading';
 import { Button } from '@/components/ui/Button';
 import { DeleteAlertDialog } from '@/components/ui/DeleteAlertDialog';
 import FileInput from '@/components/ui/FileInput';
+import ImgInput from '@/components/ui/ImgInput';
 import { Input } from '@/components/ui/Input';
 import { Label } from '@/components/ui/Label';
 import { destroy, index, update } from '@/wayfinder/routes/admin/exhibitions/info-items';
@@ -22,6 +23,7 @@ const Edit: FC<Inertia.Pages.Admin.InfoItems.Edit> = ({
         title: infoItem.title ?? '',
         url: infoItem.url ?? '',
         image: null as File | null,
+        alt: infoItem.image?.alt,
     });
 
 
@@ -103,14 +105,14 @@ const Edit: FC<Inertia.Pages.Admin.InfoItems.Edit> = ({
                     </div>
 
                     <div className="grid gap-2">
-                        <Label htmlFor="image">Изображение</Label>
-                        <FileInput
+                        <ImgInput
                             isEdited={true}
-                            id="image"
-                            src={infoItem.image?.url}
-                            filename={infoItem.image?.url}
+                            src={infoItem.image?.webp2x}
                             error={errors.image}
+                            label='Изображение'
                             onChange={(file) => setData('image', file)}
+                            altText={data.alt ?? ''}
+                            onAltChange={(alt) => setData('alt', alt)}
                         />
                         <InputError message={errors.image} />
                     </div>

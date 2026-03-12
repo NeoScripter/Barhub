@@ -19,6 +19,7 @@ final class InfoItemUpdateRequest extends FormRequest
             'title' => ['sometimes', 'required', 'string', 'min:1', 'max:255'],
             'url'   => ['sometimes', 'required', 'string', 'url', 'max:2048'],
             'image' => ['nullable', 'image', 'max:10240', 'mimes:jpg,jpeg,png,gif,webp,svg'],
+            'alt' => ['required', 'string', 'min:1', 'max:255'],
         ];
     }
     public function messages(): array
