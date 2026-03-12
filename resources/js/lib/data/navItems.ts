@@ -1,6 +1,7 @@
 import DashboardController from '@/wayfinder/App/Http/Controllers/Admin/DashboardController';
 import AdminDash from '@/wayfinder/App/Http/Controllers/Admin/DashboardController';
 import AdminExpos from '@/wayfinder/App/Http/Controllers/Admin/ExhibitionController';
+import LinkController from '@/wayfinder/App/Http/Controllers/Admin/LinkController';
 import ExponentDash from '@/wayfinder/App/Http/Controllers/Exponent/DashboardController';
 import UserExpos from '@/wayfinder/App/Http/Controllers/User/ExhibitionController';
 import { index as expoIndex } from '@/wayfinder/routes/admin/exhibitions/events';
@@ -18,7 +19,8 @@ import {
     UserCheck,
     Users,
     UserPen,
-    UserSearch
+    UserSearch,
+    CreditCard
 } from 'lucide-react';
 
 type NavLink = {
@@ -117,6 +119,14 @@ export const adminNavItems: NavItemType[] = [
         label: 'Выставки',
         url: AdminExpos.index.url(),
         icon: Martini,
+        isDynamic: false,
+    },
+    {
+        id: 'public links',
+        type: 'link',
+        label: 'Публичные ссылки',
+        url: LinkController.url(),
+        icon: CreditCard,
         isDynamic: false,
     },
 ];

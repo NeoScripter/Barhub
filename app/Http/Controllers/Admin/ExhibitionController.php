@@ -8,6 +8,7 @@ use App\Enums\UserRole;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Exhibition\ExhibitionIndexRequest;
 use App\Http\Requests\Admin\Exhibition\ExhibitionUpdateRequest;
+use App\Http\Requests\Admin\Exhibition\ExhibitionStoreRequest;
 use App\Models\Exhibition;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Pagination\LengthAwarePaginator;

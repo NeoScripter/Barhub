@@ -12,6 +12,7 @@ use App\Http\Controllers\Admin\ExhibitionUpdatedStatusController;
 use App\Http\Controllers\Admin\ExponentController as AdminExponentController;
 use App\Http\Controllers\Admin\FollowupController as AdminFollowupController;
 use App\Http\Controllers\Admin\InfoItemController;
+use App\Http\Controllers\Admin\LinkController;
 use App\Http\Controllers\Admin\PartnerController as AdminPartnerController;
 use App\Http\Controllers\Admin\PersonController as AdminPersonController;
 use App\Http\Controllers\Admin\ServiceController as AdminServiceController;
@@ -54,6 +55,7 @@ Route::prefix('/admin')
     ])
     ->group(function (): void {
         Route::get('/dashboard', AdminDashboardController::class)->name('dashboard');
+        Route::get('/links', LinkController::class)->name('public_links');
 
         Route::patch('exhibitions/{exhibition}/status', ExhibitionUpdatedStatusController::class)
             ->name('update.status');

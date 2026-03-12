@@ -6,7 +6,7 @@ namespace App\Http\Requests\Admin\Exhibition;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-final class ExhibitionUpdateRequest extends FormRequest
+final class ExhibitionStoreRequest extends FormRequest
 {
     public function authorize(): bool
     {
