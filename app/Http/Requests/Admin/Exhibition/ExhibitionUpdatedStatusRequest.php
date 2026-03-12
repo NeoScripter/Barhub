@@ -7,7 +7,7 @@ namespace App\Http\Requests\Admin\Exhibition;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
-final class ExhibitionUpdateStatusRequest extends FormRequest
+final class ExhibitionUpdatedStatusRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.

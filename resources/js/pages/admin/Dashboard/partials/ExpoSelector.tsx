@@ -1,12 +1,12 @@
 import AccentHeading from '@/components/ui/AccentHeading';
 import { Button } from '@/components/ui/Button';
 import { SelectMenu } from '@/components/ui/SelectMenu';
-import UpdatedExhibitionStatusController from '@/wayfinder/App/Http/Controllers/Admin/UpdatedExhibitionStatusController';
 import { App } from '@/wayfinder/types';
 import { router, usePage } from '@inertiajs/react';
 import { FC } from 'react';
 import { toast } from 'sonner';
 import { formatExpoValue } from './utils';
+import ExhibitionUpdatedStatusController from '@/wayfinder/App/Http/Controllers/Admin/ExhibitionUpdatedStatusController';
 
 const ExpoSelector: FC<{
     expoId: string | null;
@@ -20,7 +20,7 @@ const ExpoSelector: FC<{
         if (!selectedExpo) return;
 
         router.visit(
-            UpdatedExhibitionStatusController.patch({ id: selectedExpo.id }),
+            ExhibitionUpdatedStatusController.patch({ id: selectedExpo.id }),
             {
                 method: 'patch',
                 onSuccess: () => {

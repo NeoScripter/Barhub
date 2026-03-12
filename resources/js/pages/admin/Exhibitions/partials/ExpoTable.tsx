@@ -5,7 +5,7 @@ import { NodeProps } from '@/types/shared';
 import { edit, show } from '@/wayfinder/routes/admin/exhibitions';
 import { App } from '@/wayfinder/types';
 import { Link } from '@inertiajs/react';
-import { PencilLine } from 'lucide-react';
+import { PencilLine, Shield } from 'lucide-react';
 import { FC } from 'react';
 
 const ExpoTable: FC<
@@ -58,19 +58,34 @@ const ExpoTable: FC<
                         </Badge>
                     </Table.Cell>
                     {isSuperAdmin && (
-                        <Table.Cell
-                            key="edit-btn"
-                            width={0.5}
-                        >
-                            <Link
-                                href={edit({
-                                    exhibition: expo.id,
-                                })}
-                                data-test={`edit-expo-${expo.id}`}
+                        <>
+                            <Table.Cell
+                                key="edit-btn"
+                                width={0.5}
                             >
-                                <PencilLine />
-                            </Link>
-                        </Table.Cell>
+                                <Link
+                                    href={edit({
+                                        exhibition: expo.id,
+                                    })}
+                                    data-test={`edit-expo-${expo.id}`}
+                                >
+                                    <PencilLine />
+                                </Link>
+                            </Table.Cell>
+                            <Table.Cell
+                                key="manage-admins-btn"
+                                width={0.5}
+                            >
+                                <Link
+                                    href={edit({
+                                        exhibition: expo.id,
+                                    })}
+                                    data-test={`edit-expo-${expo.id}`}
+                                >
+                                    <Shield />
+                                </Link>
+                            </Table.Cell>
+                        </>
                     )}
                 </Table.Row>
             ))}

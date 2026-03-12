@@ -9,6 +9,7 @@ import { cn } from '@/lib/utils';
 import { NodeProps } from '@/types/shared';
 import CompanyController from '@/wayfinder/App/Http/Controllers/Admin/CompanyController';
 import EventController from '@/wayfinder/App/Http/Controllers/Admin/EventController';
+import TaskTemplateController from '@/wayfinder/App/Http/Controllers/Admin/TaskTemplateController';
 import { Link } from '@inertiajs/react';
 import { Briefcase, Calendar, Plus, Star } from 'lucide-react';
 import { FC } from 'react';
@@ -97,6 +98,6 @@ const actionCards = [
         id: crypto.randomUUID(),
         label: 'Создать общую задачу',
         icon: Star,
-        url: (expoId: number) => '',
+        url: (expoId: number) => TaskTemplateController.create({exhibition: expoId}).url,
     },
 ];

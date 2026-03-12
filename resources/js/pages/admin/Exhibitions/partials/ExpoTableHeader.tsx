@@ -12,6 +12,7 @@ const HEADER_COLS: Column[] = [
     { label: 'Площадка', query: 'location' },
     { label: 'Статус', query: 'is_active' },
     { label: 'Действия' },
+    { label: 'Доступы' },
 ] as const;
 
 
