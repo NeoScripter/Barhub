@@ -96,7 +96,7 @@ const Edit: FC<Inertia.Pages.Admin.InfoItems.Edit> = ({
                         <Label htmlFor="url">Ссылка</Label>
                         <Input
                             id="url"
-                            type="url"
+                            type="text"
                             name="url"
                             value={data.url}
                             onChange={(e) => setData('url', e.target.value)}
@@ -113,6 +113,7 @@ const Edit: FC<Inertia.Pages.Admin.InfoItems.Edit> = ({
                             onChange={(file) => setData('image', file)}
                             altText={data.alt ?? ''}
                             onAltChange={(alt) => setData('alt', alt)}
+                            altError={errors.alt}
                         />
                         <InputError message={errors.image} />
                     </div>

@@ -104,6 +104,7 @@ final class InfoItemController extends Controller
 
     public function destroy(Exhibition $exhibition, InfoItem $infoItem)
     {
+        $infoItem->image?->delete();
         $infoItem->delete();
 
         return to_route('admin.exhibitions.info-items.index', [

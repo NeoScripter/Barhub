@@ -119,7 +119,7 @@ function AltInput({ altText, altError, onAltChange }: AltInputProps) {
                 Альтернативный текст для фото
             </label>
             <textarea
-                name="Альтернативный текст"
+                name="image_alt_text"
                 id={id}
                 value={altText}
                 onChange={(e) => onAltChange(e.target.value)}

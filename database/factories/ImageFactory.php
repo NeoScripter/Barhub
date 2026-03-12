@@ -20,7 +20,15 @@ final class ImageFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'webp3x' => '/storage/people/logo3x.webp',
+            'webp2x' => '/storage/people/logo2x.webp',
+            'webp' => '/storage/people/logo.webp',
+            'avif3x' => '/storage/people/logo3x.avif',
+            'avif2x' => '/storage/people/logo2x.avif',
+            'avif' => '/storage/people/logo.avif',
+            'tiny' => '/storage/people/logo-tiny.webp',
+            'alt' => 'alt',
+            'type' => 'image',
         ];
     }
 }

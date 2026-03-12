@@ -16,7 +16,7 @@ final class InfoItemStoreRequest extends FormRequest
             'title' => ['required', 'string', 'min:1', 'max:255'],
             'url'   => ['required', 'string', 'url', 'max:2048'],
             'image' => ['nullable', 'image', 'max:10240', 'mimes:jpg,jpeg,png,gif,webp,svg'],
-            'alt' => ['required', 'string', 'min:1', 'max:255'],
+            'alt' => ['required_with:image', 'nullable', 'string', 'min:1', 'max:255'],
         ];
     }
 
