@@ -17,7 +17,8 @@ final class InfoItemController extends Controller
 {
     public function index(Exhibition $exhibition)
     {
-        $infoItems = $exhibition->infoItems()->select(['title', 'id'])
+        $infoItems = $exhibition->infoItems()
+            ->select(['title',  'id'])
             ->paginate();
 
         return Inertia::render('admin/InfoItems/Index', [

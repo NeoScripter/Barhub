@@ -24,6 +24,7 @@ const Edit: FC<Inertia.Pages.Admin.InfoItems.Edit> = ({
         image: null as File | null,
     });
 
+
     const [isDeleting, setIsDeleting] = useState(false);
 
     const handleSubmit = (e: React.FormEvent) => {

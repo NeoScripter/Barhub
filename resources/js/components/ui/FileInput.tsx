@@ -50,7 +50,7 @@ export default function FileInput({
 
     return (
         <div>
-            <div className="flex max-w-150 flex-col items-center justify-start gap-10 md:flex-row">
+            <div className="flex max-w-150 flex-col items-center justify-start gap-y-2 gap-x-10 md:flex-row">
                 {isEdited && (
                     <input
                         type="file"
@@ -61,7 +61,7 @@ export default function FileInput({
                     />
                 )}
 
-                <div className="shrink-0">
+                <div className="my-2 shrink-0">
                     <UploadFileBtn
                         id={id || generatedId}
                         disabled={!isEdited}
