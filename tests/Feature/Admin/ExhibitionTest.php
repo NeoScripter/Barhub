@@ -287,7 +287,7 @@ describe('Exhibition Page Permissions', function (): void {
         $this->delete(route('admin.exhibitions.destroy', $exhibition))
             ->assertRedirect(route('login'));
 
-        assertDatabaseHas('exhibitions', ['id' => $exhibition->id]);
+        $this->assertDatabaseHas('exhibitions', ['id' => $exhibition->id]);
     });
 });
 
@@ -533,7 +533,7 @@ describe('Exhibition Browser Test', function (): void {
             ->clear('location')
             ->fill('location', generateTextWithChars(260))
             ->submit()
-            ->assertSee('Местоположение обязательно для заполнения');
+            ->assertSee('Местоположение не должно превышать 255 символов');
     });
 
     it('allows to delete an exhibition', function (): void {

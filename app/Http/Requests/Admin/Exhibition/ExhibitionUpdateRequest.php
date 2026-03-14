@@ -16,12 +16,12 @@ final class ExhibitionUpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name'               => ['sometimes', 'required', 'string', 'max:255'],
-            'starts_at'          => ['sometimes', 'required', 'date'],
-            'ends_at'            => ['sometimes', 'required', 'date', 'after:starts_at'],
-            'location'           => ['sometimes', 'required', 'string', 'max:255'],
-            'buildin_folder_url' => ['sometimes', 'required', 'string', 'url', 'max:2048'],
-            'is_active'          => ['sometimes', 'required', 'boolean'],
+            'name'               => ['sometimes', 'string', 'max:255'],
+            'starts_at'          => ['sometimes', 'date'],
+            'ends_at'            => ['sometimes', 'date', 'after:starts_at'],
+            'location'           => ['sometimes', 'string', 'max:255'],
+            'buildin_folder_url' => ['sometimes', 'string', 'url', 'max:2048'],
+            'is_active'          => ['sometimes', 'boolean'],
         ];
     }
 
@@ -36,6 +36,7 @@ final class ExhibitionUpdateRequest extends FormRequest
             'ends_at.date'                => 'Введите корректную дату окончания',
             'ends_at.after'               => 'Дата окончания должна быть позже даты начала',
             'location.required'           => 'Местоположение обязательно для заполнения',
+            'location.max'                => 'Местоположение не должно превышать 255 символов',
             'buildin_folder_url.required' => 'Ссылка на папку обязательна для заполнения',
             'buildin_folder_url.url'      => 'Введите корректный URL папки',
             'is_active.required'          => 'Статус активности обязателен для заполнения',

@@ -89,7 +89,6 @@ const Create: FC<Inertia.Pages.Admin.Exhibitions.Create> = () => {
                         <Label htmlFor="buildin_folder_url">Ссылка на информацию и материалы</Label>
                         <Input
                             id="buildin_folder_url"
-                            type="url"
                             value={data.buildin_folder_url}
                             onChange={(e) => setData('buildin_folder_url', e.target.value)}
                             placeholder="https://example.com/folder"

@@ -656,6 +656,6 @@ describe('Admin Info Item Test', function (): void {
             ->assertSee('Информационные элементы')
             ->click('@edit-info-item-' . $infoItem->id)
             ->assertSee('Редактировать информационный элемент')
-            ->assertPresent($infoItem->image->alt);
+            ->assertPresent('@image-present');
     });
 });

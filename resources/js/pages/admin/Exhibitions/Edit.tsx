@@ -7,11 +7,7 @@ import { Input } from '@/components/ui/Input';
 import { Label } from '@/components/ui/Label';
 import RadioCheckbox from '@/components/ui/RadioCheckbox';
 import { convertDateToInputString } from '@/lib/utils';
-import {
-    destroy,
-    index,
-    update,
-} from '@/wayfinder/routes/admin/exhibitions';
+import { destroy, index, update } from '@/wayfinder/routes/admin/exhibitions';
 import { Inertia } from '@/wayfinder/types';
 import { router, useForm } from '@inertiajs/react';
 import { Trash2 } from 'lucide-react';
@@ -20,12 +16,12 @@ import { toast } from 'sonner';
 
 const Edit: FC<Inertia.Pages.Admin.Exhibitions.Edit> = ({ exhibition }) => {
     const { data, setData, put, processing, errors } = useForm({
-        name:               exhibition.name,
-        starts_at:          convertDateToInputString(exhibition.starts_at),
-        ends_at:            convertDateToInputString(exhibition.ends_at),
-        location:           exhibition.location,
+        name: exhibition.name,
+        starts_at: convertDateToInputString(exhibition.starts_at),
+        ends_at: convertDateToInputString(exhibition.ends_at),
+        location: exhibition.location,
         buildin_folder_url: exhibition.buildin_folder_url,
-        is_active:          !!exhibition.is_active,
+        is_active: !!exhibition.is_active,
     });
 
     const [isDeleting, setIsDeleting] = useState(false);
@@ -51,7 +47,10 @@ const Edit: FC<Inertia.Pages.Admin.Exhibitions.Edit> = ({ exhibition }) => {
     return (
         <div className="mx-auto w-full max-w-250">
             <div className="mb-8 text-center md:mb-12">
-                <AccentHeading asChild className="mb-1 text-lg text-secondary">
+                <AccentHeading
+                    asChild
+                    className="mb-1 text-lg text-secondary"
+                >
                     <h2>Редактировать выставку</h2>
                 </AccentHeading>
             </div>
@@ -59,7 +58,11 @@ const Edit: FC<Inertia.Pages.Admin.Exhibitions.Edit> = ({ exhibition }) => {
             <div className="mb-8 flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
                 <DeleteAlertDialog
                     trigger={
-                        <Button variant="destructive" type="button">
+                        <Button
+                            variant="destructive"
+                            type="button"
+                            data-test="delete-exhibition"
+                        >
                             Удалить выставку
                             <Trash2 />
                         </Button>
@@ -73,7 +76,10 @@ const Edit: FC<Inertia.Pages.Admin.Exhibitions.Edit> = ({ exhibition }) => {
                 />
             </div>
 
-            <form onSubmit={handleSubmit} className="flex flex-col gap-6">
+            <form
+                onSubmit={handleSubmit}
+                className="flex flex-col gap-6"
+            >
                 <div className="grid gap-6">
                     <div className="grid gap-2">
                         <Label htmlFor="name">Название</Label>
@@ -93,7 +99,9 @@ const Edit: FC<Inertia.Pages.Admin.Exhibitions.Edit> = ({ exhibition }) => {
                                 id="starts_at"
                                 type="date"
                                 value={data.starts_at}
-                                onChange={(e) => setData('starts_at', e.target.value)}
+                                onChange={(e) =>
+                                    setData('starts_at', e.target.value)
+                                }
                             />
                             <InputError message={errors.starts_at} />
                         </div>
@@ -104,7 +112,9 @@ const Edit: FC<Inertia.Pages.Admin.Exhibitions.Edit> = ({ exhibition }) => {
                                 id="ends_at"
                                 type="date"
                                 value={data.ends_at}
-                                onChange={(e) => setData('ends_at', e.target.value)}
+                                onChange={(e) =>
+                                    setData('ends_at', e.target.value)
+                                }
                             />
                             <InputError message={errors.ends_at} />
                         </div>
@@ -116,30 +126,34 @@ const Edit: FC<Inertia.Pages.Admin.Exhibitions.Edit> = ({ exhibition }) => {
                             id="location"
                             type="text"
                             value={data.location}
-                            onChange={(e) => setData('location', e.target.value)}
+                            onChange={(e) =>
+                                setData('location', e.target.value)
+                            }
                         />
                         <InputError message={errors.location} />
                     </div>
 
                     <div className="grid gap-2">
-                        <Label htmlFor="buildin_folder_url">Ссылка на информацию и материалы</Label>
+                        <Label htmlFor="buildin_folder_url">
+                            Ссылка на информацию и материалы
+                        </Label>
                         <Input
                             id="buildin_folder_url"
-                            type="url"
                             value={data.buildin_folder_url}
-                            onChange={(e) => setData('buildin_folder_url', e.target.value)}
+                            onChange={(e) =>
+                                setData('buildin_folder_url', e.target.value)
+                            }
                         />
                         <InputError message={errors.buildin_folder_url} />
                     </div>
                     <div>
                         <RadioCheckbox
-                            label='Статус публикации'
+                            label="Статус публикации"
                             value={data.is_active}
                             onChange={(val) => setData('is_active', val)}
                         />
                         <InputError message={errors.is_active} />
                     </div>
-
                 </div>
 
                 <FormButtons

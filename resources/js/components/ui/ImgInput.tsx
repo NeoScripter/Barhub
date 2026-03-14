@@ -69,6 +69,7 @@ export default function ImgInput({
                             src={preview ?? Placeholder}
                             alt="Preview"
                             className="h-full w-full rounded object-cover"
+                            data-test={preview ? 'image-present' : null}
                         />
                     </div>
                     {error && (

@@ -48,6 +48,21 @@ final class User extends Authenticatable
         return $this->belongsToMany(Exhibition::class);
     }
 
+    public function activeExhibition(): BelongsTo
+    {
+        return $this->belongsTo(Exhibition::class, 'active_exhibition_id');
+    }
+
+    public function setActiveExhibition(Exhibition $exhibition): void
+    {
+        abort_unless($this
+            ->exhibitions()
+            ->where('exhibition_id', $exhibition->id)
+            ->exists(), 403, 'User does not belong to this exhibition');
+
+        $this->update(['active_exhibition_id' => $exhibition->id]);
+    }
+
     public function company(): BelongsTo
     {
         return $this->belongsTo(Company::class);
