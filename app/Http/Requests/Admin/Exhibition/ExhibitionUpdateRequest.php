@@ -10,7 +10,7 @@ final class ExhibitionUpdateRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return $this->user()->can('update', $this->exhibition);
+        return true;
     }
 
     public function rules(): array

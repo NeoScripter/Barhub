@@ -58,7 +58,7 @@ final class ExhibitionController extends Controller
     {
         $exhibition->update($request->validated());
 
-        return back();
+        return to_route('admin.exhibitions.index');
     }
 
     public function create(): Response

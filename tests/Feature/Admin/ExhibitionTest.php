@@ -10,7 +10,7 @@ use function Pest\Laravel\actingAs;
 use function Pest\Laravel\get;
 
 describe('Exhibition Page Permissions', function (): void {
-    beforeEach(function(): void {
+    beforeEach(function (): void {
         $this->startDate = now()->format('Y') . '-01-01';
         $this->endDate = now()->format('Y') . '-10-10';
     });
@@ -261,7 +261,7 @@ describe('Exhibition Page Permissions', function (): void {
     });
 
     it('forbids guest users from creating an exhibition', function (): void {
-        \Pest\Laravel\post(route('admin.exhibitions.store'), [
+        $this->post(route('admin.exhibitions.store'), [
             'name'               => 'New Exhibition',
             'starts_at'          => $this->startDate,
             'ends_at'            => $this->endDate,
@@ -275,7 +275,7 @@ describe('Exhibition Page Permissions', function (): void {
     it('forbids guest users from updating an exhibition', function (): void {
         $exhibition = Exhibition::factory()->create();
 
-        \Pest\Laravel\put(route('admin.exhibitions.update', $exhibition), [
+        $this->put(route('admin.exhibitions.update', $exhibition), [
             'name' => 'Updated Name',
         ])
             ->assertRedirect(route('login'));
@@ -284,9 +284,280 @@ describe('Exhibition Page Permissions', function (): void {
     it('forbids guest users from deleting an exhibition', function (): void {
         $exhibition = Exhibition::factory()->create();
 
-        \Pest\Laravel\delete(route('admin.exhibitions.destroy', $exhibition))
+        $this->delete(route('admin.exhibitions.destroy', $exhibition))
             ->assertRedirect(route('login'));
 
         assertDatabaseHas('exhibitions', ['id' => $exhibition->id]);
+    });
+});
+
+describe('Exhibition Browser Test', function (): void {
+    beforeEach(function (): void {
+        $this->startDate = now()->format('Y') . '-01-01';
+        $this->endDate = now()->format('Y') . '-10-10';
+    });
+
+    it('allows to create an exhibition with valid data', function (): void {
+        $user = User::factory()->create([
+            'email'    => 'super-admin@gmail.com',
+            'password' => 'password',
+        ]);
+        $user->assignRole(UserRole::SUPER_ADMIN);
+
+        $page = visit('/login');
+        $page->assertSee('Вход в аккаунт')
+            ->fill('email', 'super-admin@gmail.com')
+            ->fill('password', 'password')
+            ->click('@login-button')
+            ->assertSee('super-admin@gmail.com');
+
+        $this->assertAuthenticated();
+
+        $page->navigate(route('admin.exhibitions.create'))
+            ->assertSee('Создать выставку')
+            ->fill('name', 'New Exhibition')
+            ->fill('starts_at', $this->startDate)
+            ->fill('ends_at', $this->endDate)
+            ->fill('location', 'Moscow')
+            ->fill('buildin_folder_url', 'https://example.com/folder')
+            ->submit()
+            ->assertPathEndsWith(route('admin.exhibitions.index', absolute: false));
+    });
+
+    it('doesnt allow to create an exhibition when the name is too long', function (): void {
+        $user = User::factory()->create([
+            'email'    => 'super-admin@gmail.com',
+            'password' => 'password',
+        ]);
+        $user->assignRole(UserRole::SUPER_ADMIN);
+
+        $page = visit('/login');
+        $page->assertSee('Вход в аккаунт')
+            ->fill('email', 'super-admin@gmail.com')
+            ->fill('password', 'password')
+            ->click('@login-button')
+            ->assertSee('super-admin@gmail.com');
+
+        $this->assertAuthenticated();
+
+        $page->navigate(route('admin.exhibitions.create'))
+            ->assertSee('Создать выставку')
+            ->fill('name', generateTextWithChars(260))
+            ->fill('starts_at', $this->startDate)
+            ->fill('ends_at', $this->endDate)
+            ->fill('location', 'Moscow')
+            ->fill('buildin_folder_url', 'https://example.com/folder')
+            ->submit()
+            ->assertSee('Название не должно превышать 255 символов');
+    });
+
+    it('doesnt allow to create an exhibition when the buildin_folder_url is invalid', function (): void {
+        $user = User::factory()->create([
+            'email'    => 'super-admin@gmail.com',
+            'password' => 'password',
+        ]);
+        $user->assignRole(UserRole::SUPER_ADMIN);
+
+        $page = visit('/login');
+        $page->assertSee('Вход в аккаунт')
+            ->fill('email', 'super-admin@gmail.com')
+            ->fill('password', 'password')
+            ->click('@login-button')
+            ->assertSee('super-admin@gmail.com');
+
+        $this->assertAuthenticated();
+
+        $page->navigate(route('admin.exhibitions.create'))
+            ->assertSee('Создать выставку')
+            ->fill('name', 'Valid Name')
+            ->fill('starts_at', $this->startDate)
+            ->fill('ends_at', $this->endDate)
+            ->fill('location', 'Moscow')
+            ->fill('buildin_folder_url', 'not-a-valid-url')
+            ->submit()
+            ->assertSee('Введите корректный URL папки');
+    });
+
+    it('doesnt allow to create an exhibition when ends_at is before starts_at', function (): void {
+        $user = User::factory()->create([
+            'email'    => 'super-admin@gmail.com',
+            'password' => 'password',
+        ]);
+        $user->assignRole(UserRole::SUPER_ADMIN);
+
+        $page = visit('/login');
+        $page->assertSee('Вход в аккаунт')
+            ->fill('email', 'super-admin@gmail.com')
+            ->fill('password', 'password')
+            ->click('@login-button')
+            ->assertSee('super-admin@gmail.com');
+
+        $this->assertAuthenticated();
+
+        $page->navigate(route('admin.exhibitions.create'))
+            ->assertSee('Создать выставку')
+            ->fill('name', 'Valid Name')
+            ->fill('starts_at', $this->endDate)
+            ->fill('ends_at', $this->startDate)
+            ->fill('location', 'Moscow')
+            ->fill('buildin_folder_url', 'https://example.com/folder')
+            ->submit()
+            ->assertSee('Дата окончания должна быть позже даты начала');
+    });
+
+    it('allows to update an exhibition with valid data', function (): void {
+        $user = User::factory()->create([
+            'email'    => 'super-admin@gmail.com',
+            'password' => 'password',
+        ]);
+        $user->assignRole(UserRole::SUPER_ADMIN);
+        $exhibition = Exhibition::factory()->create(['name' => 'Old Name']);
+
+        $page = visit('/login');
+        $page->assertSee('Вход в аккаунт')
+            ->fill('email', 'super-admin@gmail.com')
+            ->fill('password', 'password')
+            ->click('@login-button')
+            ->assertSee('super-admin@gmail.com');
+
+        $this->assertAuthenticated();
+
+        $newName = 'Updated Exhibition Name';
+
+        $page->navigate(route('admin.exhibitions.edit', $exhibition))
+            ->assertSee('Редактировать выставку')
+            ->clear('name')
+            ->fill('name', $newName)
+            ->submit();
+
+        $exhibition = $exhibition->fresh();
+        $this->assertEquals($exhibition->name, $newName);
+    });
+
+    it('doesnt allow to update an exhibition when the name is too long', function (): void {
+        $user = User::factory()->create([
+            'email'    => 'super-admin@gmail.com',
+            'password' => 'password',
+        ]);
+        $user->assignRole(UserRole::SUPER_ADMIN);
+        $exhibition = Exhibition::factory()->create(['name' => 'Old Name']);
+
+        $page = visit('/login');
+        $page->assertSee('Вход в аккаунт')
+            ->fill('email', 'super-admin@gmail.com')
+            ->fill('password', 'password')
+            ->click('@login-button')
+            ->assertSee('super-admin@gmail.com');
+
+        $this->assertAuthenticated();
+
+        $page->navigate(route('admin.exhibitions.edit', $exhibition))
+            ->assertSee('Редактировать выставку')
+            ->clear('name')
+            ->fill('name', generateTextWithChars(260))
+            ->submit()
+            ->assertSee('Название не должно превышать 255 символов');
+    });
+
+    it('doesnt allow to update an exhibition when the buildin_folder_url is invalid', function (): void {
+        $user = User::factory()->create([
+            'email'    => 'super-admin@gmail.com',
+            'password' => 'password',
+        ]);
+        $user->assignRole(UserRole::SUPER_ADMIN);
+        $exhibition = Exhibition::factory()->create();
+
+        $page = visit('/login');
+        $page->assertSee('Вход в аккаунт')
+            ->fill('email', 'super-admin@gmail.com')
+            ->fill('password', 'password')
+            ->click('@login-button')
+            ->assertSee('super-admin@gmail.com');
+
+        $this->assertAuthenticated();
+
+        $page->navigate(route('admin.exhibitions.edit', $exhibition))
+            ->assertSee('Редактировать выставку')
+            ->clear('buildin_folder_url')
+            ->fill('buildin_folder_url', 'not-a-valid-url')
+            ->submit()
+            ->assertSee('Введите корректный URL папки');
+    });
+
+    it('doesnt allow to update an exhibition when ends_at is before starts_at', function (): void {
+        $user = User::factory()->create([
+            'email'    => 'super-admin@gmail.com',
+            'password' => 'password',
+        ]);
+        $user->assignRole(UserRole::SUPER_ADMIN);
+        $exhibition = Exhibition::factory()->create();
+
+        $page = visit('/login');
+        $page->assertSee('Вход в аккаунт')
+            ->fill('email', 'super-admin@gmail.com')
+            ->fill('password', 'password')
+            ->click('@login-button')
+            ->assertSee('super-admin@gmail.com');
+
+        $this->assertAuthenticated();
+
+        $page->navigate(route('admin.exhibitions.edit', $exhibition))
+            ->assertSee('Редактировать выставку')
+            ->clear('starts_at')
+            ->fill('starts_at', $this->endDate)
+            ->clear('ends_at')
+            ->fill('ends_at', $this->startDate)
+            ->submit()
+            ->assertSee('Дата окончания должна быть позже даты начала');
+    });
+
+    it('doesnt allow to update an exhibition when the location is too long', function (): void {
+        $user = User::factory()->create([
+            'email'    => 'super-admin@gmail.com',
+            'password' => 'password',
+        ]);
+        $user->assignRole(UserRole::SUPER_ADMIN);
+        $exhibition = Exhibition::factory()->create();
+
+        $page = visit('/login');
+        $page->assertSee('Вход в аккаунт')
+            ->fill('email', 'super-admin@gmail.com')
+            ->fill('password', 'password')
+            ->click('@login-button')
+            ->assertSee('super-admin@gmail.com');
+
+        $this->assertAuthenticated();
+
+        $page->navigate(route('admin.exhibitions.edit', $exhibition))
+            ->assertSee('Редактировать выставку')
+            ->clear('location')
+            ->fill('location', generateTextWithChars(260))
+            ->submit()
+            ->assertSee('Местоположение обязательно для заполнения');
+    });
+
+    it('allows to delete an exhibition', function (): void {
+        $user = User::factory()->create([
+            'email'    => 'super-admin@gmail.com',
+            'password' => 'password',
+        ]);
+        $user->assignRole(UserRole::SUPER_ADMIN);
+        $exhibition = Exhibition::factory()->create(['name' => 'To Be Deleted']);
+
+        $page = visit('/login');
+        $page->assertSee('Вход в аккаунт')
+            ->fill('email', 'super-admin@gmail.com')
+            ->fill('password', 'password')
+            ->click('@login-button')
+            ->assertSee('super-admin@gmail.com');
+
+        $this->assertAuthenticated();
+
+        $page->navigate(route('admin.exhibitions.edit', $exhibition))
+            ->assertSee('Редактировать выставку')
+            ->click('@delete-exhibition')
+            ->click('@delete-btn')
+            ->assertPathEndsWith(route('admin.exhibitions.index', absolute: false))
+            ->assertDontSee('To Be Deleted');
     });
 });
