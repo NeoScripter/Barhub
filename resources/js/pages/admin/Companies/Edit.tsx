@@ -39,7 +39,6 @@ const Edit: FC<Inertia.Pages.Admin.Companies.Edit> = ({
         tags:
             company.tags?.map((t: { id: number }) => t.id) ?? ([] as number[]),
         logo: null as File | null,
-        logo_alt: company.logo?.alt ?? '',
     });
 
     const [isDeleting, setIsDeleting] = useState(false);
@@ -148,9 +147,6 @@ const Edit: FC<Inertia.Pages.Admin.Companies.Edit> = ({
                             isEdited={true}
                             onChange={(file) => setData('logo', file)}
                             src={company.logo?.webp}
-                            onAltChange={(val) => setData('logo_alt', val)}
-                            altError={errors.logo_alt}
-                            altText={data.logo_alt}
                             error={errors.logo}
                         />
 

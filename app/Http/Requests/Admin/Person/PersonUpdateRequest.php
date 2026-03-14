@@ -20,10 +20,8 @@ final class PersonUpdateRequest extends FormRequest
             'regalia' => ['sometimes', 'string', 'min:10', 'max:5000'],
             'bio' => ['sometimes', 'string', 'min:10', 'max:5000'],
             'telegram' => ['nullable', 'string', 'max:255'],
-            'avatar' => ['nullable', 'image', 'max:10240'],
-            'avatar_alt' => ['nullable', 'string', 'max:255'],
-            'logo' => ['nullable', 'image', 'max:10240'],
-            'logo_alt' => ['nullable', 'string', 'max:255'],
+            'avatar' => ['nullable', 'image', 'max:51200'],
+            'logo' => ['nullable', 'image', 'max:51200'],
         ];
     }
 

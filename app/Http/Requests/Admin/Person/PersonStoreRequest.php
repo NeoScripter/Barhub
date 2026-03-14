@@ -20,10 +20,8 @@ final class PersonStoreRequest extends FormRequest
             'regalia' => ['required', 'string', 'min:10', 'max:5000'],
             'bio' => ['required', 'string', 'min:10', 'max:5000'],
             'telegram' => ['nullable', 'string', 'max:255'],
-            'avatar' => ['nullable', 'image', 'max:10240'], // 10MB
-            'avatar_alt' => ['nullable', 'string', 'max:255'],
-            'logo' => ['nullable', 'image', 'max:10240'], // 10MB
-            'logo_alt' => ['nullable', 'string', 'max:255'],
+            'avatar' => ['nullable', 'image', 'max:51200'],
+            'logo' => ['nullable', 'image', 'max:51200'],
         ];
     }
 

@@ -27,9 +27,7 @@ const Edit: FC<Inertia.Pages.Admin.People.Edit> = ({ person, exhibition }) => {
         bio: person.bio,
         telegram: person.telegram || '',
         avatar: null as File | null,
-        avatar_alt: person.avatar?.alt || '',
         logo: null as File | null,
-        logo_alt: person.logo?.alt || '',
     });
 
     const [isDeleting, setIsDeleting] = useState(false);
@@ -155,9 +153,6 @@ const Edit: FC<Inertia.Pages.Admin.People.Edit> = ({ person, exhibition }) => {
                         isEdited={true}
                         onChange={(file) => setData('avatar', file)}
                         src={person.avatar?.webp}
-                        onAltChange={(val) => setData('avatar_alt', val)}
-                        altError={errors.avatar_alt}
-                        altText={data.avatar_alt}
                         error={errors.avatar}
                     />
 
@@ -168,9 +163,6 @@ const Edit: FC<Inertia.Pages.Admin.People.Edit> = ({ person, exhibition }) => {
                         isEdited={true}
                         onChange={(file) => setData('logo', file)}
                         src={person.logo?.webp}
-                        onAltChange={(val) => setData('logo_alt', val)}
-                        altError={errors.logo_alt}
-                        altText={data.logo_alt}
                         error={errors.logo}
                     />
                 </div>

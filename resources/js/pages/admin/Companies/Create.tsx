@@ -31,7 +31,6 @@ const Create: FC<Inertia.Pages.Admin.Companies.Create> = ({
         activities: '',
         tags: [] as number[],
         logo: null as File | null,
-        logo_alt: '',
     });
 
     const handleSubmit = (e: React.FormEvent) => {
@@ -92,9 +91,6 @@ const Create: FC<Inertia.Pages.Admin.Companies.Create> = ({
                         label="Логотип"
                         isEdited={true}
                         onChange={(file) => setData('logo', file)}
-                        onAltChange={(val) => setData('logo_alt', val)}
-                        altError={errors.logo_alt}
-                        altText={data.logo_alt}
                         error={errors.logo}
                     />
 

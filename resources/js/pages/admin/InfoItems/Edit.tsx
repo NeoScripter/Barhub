@@ -3,7 +3,6 @@ import InputError from '@/components/form/InputError';
 import AccentHeading from '@/components/ui/AccentHeading';
 import { Button } from '@/components/ui/Button';
 import { DeleteAlertDialog } from '@/components/ui/DeleteAlertDialog';
-import FileInput from '@/components/ui/FileInput';
 import ImgInput from '@/components/ui/ImgInput';
 import { Input } from '@/components/ui/Input';
 import { Label } from '@/components/ui/Label';
@@ -23,7 +22,6 @@ const Edit: FC<Inertia.Pages.Admin.InfoItems.Edit> = ({
         title: infoItem.title ?? '',
         url: infoItem.url ?? '',
         image: null as File | null,
-        alt: infoItem.image?.alt,
     });
 
 
@@ -111,9 +109,6 @@ const Edit: FC<Inertia.Pages.Admin.InfoItems.Edit> = ({
                             error={errors.image}
                             label='Изображение'
                             onChange={(file) => setData('image', file)}
-                            altText={data.alt ?? ''}
-                            onAltChange={(alt) => setData('alt', alt)}
-                            altError={errors.alt}
                         />
                         <InputError message={errors.image} />
                     </div>

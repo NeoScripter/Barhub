@@ -15,8 +15,7 @@ final class InfoItemStoreRequest extends FormRequest
         return [
             'title' => ['required', 'string', 'min:1', 'max:255'],
             'url'   => ['required', 'string', 'url', 'max:2048'],
-            'image' => ['nullable', 'image', 'max:10240', 'mimes:jpg,jpeg,png,gif,webp,svg'],
-            'alt' => ['required_with:image', 'nullable', 'string', 'min:1', 'max:255'],
+            'image' => ['nullable', 'image', 'max:51200', 'mimes:jpg,jpeg,png,gif,webp,svg'],
         ];
     }
 
@@ -31,8 +30,6 @@ final class InfoItemStoreRequest extends FormRequest
             'image.image'    => 'Файл должен быть изображением',
             'image.max'      => 'Размер изображения не должен превышать 10 МБ',
             'image.mimes'    => 'Изображение должно быть в формате jpg, jpeg, png, gif, webp или svg',
-            'alt.required' => 'Альтернативный текст к фото обязателен для заполнения',
-            'alt.max'      => 'Альтернативный текст к фото не должен превышать 255 символов',
         ];
     }
 }

@@ -292,7 +292,6 @@ describe('Admin Info Item Test', function (): void {
 
         $payload = [
             'title' => 'updated title',
-            'alt' => 'updated alt',
             'url'   => 'https://updated-example.com',
         ];
 
@@ -324,7 +323,6 @@ describe('Admin Info Item Test', function (): void {
             'title' => 'updated title',
             'url'   => 'https://updated-example.com',
             'image' => $image,
-            'alt' => 'image alt',
         ];
 
         $this->actingAs($user)
@@ -547,65 +545,7 @@ describe('Admin Info Item Test', function (): void {
             ->assertSee('Введите корректный URL');
     });
 
-    it('doesnt allow to update an info item when the alt is too long', function (): void {
-        $user = User::factory()->create([
-            'email'    => 'super-admin@gmail.com',
-            'password' => 'password',
-        ]);
-        $user->assignRole(UserRole::SUPER_ADMIN);
-        $exhibition = Exhibition::factory()->create();
-        $infoItem = InfoItem::factory()->for($exhibition)->create(['title' => 'Old Title']);
-        $route = "/admin/exhibitions/{$exhibition->id}/info-items";
-
-        $page = visit('/login');
-
-        $page->assertSee('Вход в аккаунт')
-            ->fill('email', 'super-admin@gmail.com')
-            ->fill('password', 'password')
-            ->click('@login-button')
-            ->assertSee('super-admin@gmail.com');
-
-        $this->assertAuthenticated();
-
-        $page->navigate($route)
-            ->assertSee('Информационные элементы')
-            ->assertSee($infoItem->title)
-            ->click('@edit-info-item-' . $infoItem->id)
-            ->assertSee('Редактировать информационный элемент')
-            ->fill('image_alt_text', generateTextWithChars(270))
-            ->submit()
-            ->assertSee('Альтернативный текст к фото не должен превышать 255 символов');
-    });
-
-    it('doesnt allow to create an info item when the alt is too long', function (): void {
-        $user = User::factory()->create([
-            'email'    => 'super-admin@gmail.com',
-            'password' => 'password',
-        ]);
-        $user->assignRole(UserRole::SUPER_ADMIN);
-        $exhibition = Exhibition::factory()->create();
-        $route = "/admin/exhibitions/{$exhibition->id}/info-items";
-
-        $page = visit('/login');
-
-        $page->assertSee('Вход в аккаунт')
-            ->fill('email', 'super-admin@gmail.com')
-            ->fill('password', 'password')
-            ->click('@login-button')
-            ->assertSee('super-admin@gmail.com');
-
-        $this->assertAuthenticated();
-
-        $page->navigate($route)
-            ->assertSee('Информационные элементы')
-            ->click('@create-info-item')
-            ->assertSee('Создать информационный элемент')
-            ->fill('image_alt_text', generateTextWithChars(270))
-            ->submit()
-            ->assertSee('Альтернативный текст к фото не должен превышать 255 символов');
-    });
-
-    it('doesnt allow to upload an image to the info item without an alt', function (): void {
+    it('allows to upload an image to the info item without an alt', function (): void {
         Storage::fake('local');
 
         $user = User::factory()->create([
@@ -625,38 +565,10 @@ describe('Admin Info Item Test', function (): void {
         ];
 
         $this->actingAs($user)
-            ->put("{$route}/{$infoItem->id}", $payload)
-            ->assertInvalid(['alt']);
+            ->put("{$route}/{$infoItem->id}", $payload);
 
         $infoItem->refresh();
-        expect($infoItem->image)->toBeNull();
-    });
-
-    it('updates only the alt without changing the image', function (): void {
-        Storage::fake('local');
-
-        $user = User::factory()->create([
-            'email'    => 'super-admin@gmail.com',
-            'password' => 'password',
-        ]);
-        $user->assignRole(UserRole::SUPER_ADMIN);
-        $exhibition = Exhibition::factory()->create();
-        $infoItem = InfoItem::factory()->for($exhibition)->create();
-        $infoItem->image()->create(Image::factory()->make(['alt' => 'original alt'])->toArray());
-        $route = "/admin/exhibitions/{$exhibition->id}/info-items";
-
-        $payload = [
-            'title' => $infoItem->title,
-            'url'   => 'https://example.com',
-            'alt'   => 'updated alt',
-        ];
-
-        $this->actingAs($user)
-            ->put("{$route}/{$infoItem->id}", $payload)
-            ->assertRedirect($route);
-
-        $infoItem->refresh();
-        expect($infoItem->image->alt)->toBe('updated alt');
+        expect($infoItem->image)->not->toBeNull();
     });
 
     it('deletes an image file when the info item is deleted', function (): void {

@@ -18,9 +18,7 @@ const Create: FC<Inertia.Pages.Admin.People.Create> = ({ exhibition }) => {
         bio: '',
         telegram: '',
         avatar: null as File | null,
-        avatar_alt: '',
         logo: null as File | null,
-        logo_alt: '',
     });
 
     const handleSubmit = (e: React.FormEvent) => {
@@ -109,9 +107,6 @@ const Create: FC<Inertia.Pages.Admin.People.Create> = ({ exhibition }) => {
                         progress={progress}
                         isEdited={true}
                         onChange={(file) => setData('avatar', file)}
-                        onAltChange={(val) => setData('avatar_alt', val)}
-                        altError={errors.avatar_alt}
-                        altText={data.avatar_alt}
                         error={errors.avatar}
                     />
 
@@ -121,9 +116,6 @@ const Create: FC<Inertia.Pages.Admin.People.Create> = ({ exhibition }) => {
                         label="Логотип"
                         isEdited={true}
                         onChange={(file) => setData('logo', file)}
-                        onAltChange={(val) => setData('logo_alt', val)}
-                        altError={errors.logo_alt}
-                        altText={data.logo_alt}
                         error={errors.logo}
                     />
                 </div>

@@ -15,7 +15,6 @@ const Create: FC<Inertia.Pages.Admin.InfoItems.Create> = ({ exhibition }) => {
         title: '',
         url: '',
         image: null as File | null,
-        alt: '',
     });
 
     const handleSubmit = (e: React.FormEvent) => {
@@ -73,9 +72,6 @@ const Create: FC<Inertia.Pages.Admin.InfoItems.Create> = ({ exhibition }) => {
                             error={errors.image}
                             label='Изображение'
                             onChange={(file) => setData('image', file)}
-                            altText={data.alt ?? ''}
-                            onAltChange={(alt) => setData('alt', alt)}
-                            altError={errors.alt}
                         />
 
                         <InputError message={errors.image} />

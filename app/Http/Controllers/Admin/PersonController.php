@@ -67,7 +67,7 @@ final class PersonController extends Controller
                     'avatar',
                     'people/avatars',
                     800,
-                    $request->input('avatar_alt', '')
+                    $person->name,
                 );
             }
 
@@ -79,7 +79,7 @@ final class PersonController extends Controller
                     'logo',
                     'people/logos',
                     400,
-                    $request->input('logo_alt', '')
+                    $person->name
                 );
             }
 
@@ -114,7 +114,7 @@ final class PersonController extends Controller
                 if ($person->avatar) {
                     $person->avatar->updateImage(
                         $request->file('avatar'),
-                        $request->input('avatar_alt'),
+                        $person->name,
                         'people/avatars',
                         200
                     );
@@ -125,12 +125,9 @@ final class PersonController extends Controller
                         'avatar',
                         'people/avatars',
                         200,
-                        $request->input('avatar_alt', '')
+                        $person->name,
                     );
                 }
-            } elseif ($request->has('avatar_alt') && $person->avatar) {
-                // Update only alt text
-                $person->avatar->updateImage(null, $request->input('avatar_alt'));
             }
 
             // Handle logo
@@ -138,7 +135,7 @@ final class PersonController extends Controller
                 if ($person->logo) {
                     $person->logo->updateImage(
                         $request->file('logo'),
-                        $request->input('logo_alt'),
+                        $person->name,
                         'people/logos',
                         400
                     );
@@ -149,14 +146,10 @@ final class PersonController extends Controller
                         'logo',
                         'people/logos',
                         400,
-                        $request->input('logo_alt', '')
+                        $person->name,
                     );
                 }
-            } elseif ($request->has('logo_alt') && $person->logo) {
-                // Update only alt text
-                $person->logo->updateImage(null, $request->input('logo_alt'));
-            }
-        });
+            }         });
 
         return to_route('admin.exhibitions.people.index', $exhibition)
             ->with('success', 'Участник успешно обновлен');

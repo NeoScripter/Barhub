@@ -10,9 +10,6 @@ type ImgInputProps = {
     onChange: (file: File | null) => void;
     error?: string;
     progress?: AxiosProgressEvent | null;
-    altText: string;
-    altError?: string;
-    onAltChange: (value: string) => void;
     label?: string;
 };
 
@@ -22,9 +19,6 @@ export default function ImgInput({
     onChange,
     error,
     progress,
-    altText,
-    altError,
-    onAltChange,
     label = 'Главное фото',
 }: ImgInputProps) {
     const [preview, setPreview] = useState(src);
@@ -68,14 +62,6 @@ export default function ImgInput({
                         disabled={!isEdited}
                         label="Загрузить фото"
                     />
-
-                    {isEdited && (
-                        <AltInput
-                            altText={altText}
-                            altError={altError}
-                            onAltChange={onAltChange}
-                        />
-                    )}
                 </div>
                 <div>
                     <div className="transition-scale relative flex size-40 items-center justify-center duration-200 ease-in hover:scale-110">
@@ -97,35 +83,6 @@ export default function ImgInput({
                     updated={preview !== src}
                 />
             </div>
-        </div>
-    );
-}
-
-type AltInputProps = {
-    altText: string;
-    altError?: string;
-    onAltChange: (value: string) => void;
-};
-
-function AltInput({ altText, altError, onAltChange }: AltInputProps) {
-    const id = useId();
-
-    return (
-        <div className="grid gap-1 text-xs">
-            <label
-                htmlFor={id}
-                className="mt-3"
-            >
-                Альтернативный текст для фото
-            </label>
-            <textarea
-                name="image_alt_text"
-                id={id}
-                value={altText}
-                onChange={(e) => onAltChange(e.target.value)}
-                className="focus-visible:border-ring focus-visible:ring-dark-swamp/80 min-h-15 rounded-sm border border-zinc-700 p-1 shadow-xs transition-[color,box-shadow] outline-none focus-visible:ring-[2px]"
-            />
-            <span className="font-medium text-red-600">{altError}</span>
         </div>
     );
 }

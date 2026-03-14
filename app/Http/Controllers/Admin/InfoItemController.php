@@ -10,9 +10,7 @@ use App\Http\Requests\Admin\InfoItem\InfoItemUpdateRequest;
 use App\Models\Exhibition;
 use App\Models\Image;
 use App\Models\InfoItem;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 
 final class InfoItemController extends Controller
@@ -58,7 +56,7 @@ final class InfoItemController extends Controller
                     'image',
                     'info-items/images',
                     80,
-                    $request->input('alt', '')
+                    $infoItem->title,
                 );
             }
         });
@@ -78,7 +76,7 @@ final class InfoItemController extends Controller
                 if ($infoItem->image) {
                     $infoItem->image->updateImage(
                         $request->file('image'),
-                        $request->input('alt', ''),
+                        $infoItem->title,
                         'info-items/images',
                         80
                     );
@@ -89,11 +87,9 @@ final class InfoItemController extends Controller
                         'image',
                         'info-items/images',
                         80,
-                        $request->input('alt', '')
+                        $infoItem->title,
                     );
                 }
-            } elseif ($request->has('alt') && $infoItem->image) {
-                $infoItem->image->updateImage(null, $request->input('alt'));
             }
         });
 

@@ -56,7 +56,7 @@ final class CompanyController extends Controller
             $validated = $request->validated();
 
             $company = Company::query()->create([
-                ...Arr::except($validated, ['tags', 'logo', 'logo_alt']),
+                ...Arr::except($validated, ['tags', 'logo']),
                 'exhibition_id' => $exhibition->id,
             ]);
 
@@ -71,7 +71,7 @@ final class CompanyController extends Controller
                     'logo',
                     'companies/logos',
                     400,
-                    $request->input('logo_alt', '')
+                    $company->public_name,
                 );
             }
         });
@@ -97,7 +97,7 @@ final class CompanyController extends Controller
     {
         DB::transaction(function () use ($request, $company): void {
             $validated = $request->validated();
-            $company->update(Arr::except($validated, ['tags', 'logo', 'logo_alt']));
+            $company->update(Arr::except($validated, ['tags', 'logo']));
 
             if ($request->has('tags')) {
                 $company->tags()->sync($request->input('tags', []));
@@ -107,7 +107,7 @@ final class CompanyController extends Controller
                 if ($company->logo) {
                     $company->logo->updateImage(
                         $request->file('logo'),
-                        $request->input('logo_alt'),
+                        $company->public_name,
                         'companies/logos',
                         400
                     );
@@ -118,11 +118,9 @@ final class CompanyController extends Controller
                         'logo',
                         'companies/logos',
                         400,
-                        $request->input('logo_alt', '')
+                        $company->public_name,
                     );
                 }
-            } elseif ($request->has('logo_alt') && $company->logo) {
-                $company->logo->updateImage(null, $request->input('logo_alt'));
             }
         });
 

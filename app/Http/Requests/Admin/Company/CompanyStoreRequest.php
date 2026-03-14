@@ -32,7 +32,7 @@ final class CompanyStoreRequest extends FormRequest
             'activities' => ['nullable', 'string', 'max:5000'],
             'tags' => ['nullable', 'array'],
             'tags.*' => ['integer', 'exists:tags,id'],
-            'logo' => ['nullable', 'image', 'max:10240'],
+            'logo' => ['nullable', 'image', 'max:51200'],
             'logo_alt' => ['nullable', 'string', 'max:255'],
         ];
     }
