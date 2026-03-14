@@ -61,12 +61,7 @@ Route::prefix('/admin')
             ->name('update.status');
 
         Route::resource('/exhibitions', AdminExhibitionController::class)
-            ->middleware(['can:viewAny,' . Exhibition::class])
-            ->only(['index', 'show']);
-
-        Route::resource('/exhibitions', AdminExhibitionController::class)
-            ->middleware(['role:' . UserRole::SUPER_ADMIN->value])
-            ->except(['index', 'show']);
+            ->middleware(['role:' . UserRole::SUPER_ADMIN->value]);
 
         Route::resource('themes', ThemeController::class)->only(['store', 'destroy']);
         Route::resource('stages', StageController::class)->only(['store', 'destroy']);
