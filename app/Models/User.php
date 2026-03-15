@@ -53,6 +53,12 @@ final class User extends Authenticatable
 
     public function getActiveExhibition(): ?Exhibition
     {
+        $activeExhibition = $this->active_exhibition_id ? Exhibition::find($this->active_exhibition_id) : null;
+
+        if ($activeExhibition) {
+            return $activeExhibition;
+        }
+
         if ($this->role === UserRole::SUPER_ADMIN) {
             return Exhibition::first();
         }
@@ -60,13 +66,6 @@ final class User extends Authenticatable
         if ($this->role !== UserRole::ADMIN) {
             return null;
         }
-
-        $activeExhibition = $this->active_exhibition_id ? Exhibition::find($this->active_exhibition_id) : null;
-
-        if ($activeExhibition) {
-            return $activeExhibition;
-        }
-
 
         return $this->exhibitions()->first();
     }

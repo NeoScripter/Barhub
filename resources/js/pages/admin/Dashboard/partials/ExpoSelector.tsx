@@ -45,6 +45,7 @@ const ExpoSelector = () => {
                         items={expos}
                         getValue={(expo) => expo.id.toString()}
                         getLabel={(expo) => formatExpoValue(expo)}
+                        value={selectedId ?? undefined}
                         placeholder="Выбрать выставку"
                         className="max-w-70 sm:max-w-90"
                         onValueChange={(value) => setSelectedId(value)}

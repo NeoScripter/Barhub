@@ -18,6 +18,7 @@ final class AdminController extends Controller
         $admins = $exhibition->users()->get();
         $users = User::query()->select(['email', 'id', 'name', 'last_login_at'])
             ->where('role', UserRole::USER)
+            ->where('role', UserRole::ADMIN)
             ->whereNotIn('id', $admins->pluck('id'))
             ->get();
 
