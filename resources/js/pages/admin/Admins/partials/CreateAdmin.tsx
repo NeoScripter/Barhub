@@ -7,14 +7,14 @@ import { useState } from 'react';
 import { toast } from 'sonner';
 
 const CreateAdmin = () => {
-    const { users, exhibition, company } =
+    const { users, exhibition } =
         usePage<Inertia.Pages.Admin.Admins.Index>().props;
     const [selectedId, setSelectedId] = useState<string | null>(null);
 
     const handleClick = () => {
         if (!selectedId) return;
 
-        router.visit(update({ exhibition, company, admin: selectedId }), {
+        router.visit(update({ exhibition, admin: selectedId }), {
             method: 'patch',
             onSuccess: () => {
                 toast.success('Администратор успешно создан');

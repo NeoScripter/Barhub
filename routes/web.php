@@ -59,7 +59,7 @@ Route::prefix('/admin')
         Route::resource('stages', StageController::class)->only(['store', 'destroy']);
         Route::resource('tags', TagController::class)->only(['store', 'destroy']);
 
-        Route::resource('admins', AdminController::class)
+        Route::resource('exhibitions/{exhibition}/admins', AdminController::class)
             ->middleware(['role:' . UserRole::SUPER_ADMIN->value])
             ->only(['index', 'destroy', 'update']);
 
