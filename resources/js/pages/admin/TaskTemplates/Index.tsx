@@ -39,7 +39,7 @@ const Index: FC<Inertia.Pages.Admin.TaskTemplates.Index> = ({
 
             <Table
                 isEmpty={templates?.data?.length === 0}
-                placeholder="По вашему запросу не найдено ни одной общейс задачи"
+                placeholder="По вашему запросу не найдено ни одной общей задачи"
             >
                 <TemplateTableHeader />
                 <TemplateTable
