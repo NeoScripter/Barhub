@@ -25,10 +25,7 @@ return new class extends Migration
             $table->unsignedInteger('status')->default(UserStatus::ACTIVE->value);
             $table->foreignId('company_id')->nullable()->constrained()->nullOnDelete();
             $table->timestamp('last_login_at')->nullable();
-            $table->foreignId('active_exhibition_id')
-                ->nullable()
-                ->constrained('exhibitions')
-                ->nullOnDelete();
+            $table->unsignedInteger('active_exhibition_id')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

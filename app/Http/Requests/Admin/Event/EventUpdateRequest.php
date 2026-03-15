@@ -16,7 +16,8 @@ final class EventUpdateRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return true;
+        $exhibition = $this->event->exhibition;
+        return $this->user()->can('view', $exhibition);
     }
 
     /**

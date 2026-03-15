@@ -26,7 +26,7 @@ describe('Admin Tag Test', function (): void {
         $tag3 = Tag::factory()->create(['name' => 'Лекция']);
 
         $this->company->tags()->attach([$tag1->id, $tag2->id, $tag3->id]);
-        $this->route = "/admin/exhibitions/{$this->exhibition->id}/companies/{$this->company->id}/edit";
+        $this->route = "/admin/companies/{$this->company->id}/edit";
 
         $page = visit('/login');
 

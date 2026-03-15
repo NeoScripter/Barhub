@@ -3,38 +3,32 @@ import { Button } from '@/components/ui/Button';
 import { SelectMenu } from '@/components/ui/SelectMenu';
 import { App } from '@/wayfinder/types';
 import { router, usePage } from '@inertiajs/react';
-import { FC } from 'react';
 import { toast } from 'sonner';
 import { formatExpoValue } from './utils';
-import ExhibitionUpdatedStatusController from '@/wayfinder/App/Http/Controllers/Admin/ExhibitionUpdatedStatusController';
+import { useState } from 'react';
+import DashboardController from '@/wayfinder/App/Http/Controllers/Admin/DashboardController';
 
-const ExpoSelector: FC<{
-    expoId: string | null;
-    setter: (val: string) => void;
-}> = ({ expoId, setter }) => {
-    const { expos } = usePage<{ expos: App.Models.Exhibition[] }>().props;
+const ExpoSelector = () => {
+    const { expos, exhibition } = usePage<{
+        expos: App.Models.Exhibition[];
+        exhibition: App.Models.Exhibition | null;
+    }>().props;
 
-    const selectedExpo = expos.find((expo) => expo.id === Number(expoId));
+    const [selectedId, setSelectedId] = useState<string | null>(exhibition?.id.toString() ?? null);
 
     const handleClick = () => {
-        if (!selectedExpo) return;
+        if (!selectedId) return;
 
         router.visit(
-            ExhibitionUpdatedStatusController.patch({ id: selectedExpo.id }),
+            DashboardController.update({ dashboard: selectedId }),
             {
                 method: 'patch',
                 onSuccess: () => {
-                    const action = selectedExpo.is_active
-                        ? 'деактивирована'
-                        : 'активирована';
-                    toast(`Выставка успешно ${action}`);
+                    toast('Выставка успешно активирована');
                     router.flush('exhibitions');
                 },
                 preserveScroll: true,
                 preserveState: true,
-                data: {
-                    is_active: !selectedExpo.is_active,
-                },
             },
         );
     };
@@ -53,7 +47,7 @@ const ExpoSelector: FC<{
                         getLabel={(expo) => formatExpoValue(expo)}
                         placeholder="Выбрать выставку"
                         className="max-w-70 sm:max-w-90"
-                        onValueChange={(value) => setter(value)}
+                        onValueChange={(value) => setSelectedId(value)}
                         variant="default"
                     />
                     <Button
@@ -61,11 +55,9 @@ const ExpoSelector: FC<{
                         variant="default"
                         size="sm"
                         className="mx-auto"
-                        disabled={expoId == null}
+                        disabled={selectedId == null}
                     >
-                        {selectedExpo?.is_active
-                            ? 'Деактивировать'
-                            : 'Активировать'}
+                        Активировать
                     </Button>
                 </div>
             )}

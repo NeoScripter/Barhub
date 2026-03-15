@@ -2,7 +2,7 @@ import AccentHeading from '@/components/ui/AccentHeading';
 import { Button } from '@/components/ui/Button';
 import IndexToolbar from '@/components/ui/IndexToolbar';
 import Pagination from '@/components/ui/Pagination';
-import { create } from '@/wayfinder/routes/admin/exhibitions/info-items';
+import { create } from '@/wayfinder/routes/admin/info-items';
 import { Inertia } from '@/wayfinder/types';
 import { Link } from '@inertiajs/react';
 import { Plus } from 'lucide-react';

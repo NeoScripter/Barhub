@@ -23,7 +23,7 @@ describe('Admin Followup Browser Tests', function (): void {
         $service = Service::factory()->for($company)->create();
         Followup::factory()->for($service)->for($user)->count(4)->create();
 
-        $route = "/admin/exhibitions/{$exhibition->id}/followups";
+        $route = "/admin/followups";
 
         $page = visit('/login');
         $page->assertSee('Вход в аккаунт')
@@ -52,7 +52,7 @@ describe('Admin Followup Browser Tests', function (): void {
             ->for($user)
             ->create(['status' => FollowupStatus::IMCOMPLETE]);
 
-        $route = "/admin/exhibitions/{$exhibition->id}/followups";
+        $route = "/admin/followups";
 
         $page = visit('/login');
         $page->assertSee('Вход в аккаунт')
@@ -82,7 +82,7 @@ describe('Admin Followup Browser Tests', function (): void {
             ->for($user)
             ->create(['status' => FollowupStatus::IMCOMPLETE]);
 
-        $route = "/admin/exhibitions/{$exhibition->id}/followups";
+        $route = "/admin/followups";
 
         $page = visit('/login');
         $page->assertSee('Вход в аккаунт')
@@ -133,7 +133,7 @@ describe('Admin Followup Browser Tests', function (): void {
             'status' => FollowupStatus::IMCOMPLETE,
         ]);
 
-        $route = "/admin/exhibitions/{$exhibition->id}/followups";
+        $route = "/admin/followups";
 
         $page = visit('/login');
         $page->assertSee('Вход в аккаунт')
@@ -158,7 +158,7 @@ describe('Admin Followup Feature Tests', function (): void {
         ]);
         $this->superAdmin->assignRole(UserRole::SUPER_ADMIN);
         $this->exhibition = Exhibition::factory()->create();
-        $this->route = "/admin/exhibitions/{$this->exhibition->id}/followups";
+        $this->route = "/admin/followups";
     });
 
     it('sorts followups by service name in desc order', function (): void {
@@ -175,7 +175,7 @@ describe('Admin Followup Feature Tests', function (): void {
             ->create();
 
         $followups = $this->actingAs($this->superAdmin)
-            ->get(route('admin.exhibitions.followups.index', [
+            ->get(route('admin.followups.index', [
                 'exhibition' => $this->exhibition,
                 'sort' => '-service.name',
             ]))
@@ -201,7 +201,7 @@ describe('Admin Followup Feature Tests', function (): void {
             ->create();
 
         $followups = $this->actingAs($this->superAdmin)
-            ->get(route('admin.exhibitions.followups.index', [
+            ->get(route('admin.followups.index', [
                 'exhibition' => $this->exhibition,
                 'sort' => 'service.name',
             ]))

@@ -2,26 +2,12 @@ import CardLayout from '@/components/layout/CardLayout';
 import AccentHeading from '@/components/ui/AccentHeading';
 import Filler from '@/components/ui/Filler';
 import { cn } from '@/lib/utils';
-import DashboardController from '@/wayfinder/App/Http/Controllers/Admin/DashboardController';
-import { router } from '@inertiajs/react';
-import { useState } from 'react';
 import Actions from './partials/Actions';
 import ExpoSelector from './partials/ExpoSelector';
 import Footer from './partials/Footer';
 import Tasks from './partials/Tasks';
 
 const Dashboard = () => {
-    const [selectedId, setSelectedId] = useState<string | null>(null);
-
-    const setter = (val: string) => {
-        router.get(
-            DashboardController.url(),
-            { selected: val },
-            { preserveState: true, preserveScroll: true },
-        );
-        setSelectedId(val);
-    };
-
     return (
         <>
             <div className="spacing flex flex-col">
@@ -41,10 +27,7 @@ const Dashboard = () => {
                             </AccentHeading>
 
                             <CardLayout className="padding w-full sm:gap-6 lg:gap-8">
-                                <ExpoSelector
-                                    setter={setter}
-                                    expoId={selectedId}
-                                />
+                                <ExpoSelector />
                             </CardLayout>
                         </article>
                         <div>
@@ -67,7 +50,7 @@ const Dashboard = () => {
                             <h2>Быстрые действия</h2>
                         </AccentHeading>
 
-                        <Actions expoId={selectedId} />
+                        <Actions />
                     </article>
                 </div>
 

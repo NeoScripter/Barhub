@@ -3,7 +3,7 @@ import { useCurrentUrl } from '@/hooks/useCurrentUrl';
 import { renderNavItems } from '@/lib/data/navItems';
 import { cn } from '@/lib/utils';
 import { NodeProps } from '@/types/shared';
-import { App, Inertia } from '@/wayfinder/types';
+import { App } from '@/wayfinder/types';
 import { usePage } from '@inertiajs/react';
 import { ArrowLeftToLine } from 'lucide-react';
 import { FC, useState } from 'react';
@@ -13,7 +13,6 @@ import NavItem from './NavItem';
 const NavMenu: FC<NodeProps> = ({ className }) => {
     const [expanded, setExpanded] = useState(false);
     const { currentUrl } = useCurrentUrl();
-    const { auth } = usePage<{ auth: Inertia.SharedData }>().props;
 
     return (
         <div
@@ -41,7 +40,7 @@ const NavMenu: FC<NodeProps> = ({ className }) => {
                             'lg:place-content-center lg:place-items-center',
                     )}
                 >
-                    {renderNavItems(currentUrl, auth.hasExpos).map(
+                    {renderNavItems(currentUrl).map(
                         (item) => (
                             <NavItem
                                 expanded={expanded}

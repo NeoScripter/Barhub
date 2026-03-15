@@ -5,7 +5,7 @@ import { Input } from '@/components/ui/Input';
 import { Label } from '@/components/ui/Label';
 import RadioCheckbox from '@/components/ui/RadioCheckbox';
 import { Textarea } from '@/components/ui/Textarea';
-import { index, store } from '@/wayfinder/routes/admin/exhibitions/services';
+import { index, store } from '@/wayfinder/routes/admin/services';
 import { Inertia } from '@/wayfinder/types';
 import { router, useForm } from '@inertiajs/react';
 import { FC } from 'react';

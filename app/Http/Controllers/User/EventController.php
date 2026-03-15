@@ -16,9 +16,10 @@ use Spatie\QueryBuilder\QueryBuilder;
 
 final class EventController extends Controller
 {
-    public function index(EventIndexRequest $request, Exhibition $exhibition, AttachRolesToPeople $action)
+    public function index(EventIndexRequest $request, AttachRolesToPeople $action, Exhibition $exhibition)
     {
         unset($request);
+
         $eventsQuery = QueryBuilder::for($exhibition->events())
             ->with(['stage', 'themes', 'people'])
             ->allowedFilters([
@@ -50,15 +51,15 @@ final class EventController extends Controller
             ->pluck('starts_at')
             ->sort()
             ->unique()
-            ->map(fn ($date) => $date->format('Y-m-d'))
+            ->map(fn($date) => $date->format('Y-m-d'))
             ->values();
 
         return Inertia::render('user/Events/Index', [
-            'exhibition' => $exhibition,
             'events' => $events,
             'themes' => $themes,
             'stages' => $stages,
             'days' => $days,
+            'exhibition' => $exhibition,
         ]);
     }
 

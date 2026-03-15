@@ -35,7 +35,7 @@ const Create: FC<Inertia.Pages.Admin.Companies.Create> = ({
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        post(`/admin/exhibitions/${exhibition.id}/companies`, {
+        post(`/admin/${exhibition.id}/companies`, {
             onSuccess: () => toast.success('Компания успешно создана'),
         });
     };

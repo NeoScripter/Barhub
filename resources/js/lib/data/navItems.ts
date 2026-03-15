@@ -1,11 +1,10 @@
-import DashboardController from '@/wayfinder/App/Http/Controllers/Admin/DashboardController';
 import AdminDash from '@/wayfinder/App/Http/Controllers/Admin/DashboardController';
 import AdminExpos from '@/wayfinder/App/Http/Controllers/Admin/ExhibitionController';
 import LinkController from '@/wayfinder/App/Http/Controllers/Admin/LinkController';
 import ExponentDash from '@/wayfinder/App/Http/Controllers/Exponent/DashboardController';
 import UserExpos from '@/wayfinder/App/Http/Controllers/User/ExhibitionController';
-import { index as expoIndex } from '@/wayfinder/routes/admin/exhibitions/events';
-import { index as personIndex } from '@/wayfinder/routes/admin/exhibitions/people';
+import { index as expoIndex } from '@/wayfinder/routes/admin/events';
+import { index as personIndex } from '@/wayfinder/routes/admin/people';
 import {
     BriefcaseBusiness,
     CalendarDays,
@@ -48,7 +47,7 @@ export const adminNavItems: NavItemType[] = [
         id: 'home',
         type: 'link',
         label: 'Главная',
-        url: AdminDash.url(),
+        url: AdminDash.index().url,
         icon: House,
         isDynamic: false,
     },
@@ -56,7 +55,7 @@ export const adminNavItems: NavItemType[] = [
         id: 'program-events',
         type: 'link',
         label: 'События программы',
-        url: expoIndex.url('{exhibition}'),
+        url: expoIndex.url(),
         icon: CalendarDays,
         isDynamic: true,
     },
@@ -64,7 +63,7 @@ export const adminNavItems: NavItemType[] = [
         id: 'people',
         type: 'link',
         label: 'Люди',
-        url: personIndex.url('{exhibition}'),
+        url: personIndex.url(),
         icon: UserCheck,
         isDynamic: true,
     },
@@ -72,7 +71,7 @@ export const adminNavItems: NavItemType[] = [
         id: 'companies',
         type: 'link',
         label: 'Компании',
-        url: '/admin/exhibitions/{exhibition}/companies',
+        url: '/admin/companies',
         icon: BriefcaseBusiness,
         isDynamic: true,
     },
@@ -87,28 +86,28 @@ export const adminNavItems: NavItemType[] = [
                 id: 'all-tasks',
                 type: 'link',
                 label: 'Задачи на проверке',
-                url: '/admin/exhibitions/{exhibition}/all-tasks',
+                url: '/admin/all-tasks',
                 isDynamic: true,
             },
             {
                 id: 'task-templates',
                 type: 'link',
                 label: 'Общие задачи',
-                url: '/admin/exhibitions/{exhibition}/task-templates',
+                url: '/admin/task-templates',
                 isDynamic: true,
             },
             {
                 id: 'followups',
                 type: 'link',
                 label: 'Услуги',
-                url: '/admin/exhibitions/{exhibition}/followups',
+                url: '/admin/followups',
                 isDynamic: true,
             },
             {
                 id: 'info-items',
                 type: 'link',
                 label: 'Информация и материалы',
-                url: '/admin/exhibitions/{exhibition}/info-items',
+                url: '/admin/info-items',
                 isDynamic: true,
             },
         ],
@@ -179,7 +178,7 @@ export const userNavItems: NavItemType[] = [
         id: 'admin-panel',
         type: 'link',
         label: 'Админка руководителя',
-        url: DashboardController.url(),
+        url: AdminDash.index().url,
         icon: UserPen,
         isDynamic: false,
     },
@@ -209,54 +208,8 @@ export const userNavItems: NavItemType[] = [
     },
 ];
 
-function extractExhibitionId(url: string): string | null {
-    const match = url.match(/admin\/exhibitions\/(\d+)/);
-    return match ? match[1] : null;
-}
-
-function injectExhibitionId(
-    item: NavItemType,
-    exhibitionId: string,
-): NavItemType {
-    const newItem = { ...item };
-
-    if (item.type === 'link' && item.isDynamic) {
-        newItem.url = item.url.replace('{exhibition}', exhibitionId);
-    }
-
-    if (item.type === 'drawer' && item.links) {
-        newItem.links = item.links.map((link) =>
-            injectExhibitionId(link, exhibitionId),
-        );
-    }
-
-    return newItem;
-}
-
-export function renderAdminNavItems(
-    currentUrl: string,
-    canViewExpos: boolean,
-): NavItemType[] {
-    const exhibitionId = extractExhibitionId(currentUrl);
-
-    if (!canViewExpos) {
-        return adminNavItems.filter(
-            (item) =>
-                item.type === 'link' &&
-                !item.url.includes('admin/exhibitions') &&
-                !item.isDynamic,
-        );
-    }
-
-    // Not on an exhibition page - show only non-dynamic items
-    if (!exhibitionId) {
-        return adminNavItems.filter((item) => !item.isDynamic);
-    }
-
-    // On an exhibition page - inject the ID into all dynamic URLs
-    return adminNavItems.map((item) =>
-        injectExhibitionId(item, exhibitionId),
-    );
+export function renderAdminNavItems(): NavItemType[] {
+    return adminNavItems;
 }
 
 export function renderExponentNavItems(): NavItemType[] {
@@ -269,10 +222,9 @@ export function renderUserNavItems(): NavItemType[] {
 
 export function renderNavItems(
     currentUrl: string,
-    canViewExpos: boolean,
 ): NavItemType[] {
     if (currentUrl.includes('/admin/')) {
-        return renderAdminNavItems(currentUrl, canViewExpos);
+        return renderAdminNavItems();
     } else if (currentUrl.includes('/exponent/')) {
         return renderExponentNavItems();
     } else {

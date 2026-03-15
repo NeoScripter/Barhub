@@ -5,7 +5,7 @@ import FileInput from '@/components/ui/FileInput';
 import { Input } from '@/components/ui/Input';
 import { Label } from '@/components/ui/Label';
 import { Textarea } from '@/components/ui/Textarea';
-import { index, store } from '@/wayfinder/routes/admin/exhibitions/tasks';
+import { index, store } from '@/wayfinder/routes/admin/tasks';
 import { Inertia } from '@/wayfinder/types';
 import { router, useForm } from '@inertiajs/react';
 import { FC } from 'react';

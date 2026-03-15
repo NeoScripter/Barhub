@@ -5,7 +5,7 @@ import LabeledContent from '@/components/ui/LabeledContent';
 import RadioLabeled from '@/components/ui/RadioLabeled';
 import { formatDateAndTime } from '@/lib/utils';
 import PartnerController from '@/wayfinder/App/Http/Controllers/Admin/PartnerController';
-import { update } from '@/wayfinder/routes/admin/exhibitions/all-tasks';
+import { update } from '@/wayfinder/routes/admin/all-tasks';
 import { Inertia } from '@/wayfinder/types';
 import { useForm } from '@inertiajs/react';
 import { FC } from 'react';

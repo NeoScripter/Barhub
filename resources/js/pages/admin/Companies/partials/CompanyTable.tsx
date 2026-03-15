@@ -2,7 +2,7 @@ import Image from '@/components/ui/Image';
 import Table from '@/components/ui/Table';
 import { range } from '@/lib/utils';
 import { NodeProps } from '@/types/shared';
-import { edit } from '@/wayfinder/routes/admin/exhibitions/companies';
+import { edit } from '@/wayfinder/routes/admin/companies';
 import { App } from '@/wayfinder/types';
 import { Link } from '@inertiajs/react';
 import { PencilLine } from 'lucide-react';

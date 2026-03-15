@@ -1,7 +1,7 @@
 import Image from '@/components/ui/Image';
 import Table from '@/components/ui/Table';
 import { NodeProps } from '@/types/shared';
-import { edit } from '@/wayfinder/routes/admin/exhibitions/people';
+import { edit } from '@/wayfinder/routes/admin/people';
 import { App } from '@/wayfinder/types';
 import { Link } from '@inertiajs/react';
 import { PencilLine } from 'lucide-react';

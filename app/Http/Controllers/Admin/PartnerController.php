@@ -11,14 +11,17 @@ use App\Http\Requests\Admin\Task\TaskIndexRequest;
 use App\Models\Exhibition;
 use App\Models\Task;
 use App\Sorts\RelationSort;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Spatie\QueryBuilder\AllowedSort;
 use Spatie\QueryBuilder\QueryBuilder;
 
 final class PartnerController extends Controller
 {
-    public function index(TaskIndexRequest $request, Exhibition $exhibition)
+    public function index(TaskIndexRequest $request)
     {
+        $exhibition = Auth::user()->getActiveExhibition();
+
         $tasks = QueryBuilder::for(Task::query()->select(['tasks.title', 'tasks.id', 'tasks.deadline', 'tasks.status', 'tasks.company_id'])
             ->forExhibition($exhibition->id))
             ->with('company:public_name,id')
@@ -30,7 +33,7 @@ final class PartnerController extends Controller
                 AllowedSort::custom('company.public_name', new RelationSort('companies', 'public_name', 'company_id')),
             ])
             ->paginate()
-            ->through(fn ($task): array => [
+            ->through(fn($task): array => [
                 ...$task->toArray(),
                 'status' => $task->status->label(),
             ])
@@ -39,35 +42,31 @@ final class PartnerController extends Controller
         $summary = Task::forSummary($exhibition->id);
 
         return Inertia::render('admin/Partners/Index', [
-            'exhibition' => $exhibition,
             'tasks' => $tasks,
             'summary' => $summary,
         ]);
     }
 
-    public function edit(Exhibition $exhibition, Task $allTask)
+    public function edit(Task $allTask)
     {
         $task = $allTask;
         $task->load([
             'company:public_name,id',
-            'comments' => fn ($q) => $q->with(['file', 'user'])->orderBy('created_at'),
+            'comments' => fn($q) => $q->with(['file', 'user'])->orderBy('created_at'),
         ]);
 
         return Inertia::render('admin/Partners/Edit', [
-            'exhibition' => $exhibition,
             'task' => $task,
         ]);
     }
 
-    public function update(PartnerUpdateRequest $request, Exhibition $exhibition, Task $allTask)
+    public function update(PartnerUpdateRequest $request,  Task $allTask)
     {
         abort_if($allTask->status !== TaskStatus::TO_BE_VERIFIED, 403);
         $task = $allTask;
         $newStatus = $request->boolean('is_accepted') === true ? TaskStatus::COMPLETED : TaskStatus::IMCOMPLETE;
         $task->update(['status' => $newStatus]);
 
-        return to_route('admin.exhibitions.all-tasks.index', [
-            'exhibition' => $exhibition,
-        ]);
+        return to_route('admin.all-tasks.index');
     }
 }

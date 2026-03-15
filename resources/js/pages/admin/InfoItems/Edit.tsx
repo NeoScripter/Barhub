@@ -6,7 +6,7 @@ import { DeleteAlertDialog } from '@/components/ui/DeleteAlertDialog';
 import ImgInput from '@/components/ui/ImgInput';
 import { Input } from '@/components/ui/Input';
 import { Label } from '@/components/ui/Label';
-import { destroy, index, update } from '@/wayfinder/routes/admin/exhibitions/info-items';
+import { destroy, index, update } from '@/wayfinder/routes/admin/info-items';
 import { Inertia } from '@/wayfinder/types';
 import { router, useForm } from '@inertiajs/react';
 import { Trash2 } from 'lucide-react';

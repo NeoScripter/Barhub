@@ -14,7 +14,7 @@ final class LoginResponse implements LoginResponseContract
         $user = auth()->user();
 
         if ($user->hasRole(UserRole::SUPER_ADMIN) || $user->hasRole(UserRole::ADMIN)) {
-            return redirect()->intended(route('admin.dashboard'));
+            return redirect()->intended(route('admin.dashboard.index'));
         }
 
         if ($user->hasRole(UserRole::EXPONENT)) {

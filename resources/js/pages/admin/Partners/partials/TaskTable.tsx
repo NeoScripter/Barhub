@@ -2,7 +2,7 @@ import Table from '@/components/ui/Table';
 import TaskCard from '@/components/ui/TaskCard';
 import { formatDateAndTime, getTaskStatus } from '@/lib/utils';
 import { NodeProps } from '@/types/shared';
-import { edit } from '@/wayfinder/routes/admin/exhibitions/all-tasks';
+import { edit } from '@/wayfinder/routes/admin/all-tasks';
 import { App } from '@/wayfinder/types';
 import { Link } from '@inertiajs/react';
 import { VisuallyHidden } from '@radix-ui/react-visually-hidden';

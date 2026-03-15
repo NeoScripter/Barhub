@@ -26,17 +26,17 @@ describe('Admin Company Test - Access Control', function (): void {
     });
 
     it('redirects guest users to login on index', function (): void {
-        get(route('admin.exhibitions.companies.index', $this->exhibition))
+        get(route('admin.companies.index'))
             ->assertRedirect(route('login'));
     });
 
     it('redirects guest users to login on create', function (): void {
-        get(route('admin.exhibitions.companies.create', $this->exhibition))
+        get(route('admin.companies.create'))
             ->assertRedirect(route('login'));
     });
 
     it('redirects guest users to login on edit', function (): void {
-        get(route('admin.exhibitions.companies.edit', [$this->exhibition, $this->company]))
+        get(route('admin.companies.edit', [$this->exhibition, $this->company]))
             ->assertRedirect(route('login'));
     });
 
@@ -45,7 +45,7 @@ describe('Admin Company Test - Access Control', function (): void {
         $user->assignRole(UserRole::USER);
 
         actingAs($user)
-            ->get(route('admin.exhibitions.companies.index', $this->exhibition))
+            ->get(route('admin.companies.index'))
             ->assertForbidden();
     });
 
@@ -54,7 +54,7 @@ describe('Admin Company Test - Access Control', function (): void {
         $user->assignRole(UserRole::EXPONENT);
 
         actingAs($user)
-            ->get(route('admin.exhibitions.companies.index', $this->exhibition))
+            ->get(route('admin.companies.index'))
             ->assertForbidden();
     });
 
@@ -63,26 +63,8 @@ describe('Admin Company Test - Access Control', function (): void {
         $superAdmin->assignRole(UserRole::SUPER_ADMIN);
 
         actingAs($superAdmin)
-            ->get(route('admin.exhibitions.companies.index', $this->exhibition))
+            ->get(route('admin.companies.index'))
             ->assertOk();
-    });
-
-    it('admin can only access assigned exhibitions companies', function (): void {
-        $admin = User::factory()->create();
-        $admin->assignRole(UserRole::ADMIN);
-
-        $assignedExhibition = Exhibition::factory()->create();
-        $assignedExhibition->users()->attach($admin);
-
-        $unassignedExhibition = Exhibition::factory()->create();
-
-        actingAs($admin)
-            ->get(route('admin.exhibitions.companies.index', $assignedExhibition))
-            ->assertOk();
-
-        actingAs($admin)
-            ->get(route('admin.exhibitions.companies.index', $unassignedExhibition))
-            ->assertForbidden();
     });
 });
 
@@ -101,7 +83,7 @@ describe('Company Index', function (): void {
         Company::factory(5)->for($this->exhibition)->create();
 
         actingAs($this->superAdmin)
-            ->get(route('admin.exhibitions.companies.index', $this->exhibition))
+            ->get(route('admin.companies.index'))
             ->assertOk()
             ->assertInertia(
                 fn($page) => $page
@@ -116,7 +98,7 @@ describe('Company Index', function (): void {
         Company::factory(4)->for($otherExhibition)->create();
 
         actingAs($this->superAdmin)
-            ->get(route('admin.exhibitions.companies.index', $this->exhibition))
+            ->get(route('admin.companies.index'))
             ->assertOk()
             ->assertInertia(
                 fn($page) => $page->has('companies.data', 3)
@@ -125,7 +107,7 @@ describe('Company Index', function (): void {
 
     it('passes exhibition to the view', function (): void {
         actingAs($this->superAdmin)
-            ->get(route('admin.exhibitions.companies.index', $this->exhibition))
+            ->get(route('admin.companies.index'))
             ->assertOk()
             ->assertInertia(
                 fn($page) => $page
@@ -140,7 +122,7 @@ describe('Company Index', function (): void {
         $company->tags()->attach($tag);
 
         actingAs($this->superAdmin)
-            ->get(route('admin.exhibitions.companies.index', $this->exhibition))
+            ->get(route('admin.companies.index'))
             ->assertOk()
             ->assertInertia(
                 fn($page) => $page
@@ -154,7 +136,7 @@ describe('Company Index', function (): void {
         Company::factory()->for($this->exhibition)->create(['public_name' => 'Acme Supplies']);
 
         $response = actingAs($this->superAdmin)
-            ->get(route('admin.exhibitions.companies.index', [
+            ->get(route('admin.companies.index', [
                 'exhibition' => $this->exhibition,
                 'search' => 'Acme',
             ]));
@@ -169,7 +151,7 @@ describe('Company Index', function (): void {
         Company::factory()->for($this->exhibition)->create(['public_name' => 'Other Company']);
 
         $response = actingAs($this->superAdmin)
-            ->get(route('admin.exhibitions.companies.index', [
+            ->get(route('admin.companies.index', [
                 'exhibition' => $this->exhibition,
                 'search' => 'acme',
             ]));
@@ -182,7 +164,7 @@ describe('Company Index', function (): void {
         Company::factory(3)->for($this->exhibition)->create();
 
         $response = actingAs($this->superAdmin)
-            ->get(route('admin.exhibitions.companies.index', [
+            ->get(route('admin.companies.index', [
                 'exhibition' => $this->exhibition,
                 'search' => 'xyznonexistent',
             ]));
@@ -197,7 +179,7 @@ describe('Company Index', function (): void {
         Company::factory()->for($this->exhibition)->create(['public_name' => 'Beta Co']);
 
         $response = actingAs($this->superAdmin)
-            ->get(route('admin.exhibitions.companies.index', [
+            ->get(route('admin.companies.index', [
                 'exhibition' => $this->exhibition,
                 'sort' => 'public_name',
             ]));
@@ -214,7 +196,7 @@ describe('Company Index', function (): void {
         Company::factory()->for($this->exhibition)->create(['public_name' => 'Beta Co']);
 
         $response = actingAs($this->superAdmin)
-            ->get(route('admin.exhibitions.companies.index', [
+            ->get(route('admin.companies.index', [
                 'exhibition' => $this->exhibition,
                 'sort' => '-public_name',
             ]));
@@ -229,7 +211,7 @@ describe('Company Index', function (): void {
         Company::factory(20)->for($this->exhibition)->create();
 
         actingAs($this->superAdmin)
-            ->get(route('admin.exhibitions.companies.index', $this->exhibition))
+            ->get(route('admin.companies.index'))
             ->assertOk()
             ->assertInertia(
                 fn($page) => $page
@@ -240,7 +222,7 @@ describe('Company Index', function (): void {
 
     it('handles exhibition with no companies', function (): void {
         actingAs($this->superAdmin)
-            ->get(route('admin.exhibitions.companies.index', $this->exhibition))
+            ->get(route('admin.companies.index'))
             ->assertOk()
             ->assertInertia(
                 fn($page) => $page
@@ -262,7 +244,7 @@ describe('Company Create', function (): void {
 
     it('displays create form', function (): void {
         actingAs($this->superAdmin)
-            ->get(route('admin.exhibitions.companies.create', $this->exhibition))
+            ->get(route('admin.companies.create'))
             ->assertOk()
             ->assertInertia(
                 fn($page) => $page
@@ -276,7 +258,7 @@ describe('Company Create', function (): void {
         Tag::factory(5)->create();
 
         actingAs($this->superAdmin)
-            ->get(route('admin.exhibitions.companies.create', $this->exhibition))
+            ->get(route('admin.companies.create'))
             ->assertOk()
             ->assertInertia(
                 fn($page) => $page
@@ -286,11 +268,11 @@ describe('Company Create', function (): void {
 
     it('passes correct exhibition to create form', function (): void {
         actingAs($this->superAdmin)
-            ->get(route('admin.exhibitions.companies.create', $this->exhibition))
+            ->get(route('admin.companies.create'))
             ->assertOk()
             ->assertInertia(
                 fn($page) => $page
-                    ->where('exhibition.id', $this->exhibition->id)
+                    ->where('exhibition.id',$this->exhibition->id)
             );
     });
 });
@@ -324,8 +306,8 @@ describe('Company Store', function (): void {
 
     it('creates company with all fields', function (): void {
         actingAs($this->superAdmin)
-            ->post(route('admin.exhibitions.companies.store', $this->exhibition), $this->validData)
-            ->assertRedirect(route('admin.exhibitions.companies.index', $this->exhibition));
+            ->post(route('admin.companies.store'), $this->validData)
+            ->assertRedirect(route('admin.companies.index'));
 
         assertDatabaseHas('companies', [
             'public_name' => 'Acme Corporation',
@@ -338,7 +320,7 @@ describe('Company Store', function (): void {
 
     it('assigns exhibition_id automatically', function (): void {
         actingAs($this->superAdmin)
-            ->post(route('admin.exhibitions.companies.store', $this->exhibition), $this->validData);
+            ->post(route('admin.companies.store'), $this->validData);
 
         assertDatabaseHas('companies', [
             'email' => 'acme@example.com',
@@ -353,7 +335,7 @@ describe('Company Store', function (): void {
         ]);
 
         actingAs($this->superAdmin)
-            ->post(route('admin.exhibitions.companies.store', $this->exhibition), $data);
+            ->post(route('admin.companies.store'), $data);
 
         $company = Company::query()->where('email', 'acme@example.com')->first();
         expect($company->tags)->toHaveCount(3);
@@ -361,7 +343,7 @@ describe('Company Store', function (): void {
 
     it('creates company without tags', function (): void {
         actingAs($this->superAdmin)
-            ->post(route('admin.exhibitions.companies.store', $this->exhibition), $this->validData);
+            ->post(route('admin.companies.store'), $this->validData);
 
         $company = Company::query()->where('email', 'acme@example.com')->first();
         expect($company->tags)->toHaveCount(0);
@@ -369,8 +351,8 @@ describe('Company Store', function (): void {
 
     it('redirects to index with success flash on store', function (): void {
         actingAs($this->superAdmin)
-            ->post(route('admin.exhibitions.companies.store', $this->exhibition), $this->validData)
-            ->assertRedirect(route('admin.exhibitions.companies.index', $this->exhibition))
+            ->post(route('admin.companies.store'), $this->validData)
+            ->assertRedirect(route('admin.companies.index'))
             ->assertSessionHas('success');
     });
 
@@ -378,7 +360,7 @@ describe('Company Store', function (): void {
 
     it('validates required fields', function (): void {
         actingAs($this->superAdmin)
-            ->post(route('admin.exhibitions.companies.store', $this->exhibition), [])
+            ->post(route('admin.companies.store'), [])
             ->assertSessionHasErrors(['public_name', 'legal_name', 'description', 'phone', 'email', 'stand_code', 'show_on_site']);
     });
 
@@ -386,7 +368,7 @@ describe('Company Store', function (): void {
         $data = array_merge($this->validData, ['public_name' => str_repeat('a', 256)]);
 
         actingAs($this->superAdmin)
-            ->post(route('admin.exhibitions.companies.store', $this->exhibition), $data)
+            ->post(route('admin.companies.store'), $data)
             ->assertSessionHasErrors('public_name');
     });
 
@@ -394,7 +376,7 @@ describe('Company Store', function (): void {
         $data = array_merge($this->validData, ['public_name' => str_repeat('a', 255)]);
 
         actingAs($this->superAdmin)
-            ->post(route('admin.exhibitions.companies.store', $this->exhibition), $data)
+            ->post(route('admin.companies.store'), $data)
             ->assertRedirect();
     });
 
@@ -402,7 +384,7 @@ describe('Company Store', function (): void {
         $data = array_merge($this->validData, ['email' => 'not-an-email']);
 
         actingAs($this->superAdmin)
-            ->post(route('admin.exhibitions.companies.store', $this->exhibition), $data)
+            ->post(route('admin.companies.store'), $data)
             ->assertSessionHasErrors('email');
     });
 
@@ -410,7 +392,7 @@ describe('Company Store', function (): void {
         Company::factory()->for($this->exhibition)->create(['email' => 'acme@example.com']);
 
         actingAs($this->superAdmin)
-            ->post(route('admin.exhibitions.companies.store', $this->exhibition), $this->validData)
+            ->post(route('admin.companies.store'), $this->validData)
             ->assertSessionHasErrors('email');
     });
 
@@ -418,7 +400,7 @@ describe('Company Store', function (): void {
         $data = array_merge($this->validData, ['site_url' => 'not-a-url']);
 
         actingAs($this->superAdmin)
-            ->post(route('admin.exhibitions.companies.store', $this->exhibition), $data)
+            ->post(route('admin.companies.store'), $data)
             ->assertSessionHasErrors('site_url');
     });
 
@@ -426,7 +408,7 @@ describe('Company Store', function (): void {
         $data = array_merge($this->validData, ['stand_code' => -1]);
 
         actingAs($this->superAdmin)
-            ->post(route('admin.exhibitions.companies.store', $this->exhibition), $data)
+            ->post(route('admin.companies.store'), $data)
             ->assertSessionHasErrors('stand_code');
     });
 
@@ -434,7 +416,7 @@ describe('Company Store', function (): void {
         $data = array_merge($this->validData, ['description' => 'Short']);
 
         actingAs($this->superAdmin)
-            ->post(route('admin.exhibitions.companies.store', $this->exhibition), $data)
+            ->post(route('admin.companies.store'), $data)
             ->assertSessionHasErrors('description');
     });
 
@@ -442,7 +424,7 @@ describe('Company Store', function (): void {
         $data = array_merge($this->validData, ['tags' => [99999]]);
 
         actingAs($this->superAdmin)
-            ->post(route('admin.exhibitions.companies.store', $this->exhibition), $data)
+            ->post(route('admin.companies.store'), $data)
             ->assertSessionHasErrors('tags.0');
     });
 });
@@ -461,7 +443,7 @@ describe('Company Edit', function (): void {
 
     it('displays edit form', function (): void {
         actingAs($this->superAdmin)
-            ->get(route('admin.exhibitions.companies.edit', [$this->exhibition, $this->company]))
+            ->get(route('admin.companies.edit', [$this->exhibition, $this->company]))
             ->assertOk()
             ->assertInertia(
                 fn($page) => $page
@@ -474,7 +456,7 @@ describe('Company Edit', function (): void {
 
     it('passes correct company to edit form', function (): void {
         actingAs($this->superAdmin)
-            ->get(route('admin.exhibitions.companies.edit', [$this->exhibition, $this->company]))
+            ->get(route('admin.companies.edit', [$this->exhibition, $this->company]))
             ->assertOk()
             ->assertInertia(
                 fn($page) => $page
@@ -487,7 +469,7 @@ describe('Company Edit', function (): void {
         Tag::factory(4)->create();
 
         actingAs($this->superAdmin)
-            ->get(route('admin.exhibitions.companies.edit', [$this->exhibition, $this->company]))
+            ->get(route('admin.companies.edit', [$this->exhibition, $this->company]))
             ->assertOk()
             ->assertInertia(
                 fn($page) => $page
@@ -500,7 +482,7 @@ describe('Company Edit', function (): void {
         $this->company->tags()->attach($tags->pluck('id'));
 
         actingAs($this->superAdmin)
-            ->get(route('admin.exhibitions.companies.edit', [$this->exhibition, $this->company]))
+            ->get(route('admin.companies.edit', [$this->exhibition, $this->company]))
             ->assertOk()
             ->assertInertia(
                 fn($page) => $page
@@ -548,8 +530,8 @@ describe('Company Update', function (): void {
         $data = array_merge($this->validData, ['logo' => $logo]);
 
         actingAs($this->superAdmin)
-            ->post(route('admin.exhibitions.companies.store', $this->exhibition), $data)
-            ->assertRedirect(route('admin.exhibitions.companies.index', $this->exhibition));
+            ->post(route('admin.companies.store'), $data)
+            ->assertRedirect(route('admin.companies.index'));
 
         $company = Company::query()->where('email', $this->validData['email'])->first();
         expect($company->logo)->not->toBeNull();
@@ -561,7 +543,7 @@ describe('Company Update', function (): void {
         $logo = UploadedFile::fake()->image('new-logo.jpg');
 
         actingAs($this->superAdmin)
-            ->put(route('admin.exhibitions.companies.update', [$this->exhibition, $this->company]), [
+            ->put(route('admin.companies.update', [$this->exhibition, $this->company]), [
                 'public_name'  => $this->company->public_name,
                 'legal_name'   => $this->company->legal_name,
                 'description'  => $this->company->description,
@@ -571,7 +553,7 @@ describe('Company Update', function (): void {
                 'show_on_site' => $this->company->show_on_site,
                 'logo'         => $logo,
             ])
-            ->assertRedirect(route('admin.exhibitions.companies.index', $this->exhibition));
+            ->assertRedirect(route('admin.companies.index'));
 
         $this->company->refresh();
         expect($this->company->logo)->not->toBeNull();
@@ -592,7 +574,7 @@ describe('Company Update', function (): void {
         $newLogo = UploadedFile::fake()->image('new-logo.jpg');
 
         actingAs($this->superAdmin)
-            ->put(route('admin.exhibitions.companies.update', [$this->exhibition, $this->company]), [
+            ->put(route('admin.companies.update', [$this->exhibition, $this->company]), [
                 'public_name'  => $this->company->public_name,
                 'legal_name'   => $this->company->legal_name,
                 'description'  => $this->company->description,
@@ -602,7 +584,7 @@ describe('Company Update', function (): void {
                 'show_on_site' => $this->company->show_on_site,
                 'logo'         => $newLogo,
             ])
-            ->assertRedirect(route('admin.exhibitions.companies.index', $this->exhibition));
+            ->assertRedirect(route('admin.companies.index'));
 
         Storage::assertMissing($oldPath);
 
@@ -623,8 +605,8 @@ describe('Company Update', function (): void {
         );
 
         actingAs($this->superAdmin)
-            ->delete(route('admin.exhibitions.companies.destroy', [$this->exhibition, $this->company]))
-            ->assertRedirect(route('admin.exhibitions.companies.index', $this->exhibition));
+            ->delete(route('admin.companies.destroy', [$this->exhibition, $this->company]))
+            ->assertRedirect(route('admin.companies.index'));
 
         Storage::assertMissing($logoPath);
         assertDatabaseMissing('companies', ['id' => $this->company->id]);
@@ -633,7 +615,7 @@ describe('Company Update', function (): void {
 
     it('updates basic company fields', function (): void {
         actingAs($this->superAdmin)
-            ->put(route('admin.exhibitions.companies.update', [$this->exhibition, $this->company]), [
+            ->put(route('admin.companies.update', [$this->exhibition, $this->company]), [
                 'public_name' => 'Updated Name',
                 'legal_name' => 'Updated Legal LLC',
                 'description' => 'Updated description for the company.',
@@ -642,7 +624,7 @@ describe('Company Update', function (): void {
                 'stand_code' => 99,
                 'show_on_site' => false,
             ])
-            ->assertRedirect(route('admin.exhibitions.companies.index', $this->exhibition));
+            ->assertRedirect(route('admin.companies.index'));
 
         assertDatabaseHas('companies', [
             'id' => $this->company->id,
@@ -658,7 +640,7 @@ describe('Company Update', function (): void {
         $this->company->tags()->attach($oldTags->pluck('id'));
 
         actingAs($this->superAdmin)
-            ->put(route('admin.exhibitions.companies.update', [$this->exhibition, $this->company]), [
+            ->put(route('admin.companies.update', [$this->exhibition, $this->company]), [
                 'public_name' => $this->company->public_name,
                 'legal_name' => $this->company->legal_name,
                 'description' => $this->company->description,
@@ -680,7 +662,7 @@ describe('Company Update', function (): void {
         $this->company->tags()->attach($tags->pluck('id'));
 
         actingAs($this->superAdmin)
-            ->put(route('admin.exhibitions.companies.update', [$this->exhibition, $this->company]), [
+            ->put(route('admin.companies.update', [$this->exhibition, $this->company]), [
                 'public_name' => $this->company->public_name,
                 'legal_name' => $this->company->legal_name,
                 'description' => $this->company->description,
@@ -697,7 +679,7 @@ describe('Company Update', function (): void {
 
     it('allows same email on update for same company', function (): void {
         actingAs($this->superAdmin)
-            ->put(route('admin.exhibitions.companies.update', [$this->exhibition, $this->company]), [
+            ->put(route('admin.companies.update', [$this->exhibition, $this->company]), [
                 'public_name' => $this->company->public_name,
                 'legal_name' => $this->company->legal_name,
                 'description' => $this->company->description,
@@ -718,7 +700,7 @@ describe('Company Update', function (): void {
         Company::factory()->for($this->exhibition)->create(['email' => 'taken@example.com']);
 
         actingAs($this->superAdmin)
-            ->put(route('admin.exhibitions.companies.update', [$this->exhibition, $this->company]), [
+            ->put(route('admin.companies.update', [$this->exhibition, $this->company]), [
                 'public_name' => $this->company->public_name,
                 'legal_name' => $this->company->legal_name,
                 'description' => $this->company->description,
@@ -732,7 +714,7 @@ describe('Company Update', function (): void {
 
     it('redirects to index with success flash on update', function (): void {
         actingAs($this->superAdmin)
-            ->put(route('admin.exhibitions.companies.update', [$this->exhibition, $this->company]), [
+            ->put(route('admin.companies.update', [$this->exhibition, $this->company]), [
                 'public_name' => 'Updated Name',
                 'legal_name' => $this->company->legal_name,
                 'description' => $this->company->description,
@@ -741,13 +723,13 @@ describe('Company Update', function (): void {
                 'stand_code' => $this->company->stand_code,
                 'show_on_site' => $this->company->show_on_site,
             ])
-            ->assertRedirect(route('admin.exhibitions.companies.index', $this->exhibition))
+            ->assertRedirect(route('admin.companies.index'))
             ->assertSessionHas('success');
     });
 
     it('validates update data', function (): void {
         actingAs($this->superAdmin)
-            ->put(route('admin.exhibitions.companies.update', [$this->exhibition, $this->company]), [
+            ->put(route('admin.companies.update', [$this->exhibition, $this->company]), [
                 'public_name' => '',
             ])
             ->assertSessionHasErrors('public_name');
@@ -768,7 +750,7 @@ describe('Company Destroy', function (): void {
 
     it('deletes company', function (): void {
         actingAs($this->superAdmin)
-            ->delete(route('admin.exhibitions.companies.destroy', [$this->exhibition, $this->company]))
+            ->delete(route('admin.companies.destroy', [$this->exhibition, $this->company]))
             ->assertRedirect();
 
         assertDatabaseMissing('companies', ['id' => $this->company->id]);
@@ -776,8 +758,8 @@ describe('Company Destroy', function (): void {
 
     it('redirects to index with success flash on destroy', function (): void {
         actingAs($this->superAdmin)
-            ->delete(route('admin.exhibitions.companies.destroy', [$this->exhibition, $this->company]))
-            ->assertRedirect(route('admin.exhibitions.companies.index', $this->exhibition))
+            ->delete(route('admin.companies.destroy', [$this->exhibition, $this->company]))
+            ->assertRedirect(route('admin.companies.index'))
             ->assertSessionHas('success');
     });
 
@@ -786,7 +768,7 @@ describe('Company Destroy', function (): void {
         $this->company->tags()->attach($tags->pluck('id'));
 
         actingAs($this->superAdmin)
-            ->delete(route('admin.exhibitions.companies.destroy', [$this->exhibition, $this->company]));
+            ->delete(route('admin.companies.destroy', [$this->exhibition, $this->company]));
 
         assertDatabaseMissing('company_tag', ['company_id' => $this->company->id]);
     });
@@ -796,7 +778,7 @@ describe('Company Destroy', function (): void {
         $this->company->tags()->attach($tags->pluck('id'));
 
         actingAs($this->superAdmin)
-            ->delete(route('admin.exhibitions.companies.destroy', [$this->exhibition, $this->company]));
+            ->delete(route('admin.companies.destroy', [$this->exhibition, $this->company]));
 
         foreach ($tags as $tag) {
             assertDatabaseHas('tags', ['id' => $tag->id]);
@@ -815,11 +797,11 @@ describe('Company Destroy', function (): void {
         $unassignedCompany = Company::factory()->for($unassignedExhibition)->create();
 
         actingAs($admin)
-            ->delete(route('admin.exhibitions.companies.destroy', [$assignedExhibition, $assignedCompany]))
+            ->delete(route('admin.companies.destroy', [$assignedCompany]))
             ->assertRedirect();
 
         actingAs($admin)
-            ->delete(route('admin.exhibitions.companies.destroy', [$unassignedExhibition, $unassignedCompany]))
+            ->delete(route('admin.companies.destroy', [$unassignedCompany]))
             ->assertForbidden();
 
         assertDatabaseMissing('companies', ['id' => $assignedCompany->id]);
@@ -842,7 +824,7 @@ describe('Company Edge Cases', function (): void {
         Company::factory()->for($this->exhibition)->create();
 
         actingAs($this->superAdmin)
-            ->get(route('admin.exhibitions.companies.index', $this->exhibition))
+            ->get(route('admin.companies.index'))
             ->assertOk()
             ->assertInertia(
                 fn($page) => $page
@@ -870,7 +852,7 @@ describe('Company Edge Cases', function (): void {
         ];
 
         actingAs($this->superAdmin)
-            ->post(route('admin.exhibitions.companies.store', $this->exhibition), $data)
+            ->post(route('admin.companies.store'), $data)
             ->assertRedirect();
 
         assertDatabaseHas('companies', [
@@ -903,7 +885,7 @@ describe('Company Edge Cases', function (): void {
         ];
 
         actingAs($this->superAdmin)
-            ->post(route('admin.exhibitions.companies.store', $this->exhibition), $data)
+            ->post(route('admin.companies.store'), $data)
             ->assertSessionHasNoErrors()
             ->assertRedirect();
 

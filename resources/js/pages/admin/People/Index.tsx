@@ -4,7 +4,7 @@ import IndexToolbar from '@/components/ui/IndexToolbar';
 import Pagination from '@/components/ui/Pagination';
 import SearchInput from '@/components/ui/SearchInput';
 import Table from '@/components/ui/Table';
-import { create } from '@/wayfinder/routes/admin/exhibitions/people';
+import { create } from '@/wayfinder/routes/admin/people';
 import { Inertia } from '@/wayfinder/types';
 import { Link } from '@inertiajs/react';
 import { Plus } from 'lucide-react';

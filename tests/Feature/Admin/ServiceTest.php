@@ -19,7 +19,7 @@ describe('Admin Service Test', function (): void {
         $exhibition = Exhibition::factory()->create();
         $company = Company::factory()->for($exhibition)->create();
         $services = Service::factory(3)->for($company)->create();
-        $route = "/admin/exhibitions/{$exhibition->id}/companies/{$company->id}/services";
+        $route = "/admin/companies/{$company->id}/services";
 
         $page = visit('/login');
 
@@ -44,7 +44,7 @@ describe('Admin Service Test', function (): void {
         $user->assignRole(UserRole::SUPER_ADMIN);
         $exhibition = Exhibition::factory()->create();
         $company = Company::factory()->for($exhibition)->create();
-        $route = "/admin/exhibitions/{$exhibition->id}/companies/{$company->id}/services";
+        $route = "/admin/companies/{$company->id}/services";
 
         $page = visit('/login');
 
@@ -75,7 +75,7 @@ describe('Admin Service Test', function (): void {
         $user->assignRole(UserRole::SUPER_ADMIN);
         $exhibition = Exhibition::factory()->create();
         $company = Company::factory()->for($exhibition)->create();
-        $route = "/admin/exhibitions/{$exhibition->id}/companies/{$company->id}/services";
+        $route = "/admin/companies/{$company->id}/services";
 
         $page = visit('/login');
 
@@ -106,7 +106,7 @@ describe('Admin Service Test', function (): void {
         $user->assignRole(UserRole::SUPER_ADMIN);
         $exhibition = Exhibition::factory()->create();
         $company = Company::factory()->for($exhibition)->create();
-        $route = "/admin/exhibitions/{$exhibition->id}/companies/{$company->id}/services";
+        $route = "/admin/companies/{$company->id}/services";
 
         $page = visit('/login');
 
@@ -137,7 +137,7 @@ describe('Admin Service Test', function (): void {
         $user->assignRole(UserRole::SUPER_ADMIN);
         $exhibition = Exhibition::factory()->create();
         $company = Company::factory()->for($exhibition)->create();
-        $route = "/admin/exhibitions/{$exhibition->id}/companies/{$company->id}/services";
+        $route = "/admin/companies/{$company->id}/services";
 
         $page = visit('/login');
 
@@ -167,7 +167,7 @@ describe('Admin Service Test', function (): void {
         $user->assignRole(UserRole::SUPER_ADMIN);
         $exhibition = Exhibition::factory()->create();
         $company = Company::factory()->for($exhibition)->create();
-        $route = "/admin/exhibitions/{$exhibition->id}/companies/{$company->id}/services";
+        $route = "/admin/companies/{$company->id}/services";
 
         $page = visit('/login');
 
@@ -198,7 +198,7 @@ describe('Admin Service Test', function (): void {
         $user->assignRole(UserRole::SUPER_ADMIN);
         $exhibition = Exhibition::factory()->create();
         $company = Company::factory()->for($exhibition)->create();
-        $route = "/admin/exhibitions/{$exhibition->id}/companies/{$company->id}/services";
+        $route = "/admin/companies/{$company->id}/services";
 
         $page = visit('/login');
 
@@ -232,7 +232,7 @@ describe('Admin Service Test', function (): void {
         $service = Service::factory()
             ->for($company)
             ->create(['name' => 'Zebra']);
-        $route = "/admin/exhibitions/{$exhibition->id}/companies/{$company->id}/services";
+        $route = "/admin/companies/{$company->id}/services";
 
         $page = visit('/login');
 
@@ -266,7 +266,7 @@ describe('Admin Service Test', function (): void {
         $service = Service::factory()
             ->for($company)
             ->create(['name' => 'Zebra']);
-        $route = "/admin/exhibitions/{$exhibition->id}/companies/{$company->id}/services";
+        $route = "/admin/companies/{$company->id}/services";
 
         $page = visit('/login');
 
@@ -300,7 +300,7 @@ describe('Admin Service Test', function (): void {
         $service = Service::factory()
             ->for($company)
             ->create(['name' => 'Zebra']);
-        $route = "/admin/exhibitions/{$exhibition->id}/companies/{$company->id}/services";
+        $route = "/admin/companies/{$company->id}/services";
 
         $page = visit('/login');
 
@@ -334,7 +334,7 @@ describe('Admin Service Test', function (): void {
         $service = Service::factory()
             ->for($company)
             ->create(['name' => 'Zebra']);
-        $route = "/admin/exhibitions/{$exhibition->id}/companies/{$company->id}/services";
+        $route = "/admin/companies/{$company->id}/services";
 
         $page = visit('/login');
 
@@ -368,7 +368,7 @@ describe('Admin Service Test', function (): void {
         $service = Service::factory()
             ->for($company)
             ->create(['name' => 'Zebra']);
-        $route = "/admin/exhibitions/{$exhibition->id}/companies/{$company->id}/services";
+        $route = "/admin/companies/{$company->id}/services";
 
         $page = visit('/login');
 
@@ -402,7 +402,7 @@ describe('Admin Service Test', function (): void {
         $service = Service::factory()
             ->for($company)
             ->create(['name' => 'Zebra']);
-        $route = "/admin/exhibitions/{$exhibition->id}/companies/{$company->id}/services";
+        $route = "/admin/companies/{$company->id}/services";
 
         $page = visit('/login');
 
@@ -446,7 +446,7 @@ describe('Admin Service Test', function (): void {
         $service = Service::factory()
             ->for($company)
             ->create(['name' => 'Zebra']);
-        $route = "/admin/exhibitions/{$exhibition->id}/companies/{$company->id}/services";
+        $route = "/admin/companies/{$company->id}/services";
 
         $page = visit('/login');
 
@@ -491,7 +491,7 @@ describe('Admin Service Test', function (): void {
         $exhibitionWithoutCompany->users()->attach($adminWithoutAccess->id);
         $company = Company::factory()->for($exhibitionWithCompany)->create();
         $services = Service::factory(3)->for($company)->create();
-        $route = "/admin/exhibitions/{$exhibitionWithCompany->id}/companies/{$company->id}/services";
+        $route = "/admin/companies/{$company->id}/services";
 
         visit($route)->assertSee('Вход в аккаунт');
 

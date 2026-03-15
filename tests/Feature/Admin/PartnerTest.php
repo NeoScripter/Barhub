@@ -25,7 +25,7 @@ describe('Admin Partner Browser Tests', function (): void {
             ->count(3)
             ->create();
 
-        $route = "/admin/exhibitions/{$exhibition->id}/all-tasks";
+        $route = "/admin/all-tasks";
 
         $page = visit('/login');
 
@@ -53,7 +53,7 @@ describe('Admin Partner Browser Tests', function (): void {
             ->has(Task::factory(['status' => TaskStatus::TO_BE_VERIFIED]))
             ->create();
 
-        $route = "/admin/exhibitions/{$exhibition->id}/all-tasks";
+        $route = "/admin/all-tasks";
 
         $page = visit('/login');
 
@@ -80,7 +80,7 @@ describe('Admin Partner Browser Tests', function (): void {
         $company = Company::factory()->for($exhibition)
             ->has(Task::factory()->state(['status' => TaskStatus::TO_BE_VERIFIED]))
             ->create();
-        $route = "/admin/exhibitions/{$exhibition->id}/all-tasks";
+        $route = "/admin/all-tasks";
 
         $page = visit('/login');
         $page->assertSee('Вход в аккаунт')
@@ -114,7 +114,7 @@ describe('Admin Partner Browser Tests', function (): void {
         $company = Company::factory()->for($exhibition)
             ->has(Task::factory()->state(['status' => TaskStatus::TO_BE_VERIFIED]))
             ->create();
-        $route = "/admin/exhibitions/{$exhibition->id}/all-tasks";
+        $route = "/admin/all-tasks";
 
         $page = visit('/login');
         $page->assertSee('Вход в аккаунт')
@@ -155,7 +155,7 @@ describe('Admin Partner Browser Tests', function (): void {
         Task::factory()->for($company)->create(['title' => 'Belongs To This Exhibition', 'status' => TaskStatus::TO_BE_VERIFIED]);
         Task::factory()->for($otherCompany)->create(['title' => 'Belongs To Other Exhibition', 'status' => TaskStatus::TO_BE_VERIFIED]);
 
-        $route = "/admin/exhibitions/{$exhibition->id}/all-tasks";
+        $route = "/admin/all-tasks";
 
         $page = visit('/login');
         $page->assertSee('Вход в аккаунт')
@@ -180,7 +180,7 @@ describe('Admin Partner Feature Tests', function (): void {
         ]);
         $this->superAdmin->assignRole(UserRole::SUPER_ADMIN);
         $this->exhibition = Exhibition::factory()->create();
-        $this->route = "/admin/exhibitions/{$this->exhibition->id}/all-tasks";
+        $this->route = "/admin/all-tasks";
     });
 
     it('sorts tasks by title in desc order', function (): void {
@@ -196,7 +196,7 @@ describe('Admin Partner Feature Tests', function (): void {
             ->create();
 
         $response = $this->actingAs($this->superAdmin)
-            ->get(route('admin.exhibitions.all-tasks.index', [
+            ->get(route('admin.all-tasks.index', [
                 'exhibition' => $this->exhibition,
                 'sort' => '-title',
             ]));
@@ -222,7 +222,7 @@ describe('Admin Partner Feature Tests', function (): void {
             ->create();
 
         $response = $this->actingAs($this->superAdmin)
-            ->get(route('admin.exhibitions.all-tasks.index', [
+            ->get(route('admin.all-tasks.index', [
                 'exhibition' => $this->exhibition,
                 'sort' => 'title',
             ]));
@@ -247,7 +247,7 @@ describe('Admin Partner Feature Tests', function (): void {
             ->create();
 
         $response = $this->actingAs($this->superAdmin)
-            ->get(route('admin.exhibitions.all-tasks.index', [
+            ->get(route('admin.all-tasks.index', [
                 'exhibition' => $this->exhibition,
                 'sort' => '-company.public_name',
             ]));
@@ -272,7 +272,7 @@ describe('Admin Partner Feature Tests', function (): void {
             ->create();
 
         $response = $this->actingAs($this->superAdmin)
-            ->get(route('admin.exhibitions.all-tasks.index', [
+            ->get(route('admin.all-tasks.index', [
                 'exhibition' => $this->exhibition,
                 'sort' => 'company.public_name',
             ]));
@@ -298,7 +298,7 @@ describe('Admin Partner Feature Tests', function (): void {
             ->create();
 
         $tasks = $this->actingAs($this->superAdmin)
-            ->get(route('admin.exhibitions.all-tasks.index', [
+            ->get(route('admin.all-tasks.index', [
                 'exhibition' => $this->exhibition,
                 'sort' => 'deadline',
             ]))
@@ -309,7 +309,7 @@ describe('Admin Partner Feature Tests', function (): void {
             ->and($tasks[1]['deadline'])->toBeLessThan($tasks[2]['deadline']);
 
         $tasks = $this->actingAs($this->superAdmin)
-            ->get(route('admin.exhibitions.all-tasks.index', [
+            ->get(route('admin.all-tasks.index', [
                 'exhibition' => $this->exhibition,
                 'sort' => '-deadline',
             ]))
@@ -333,7 +333,7 @@ describe('Admin Partner Feature Tests', function (): void {
             ->create();
 
         $tasks = $this->actingAs($this->superAdmin)
-            ->get(route('admin.exhibitions.all-tasks.index', [
+            ->get(route('admin.all-tasks.index', [
                 'exhibition' => $this->exhibition,
                 'sort' => 'status',
             ]))
@@ -344,7 +344,7 @@ describe('Admin Partner Feature Tests', function (): void {
         expect($statuses)->toBe(collect($statuses)->sort()->values()->all());
 
         $tasks = $this->actingAs($this->superAdmin)
-            ->get(route('admin.exhibitions.all-tasks.index', [
+            ->get(route('admin.all-tasks.index', [
                 'exhibition' => $this->exhibition,
                 'sort' => '-status',
             ]))
@@ -358,7 +358,7 @@ describe('Admin Partner Feature Tests', function (): void {
     it('displays the comments on the edit page from oldest to newest', function (): void {
         $company = Company::factory()->for($this->exhibition)->create();
         $task = Task::factory(['status' => TaskStatus::TO_BE_VERIFIED])->for($company)->create();
-        $route = "/admin/exhibitions/{$this->exhibition->id}/all-tasks";
+        $route = "/admin/all-tasks";
 
         TaskComment::factory()
             ->count(3)

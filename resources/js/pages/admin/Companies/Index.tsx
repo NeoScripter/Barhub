@@ -10,7 +10,7 @@ import { Plus } from 'lucide-react';
 import { FC } from 'react';
 import CompanyTable from './partials/CompanyTable';
 import CompanyTableHeader from './partials/CompanyTableHeader';
-import { create } from '@/wayfinder/routes/admin/exhibitions/companies';
+import { create } from '@/wayfinder/routes/admin/companies';
 
 const Index: FC<Inertia.Pages.Admin.Companies.Index> = ({
     companies,

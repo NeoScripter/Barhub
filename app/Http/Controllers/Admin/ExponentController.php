@@ -14,7 +14,7 @@ use Inertia\Inertia;
 
 final class ExponentController extends Controller
 {
-    public function index(Exhibition $exhibition, Company $company)
+    public function index(Company $company)
     {
         $exponents = $company->users()->get();
         $users = User::query()->select(['email', 'id', 'name', 'last_login_at'])
@@ -23,14 +23,13 @@ final class ExponentController extends Controller
             ->get();
 
         return Inertia::render('admin/Exponents/Index', [
-            'exhibition' => $exhibition,
             'company' => $company,
             'exponents' => $exponents,
             'users' => $users,
         ]);
     }
 
-    public function update(Exhibition $exhibition, Company $company, int $id): RedirectResponse
+    public function update(Company $company, int $id): RedirectResponse
     {
         $user = User::query()->find($id);
         $company->users()->save($user);
@@ -40,7 +39,7 @@ final class ExponentController extends Controller
         return back();
     }
 
-    public function destroy(Exhibition $exhibition, Company $company, int $id): RedirectResponse
+    public function destroy(Company $company, int $id): RedirectResponse
     {
         $user = User::query()->find($id);
         $user->update(['company_id' => null, 'role' => UserRole::USER]);

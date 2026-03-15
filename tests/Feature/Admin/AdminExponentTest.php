@@ -21,7 +21,7 @@ describe('Admin Exponent Test', function (): void {
         $exhibition = Exhibition::factory()->create();
         $company = Company::factory()->for($exhibition)->create();
 
-        $route = "/admin/exhibitions/{$exhibition->id}/companies/{$company->id}/exponents";
+        $route = "/admin/companies/{$company->id}/exponents";
 
         $page = visit('/login');
 

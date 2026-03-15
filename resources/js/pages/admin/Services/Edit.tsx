@@ -12,7 +12,7 @@ import {
     destroy,
     index,
     update,
-} from '@/wayfinder/routes/admin/exhibitions/services';
+} from '@/wayfinder/routes/admin/services';
 import { Inertia } from '@/wayfinder/types';
 import { router, useForm } from '@inertiajs/react';
 import { Trash2 } from 'lucide-react';

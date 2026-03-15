@@ -1,6 +1,6 @@
 import Table from '@/components/ui/Table';
 import { NodeProps } from '@/types/shared';
-import { edit } from '@/wayfinder/routes/admin/exhibitions/followups';
+import { edit } from '@/wayfinder/routes/admin/followups';
 import { App } from '@/wayfinder/types';
 import { Link } from '@inertiajs/react';
 import { VisuallyHidden } from '@radix-ui/react-visually-hidden';

@@ -15,7 +15,7 @@ describe('Admin Task Template Permission Test', function (): void {
     beforeEach(function (): void {
         $this->exhibition = Exhibition::factory()->create();
         $this->task = TaskTemplate::factory(['exhibition_id' => $this->exhibition->id])->create();
-        $this->route = "/admin/exhibitions/{$this->exhibition->id}/task-templates";
+        $this->route = "/admin/task-templates";
         $this->payload = [
             'title' => 'new title',
             'description' => generateTextWithChars(50),
@@ -235,7 +235,7 @@ describe('Admin Task Template Test', function (): void {
             'file_name' => 'document.pdf',
             'file_url' => Storage::fake('local')->put('task-template-files', UploadedFile::fake()->create('document.pdf', 100)),
         ]);
-        $route = "/admin/exhibitions/{$exhibition->id}/task-templates";
+        $route = "/admin/task-templates";
 
         $page = visit('/login');
 
@@ -269,7 +269,7 @@ describe('Admin Task Template Test', function (): void {
         $user->assignRole(UserRole::SUPER_ADMIN);
         $exhibition = Exhibition::factory()->create();
         $task = TaskTemplate::factory()->for($exhibition)->create();
-        $route = "/admin/exhibitions/{$exhibition->id}/task-templates";
+        $route = "/admin/task-templates";
 
         $this->actingAs($user)
             ->get($route . "/{$task->id}/edit")
@@ -310,7 +310,7 @@ describe('Admin Task Template Test', function (): void {
         ]);
         $user->assignRole(UserRole::SUPER_ADMIN);
         $exhibition = Exhibition::factory()->create();
-        $route = "/admin/exhibitions/{$exhibition->id}/task-templates";
+        $route = "/admin/task-templates";
 
         $file = UploadedFile::fake()->create('document.pdf', 100);
         $payload = [
@@ -342,7 +342,7 @@ describe('Admin Task Template Test', function (): void {
         ]);
         $user->assignRole(UserRole::SUPER_ADMIN);
         $exhibition = Exhibition::factory()->create();
-        $route = "/admin/exhibitions/{$exhibition->id}/task-templates";
+        $route = "/admin/task-templates";
 
         $file = UploadedFile::fake()->create('document.pdf', 100);
         $payload = [
@@ -372,7 +372,7 @@ describe('Admin Task Template Test', function (): void {
         $user->assignRole(UserRole::SUPER_ADMIN);
         $exhibition = Exhibition::factory()->create();
         $task = TaskTemplate::factory()->for($exhibition)->create();
-        $route = "/admin/exhibitions/{$exhibition->id}/task-templates";
+        $route = "/admin/task-templates";
 
         $this->actingAs($user)
             ->get($route . "/{$task->id}/edit")
@@ -408,7 +408,7 @@ describe('Admin Task Template Test', function (): void {
         $user->assignRole(UserRole::SUPER_ADMIN);
         $exhibition = Exhibition::factory()->create();
         $task = TaskTemplate::factory(['comment' => 'new comment'])->for($exhibition)->create();
-        $route = "/admin/exhibitions/{$exhibition->id}/task-templates";
+        $route = "/admin/task-templates";
 
         $this->actingAs($user)
             ->get($route . "/{$task->id}/edit")
@@ -440,7 +440,7 @@ describe('Admin Task Template Test', function (): void {
         $user->assignRole(UserRole::SUPER_ADMIN);
         $exhibition = Exhibition::factory()->create();
         $tasks = TaskTemplate::factory(3)->for($exhibition)->create();
-        $route = "/admin/exhibitions/{$exhibition->id}/task-templates";
+        $route = "/admin/task-templates";
 
         $page = visit('/login');
 
@@ -464,7 +464,7 @@ describe('Admin Task Template Test', function (): void {
         ]);
         $user->assignRole(UserRole::SUPER_ADMIN);
         $exhibition = Exhibition::factory()->create();
-        $route = "/admin/exhibitions/{$exhibition->id}/task-templates";
+        $route = "/admin/task-templates";
 
         $page = visit('/login');
 
@@ -494,7 +494,7 @@ describe('Admin Task Template Test', function (): void {
         ]);
         $user->assignRole(UserRole::SUPER_ADMIN);
         $exhibition = Exhibition::factory()->create();
-        $route = "/admin/exhibitions/{$exhibition->id}/task-templates";
+        $route = "/admin/task-templates";
 
         $page = visit('/login');
 
@@ -524,7 +524,7 @@ describe('Admin Task Template Test', function (): void {
         ]);
         $user->assignRole(UserRole::SUPER_ADMIN);
         $exhibition = Exhibition::factory()->create();
-        $route = "/admin/exhibitions/{$exhibition->id}/task-templates";
+        $route = "/admin/task-templates";
 
         $page = visit('/login');
 
@@ -554,7 +554,7 @@ describe('Admin Task Template Test', function (): void {
         ]);
         $user->assignRole(UserRole::SUPER_ADMIN);
         $exhibition = Exhibition::factory()->create();
-        $route = "/admin/exhibitions/{$exhibition->id}/task-templates";
+        $route = "/admin/task-templates";
 
         $page = visit('/login');
 
@@ -585,7 +585,7 @@ describe('Admin Task Template Test', function (): void {
         ]);
         $user->assignRole(UserRole::SUPER_ADMIN);
         $exhibition = Exhibition::factory()->create();
-        $route = "/admin/exhibitions/{$exhibition->id}/task-templates";
+        $route = "/admin/task-templates";
 
         $page = visit('/login');
 
@@ -615,7 +615,7 @@ describe('Admin Task Template Test', function (): void {
         ]);
         $user->assignRole(UserRole::SUPER_ADMIN);
         $exhibition = Exhibition::factory()->create();
-        $route = "/admin/exhibitions/{$exhibition->id}/task-templates";
+        $route = "/admin/task-templates";
 
         $page = visit('/login');
 
@@ -648,7 +648,7 @@ describe('Admin Task Template Test', function (): void {
         $exhibition = Exhibition::factory()->create();
         $task = TaskTemplate::factory()->for($exhibition)
             ->create(['title' => 'Zebra', 'deadline' => now()]);
-        $route = "/admin/exhibitions/{$exhibition->id}/task-templates";
+        $route = "/admin/task-templates";
 
         $page = visit('/login');
 
@@ -680,7 +680,7 @@ describe('Admin Task Template Test', function (): void {
         $exhibition = Exhibition::factory()->create();
         $task = TaskTemplate::factory()->for($exhibition)
             ->create(['title' => 'Zebra', 'deadline' => now()]);
-        $route = "/admin/exhibitions/{$exhibition->id}/task-templates";
+        $route = "/admin/task-templates";
 
         $page = visit('/login');
 
@@ -712,7 +712,7 @@ describe('Admin Task Template Test', function (): void {
         $exhibition = Exhibition::factory()->create();
         $task = TaskTemplate::factory()->for($exhibition)
             ->create(['title' => 'Zebra', 'deadline' => now()]);
-        $route = "/admin/exhibitions/{$exhibition->id}/task-templates";
+        $route = "/admin/task-templates";
 
         $page = visit('/login');
 
@@ -744,7 +744,7 @@ describe('Admin Task Template Test', function (): void {
         $exhibition = Exhibition::factory()->create();
         $task = TaskTemplate::factory()->for($exhibition)
             ->create(['title' => 'Zebra', 'deadline' => now()]);
-        $route = "/admin/exhibitions/{$exhibition->id}/task-templates";
+        $route = "/admin/task-templates";
 
         $page = visit('/login');
 
@@ -776,7 +776,7 @@ describe('Admin Task Template Test', function (): void {
         $exhibition = Exhibition::factory()->create();
         $task = TaskTemplate::factory()->for($exhibition)
             ->create(['title' => 'Zebra', 'deadline' => now()]);
-        $route = "/admin/exhibitions/{$exhibition->id}/task-templates";
+        $route = "/admin/task-templates";
 
         $page = visit('/login');
 
@@ -809,7 +809,7 @@ describe('Admin Task Template Test', function (): void {
         $task = TaskTemplate::factory()->for($exhibition)
 
             ->create(['title' => 'Zebra', 'deadline' => now()]);
-        $route = "/admin/exhibitions/{$exhibition->id}/task-templates";
+        $route = "/admin/task-templates";
 
         $page = visit('/login');
 
@@ -854,7 +854,7 @@ describe('Admin Task Template Test', function (): void {
         $task = TaskTemplate::factory()->for($exhibition)
 
             ->create(['title' => 'Zebra', 'deadline' => now()]);
-        $route = "/admin/exhibitions/{$exhibition->id}/task-templates";
+        $route = "/admin/task-templates";
 
         $page = visit('/login');
 
@@ -898,7 +898,7 @@ describe('Admin Task Template Test', function (): void {
                 ['title' => 'Beta', 'deadline' => $date2],
                 ['title' => 'Zebra', 'deadline' => $date3],
             ]);
-        $route = "/admin/exhibitions/{$exhibition->id}/task-templates";
+        $route = "/admin/task-templates";
 
         $page = visit('/login');
 

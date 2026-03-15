@@ -20,6 +20,9 @@ final class User extends Authenticatable
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
 
+    protected $attributes = [
+        'active_exhibition_id' => null,
+    ];
     /**
      * The attributes that are mass assignable.
      *
@@ -48,19 +51,36 @@ final class User extends Authenticatable
         return $this->belongsToMany(Exhibition::class);
     }
 
-    public function activeExhibition(): BelongsTo
+    public function getActiveExhibition(): ?Exhibition
     {
-        return $this->belongsTo(Exhibition::class, 'active_exhibition_id');
+        if ($this->role === UserRole::SUPER_ADMIN) {
+            return Exhibition::first();
+        }
+
+        if ($this->role !== UserRole::ADMIN) {
+            return null;
+        }
+
+        $activeExhibition = $this->active_exhibition_id ? Exhibition::find($this->active_exhibition_id) : null;
+
+        if ($activeExhibition) {
+            return $activeExhibition;
+        }
+
+
+        return $this->exhibitions()->first();
     }
 
-    public function setActiveExhibition(Exhibition $exhibition): void
+    public function setActiveExhibition(int $id): void
     {
-        abort_unless($this
-            ->exhibitions()
-            ->where('exhibition_id', $exhibition->id)
-            ->exists(), 403, 'User does not belong to this exhibition');
+        abort_unless(
+            $this->role === UserRole::SUPER_ADMIN ||
+                $this->exhibitions()->whereKey($id)->exists(),
+            403,
+            'User does not belong to this exhibition'
+        );
 
-        $this->update(['active_exhibition_id' => $exhibition->id]);
+        $this->update(['active_exhibition_id' => $id]);
     }
 
     public function company(): BelongsTo
@@ -104,11 +124,7 @@ final class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
             'role' => UserRole::class,
+            'active_exhibition_id' => 'integer',
         ];
     }
-
-    // public function scopeVerified(Builder $query): Builder
-    // {
-    //     return $query->whereNotNull('email_verified_at');
-    // }
 }

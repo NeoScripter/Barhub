@@ -3,7 +3,7 @@ import Table from '@/components/ui/Table';
 import { formatDateShort } from '@/lib/utils';
 import { NodeProps } from '@/types/shared';
 import { edit, show } from '@/wayfinder/routes/admin/exhibitions';
-import { index } from '@/wayfinder/routes/admin/exhibitions/admins';
+import { index } from '@/wayfinder/routes/admin/admins';
 import { App } from '@/wayfinder/types';
 import { Link } from '@inertiajs/react';
 import { PencilLine, Shield } from 'lucide-react';

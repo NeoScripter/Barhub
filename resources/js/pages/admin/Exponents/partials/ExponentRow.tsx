@@ -2,7 +2,7 @@ import { Button } from '@/components/ui/Button';
 import { DeleteAlertDialog } from '@/components/ui/DeleteAlertDialog';
 import { cn } from '@/lib/utils';
 import { NodeProps } from '@/types/shared';
-import { destroy } from '@/wayfinder/routes/admin/exhibitions/exponents';
+import { destroy } from '@/wayfinder/routes/admin/exponents';
 import { App, Inertia } from '@/wayfinder/types';
 import { router, usePage } from '@inertiajs/react';
 import { Trash2 } from 'lucide-react';

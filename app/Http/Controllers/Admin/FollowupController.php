@@ -10,15 +10,18 @@ use App\Http\Requests\Admin\Followup\FollowupIndexRequest;
 use App\Models\Exhibition;
 use App\Models\Followup;
 use App\Sorts\RelationSort;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Spatie\QueryBuilder\AllowedSort;
 use Spatie\QueryBuilder\QueryBuilder;
 
 final class FollowupController extends Controller
 {
-    public function index(FollowupIndexRequest $request, Exhibition $exhibition)
+    public function index(FollowupIndexRequest $request)
     {
-        $followups = QueryBuilder::for(Followup::query()->select(['followup.comment', 'followup.status', 'followup.id'])
+        $exhibition = Auth::user()->getActiveExhibition();
+
+        $followups = QueryBuilder::for(Followup::query()->select(['followups.comment', 'followups.status', 'followups.id'])
             ->forExhibition($exhibition->id))
             ->with('service')
             ->where('status', '!=', FollowupStatus::COMPLETED)
@@ -26,35 +29,31 @@ final class FollowupController extends Controller
                 AllowedSort::custom('service.name', new RelationSort('services', 'name', 'service_id')),
             ])
             ->paginate()
-            ->through(fn ($followup): array => [
+            ->through(fn($followup): array => [
                 ...$followup->toArray(),
                 'status' => $followup->status->label(),
             ])
             ->appends($request->query());
 
         return Inertia::render('admin/Followups/Index', [
-            'exhibition' => $exhibition,
             'followups' => $followups,
         ]);
     }
 
-    public function edit(Exhibition $exhibition, Followup $followup)
+    public function edit(Followup $followup)
     {
         $followup->load(['service.company:public_name,id', 'user:name,id']);
 
         return Inertia::render('admin/Followups/Edit', [
-            'exhibition' => $exhibition,
             'followup' => $followup,
         ]);
     }
 
-    public function update(Exhibition $exhibition, Followup $followup)
+    public function update(Followup $followup)
     {
         abort_if($followup->status !== FollowupStatus::IMCOMPLETE, 403);
         $followup->update(['status' => FollowupStatus::COMPLETED]);
 
-        return to_route('admin.exhibitions.followups.index', [
-            'exhibition' => $exhibition,
-        ]);
+        return to_route('admin.followups.index' );
     }
 }

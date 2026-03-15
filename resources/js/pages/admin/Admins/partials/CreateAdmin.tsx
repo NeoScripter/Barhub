@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/Button';
 import { SelectMenu } from '@/components/ui/SelectMenu';
-import { update } from '@/wayfinder/routes/admin/exhibitions/admins';
+import { update } from '@/wayfinder/routes/admin/admins';
 import { Inertia } from '@/wayfinder/types';
 import { router, usePage } from '@inertiajs/react';
 import { useState } from 'react';

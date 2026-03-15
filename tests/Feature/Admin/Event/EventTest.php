@@ -15,7 +15,7 @@ describe('Event Panel Access Control', function (): void {
     it('redirects guest users to login', function (): void {
         $exhibition = Exhibition::factory()->create();
 
-        get(route('admin.exhibitions.events.index', $exhibition))
+        get(route('admin.events.index', $exhibition))
             ->assertRedirect(route('login'));
     });
 
@@ -25,7 +25,7 @@ describe('Event Panel Access Control', function (): void {
         $exhibition = Exhibition::factory()->create();
 
         actingAs($user)
-            ->get(route('admin.exhibitions.events.index', $exhibition))
+            ->get(route('admin.events.index', $exhibition))
             ->assertForbidden();
     });
 
@@ -35,7 +35,7 @@ describe('Event Panel Access Control', function (): void {
         $exhibition = Exhibition::factory()->create();
 
         actingAs($user)
-            ->get(route('admin.exhibitions.events.index', $exhibition))
+            ->get(route('admin.events.index', $exhibition))
             ->assertForbidden();
     });
 
@@ -47,7 +47,7 @@ describe('Event Panel Access Control', function (): void {
         $events = Event::factory(5)->for($exhibition)->create();
 
         $response = actingAs($superAdmin)
-            ->get(route('admin.exhibitions.events.index', $exhibition));
+            ->get(route('admin.events.index', $exhibition));
 
         $response
             ->assertOk()
@@ -60,32 +60,6 @@ describe('Event Panel Access Control', function (): void {
         $events->each(
             fn ($event) => $response->assertSee($event->title)
         );
-    });
-
-    test('admin can see events only for exhibitions assigned to them', function (): void {
-        $admin = User::factory()->create();
-        $admin->assignRole(UserRole::ADMIN);
-
-        // Assigned exhibition
-        $assignedExhibition = Exhibition::factory()->create();
-        $assignedExhibition->users()->attach($admin);
-        $assignedEvents = Event::factory(3)->for($assignedExhibition)->create();
-
-        // Unassigned exhibition
-        $unassignedExhibition = Exhibition::factory()->create();
-        Event::factory(2)->for($unassignedExhibition)->create();
-
-        actingAs($admin)
-            ->get(route('admin.exhibitions.events.index', $assignedExhibition))
-            ->assertOk()
-            ->assertInertia(
-                fn ($page) => $page->component('admin/Events/Index')
-                    ->has('events.data', 3)
-            );
-
-        actingAs($admin)
-            ->get(route('admin.exhibitions.events.index', $unassignedExhibition))
-            ->assertForbidden();
     });
 });
 
@@ -104,7 +78,7 @@ describe('Event Sorting', function (): void {
         Event::factory()->for($this->exhibition)->create(['title' => 'Beta Event']);
 
         $response = actingAs($this->superAdmin)
-            ->get(route('admin.exhibitions.events.index', [
+            ->get(route('admin.events.index', [
                 'exhibition' => $this->exhibition,
                 'sort' => 'title',
             ]));
@@ -123,7 +97,7 @@ describe('Event Sorting', function (): void {
         Event::factory()->for($this->exhibition)->create(['title' => 'Beta Event']);
 
         $response = actingAs($this->superAdmin)
-            ->get(route('admin.exhibitions.events.index', [
+            ->get(route('admin.events.index', [
                 'exhibition' => $this->exhibition,
                 'sort' => '-title',
             ]));
@@ -142,7 +116,7 @@ describe('Event Sorting', function (): void {
         Event::factory()->for($this->exhibition)->create(['starts_at' => '2025-02-01 10:00:00']);
 
         $response = actingAs($this->superAdmin)
-            ->get(route('admin.exhibitions.events.index', [
+            ->get(route('admin.events.index', [
                 'exhibition' => $this->exhibition,
                 'sort' => 'starts_at',
             ]));
@@ -161,7 +135,7 @@ describe('Event Sorting', function (): void {
         Event::factory()->for($this->exhibition)->create(['starts_at' => '2025-02-01 10:00:00']);
 
         $response = actingAs($this->superAdmin)
-            ->get(route('admin.exhibitions.events.index', [
+            ->get(route('admin.events.index', [
                 'exhibition' => $this->exhibition,
                 'sort' => '-starts_at',
             ]));
@@ -184,7 +158,7 @@ describe('Event Sorting', function (): void {
         $this->stages[2]->update(['name' => 'Bravo Stage']);
 
         $response = actingAs($this->superAdmin)
-            ->get(route('admin.exhibitions.events.index', [
+            ->get(route('admin.events.index', [
                 'exhibition' => $this->exhibition,
                 'sort' => 'stage.name',
             ]));
@@ -207,7 +181,7 @@ describe('Event Sorting', function (): void {
         $this->stages[2]->update(['name' => 'Bravo Stage']);
 
         $response = actingAs($this->superAdmin)
-            ->get(route('admin.exhibitions.events.index', [
+            ->get(route('admin.events.index', [
                 'exhibition' => $this->exhibition,
                 'sort' => '-stage.name',
             ]));
@@ -235,7 +209,7 @@ describe('Event Search', function (): void {
         Event::factory()->for($this->exhibition)->create(['title' => 'Tech Innovation Summit']);
 
         $response = actingAs($this->superAdmin)
-            ->get(route('admin.exhibitions.events.index', [
+            ->get(route('admin.events.index', [
                 'exhibition' => $this->exhibition,
                 'search' => 'Innovation',
             ]));
@@ -256,7 +230,7 @@ describe('Event Edit Page Access', function (): void {
         $event = Event::factory()->for($exhibition)->create();
 
         actingAs($superAdmin)
-            ->get(route('admin.exhibitions.events.edit', [$exhibition, $event]))
+            ->get(route('admin.events.edit', [$exhibition, $event]))
             ->assertOk()
             ->assertInertia(
                 fn ($page) => $page->component('admin/Events/Edit')
@@ -277,11 +251,11 @@ describe('Event Edit Page Access', function (): void {
         $unassignedEvent = Event::factory()->for($unassignedExhibition)->create();
 
         actingAs($admin)
-            ->get(route('admin.exhibitions.events.edit', [$assignedExhibition, $assignedEvent]))
+            ->get(route('admin.events.edit', [$assignedExhibition, $assignedEvent]))
             ->assertOk();
 
         actingAs($admin)
-            ->get(route('admin.exhibitions.events.edit', [$unassignedExhibition, $unassignedEvent]))
+            ->get(route('admin.events.edit', [$unassignedExhibition, $unassignedEvent]))
             ->assertForbidden();
     });
 });

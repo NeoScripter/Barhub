@@ -10,7 +10,8 @@ final class FollowupUpdateRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return true;
+        $exhibition = $this->service?->company?->exhibition;
+        return $this->user()->can('view', $exhibition);
     }
 
     public function rules(): array

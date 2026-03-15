@@ -28,7 +28,7 @@ describe('Admin Task Test', function (): void {
         $exhibition = Exhibition::factory()->create();
         $company = Company::factory()->for($exhibition)->create();
         $task = Task::factory()->for($company)->create();
-        $route = "/admin/exhibitions/{$exhibition->id}/companies/{$company->id}/tasks/{$task->id}/edit";
+        $route = "/admin/companies/{$company->id}/tasks/{$task->id}/edit";
 
         $task->comments()->createMany([[
             'content' => 'comment one name',
@@ -72,7 +72,7 @@ describe('Admin Task Test', function (): void {
         $exhibition = Exhibition::factory()->create();
         $company = Company::factory()->for($exhibition)->create();
         $task = Task::factory()->for($company)->create();
-        $route = "/admin/exhibitions/{$exhibition->id}/companies/{$company->id}/tasks";
+        $route = "/admin/companies/{$company->id}/tasks";
 
         $comment = $task->comments()->create([
             'content' => 'new content',
@@ -117,7 +117,7 @@ describe('Admin Task Test', function (): void {
         $exhibition = Exhibition::factory()->create();
         $company = Company::factory()->for($exhibition)->create();
         $task = Task::factory()->for($company)->create();
-        $route = "/admin/exhibitions/{$exhibition->id}/companies/{$company->id}/tasks";
+        $route = "/admin/companies/{$company->id}/tasks";
 
         $this->actingAs($user)
             ->get($route."/{$task->id}/edit")
@@ -166,7 +166,7 @@ describe('Admin Task Test', function (): void {
         $user->assignRole(UserRole::SUPER_ADMIN);
         $exhibition = Exhibition::factory()->create();
         $company = Company::factory()->for($exhibition)->create();
-        $route = "/admin/exhibitions/{$exhibition->id}/companies/{$company->id}/tasks";
+        $route = "/admin/companies/{$company->id}/tasks";
 
         $file = UploadedFile::fake()->create('document.pdf', 100);
         $payload = [
@@ -210,7 +210,7 @@ describe('Admin Task Test', function (): void {
         $user->assignRole(UserRole::SUPER_ADMIN);
         $exhibition = Exhibition::factory()->create();
         $company = Company::factory()->for($exhibition)->create();
-        $route = "/admin/exhibitions/{$exhibition->id}/companies/{$company->id}/tasks";
+        $route = "/admin/companies/{$company->id}/tasks";
 
         $file = UploadedFile::fake()->create('document.pdf', 100);
         $payload = [
@@ -242,7 +242,7 @@ describe('Admin Task Test', function (): void {
         $exhibition = Exhibition::factory()->create();
         $company = Company::factory()->for($exhibition)->create();
         $task = Task::factory()->for($company)->create();
-        $route = "/admin/exhibitions/{$exhibition->id}/companies/{$company->id}/tasks";
+        $route = "/admin/companies/{$company->id}/tasks";
 
         $this->actingAs($user)
             ->get($route."/{$task->id}/edit")
@@ -283,7 +283,7 @@ describe('Admin Task Test', function (): void {
         $company = Company::factory()->for($exhibition)->create();
         $task = Task::factory()->for($company)->create();
         TaskComment::factory()->for($task)->create();
-        $route = "/admin/exhibitions/{$exhibition->id}/companies/{$company->id}/tasks";
+        $route = "/admin/companies/{$company->id}/tasks";
 
         $this->actingAs($user)
             ->get($route."/{$task->id}/edit")
@@ -316,7 +316,7 @@ describe('Admin Task Test', function (): void {
         $exhibition = Exhibition::factory()->create();
         $company = Company::factory()->for($exhibition)->create();
         $tasks = Task::factory(3)->for($company)->create();
-        $route = "/admin/exhibitions/{$exhibition->id}/companies/{$company->id}/tasks";
+        $route = "/admin/companies/{$company->id}/tasks";
 
         $page = visit('/login');
 
@@ -341,7 +341,7 @@ describe('Admin Task Test', function (): void {
         $user->assignRole(UserRole::SUPER_ADMIN);
         $exhibition = Exhibition::factory()->create();
         $company = Company::factory()->for($exhibition)->create();
-        $route = "/admin/exhibitions/{$exhibition->id}/companies/{$company->id}/tasks";
+        $route = "/admin/companies/{$company->id}/tasks";
 
         $page = visit('/login');
 
@@ -372,7 +372,7 @@ describe('Admin Task Test', function (): void {
         $user->assignRole(UserRole::SUPER_ADMIN);
         $exhibition = Exhibition::factory()->create();
         $company = Company::factory()->for($exhibition)->create();
-        $route = "/admin/exhibitions/{$exhibition->id}/companies/{$company->id}/tasks";
+        $route = "/admin/companies/{$company->id}/tasks";
 
         $page = visit('/login');
 
@@ -403,7 +403,7 @@ describe('Admin Task Test', function (): void {
         $user->assignRole(UserRole::SUPER_ADMIN);
         $exhibition = Exhibition::factory()->create();
         $company = Company::factory()->for($exhibition)->create();
-        $route = "/admin/exhibitions/{$exhibition->id}/companies/{$company->id}/tasks";
+        $route = "/admin/companies/{$company->id}/tasks";
 
         $page = visit('/login');
 
@@ -434,7 +434,7 @@ describe('Admin Task Test', function (): void {
         $user->assignRole(UserRole::SUPER_ADMIN);
         $exhibition = Exhibition::factory()->create();
         $company = Company::factory()->for($exhibition)->create();
-        $route = "/admin/exhibitions/{$exhibition->id}/companies/{$company->id}/tasks";
+        $route = "/admin/companies/{$company->id}/tasks";
 
         $page = visit('/login');
 
@@ -466,7 +466,7 @@ describe('Admin Task Test', function (): void {
         $user->assignRole(UserRole::SUPER_ADMIN);
         $exhibition = Exhibition::factory()->create();
         $company = Company::factory()->for($exhibition)->create();
-        $route = "/admin/exhibitions/{$exhibition->id}/companies/{$company->id}/tasks";
+        $route = "/admin/companies/{$company->id}/tasks";
 
         $page = visit('/login');
 
@@ -497,7 +497,7 @@ describe('Admin Task Test', function (): void {
         $user->assignRole(UserRole::SUPER_ADMIN);
         $exhibition = Exhibition::factory()->create();
         $company = Company::factory()->for($exhibition)->create();
-        $route = "/admin/exhibitions/{$exhibition->id}/companies/{$company->id}/tasks";
+        $route = "/admin/companies/{$company->id}/tasks";
 
         $page = visit('/login');
 
@@ -532,7 +532,7 @@ describe('Admin Task Test', function (): void {
         $task = Task::factory()
             ->for($company)
             ->create(['title' => 'Zebra', 'deadline' => now()]);
-        $route = "/admin/exhibitions/{$exhibition->id}/companies/{$company->id}/tasks";
+        $route = "/admin/companies/{$company->id}/tasks";
 
         $page = visit('/login');
 
@@ -566,7 +566,7 @@ describe('Admin Task Test', function (): void {
         $task = Task::factory()
             ->for($company)
             ->create(['title' => 'Zebra', 'deadline' => now()]);
-        $route = "/admin/exhibitions/{$exhibition->id}/companies/{$company->id}/tasks";
+        $route = "/admin/companies/{$company->id}/tasks";
 
         $page = visit('/login');
 
@@ -600,7 +600,7 @@ describe('Admin Task Test', function (): void {
         $task = Task::factory()
             ->for($company)
             ->create(['title' => 'Zebra', 'deadline' => now()]);
-        $route = "/admin/exhibitions/{$exhibition->id}/companies/{$company->id}/tasks";
+        $route = "/admin/companies/{$company->id}/tasks";
 
         $page = visit('/login');
 
@@ -634,7 +634,7 @@ describe('Admin Task Test', function (): void {
         $task = Task::factory()
             ->for($company)
             ->create(['title' => 'Zebra', 'deadline' => now()]);
-        $route = "/admin/exhibitions/{$exhibition->id}/companies/{$company->id}/tasks";
+        $route = "/admin/companies/{$company->id}/tasks";
 
         $page = visit('/login');
 
@@ -668,7 +668,7 @@ describe('Admin Task Test', function (): void {
         $task = Task::factory()
             ->for($company)
             ->create(['title' => 'Zebra', 'deadline' => now()]);
-        $route = "/admin/exhibitions/{$exhibition->id}/companies/{$company->id}/tasks";
+        $route = "/admin/companies/{$company->id}/tasks";
 
         $page = visit('/login');
 
@@ -702,7 +702,7 @@ describe('Admin Task Test', function (): void {
         $task = Task::factory()
             ->for($company)
             ->create(['title' => 'Zebra', 'deadline' => now()]);
-        $route = "/admin/exhibitions/{$exhibition->id}/companies/{$company->id}/tasks";
+        $route = "/admin/companies/{$company->id}/tasks";
 
         $page = visit('/login');
 
@@ -748,7 +748,7 @@ describe('Admin Task Test', function (): void {
         $task = Task::factory()
             ->for($company)
             ->create(['title' => 'Zebra', 'deadline' => now()]);
-        $route = "/admin/exhibitions/{$exhibition->id}/companies/{$company->id}/tasks";
+        $route = "/admin/companies/{$company->id}/tasks";
 
         $page = visit('/login');
 
@@ -793,7 +793,7 @@ describe('Admin Task Test', function (): void {
                 ['title' => 'Beta', 'deadline' => $date2],
                 ['title' => 'Zebra', 'deadline' => $date3],
             ]);
-        $route = "/admin/exhibitions/{$exhibition->id}/companies/{$company->id}/tasks";
+        $route = "/admin/companies/{$company->id}/tasks";
 
         $page = visit('/login');
 
@@ -857,7 +857,7 @@ describe('Admin Task Test', function (): void {
         $exhibitionWithoutCompany->users()->attach($adminWithoutAccess->id);
         $company = Company::factory()->for($exhibitionWithCompany)->create();
         $tasks = Task::factory(3)->for($company)->create();
-        $route = "/admin/exhibitions/{$exhibitionWithCompany->id}/companies/{$company->id}/tasks";
+        $route = "/admin/companies/{$company->id}/tasks";
 
         visit($route)->assertSee('Вход в аккаунт');
 

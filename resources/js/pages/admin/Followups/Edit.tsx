@@ -3,7 +3,7 @@ import AccentHeading from '@/components/ui/AccentHeading';
 import LabeledContent from '@/components/ui/LabeledContent';
 import { formatDateAndTime } from '@/lib/utils';
 import FollowupController from '@/wayfinder/App/Http/Controllers/Admin/FollowupController';
-import { update } from '@/wayfinder/routes/admin/exhibitions/followups';
+import { update } from '@/wayfinder/routes/admin/followups';
 import { Inertia } from '@/wayfinder/types';
 import { useForm } from '@inertiajs/react';
 import { FC } from 'react';

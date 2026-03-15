@@ -116,6 +116,6 @@ const navLinks: NavLinkType[] = [
 ];
 
 function extractPathToCurrentCompany(url: string): string | null {
-    const match = url.match(/(admin\/exhibitions\/\d+\/companies\/\d+)/);
+    const match = url.match(/(admin\/companies\/\d+)/);
     return match ? match[1] : null;
 }

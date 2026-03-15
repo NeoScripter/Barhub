@@ -138,8 +138,8 @@ describe('Event Filtering', function (): void {
         Event::factory()->for($exhibition)->for($sideStage)->create(['title' => 'Side Event']);
 
         $response = get(route('events.index', [
-            'exhibition' => $exhibition,
             'filter' => ['stage.name' => 'Main Stage'],
+            'exhibition' => $exhibition
         ]));
 
         $response->assertOk()
@@ -161,8 +161,8 @@ describe('Event Filtering', function (): void {
         $artEvent->themes()->attach($artTheme);
 
         $response = get(route('events.index', [
-            'exhibition' => $exhibition,
             'filter' => ['themes.name' => 'Technology'],
+            'exhibition' => $exhibition
         ]));
 
         $response->assertOk()
@@ -184,8 +184,8 @@ describe('Event Filtering', function (): void {
         ]);
 
         $response = get(route('events.index', [
-            'exhibition' => $exhibition,
             'filter' => ['starts_at' => '2025-03-15'],
+            'exhibition' => $exhibition
         ]));
 
         $response->assertOk()
@@ -221,11 +221,11 @@ describe('Event Filtering', function (): void {
         $event3->themes()->attach($techTheme);
 
         $response = get(route('events.index', [
-            'exhibition' => $exhibition,
             'filter' => [
                 'stage.name' => 'Main Stage',
                 'themes.name' => 'Technology',
             ],
+            'exhibition' => $exhibition
         ]));
 
         $response->assertOk()

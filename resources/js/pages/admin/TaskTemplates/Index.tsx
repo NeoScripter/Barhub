@@ -9,7 +9,7 @@ import { FC } from 'react';
 import TemplateTable from './partials/TemplateTable';
 import TemplateTableHeader from './partials/TemplateTableHeader';
 import { Link } from '@inertiajs/react';
-import { create } from '@/wayfinder/routes/admin/exhibitions/task-templates';
+import { create } from '@/wayfinder/routes/admin/task-templates';
 
 const Index: FC<Inertia.Pages.Admin.TaskTemplates.Index> = ({
     templates,

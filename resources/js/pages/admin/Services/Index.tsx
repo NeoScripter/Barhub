@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui/Button';
 import Pagination from '@/components/ui/Pagination';
 import CompanyLayout from '@/layouts/app/CompanyLayout';
-import { create } from '@/wayfinder/routes/admin/exhibitions/services';
+import { create } from '@/wayfinder/routes/admin/services';
 import { Inertia } from '@/wayfinder/types';
 import { Link } from '@inertiajs/react';
 import { Plus } from 'lucide-react';

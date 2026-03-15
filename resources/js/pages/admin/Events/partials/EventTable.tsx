@@ -2,7 +2,7 @@ import Table from '@/components/ui/Table';
 import ThemeBadge from '@/components/ui/ThemeBadge';
 import { formatDateAndTime } from '@/lib/utils';
 import { NodeProps } from '@/types/shared';
-import { edit } from '@/wayfinder/routes/admin/exhibitions/events';
+import { edit } from '@/wayfinder/routes/admin/events';
 import { App } from '@/wayfinder/types';
 import { Link } from '@inertiajs/react';
 import { PencilLine } from 'lucide-react';

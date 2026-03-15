@@ -10,41 +10,40 @@ use App\Http\Requests\Admin\InfoItem\InfoItemUpdateRequest;
 use App\Models\Exhibition;
 use App\Models\Image;
 use App\Models\InfoItem;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 
 final class InfoItemController extends Controller
 {
-    public function index(Exhibition $exhibition)
+    public function index()
     {
+        $exhibition = Auth::user()->getActiveExhibition();
         $infoItems = $exhibition->infoItems()
             ->select(['title',  'id'])
             ->paginate();
 
         return Inertia::render('admin/InfoItems/Index', [
-            'exhibition' => $exhibition,
             'infoItems' => $infoItems,
         ]);
     }
 
-    public function edit(Exhibition $exhibition, InfoItem $infoItem)
+    public function edit(InfoItem $infoItem)
     {
         return Inertia::render('admin/InfoItems/Edit', [
-            'exhibition' => $exhibition,
             'infoItem' => $infoItem,
         ]);
     }
 
     public function create(Exhibition $exhibition)
     {
-        return Inertia::render('admin/InfoItems/Create', [
-            'exhibition' => $exhibition,
-        ]);
+        return Inertia::render('admin/InfoItems/Create');
     }
 
-    public function store(InfoItemStoreRequest $request, Exhibition $exhibition)
+    public function store(InfoItemStoreRequest $request)
     {
-        DB::transaction(function () use ($request, $exhibition) {
+        DB::transaction(function () use ($request) {
+            $exhibition = Auth::user()->getActiveExhibition();
             $infoItem = $exhibition->infoItems()->create(
                 $request->only(['title', 'url']),
             );
@@ -61,12 +60,10 @@ final class InfoItemController extends Controller
             }
         });
 
-        return to_route('admin.exhibitions.info-items.index', [
-            'exhibition' => $exhibition,
-        ]);
+        return to_route('admin.info-items.index');
     }
 
-    public function update(InfoItemUpdateRequest $request, Exhibition $exhibition, InfoItem $infoItem)
+    public function update(InfoItemUpdateRequest $request,  InfoItem $infoItem)
     {
 
         DB::transaction(function () use ($request, $infoItem): void {
@@ -93,18 +90,14 @@ final class InfoItemController extends Controller
             }
         });
 
-        return to_route('admin.exhibitions.info-items.index', [
-            'exhibition' => $exhibition,
-        ]);
+        return to_route('admin.info-items.index');
     }
 
-    public function destroy(Exhibition $exhibition, InfoItem $infoItem)
+    public function destroy(InfoItem $infoItem)
     {
         $infoItem->image?->delete();
         $infoItem->delete();
 
-        return to_route('admin.exhibitions.info-items.index', [
-            'exhibition' => $exhibition,
-        ]);
+        return to_route('admin.info-items.index');
     }
 }

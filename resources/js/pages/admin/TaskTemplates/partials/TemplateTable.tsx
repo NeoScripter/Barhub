@@ -1,7 +1,7 @@
 import Table from '@/components/ui/Table';
 import { formatDateAndTime } from '@/lib/utils';
 import { NodeProps } from '@/types/shared';
-import { edit } from '@/wayfinder/routes/admin/exhibitions/task-templates';
+import { edit } from '@/wayfinder/routes/admin/task-templates';
 import { App } from '@/wayfinder/types';
 import { Link } from '@inertiajs/react';
 import { VisuallyHidden } from '@radix-ui/react-visually-hidden';

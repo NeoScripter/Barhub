@@ -8,7 +8,6 @@ use App\Http\Controllers\Admin\CompanyController as AdminCompanyController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\EventController as AdminEventController;
 use App\Http\Controllers\Admin\ExhibitionController as AdminExhibitionController;
-use App\Http\Controllers\Admin\ExhibitionUpdatedStatusController;
 use App\Http\Controllers\Admin\ExponentController as AdminExponentController;
 use App\Http\Controllers\Admin\FollowupController as AdminFollowupController;
 use App\Http\Controllers\Admin\InfoItemController;
@@ -25,7 +24,6 @@ use App\Http\Controllers\Exponent\DashboardController as ExponentDashboardContro
 use App\Http\Controllers\User\EventController as UserEventController;
 use App\Http\Controllers\User\ExhibitionController as UserExhibitionController;
 use App\Http\Controllers\User\HomeController;
-use App\Models\Exhibition;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', HomeController::class)->name('home');
@@ -49,46 +47,34 @@ Route::prefix('/exponent')
 
 Route::prefix('/admin')
     ->name('admin.')
-    ->middleware([
-        'auth',
-        'role:' . UserRole::ADMIN->value . ',' . UserRole::SUPER_ADMIN->value,
-    ])
+    ->middleware(['auth', 'admin'])
     ->group(function (): void {
-        Route::get('/dashboard', AdminDashboardController::class)->name('dashboard');
+        Route::resource('dashboard', AdminDashboardController::class)->only(['index', 'update']);
         Route::get('/links', LinkController::class)->name('public_links');
 
-        Route::patch('exhibitions/{exhibition}/status', ExhibitionUpdatedStatusController::class)
-            ->name('update.status');
-
-        Route::resource('/exhibitions', AdminExhibitionController::class)
+        Route::resource('exhibitions', AdminExhibitionController::class)
             ->middleware(['role:' . UserRole::SUPER_ADMIN->value]);
 
         Route::resource('themes', ThemeController::class)->only(['store', 'destroy']);
         Route::resource('stages', StageController::class)->only(['store', 'destroy']);
         Route::resource('tags', TagController::class)->only(['store', 'destroy']);
 
-        Route::prefix('exhibitions/{exhibition}')
-            ->name('exhibitions.')
-            ->middleware('can:view,exhibition')
-            ->group(function (): void {
+        Route::resource('admins', AdminController::class)
+            ->middleware(['role:' . UserRole::SUPER_ADMIN->value])
+            ->only(['index', 'destroy', 'update']);
 
-                Route::resource('/admins', AdminController::class)
-                    ->middleware(['role:' . UserRole::SUPER_ADMIN->value])
-                    ->only(['index', 'destroy', 'update']);
+        Route::resource('all-tasks', AdminPartnerController::class)
+            ->only(['index', 'edit', 'update']);
+        Route::resource('followups', AdminFollowupController::class)
+            ->only(['index', 'edit', 'update']);
+        Route::resource('companies/{company}/exponents', AdminExponentController::class)
+            ->only(['update', 'index', 'destroy']);
+        Route::resource('companies/{company}/tasks', AdminTaskController::class);
+        Route::resource('task-templates', TaskTemplateController::class);
+        Route::resource('info-items', InfoItemController::class);
+        Route::resource('companies/{company}/services', AdminServiceController::class);
 
-                Route::resource('all-tasks', AdminPartnerController::class)
-                    ->only(['index', 'edit', 'update']);
-                Route::resource('followups', AdminFollowupController::class)
-                    ->only(['index', 'edit', 'update']);
-                Route::resource('companies/{company}/exponents', AdminExponentController::class)
-                    ->only(['update', 'index', 'destroy']);
-                Route::resource('companies/{company}/tasks', AdminTaskController::class);
-                Route::resource('task-templates', TaskTemplateController::class);
-                Route::resource('info-items', InfoItemController::class);
-                Route::resource('companies/{company}/services', AdminServiceController::class);
-
-                Route::resource('events', AdminEventController::class)->except('show');
-                Route::resource('people', AdminPersonController::class)->except(['show']);
-                Route::resource('companies', AdminCompanyController::class)->except(['show']);
-            });
+        Route::resource('events', AdminEventController::class)->except('show');
+        Route::resource('people', AdminPersonController::class)->except(['show']);
+        Route::resource('companies', AdminCompanyController::class)->except(['show']);
     });

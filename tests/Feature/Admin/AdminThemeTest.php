@@ -41,7 +41,7 @@ describe('Admin Theme Test', function (): void {
         $this->assertAuthenticated();
 
         // Navigate to event edit page
-        $page->navigate("/admin/exhibitions/{$exhibition->id}/events/{$event->id}/edit");
+        $page->navigate("/admin/events/{$event->id}/edit");
         $page->assertSee('Название');
 
         // Click the "Редактировать" button
@@ -90,7 +90,7 @@ describe('Admin Theme Test', function (): void {
 
         $this->assertAuthenticated();
 
-        $page->navigate("/admin/exhibitions/{$exhibition->id}/events/{$event->id}/edit");
+        $page->navigate("/admin/events/{$event->id}/edit");
         $page->click('Редактировать');
 
         $page->wait(1);
@@ -127,7 +127,7 @@ describe('Admin Theme Test', function (): void {
 
         $this->assertAuthenticated();
 
-        $page->navigate("/admin/exhibitions/{$exhibition->id}/events/{$event->id}/edit");
+        $page->navigate("/admin/events/{$event->id}/edit");
 
         // Verify selected themes are shown
         $themes->take(3)->each(function ($theme) use ($page): void {

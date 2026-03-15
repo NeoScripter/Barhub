@@ -17,15 +17,18 @@ use App\Models\Stage;
 use App\Models\Theme;
 use App\Sorts\RelationSort;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 use Inertia\Inertia;
 use Spatie\QueryBuilder\AllowedSort;
 use Spatie\QueryBuilder\QueryBuilder;
 
 final class EventController extends Controller
 {
-    public function index(EventIndexRequest $request, Exhibition $exhibition)
+    public function index(EventIndexRequest $request)
     {
+        $exhibition = Auth::user()->getActiveExhibition();
         /** @var LengthAwarePaginator<Event> $events */
         $events = QueryBuilder::for($exhibition->events())
             ->with([
@@ -47,20 +50,19 @@ final class EventController extends Controller
             ->appends($request->query());
 
         return Inertia::render('admin/Events/Index', [
-            'exhibition' => $exhibition,
             'events' => $events,
         ]);
     }
 
     public function edit(
-        Exhibition $exhibition,
         Event $event,
         FormatEventPeople $formatPeople
     ) {
+        Gate::authorize('view', $event->exhibition);
+
         $event->load(['stage', 'themes', 'people']);
 
         return Inertia::render('admin/Events/Edit', [
-            'exhibition' => $exhibition,
             'event' => $event,
             'eventPeople' => $formatPeople->execute($event),
             'stages' => Stage::query()->select(['id', 'name'])->get(),
@@ -70,8 +72,9 @@ final class EventController extends Controller
         ]);
     }
 
-    public function update(EventUpdateRequest $request, Exhibition $exhibition, Event $event)
+    public function update(EventUpdateRequest $request, Event $event)
     {
+        Gate::authorize('view', $event->exhibition);
         DB::transaction(function () use ($request, $event): void {
             $event->update($request->only([
                 'title',
@@ -96,14 +99,13 @@ final class EventController extends Controller
             }
         });
 
-        return to_route('admin.exhibitions.events.index', $exhibition)
+        return to_route('admin.events.index')
             ->with('success', 'Event updated successfully');
     }
 
-    public function create(Exhibition $exhibition)
+    public function create()
     {
         return Inertia::render('admin/Events/Create', [
-            'exhibition' => $exhibition,
             'stages' => Stage::query()->select(['id', 'name'])->get(),
             'themes' => Theme::all(),
             'availablePeople' => Person::query()->select(['id', 'name'])->get(),
@@ -111,16 +113,19 @@ final class EventController extends Controller
         ]);
     }
 
-    public function store(EventStoreRequest $request, Exhibition $exhibition)
+    public function store(EventStoreRequest $request)
     {
-        DB::transaction(function () use ($request, $exhibition) {
-            $event = $exhibition->events()->create($request->only([
-                'title',
-                'description',
-                'stage_id',
-                'starts_at',
-                'ends_at',
-            ]));
+        DB::transaction(function () use ($request) {
+            $event = $request->user()
+                ->getActiveExhibition()
+                ->events()
+                ->create($request->only([
+                    'title',
+                    'description',
+                    'stage_id',
+                    'starts_at',
+                    'ends_at',
+                ]));
 
             if ($request->has('theme_ids')) {
                 $event->themes()->attach($request->theme_ids);
@@ -137,15 +142,15 @@ final class EventController extends Controller
             return $event;
         });
 
-        return to_route('admin.exhibitions.events.index', $exhibition)
+        return to_route('admin.events.index')
             ->with('success', 'Событие успешно создано');
     }
 
-    public function destroy(Exhibition $exhibition, Event $event)
+    public function destroy(Event $event)
     {
         $event->delete();
 
-        return to_route('admin.exhibitions.events.index', $exhibition)
+        return to_route('admin.events.index')
             ->with('success', 'Событие успешно удалено');
     }
 }

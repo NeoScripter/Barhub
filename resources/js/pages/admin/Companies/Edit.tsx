@@ -45,7 +45,7 @@ const Edit: FC<Inertia.Pages.Admin.Companies.Edit> = ({
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        post(`/admin/exhibitions/${exhibition.id}/companies/${company.id}`, {
+        post(`/admin/${exhibition.id}/companies/${company.id}`, {
             onSuccess: () => toast.success('Компания успешно обновлена'),
         });
     };
@@ -53,7 +53,7 @@ const Edit: FC<Inertia.Pages.Admin.Companies.Edit> = ({
     const handleDelete = () => {
         setIsDeleting(true);
         router.delete(
-            `/admin/exhibitions/${exhibition.id}/companies/${company.id}`,
+            `/admin/${exhibition.id}/companies/${company.id}`,
             {
                 onSuccess: () => toast.success('Компания успешно удалена'),
                 onError: () => {
@@ -69,7 +69,7 @@ const Edit: FC<Inertia.Pages.Admin.Companies.Edit> = ({
             <div className="mx-auto w-full max-w-250">
                 <div className="mb-8 flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
                     <CopyLinkBtn
-                        url={`${window.location.origin}/exhibitions/${exhibition.id}/companies/${company.id}`}
+                        url={`${window.location.origin}/${exhibition.id}/companies/${company.id}`}
                     />
 
                     <DeleteAlertDialog

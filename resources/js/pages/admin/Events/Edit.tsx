@@ -13,7 +13,7 @@ import {
     destroy,
     index,
     update,
-} from '@/wayfinder/routes/admin/exhibitions/events';
+} from '@/wayfinder/routes/admin/events';
 import { Inertia } from '@/wayfinder/types';
 import { router, useForm } from '@inertiajs/react';
 import { Trash2 } from 'lucide-react';
@@ -78,7 +78,7 @@ const Edit: FC<Inertia.Pages.Admin.Events.Edit> = ({
 
             <div className="mb-8 flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
                 <CopyLinkBtn
-                    url={`${window.location.origin}/exhibitions/${exhibition.id}/events/${event.id}`}
+                    url={`${window.location.origin}/${exhibition.id}/events/${event.id}`}
                 />
 
                 <DeleteAlertDialog

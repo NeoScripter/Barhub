@@ -7,7 +7,7 @@ import { Pencil } from 'lucide-react';
 import { FC } from 'react';
 import {
     edit,
-} from '@/wayfinder/routes/admin/exhibitions/info-items';
+} from '@/wayfinder/routes/admin/info-items';
 import Image from '@/components/ui/Image';
 
 

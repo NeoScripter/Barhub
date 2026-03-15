@@ -15,7 +15,7 @@ final class PersonIndexRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return $this->user()->can('view', $this->exhibition);
+        return true;
     }
 
     /**

@@ -1,7 +1,0 @@
-
-  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Admin\Exponent\ExponentAssignmentTest[39m
-  [32;1m✓[39;22m[90m [39m[37mExponent Assignment Test[39m[90m → it allows super-admin to assign and revoke exponent status[39m                                      [90m2.45s[39m  
-
-  [90mTests:[39m    [32;1m1 passed[39;22m[90m (9 assertions)[39m
-  [90mDuration:[39m [39m2.95s[39m
-

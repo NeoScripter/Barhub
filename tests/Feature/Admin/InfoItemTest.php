@@ -15,7 +15,7 @@ describe('Admin Info Item Permission Test', function (): void {
     beforeEach(function (): void {
         $this->exhibition = Exhibition::factory()->create();
         $this->infoItem = InfoItem::factory()->for($this->exhibition)->create();
-        $this->route = "/admin/exhibitions/{$this->exhibition->id}/info-items";
+        $this->route = "/admin/info-items";
         $this->payload = [
             'title' => 'new title',
             'url'   => 'https://example.com',
@@ -221,7 +221,7 @@ describe('Admin Info Item Test', function (): void {
         ]);
         $user->assignRole(UserRole::SUPER_ADMIN);
         $exhibition = Exhibition::factory()->create();
-        $route = "/admin/exhibitions/{$exhibition->id}/info-items";
+        $route = "/admin/info-items";
 
         $image = UploadedFile::fake()->image('photo.jpg');
         $payload = [
@@ -253,7 +253,7 @@ describe('Admin Info Item Test', function (): void {
         ]);
         $user->assignRole(UserRole::SUPER_ADMIN);
         $exhibition = Exhibition::factory()->create();
-        $route = "/admin/exhibitions/{$exhibition->id}/info-items";
+        $route = "/admin/info-items";
 
         $payload = [
             'title' => 'new title',
@@ -281,7 +281,7 @@ describe('Admin Info Item Test', function (): void {
         $user->assignRole(UserRole::SUPER_ADMIN);
         $exhibition = Exhibition::factory()->create();
         $infoItem = InfoItem::factory()->for($exhibition)->create();
-        $route = "/admin/exhibitions/{$exhibition->id}/info-items";
+        $route = "/admin/info-items";
 
         $this->actingAs($user)
             ->get("{$route}/{$infoItem->id}/edit")
@@ -316,7 +316,7 @@ describe('Admin Info Item Test', function (): void {
         $user->assignRole(UserRole::SUPER_ADMIN);
         $exhibition = Exhibition::factory()->create();
         $infoItem = InfoItem::factory()->for($exhibition)->create();
-        $route = "/admin/exhibitions/{$exhibition->id}/info-items";
+        $route = "/admin/info-items";
 
         $image = UploadedFile::fake()->image('new-photo.jpg');
         $payload = [
@@ -341,7 +341,7 @@ describe('Admin Info Item Test', function (): void {
         $user->assignRole(UserRole::SUPER_ADMIN);
         $exhibition = Exhibition::factory()->create();
         $infoItems = InfoItem::factory(3)->for($exhibition)->create();
-        $route = "/admin/exhibitions/{$exhibition->id}/info-items";
+        $route = "/admin/info-items";
 
         $page = visit('/login');
 
@@ -365,7 +365,7 @@ describe('Admin Info Item Test', function (): void {
         ]);
         $user->assignRole(UserRole::SUPER_ADMIN);
         $exhibition = Exhibition::factory()->create();
-        $route = "/admin/exhibitions/{$exhibition->id}/info-items";
+        $route = "/admin/info-items";
 
         $page = visit('/login');
 
@@ -394,7 +394,7 @@ describe('Admin Info Item Test', function (): void {
         ]);
         $user->assignRole(UserRole::SUPER_ADMIN);
         $exhibition = Exhibition::factory()->create();
-        $route = "/admin/exhibitions/{$exhibition->id}/info-items";
+        $route = "/admin/info-items";
 
         $page = visit('/login');
 
@@ -423,7 +423,7 @@ describe('Admin Info Item Test', function (): void {
         ]);
         $user->assignRole(UserRole::SUPER_ADMIN);
         $exhibition = Exhibition::factory()->create();
-        $route = "/admin/exhibitions/{$exhibition->id}/info-items";
+        $route = "/admin/info-items";
 
         $page = visit('/login');
 
@@ -453,7 +453,7 @@ describe('Admin Info Item Test', function (): void {
         $user->assignRole(UserRole::SUPER_ADMIN);
         $exhibition = Exhibition::factory()->create();
         $infoItem = InfoItem::factory()->for($exhibition)->create(['title' => 'Old Title']);
-        $route = "/admin/exhibitions/{$exhibition->id}/info-items";
+        $route = "/admin/info-items";
 
         $page = visit('/login');
 
@@ -491,7 +491,7 @@ describe('Admin Info Item Test', function (): void {
         $user->assignRole(UserRole::SUPER_ADMIN);
         $exhibition = Exhibition::factory()->create();
         $infoItem = InfoItem::factory()->for($exhibition)->create(['title' => 'Old Title']);
-        $route = "/admin/exhibitions/{$exhibition->id}/info-items";
+        $route = "/admin/info-items";
 
         $page = visit('/login');
 
@@ -522,7 +522,7 @@ describe('Admin Info Item Test', function (): void {
         $user->assignRole(UserRole::SUPER_ADMIN);
         $exhibition = Exhibition::factory()->create();
         $infoItem = InfoItem::factory()->for($exhibition)->create(['title' => 'Old Title']);
-        $route = "/admin/exhibitions/{$exhibition->id}/info-items";
+        $route = "/admin/info-items";
 
         $page = visit('/login');
 
@@ -555,7 +555,7 @@ describe('Admin Info Item Test', function (): void {
         $user->assignRole(UserRole::SUPER_ADMIN);
         $exhibition = Exhibition::factory()->create();
         $infoItem = InfoItem::factory()->for($exhibition)->create();
-        $route = "/admin/exhibitions/{$exhibition->id}/info-items";
+        $route = "/admin/info-items";
 
         $image = UploadedFile::fake()->image('photo.jpg');
         $payload = [
@@ -586,7 +586,7 @@ describe('Admin Info Item Test', function (): void {
         $imagePath = Storage::disk('public')->put('info-items/images', $image);
         $infoItem->image()->create(Image::factory()->make(['webp' => $imagePath])->toArray());
 
-        $route = "/admin/exhibitions/{$exhibition->id}/info-items";
+        $route = "/admin/info-items";
 
         $this->actingAs($user)
             ->delete("{$route}/{$infoItem->id}")
@@ -605,7 +605,7 @@ describe('Admin Info Item Test', function (): void {
         $user->assignRole(UserRole::SUPER_ADMIN);
         $exhibition = Exhibition::factory()->create();
         $infoItem = InfoItem::factory()->for($exhibition)->create(['title' => 'To Be Deleted']);
-        $route = "/admin/exhibitions/{$exhibition->id}/info-items";
+        $route = "/admin/info-items";
 
         $page = visit('/login');
 
@@ -640,7 +640,7 @@ describe('Admin Info Item Test', function (): void {
         $infoItem = InfoItem::factory()->for($exhibition)->create(['title' => 'With Image']);
         $infoItem->image()->create(Image::factory()->make()->toArray());
 
-        $route = "/admin/exhibitions/{$exhibition->id}/info-items";
+        $route = "/admin/info-items";
 
         $page = visit('/login');
 

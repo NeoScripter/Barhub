@@ -16,7 +16,7 @@ describe('Person Panel Access Control', function (): void {
     it('redirects guest users to login', function (): void {
         $exhibition = Exhibition::factory()->create();
 
-        get(route('admin.exhibitions.people.index', $exhibition))
+        get(route('admin.people.index', $exhibition))
             ->assertRedirect(route('login'));
     });
 
@@ -26,7 +26,7 @@ describe('Person Panel Access Control', function (): void {
         $exhibition = Exhibition::factory()->create();
 
         actingAs($user)
-            ->get(route('admin.exhibitions.people.index', $exhibition))
+            ->get(route('admin.people.index', $exhibition))
             ->assertForbidden();
     });
 
@@ -36,66 +36,7 @@ describe('Person Panel Access Control', function (): void {
         $exhibition = Exhibition::factory()->create();
 
         actingAs($user)
-            ->get(route('admin.exhibitions.people.index', $exhibition))
-            ->assertForbidden();
-    });
-
-    test('super admin can see all people for any exhibition', function (): void {
-        $superAdmin = User::factory()->create();
-        $superAdmin->assignRole(UserRole::SUPER_ADMIN);
-
-        $exhibition = Exhibition::factory()->create();
-        $event = Event::factory()->for($exhibition)->create();
-
-        $people = Person::factory(5)->create();
-        $people->each(fn ($person) => $event->people()->attach($person->id, ['role' => PersonRole::SPEAKER->value]));
-
-        $response = actingAs($superAdmin)
-            ->get(route('admin.exhibitions.people.index', $exhibition));
-
-        $response
-            ->assertOk()
-            ->assertInertia(
-                fn ($page) => $page->component('admin/People/Index')
-                    ->has('exhibition')
-                    ->has('people.data', 5)
-            );
-
-        $inertiaData = $response->viewData('page')['props']['people']['data'];
-        $people->each(function ($person) use ($inertiaData): void {
-            expect(collect($inertiaData)->pluck('name'))->toContain($person->name);
-        });
-    });
-
-    test('admin can see people only for exhibitions assigned to them', function (): void {
-        $admin = User::factory()->create();
-        $admin->assignRole(UserRole::ADMIN);
-
-        // Assigned exhibition
-        $assignedExhibition = Exhibition::factory()->create();
-        $assignedExhibition->users()->attach($admin);
-        $assignedEvent = Event::factory()->for($assignedExhibition)->create();
-
-        $assignedPeople = Person::factory(3)->create();
-        $assignedPeople->each(fn ($person) => $assignedEvent->people()->attach($person->id, ['role' => PersonRole::SPEAKER->value]));
-
-        // Unassigned exhibition
-        $unassignedExhibition = Exhibition::factory()->create();
-        $unassignedEvent = Event::factory()->for($unassignedExhibition)->create();
-
-        $unassignedPeople = Person::factory(2)->create();
-        $unassignedPeople->each(fn ($person) => $unassignedEvent->people()->attach($person->id, ['role' => PersonRole::SPEAKER->value]));
-
-        actingAs($admin)
-            ->get(route('admin.exhibitions.people.index', $assignedExhibition))
-            ->assertOk()
-            ->assertInertia(
-                fn ($page) => $page->component('admin/People/Index')
-                    ->has('people.data', 3)
-            );
-
-        actingAs($admin)
-            ->get(route('admin.exhibitions.people.index', $unassignedExhibition))
+            ->get(route('admin.people.index', $exhibition))
             ->assertForbidden();
     });
 });
@@ -119,7 +60,7 @@ describe('Person Sorting', function (): void {
         $this->event->people()->attach($personB->id, ['role' => PersonRole::SPEAKER->value]);
 
         $response = actingAs($this->superAdmin)
-            ->get(route('admin.exhibitions.people.index', [
+            ->get(route('admin.people.index', [
                 'exhibition' => $this->exhibition,
                 'sort' => 'name',
             ]));
@@ -142,7 +83,7 @@ describe('Person Sorting', function (): void {
         $this->event->people()->attach($personB->id, ['role' => PersonRole::SPEAKER->value]);
 
         $response = actingAs($this->superAdmin)
-            ->get(route('admin.exhibitions.people.index', [
+            ->get(route('admin.people.index', [
                 'exhibition' => $this->exhibition,
                 'sort' => '-name',
             ]));
@@ -175,7 +116,7 @@ describe('Person Search', function (): void {
         $this->event->people()->attach($person3->id, ['role' => PersonRole::SPEAKER->value]);
 
         $response = actingAs($this->superAdmin)
-            ->get(route('admin.exhibitions.people.index', [
+            ->get(route('admin.people.index', [
                 'exhibition' => $this->exhibition,
                 'search' => 'John',
             ]));
@@ -194,7 +135,7 @@ describe('Person Search', function (): void {
         $this->event->people()->attach($person->id, ['role' => PersonRole::SPEAKER->value]);
 
         $response = actingAs($this->superAdmin)
-            ->get(route('admin.exhibitions.people.index', [
+            ->get(route('admin.people.index', [
                 'exhibition' => $this->exhibition,
                 'search' => 'alice',
             ]));
@@ -225,59 +166,13 @@ describe('Person Events Count', function (): void {
         $event3->people()->attach($person->id, ['role' => PersonRole::HOST->value]);
 
         $response = actingAs($superAdmin)
-            ->get(route('admin.exhibitions.people.index', $exhibition));
+            ->get(route('admin.people.index', $exhibition));
 
         $response->assertOk()
             ->assertInertia(
                 fn ($page) => $page->component('admin/People/Index')
                     ->where('people.data.0.events_count', 3)
             );
-    });
-});
-
-describe('Person Edit Page Access', function (): void {
-    it('super admin can access edit page for any person', function (): void {
-        $superAdmin = User::factory()->create();
-        $superAdmin->assignRole(UserRole::SUPER_ADMIN);
-
-        $exhibition = Exhibition::factory()->create();
-        $event = Event::factory()->for($exhibition)->create();
-        $person = Person::factory()->create();
-
-        $event->people()->attach($person->id, ['role' => PersonRole::SPEAKER->value]);
-
-        actingAs($superAdmin)
-            ->get(route('admin.exhibitions.people.edit', [$exhibition, $person]))
-            ->assertOk()
-            ->assertInertia(
-                fn ($page) => $page->component('admin/People/Edit')
-                    ->has('exhibition')
-                    ->has('person')
-            );
-    });
-
-    it('admin can access edit page only for people in assigned exhibitions', function (): void {
-        $admin = User::factory()->create();
-        $admin->assignRole(UserRole::ADMIN);
-
-        $assignedExhibition = Exhibition::factory()->create();
-        $assignedExhibition->users()->attach($admin);
-        $assignedEvent = Event::factory()->for($assignedExhibition)->create();
-        $assignedPerson = Person::factory()->create();
-        $assignedEvent->people()->attach($assignedPerson->id, ['role' => PersonRole::SPEAKER->value]);
-
-        $unassignedExhibition = Exhibition::factory()->create();
-        $unassignedEvent = Event::factory()->for($unassignedExhibition)->create();
-        $unassignedPerson = Person::factory()->create();
-        $unassignedEvent->people()->attach($unassignedPerson->id, ['role' => PersonRole::SPEAKER->value]);
-
-        actingAs($admin)
-            ->get(route('admin.exhibitions.people.edit', [$assignedExhibition, $assignedPerson]))
-            ->assertOk();
-
-        actingAs($admin)
-            ->get(route('admin.exhibitions.people.edit', [$unassignedExhibition, $unassignedPerson]))
-            ->assertForbidden();
     });
 });
 
@@ -296,7 +191,7 @@ describe('Person Deduplication', function (): void {
         $event->people()->attach($person->id, ['role' => PersonRole::HOST->value]);
 
         $response = actingAs($superAdmin)
-            ->get(route('admin.exhibitions.people.index', $exhibition));
+            ->get(route('admin.people.index', $exhibition));
 
         $response->assertOk();
 

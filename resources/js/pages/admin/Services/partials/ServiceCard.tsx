@@ -5,7 +5,7 @@ import {
     TooltipProvider,
     TooltipTrigger,
 } from '@/components/ui/Tooltip';
-import { edit } from '@/wayfinder/routes/admin/exhibitions/services';
+import { edit } from '@/wayfinder/routes/admin/services';
 import { App, Inertia } from '@/wayfinder/types';
 import { Link, usePage } from '@inertiajs/react';
 import { Pencil } from 'lucide-react';

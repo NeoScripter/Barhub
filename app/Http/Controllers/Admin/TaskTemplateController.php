@@ -11,42 +11,45 @@ use App\Http\Requests\Admin\TaskTemplate\TaskTemplateUpdateRequest;
 use App\Models\Exhibition;
 use App\Models\TaskTemplate;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use Spatie\QueryBuilder\QueryBuilder;
 
 final class TaskTemplateController extends Controller
 {
-    public function index(TaskTemplateIndexRequest $request, Exhibition $exhibition)
+    public function index(TaskTemplateIndexRequest $request)
     {
+        $exhibition = Auth::user()->getActiveExhibition();
+
         $templates = QueryBuilder::for($exhibition->taskTemplates()->select(['title', 'id', 'deadline']))
             ->allowedSorts(['title', 'deadline'])
             ->paginate()
             ->appends($request->query());
 
         return Inertia::render('admin/TaskTemplates/Index', [
-            'exhibition' => $exhibition,
             'templates' => $templates,
         ]);
     }
 
-    public function edit(Exhibition $exhibition, TaskTemplate $taskTemplate)
+    public function edit(TaskTemplate $taskTemplate)
     {
+        Gate::authorize('view', $taskTemplate->exhibition);
+
         return Inertia::render('admin/TaskTemplates/Edit', [
-            'exhibition' => $exhibition,
             'template' => $taskTemplate,
         ]);
     }
 
-    public function create(Exhibition $exhibition)
+    public function create()
     {
-        return Inertia::render('admin/TaskTemplates/Create', [
-            'exhibition' => $exhibition,
-        ]);
+        return Inertia::render('admin/TaskTemplates/Create');
     }
 
-    public function store(TaskTemplateStoreRequest $request, Exhibition $exhibition)
+    public function store(TaskTemplateStoreRequest $request)
     {
+        $exhibition = Auth::user()->getActiveExhibition();
+
         $user = Auth::user();
         $template = $exhibition->taskTemplates()->create([
             ...$request->only(['title', 'description', 'deadline', 'comment', 'file_name']),
@@ -60,13 +63,12 @@ final class TaskTemplateController extends Controller
             ]);
         }
 
-        return to_route('admin.exhibitions.task-templates.index', [
-            'exhibition' => $exhibition,
-        ]);
+        return to_route('admin.task-templates.index');
     }
 
-    public function update(TaskTemplateUpdateRequest $request, Exhibition $exhibition, TaskTemplate $taskTemplate)
+    public function update(TaskTemplateUpdateRequest $request, TaskTemplate $taskTemplate)
     {
+        Gate::authorize('view', $taskTemplate->exhibition);
         $taskTemplate->update($request->only(['title', 'description', 'deadline', 'comment', 'file_name']));
 
         if ($request->hasFile('file_url')) {
@@ -77,17 +79,13 @@ final class TaskTemplateController extends Controller
             $taskTemplate->update(['file_url' => $path]);
         }
 
-        return to_route('admin.exhibitions.task-templates.index', [
-            'exhibition' => $exhibition,
-        ]);
+        return to_route('admin.task-templates.index');
     }
 
-    public function destroy(Exhibition $exhibition, TaskTemplate $taskTemplate)
+    public function destroy(TaskTemplate $taskTemplate)
     {
         $taskTemplate->delete();
 
-        return to_route('admin.exhibitions.task-templates.index', [
-            'exhibition' => $exhibition,
-        ]);
+        return to_route('admin.task-templates.index');
     }
 }
