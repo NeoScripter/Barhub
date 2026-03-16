@@ -935,6 +935,7 @@ describe('Admin Task Template Test', function (): void {
         ]);
         $user->assignRole(UserRole::SUPER_ADMIN);
         $exhibition = Exhibition::factory()->create();
+        $exhibition->taskTemplates()->each(fn($template) => $template->delete());
 
         $date1 = now();
         $date2 = now()->addDay();

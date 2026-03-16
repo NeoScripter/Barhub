@@ -810,6 +810,7 @@ describe('Admin Task Test', function (): void {
         ]);
         $user->assignRole(UserRole::SUPER_ADMIN);
         $exhibition = Exhibition::factory()->create();
+        $exhibition->taskTemplates()->each(fn($template) => $template->delete());
         $company = Company::factory()->for($exhibition)->create();
 
         $date1 = now();
