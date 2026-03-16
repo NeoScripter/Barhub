@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Events\ExhibitionCreated;
 use Database\Factories\ExhibitionFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -14,6 +15,10 @@ final class Exhibition extends Model
 {
     /** @use HasFactory<ExhibitionFactory> */
     use HasFactory;
+
+    protected $dispatchesEvents = [
+        'created' => ExhibitionCreated::class,
+    ];
 
     public function users(): BelongsToMany
     {

@@ -376,11 +376,11 @@ describe('Event Create', function (): void {
         Person::factory(10)->create();
 
         actingAs($this->superAdmin)
-            ->get(route('admin.events.create'))
+            ->get(route('admin.events.create', $this->exhibition))
             ->assertOk()
             ->assertInertia(
                 fn($page) => $page
-                    ->where('stages', fn($stages): bool => count($stages) === 3)
+                    ->where('stages', fn($stages): bool => count($stages) === 4)
                     ->where('themes', fn($themes): bool => count($themes) === 5)
                     ->where('availablePeople', fn($people): bool => count($people) === 10)
                     ->where('roles', fn($roles): bool => count($roles) === 5)

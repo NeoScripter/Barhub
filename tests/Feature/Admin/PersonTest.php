@@ -551,11 +551,11 @@ describe('Person Destroy', function (): void {
         $event->people()->attach($person1, ['role' => 1]);
 
         actingAs($admin)
-            ->delete(route('admin.people.destroy', [$assignedExhibition, $person1]))
+            ->delete(route('admin.people.destroy', [$person1]))
             ->assertRedirect();
 
         actingAs($admin)
-            ->delete(route('admin.people.destroy', [$assignedExhibition, $person2]))
+            ->delete(route('admin.people.destroy', [$person2]))
             ->assertForbidden();
 
         assertDatabaseMissing('people', ['id' => $person1->id]);

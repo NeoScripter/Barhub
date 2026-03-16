@@ -572,7 +572,7 @@ describe('Admin Info Item Test', function (): void {
     });
 
     it('deletes an image file when the info item is deleted', function (): void {
-        Storage::fake('local');
+        Storage::fake('public');
 
         $user = User::factory()->create([
             'email'    => 'super-admin@gmail.com',

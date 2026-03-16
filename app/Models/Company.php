@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Events\CompanyCreated;
 use App\Traits\HasFilterSearch;
 use Database\Factories\CompanyFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -20,6 +21,10 @@ final class Company extends Model
     use HasFilterSearch;
 
     protected $with = ['logo'];
+
+    protected $dispatchesEvents = [
+        'created' => CompanyCreated::class,
+    ];
 
     public function images()
     {

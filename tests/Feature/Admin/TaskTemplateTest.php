@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use App\Enums\UserRole;
+use App\Models\Company;
 use App\Models\Exhibition;
 use App\Models\TaskTemplate;
 use App\Models\User;
@@ -10,6 +11,8 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Testing\AssertableInertia;
+
+use function Pest\Laravel\assertDatabaseCount;
 
 describe('Admin Task Template Permission Test', function (): void {
     beforeEach(function (): void {
@@ -213,13 +216,61 @@ describe('Admin Task Template Permission Test', function (): void {
 
 
 describe('Admin Task Template Test', function (): void {
-    it('creates a list of new tasks for this exhibition when a new exponent is created based on the current task templates', function (): void {})->todo();
+    it('creates a list of new tasks for this exhibition when a new exponent is created based on the current task templates', function (): void {
+        assertDatabaseCount('task_templates', 0);
 
-    it('it does not create a list of tasks based on templates more than one time for the same exponent even after they were downgraded', function (): void {})->todo();
+        $exhibition = Exhibition::factory()->create();
+        TaskTemplate::factory(4)->for($exhibition)->create();
 
-    it('has a default task template that requires each new exponent to fill in the information about their company', function (): void {})->todo();
+        assertDatabaseCount('task_templates', 5);
+        assertDatabaseCount('tasks', 0);
 
-    it('deletes a file in the storage after the model is deleted', function (): void {})->todo();
+        Company::factory()->for($exhibition)->create();
+
+        assertDatabaseCount('tasks', 5);
+    });
+
+    it('has a default task template that requires each new exponent to fill in the information about their company', function (): void {
+        assertDatabaseCount('task_templates', 0);
+
+        $exhibitions = Exhibition::factory(3)->create();
+
+        assertDatabaseCount('task_templates', $exhibitions->count());
+
+        $exhibitions->each(function ($exhibition) {
+            Company::factory()->for($exhibition)->create();
+        });
+
+        assertDatabaseCount('tasks', $exhibitions->count());
+    });
+
+    it('deletes a file in the storage after the model is deleted', function (): void {
+        Storage::fake('local');
+
+        $user = User::factory()->create([
+            'email'    => 'super-admin@gmail.com',
+            'password' => 'password',
+        ]);
+        $user->assignRole(UserRole::SUPER_ADMIN);
+        $exhibition = Exhibition::factory()->create();
+
+        $file = UploadedFile::fake()->create('document.pdf', 100);
+        $filePath = Storage::put('task-template-files', $file);
+
+        $task = TaskTemplate::factory()->for($exhibition)->create([
+            'file_url'  => $filePath,
+            'file_name' => 'document.pdf',
+        ]);
+
+        Storage::assertExists($filePath);
+
+        $this->actingAs($user)
+            ->delete("/admin/task-templates/{$task->id}")
+            ->assertRedirect('/admin/task-templates');
+
+        $this->assertDatabaseMissing('task_templates', ['id' => $task->id]);
+        Storage::assertMissing($filePath);
+    });
 
     it('displays the filename of the comment file and the comment comment in the task edit form when a task has a file', function (): void {
         Storage::fake('local');

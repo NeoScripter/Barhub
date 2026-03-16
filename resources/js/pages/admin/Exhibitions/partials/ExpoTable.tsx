@@ -3,8 +3,7 @@ import Table from '@/components/ui/Table';
 import { formatDateShort } from '@/lib/utils';
 import { NodeProps } from '@/types/shared';
 import AdminController from '@/wayfinder/App/Http/Controllers/Admin/AdminController';
-import { index } from '@/wayfinder/routes/admin/admins';
-import { edit, show } from '@/wayfinder/routes/admin/exhibitions';
+import { edit } from '@/wayfinder/routes/admin/exhibitions';
 import { App } from '@/wayfinder/types';
 import { Link } from '@inertiajs/react';
 import { PencilLine, Shield } from 'lucide-react';
@@ -29,10 +28,6 @@ const ExpoTable: FC<
                         width={2}
                         className="relative"
                     >
-                        <Link
-                            href={show({ id: expo.id })}
-                            className="absolute inset-0 block"
-                        />
                         {expo.name}
                     </Table.Cell>
                     <Table.Cell

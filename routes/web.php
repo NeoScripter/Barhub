@@ -53,7 +53,8 @@ Route::prefix('/admin')
         Route::get('/links', LinkController::class)->name('public_links');
 
         Route::resource('exhibitions', AdminExhibitionController::class)
-            ->middleware(['role:' . UserRole::SUPER_ADMIN->value]);
+            ->middleware(['role:' . UserRole::SUPER_ADMIN->value])
+            ->except('show');
 
         Route::resource('themes', ThemeController::class)->only(['store', 'destroy']);
         Route::resource('stages', StageController::class)->only(['store', 'destroy']);
