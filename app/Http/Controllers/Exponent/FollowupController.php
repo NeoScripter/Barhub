@@ -31,16 +31,7 @@ final class FollowupController extends Controller
         ]);
     }
 
-    public function edit(Followup $followup)
-    {
-        $followup->load(['service.company:public_name,id', 'user:name,id']);
-
-        return Inertia::render('exponent/Followups/Edit', [
-            'followup' => $followup,
-        ]);
-    }
-
-    public function update(Followup $followup)
+    public function store()
     {
         abort_if($followup->status !== FollowupStatus::IMCOMPLETE, 403);
         $followup->update(['status' => FollowupStatus::COMPLETED]);

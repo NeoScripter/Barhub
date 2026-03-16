@@ -16,8 +16,10 @@ use Inertia\Inertia;
 
 final class CompanyController extends Controller
 {
-    public function show(Company $company)
+    public function index()
     {
+        $company = Auth::user()->company();
+        abort_unless($company, 404, 'Компания не найдена');
         $company->load(['tags']);
 
         return Inertia::render('exponent/Companies/Edit', [
@@ -64,7 +66,7 @@ final class CompanyController extends Controller
             }
         });
 
-        return to_route('exponent.companies.index')
+        return to_route('exponent.companies.show')
             ->with('success', 'Компания успешно обновлена');
     }
 }

@@ -2,6 +2,9 @@ import AdminDash from '@/wayfinder/App/Http/Controllers/Admin/DashboardControlle
 import AdminExpos from '@/wayfinder/App/Http/Controllers/Admin/ExhibitionController';
 import LinkController from '@/wayfinder/App/Http/Controllers/Admin/LinkController';
 import ExponentDash from '@/wayfinder/App/Http/Controllers/Exponent/DashboardController';
+import ExponentCompany from '@/wayfinder/App/Http/Controllers/Exponent/CompanyController';
+import ExponentFollowups from '@/wayfinder/App/Http/Controllers/Exponent/FollowupController';
+import ExponentInfoItems from '@/wayfinder/App/Http/Controllers/Exponent/InfoItemController';
 import UserExpos from '@/wayfinder/App/Http/Controllers/User/ExhibitionController';
 import { index as expoIndex } from '@/wayfinder/routes/admin/events';
 import { index as personIndex } from '@/wayfinder/routes/admin/people';
@@ -28,7 +31,6 @@ type NavLink = {
     label: string;
     url: string;
     type: 'link';
-    isDynamic: boolean;
 };
 
 export type NavDrawerType = {
@@ -37,7 +39,6 @@ export type NavDrawerType = {
     icon: LucideIcon;
     type: 'drawer';
     links: Omit<NavLink, 'icon'>[];
-    isDynamic: boolean;
 };
 
 export type NavItemType = NavLink | NavDrawerType;
@@ -49,7 +50,6 @@ export const adminNavItems: NavItemType[] = [
         label: 'Главная',
         url: AdminDash.index().url,
         icon: House,
-        isDynamic: false,
     },
     {
         id: 'program-events',
@@ -57,7 +57,6 @@ export const adminNavItems: NavItemType[] = [
         label: 'События программы',
         url: expoIndex.url(),
         icon: CalendarDays,
-        isDynamic: true,
     },
     {
         id: 'people',
@@ -65,7 +64,6 @@ export const adminNavItems: NavItemType[] = [
         label: 'Люди',
         url: personIndex.url(),
         icon: UserCheck,
-        isDynamic: true,
     },
     {
         id: 'companies',
@@ -73,42 +71,36 @@ export const adminNavItems: NavItemType[] = [
         label: 'Компании',
         url: '/admin/companies',
         icon: BriefcaseBusiness,
-        isDynamic: true,
     },
     {
         id: 'partners-work',
         type: 'drawer',
         label: 'Работа с партнерами',
         icon: Star,
-        isDynamic: true,
         links: [
             {
                 id: 'all-tasks',
                 type: 'link',
                 label: 'Задачи на проверке',
                 url: '/admin/all-tasks',
-                isDynamic: true,
             },
             {
                 id: 'task-templates',
                 type: 'link',
                 label: 'Общие задачи',
                 url: '/admin/task-templates',
-                isDynamic: true,
             },
             {
                 id: 'followups',
                 type: 'link',
                 label: 'Услуги',
                 url: '/admin/followups',
-                isDynamic: true,
             },
             {
                 id: 'info-items',
                 type: 'link',
                 label: 'Информация и материалы',
                 url: '/admin/info-items',
-                isDynamic: true,
             },
         ],
     },
@@ -118,7 +110,6 @@ export const adminNavItems: NavItemType[] = [
         label: 'Выставки',
         url: AdminExpos.index.url(),
         icon: Martini,
-        isDynamic: false,
     },
     {
         id: 'public links',
@@ -126,7 +117,6 @@ export const adminNavItems: NavItemType[] = [
         label: 'Публичные ссылки',
         url: LinkController.url(),
         icon: CreditCard,
-        isDynamic: false,
     },
 ];
 
@@ -137,31 +127,27 @@ export const exponentNavItems: NavItemType[] = [
         label: 'Главная',
         url: ExponentDash.url(),
         icon: House,
-        isDynamic: false,
     },
     {
         id: 'companies',
         type: 'link',
-        label: 'Задачи',
-        url: '/',
+        label: 'Данные о компании',
+        url: ExponentCompany.index().url,
         icon: BriefcaseBusiness,
-        isDynamic: false,
     },
     {
         id: 'services',
         type: 'link',
         label: 'Услуги',
-        url: '/',
+        url: ExponentFollowups.index().url,
         icon: LayoutDashboard,
-        isDynamic: false,
     },
     {
         id: 'materials',
         type: 'link',
         label: 'Информация и материалы',
-        url: '/',
+        url: ExponentInfoItems.index().url,
         icon: ListChecks,
-        isDynamic: false,
     },
 ];
 
@@ -172,7 +158,6 @@ export const userNavItems: NavItemType[] = [
         label: 'Выставки',
         url: UserExpos.url(),
         icon: Martini,
-        isDynamic: false,
     },
     {
         id: 'admin-panel',
@@ -180,7 +165,6 @@ export const userNavItems: NavItemType[] = [
         label: 'Админка руководителя',
         url: AdminDash.index().url,
         icon: UserPen,
-        isDynamic: false,
     },
     {
         id: 'admin-panel',
@@ -188,7 +172,6 @@ export const userNavItems: NavItemType[] = [
         label: 'Личный кабинет экспонента',
         url: ExponentDash.url(),
         icon: UserSearch,
-        isDynamic: false,
     },
     {
         id: 'people',
@@ -196,7 +179,6 @@ export const userNavItems: NavItemType[] = [
         label: 'Спикеры и организаторы',
         url: '/',
         icon: Users,
-        isDynamic: false,
     },
     {
         id: 'services',
@@ -204,7 +186,6 @@ export const userNavItems: NavItemType[] = [
         label: 'Партнеры и экспоненты',
         url: '/',
         icon: Handshake,
-        isDynamic: false,
     },
 ];
 

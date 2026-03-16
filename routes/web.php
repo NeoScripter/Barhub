@@ -20,6 +20,7 @@ use App\Http\Controllers\Admin\TagController;
 use App\Http\Controllers\Admin\TaskController as AdminTaskController;
 use App\Http\Controllers\Admin\TaskTemplateController;
 use App\Http\Controllers\Admin\ThemeController;
+use App\Http\Controllers\Exponent\FollowupController as ExponentFollowupController;
 use App\Http\Controllers\Exponent\InfoItemController as ExponentInfoItemController;
 use App\Http\Controllers\Exponent\CompanyController as ExponentCompanyController;
 use App\Http\Controllers\Exponent\DashboardController as ExponentDashboardController;
@@ -45,8 +46,8 @@ Route::prefix('/exponent')
     ])
     ->group(function (): void {
         Route::get('/dashboard', ExponentDashboardController::class)->name('dashboard');
-        Route::resource('followups', ExponentDashboardController::class);
-        Route::resource('info-items', ExponentInfoItemController::class)->only('index');
+        Route::resource('followups', ExponentFollowupController::class)->only(['index', 'store']);
+        Route::resource('info-items', ExponentInfoItemController::class)->only(['index']);
         Route::resource('companies', ExponentCompanyController::class)->only(['index', 'edit', 'update']);
     });
 
