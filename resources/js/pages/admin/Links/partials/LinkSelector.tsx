@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui/Button';
 import { SelectMenu } from '@/components/ui/SelectMenu';
 import { useClipboard } from '@/hooks/useClipboard';
-import { FC, useEffect, useState } from 'react';
+import { FC, useState } from 'react';
 import { toast } from 'sonner';
 
 export type LinkOptionType = {
@@ -15,7 +15,7 @@ const LinkSelector: FC<{
     label: string;
 }> = ({ options, setter, label }) => {
     const [selected, setSelected] = useState<string | null>(null);
-    const [copiedText, copy] = useClipboard();
+    const [, copy] = useClipboard();
 
     const handleClick = () => {
         if (!selected) {
@@ -23,15 +23,13 @@ const LinkSelector: FC<{
             return;
         }
 
-        copy(window.location.hostname + setter(Number(selected)));
+        const res = copy(window.location.hostname + setter(Number(selected)));
 
-        // TODO: Make proper error handling
-        // if (!copiedText) {
-        //     toast.error('Ошибка копирования ссылки');
-        //     return;
-        // }
-
-        toast.success('Ссылка успешно скопирована!');
+        if (!res) {
+            toast.error('Ошибка копирования ссылки');
+        } else {
+            toast.success('Ссылка успешно скопирована!');
+        }
     };
 
     return (

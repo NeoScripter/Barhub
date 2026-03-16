@@ -77,6 +77,7 @@ describe('Admin Partner Browser Tests', function (): void {
         ]);
         $user->assignRole(UserRole::SUPER_ADMIN);
         $exhibition = Exhibition::factory()->create();
+        $exhibition->taskTemplates()->each(fn($template) => $template->delete());
         $company = Company::factory()->for($exhibition)
             ->has(Task::factory()->state(['status' => TaskStatus::TO_BE_VERIFIED]))
             ->create();
@@ -111,6 +112,7 @@ describe('Admin Partner Browser Tests', function (): void {
         ]);
         $user->assignRole(UserRole::SUPER_ADMIN);
         $exhibition = Exhibition::factory()->create();
+        $exhibition->taskTemplates()->each(fn($template) => $template->delete());
         $company = Company::factory()->for($exhibition)
             ->has(Task::factory()->state(['status' => TaskStatus::TO_BE_VERIFIED]))
             ->create();
@@ -180,6 +182,9 @@ describe('Admin Partner Feature Tests', function (): void {
         ]);
         $this->superAdmin->assignRole(UserRole::SUPER_ADMIN);
         $this->exhibition = Exhibition::factory()->create();
+        $this->exhibition->taskTemplates()->each(function ($template) {
+            $template->delete();
+        });
         $this->route = "/admin/all-tasks";
     });
 
@@ -375,7 +380,7 @@ describe('Admin Partner Feature Tests', function (): void {
             ->get("$route/$task->id/edit")
             ->assertOk()
             ->assertInertia(
-                fn (AssertableInertia $page): AssertableInertia => $page
+                fn(AssertableInertia $page): AssertableInertia => $page
                     ->component('admin/Partners/Edit')
                     ->has('task.comments', 3)
             )
@@ -399,7 +404,7 @@ describe('Admin Partner Feature Tests', function (): void {
             ->create();
 
         $this->actingAs($this->superAdmin)
-            ->patch($this->route."/$task->id", ['is_accepted' => true])
+            ->patch($this->route . "/$task->id", ['is_accepted' => true])
             ->assertRedirect($this->route);
 
         $this->assertDatabaseHas('tasks', [
@@ -415,28 +420,28 @@ describe('Admin Partner Feature Tests', function (): void {
             ->create();
 
         $this->actingAs($this->superAdmin)
-            ->patch($this->route."/$task->id", ['is_accepted' => true])
+            ->patch($this->route . "/$task->id", ['is_accepted' => true])
             ->assertForbidden();
 
         $task->update(['status' => TaskStatus::DELAYED->value]);
         $task = $task->refresh();
 
         $this->actingAs($this->superAdmin)
-            ->patch($this->route."/$task->id", ['is_accepted' => true])
+            ->patch($this->route . "/$task->id", ['is_accepted' => true])
             ->assertForbidden();
 
         $task->update(['status' => TaskStatus::TO_BE_COMPLETED->value]);
         $task = $task->refresh();
 
         $this->actingAs($this->superAdmin)
-            ->patch($this->route."/$task->id", ['is_accepted' => true])
+            ->patch($this->route . "/$task->id", ['is_accepted' => true])
             ->assertForbidden();
 
         $task->update(['status' => TaskStatus::COMPLETED->value]);
         $task = $task->refresh();
 
         $this->actingAs($this->superAdmin)
-            ->patch($this->route."/$task->id", ['is_accepted' => false])
+            ->patch($this->route . "/$task->id", ['is_accepted' => false])
             ->assertForbidden();
     });
 
@@ -468,7 +473,7 @@ describe('Admin Partner Feature Tests', function (): void {
             ->create();
 
         $this->actingAs($admin)
-            ->patch($this->route."/$task->id", ['is_accepted' => true])
+            ->patch($this->route . "/$task->id", ['is_accepted' => true])
             ->assertForbidden();
 
         $this->assertDatabaseHas('tasks', [
@@ -495,7 +500,7 @@ describe('Admin Partner Feature Tests', function (): void {
             ->create();
 
         $this->actingAs($exponent)
-            ->patch($this->route."/$task->id", ['is_accepted' => true])
+            ->patch($this->route . "/$task->id", ['is_accepted' => true])
             ->assertForbidden();
 
         $this->assertDatabaseHas('tasks', [
@@ -522,7 +527,7 @@ describe('Admin Partner Feature Tests', function (): void {
             ->create();
 
         $this->actingAs($user)
-            ->patch($this->route."/$task->id", ['is_accepted' => true])
+            ->patch($this->route . "/$task->id", ['is_accepted' => true])
             ->assertForbidden();
 
         $this->assertDatabaseHas('tasks', [
@@ -542,7 +547,7 @@ describe('Admin Partner Feature Tests', function (): void {
             ->for($company)
             ->create();
 
-        $this->patch($this->route."/$task->id", ['is_accepted' => true])
+        $this->patch($this->route . "/$task->id", ['is_accepted' => true])
             ->assertRedirect('/login');
 
         $this->assertDatabaseHas('tasks', [
@@ -584,7 +589,7 @@ describe('Admin Partner Feature Tests', function (): void {
         $tasks = $response->viewData('page')['props']['tasks']['data'];
 
         expect($tasks)->toHaveCount(4)
-            ->and($tasks)->each(fn ($task) => $task->status->not->toBe(TaskStatus::COMPLETED->label()));
+            ->and($tasks)->each(fn($task) => $task->status->not->toBe(TaskStatus::COMPLETED->label()));
     });
 
     it('displays the correct number of tasks in each category', function (): void {
