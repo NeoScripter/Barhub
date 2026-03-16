@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\Exponent;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Company\CompanyDestroyRequest;
@@ -10,6 +10,7 @@ use App\Http\Requests\Admin\Company\CompanyIndexRequest;
 use App\Http\Requests\Admin\Company\CompanyStoreRequest;
 use App\Http\Requests\Admin\Company\CompanyUpdateRequest;
 use App\Models\Company;
+use App\Models\Image;
 use App\Models\Tag;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Arr;
@@ -56,12 +57,23 @@ final class CompanyController extends Controller
             $validated = $request->validated();
 
             $company = Company::query()->create([
-                ...Arr::except($validated, ['tags']),
+                ...Arr::except($validated, ['tags', 'logo']),
                 'exhibition_id' => $exhibition->id,
             ]);
 
             if ($request->filled('tags')) {
                 $company->tags()->sync($request->input('tags'));
+            }
+
+            if ($request->hasFile('logo')) {
+                Image::attachToModel(
+                    $company,
+                    $request->file('logo'),
+                    'logo',
+                    'companies/logos',
+                    400,
+                    $company->public_name,
+                );
             }
         });
 
@@ -85,10 +97,30 @@ final class CompanyController extends Controller
     {
         DB::transaction(function () use ($request, $company): void {
             $validated = $request->validated();
-            $company->update(Arr::except($validated, ['tags']));
+            $company->update(Arr::except($validated, ['tags', 'logo']));
 
             if ($request->has('tags')) {
                 $company->tags()->sync($request->input('tags', []));
+            }
+
+            if ($request->hasFile('logo')) {
+                if ($company->logo) {
+                    $company->logo->updateImage(
+                        $request->file('logo'),
+                        $company->public_name,
+                        'companies/logos',
+                        400
+                    );
+                } else {
+                    Image::attachToModel(
+                        $company,
+                        $request->file('logo'),
+                        'logo',
+                        'companies/logos',
+                        400,
+                        $company->public_name,
+                    );
+                }
             }
         });
 

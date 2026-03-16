@@ -17,7 +17,7 @@ const RadioCheckbox: FC<Props> = ({ className, label, value, onChange }) => {
             onChange={onChange}
             className={cn('', className)}
         >
-            {label && <Label className="block mb-4">{label}</Label>}
+            {label && <Label className="mb-4 block font-medium">{label}</Label>}
             <span className="flex items-center gap-6">
                 {[true, false].map((option) => (
                     <Field
