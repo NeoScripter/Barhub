@@ -7,6 +7,7 @@ namespace App\Http\Controllers\Admin;
 use App\Actions\FormatEventPeople;
 use App\Enums\PersonRole;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\Event\EventDestroyRequest;
 use App\Http\Requests\Admin\Event\EventIndexRequest;
 use App\Http\Requests\Admin\Event\EventStoreRequest;
 use App\Http\Requests\Admin\Event\EventUpdateRequest;
@@ -146,7 +147,7 @@ final class EventController extends Controller
             ->with('success', 'Событие успешно создано');
     }
 
-    public function destroy(Event $event)
+    public function destroy(EventDestroyRequest $request, Event $event)
     {
         $event->delete();
 

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\Person\PersonDeleteRequest;
 use App\Http\Requests\Admin\Person\PersonIndexRequest;
 use App\Http\Requests\Admin\Person\PersonStoreRequest;
 use App\Http\Requests\Admin\Person\PersonUpdateRequest;
@@ -155,7 +156,7 @@ final class PersonController extends Controller
             ->with('success', 'Участник успешно обновлен');
     }
 
-    public function destroy(Person $person)
+    public function destroy(PersonDeleteRequest $request, Person $person)
     {
         $person->avatar?->delete();
         $person->logo?->delete();
