@@ -16,7 +16,39 @@ use Inertia\Testing\AssertableInertia;
 
 describe('Admin Task Test', function (): void {
 
-    it('deletes all the files in the storage after the model is deleted', function (): void {})->todo();
+    it('deletes all the files in the storage after the model is deleted', function (): void {
+        Storage::fake('public');
+
+        $user = User::factory()->create([
+            'email' => 'super-admin@gmail.com',
+            'password' => 'password',
+        ]);
+        $user->assignRole(UserRole::SUPER_ADMIN);
+        $exhibition = Exhibition::factory()->create();
+        $company = Company::factory()->for($exhibition)->create();
+        $task = Task::factory()->for($company)->create();
+        $route = "/admin/companies/{$company->id}/tasks";
+
+        $comment = $task->comments()->create([
+            'content' => 'new content',
+            'user_id' => $user->id,
+        ]);
+
+        $comment->file()->create([
+            'name' => 'document.pdf',
+            'url' => Storage::fake('public')->put('task-files', UploadedFile::fake()->create('document.pdf', 100)),
+        ]);
+
+        $url = $comment->file->url;
+
+        $this->actingAs($user)
+            ->delete($route . "/{$task->id}")
+            ->assertRedirect($route);
+
+        $this->assertDatabaseMissing('task_comments', ['id' => $comment->id]);
+        $this->assertDatabaseMissing('tasks', ['id' => $task->id]);
+        Storage::assertMissing($url);
+    });
 
     it('displays the newest comment for the current user when editing the task', function (): void {
 
@@ -100,7 +132,7 @@ describe('Admin Task Test', function (): void {
             ->assertSee('Редактировать задачу')
             ->assertSee('document.pdf')
             ->fill('comment', 'new content 2')
-            ->fill('deadline', now()->addYear()->format('Y').'-03-20T12:02')
+            ->fill('deadline', now()->addYear()->format('Y') . '-03-20T12:02')
             ->submit()
             ->click("@edit-task-{$task->id}")
             ->assertSee('new content 2');
@@ -120,23 +152,23 @@ describe('Admin Task Test', function (): void {
         $route = "/admin/companies/{$company->id}/tasks";
 
         $this->actingAs($user)
-            ->get($route."/{$task->id}/edit")
+            ->get($route . "/{$task->id}/edit")
             ->assertInertia(
-                fn (AssertableInertia $page): AssertableInertia => $page->component('admin/Tasks/Edit')
+                fn(AssertableInertia $page): AssertableInertia => $page->component('admin/Tasks/Edit')
             );
 
         $file = UploadedFile::fake()->create('document.pdf', 100);
         $payload = [
             'title' => 'new title',
             'description' => generateTextWithChars(50),
-            'deadline' => now()->addYear()->format('Y').'-03-20T12:02',
+            'deadline' => now()->addYear()->format('Y') . '-03-20T12:02',
             'comment' => 'new comment',
             'file' => $file,
             'file_name' => 'document.pdf',
         ];
 
         $this->actingAs($user)
-            ->put($route."/{$task->id}", $payload)
+            ->put($route . "/{$task->id}", $payload)
             ->assertRedirect($route);
 
         $this->assertDatabaseHas('tasks', [
@@ -172,7 +204,7 @@ describe('Admin Task Test', function (): void {
         $payload = [
             'title' => 'new title',
             'description' => generateTextWithChars(50),
-            'deadline' => now()->addYear()->format('Y').'-03-20T12:02',
+            'deadline' => now()->addYear()->format('Y') . '-03-20T12:02',
             'comment' => 'new comment',
             'file' => $file,
             'file_name' => 'document.pdf',
@@ -216,7 +248,7 @@ describe('Admin Task Test', function (): void {
         $payload = [
             'title' => 'new title',
             'description' => generateTextWithChars(50),
-            'deadline' => now()->addYear()->format('Y').'-03-20T12:02',
+            'deadline' => now()->addYear()->format('Y') . '-03-20T12:02',
             'file' => $file,
             'file_name' => 'file name',
         ];
@@ -245,20 +277,20 @@ describe('Admin Task Test', function (): void {
         $route = "/admin/companies/{$company->id}/tasks";
 
         $this->actingAs($user)
-            ->get($route."/{$task->id}/edit")
+            ->get($route . "/{$task->id}/edit")
             ->assertInertia(
-                fn (AssertableInertia $page): AssertableInertia => $page->component('admin/Tasks/Edit')
+                fn(AssertableInertia $page): AssertableInertia => $page->component('admin/Tasks/Edit')
             );
 
         $payload = [
             'title' => 'new title',
             'description' => generateTextWithChars(50),
-            'deadline' => now()->addYear()->format('Y').'-03-20T12:02',
+            'deadline' => now()->addYear()->format('Y') . '-03-20T12:02',
             'comment' => 'new comment',
         ];
 
         $this->actingAs($user)
-            ->put($route."/{$task->id}", $payload)
+            ->put($route . "/{$task->id}", $payload)
             ->assertRedirect($route);
 
         $this->assertDatabaseHas('tasks', [
@@ -286,19 +318,19 @@ describe('Admin Task Test', function (): void {
         $route = "/admin/companies/{$company->id}/tasks";
 
         $this->actingAs($user)
-            ->get($route."/{$task->id}/edit")
+            ->get($route . "/{$task->id}/edit")
             ->assertInertia(
-                fn (AssertableInertia $page): AssertableInertia => $page->component('admin/Tasks/Edit')
+                fn(AssertableInertia $page): AssertableInertia => $page->component('admin/Tasks/Edit')
             );
 
         $payload = [
             'title' => generateTextWithChars(50),
             'description' => generateTextWithChars(50),
-            'deadline' => now()->addYear()->format('Y').'-03-20T12:02',
+            'deadline' => now()->addYear()->format('Y') . '-03-20T12:02',
         ];
 
         $this->actingAs($user)
-            ->put($route."/{$task->id}", $payload)
+            ->put($route . "/{$task->id}", $payload)
             ->assertRedirect($route);
 
         $this->assertDatabaseHas('tasks', [
@@ -390,7 +422,7 @@ describe('Admin Task Test', function (): void {
             ->assertSee('Название')
             ->fill('title', generateTextWithChars(50))
             ->fill('description', generateTextWithChars(3))
-            ->fill('deadline', now()->addYear()->format('Y').'-03-20T12:02')
+            ->fill('deadline', now()->addYear()->format('Y') . '-03-20T12:02')
             ->submit()
             ->assertSee('Описание задачи должно содержать не менее 10 символов');
     });
@@ -421,7 +453,7 @@ describe('Admin Task Test', function (): void {
             ->assertSee('Название')
             ->fill('title', generateTextWithChars(50))
             ->fill('description', generateTextWithChars(5004))
-            ->fill('deadline', now()->addYear()->format('Y').'-03-20T12:02')
+            ->fill('deadline', now()->addYear()->format('Y') . '-03-20T12:02')
             ->submit()
             ->assertSee('Описание задачи не должно превышать 5000 символов');
     });
@@ -453,7 +485,7 @@ describe('Admin Task Test', function (): void {
             ->fill('title', generateTextWithChars(50))
             ->fill('description', generateTextWithChars(100))
             ->fill('comment', generateTextWithChars(2005))
-            ->fill('deadline', now()->addYear()->format('Y').'-03-20T12:02')
+            ->fill('deadline', now()->addYear()->format('Y') . '-03-20T12:02')
             ->submit()
             ->assertSee('Комментарий не должен превышать 2000 символов');
     });
@@ -515,7 +547,7 @@ describe('Admin Task Test', function (): void {
             ->assertSee('Название')
             ->fill('title', generateTextWithChars(50))
             ->fill('description', generateTextWithChars(20))
-            ->fill('deadline', now()->addYear()->format('Y').'-03-20T12:02')
+            ->fill('deadline', now()->addYear()->format('Y') . '-03-20T12:02')
             ->fill('comment', generateTextWithChars(100))
             ->submit()
             ->assertPathEndsWith($route);
@@ -547,7 +579,7 @@ describe('Admin Task Test', function (): void {
         $page->navigate($route)
             ->assertSee($company->public_name)
             ->assertSee($task->title)
-            ->click('@edit-task-'.$task->id)
+            ->click('@edit-task-' . $task->id)
             ->assertSee('Название')
             ->clear('title')
             ->fill('title', generateTextWithChars(1103))
@@ -581,7 +613,7 @@ describe('Admin Task Test', function (): void {
         $page->navigate($route)
             ->assertSee($company->public_name)
             ->assertSee($task->title)
-            ->click('@edit-task-'.$task->id)
+            ->click('@edit-task-' . $task->id)
             ->assertSee('Название')
             ->clear('description')
             ->fill('description', generateTextWithChars(3))
@@ -615,7 +647,7 @@ describe('Admin Task Test', function (): void {
         $page->navigate($route)
             ->assertSee($company->public_name)
             ->assertSee($task->title)
-            ->click('@edit-task-'.$task->id)
+            ->click('@edit-task-' . $task->id)
             ->assertSee('Название')
             ->clear('description')
             ->fill('description', generateTextWithChars(15003))
@@ -649,7 +681,7 @@ describe('Admin Task Test', function (): void {
         $page->navigate($route)
             ->assertSee($company->public_name)
             ->assertSee($task->title)
-            ->click('@edit-task-'.$task->id)
+            ->click('@edit-task-' . $task->id)
             ->assertSee('Название')
             ->clear('comment')
             ->fill('comment', generateTextWithChars(2005))
@@ -683,7 +715,7 @@ describe('Admin Task Test', function (): void {
         $page->navigate($route)
             ->assertSee($company->public_name)
             ->assertSee($task->title)
-            ->click('@edit-task-'.$task->id)
+            ->click('@edit-task-' . $task->id)
             ->assertSee('Название')
             ->clear('deadline')
             ->fill('deadline', '2020-03-20T12:02')
@@ -720,7 +752,7 @@ describe('Admin Task Test', function (): void {
         $page->navigate($route)
             ->assertSee($company->public_name)
             ->assertSee($task->title)
-            ->click('@edit-task-'.$task->id)
+            ->click('@edit-task-' . $task->id)
             ->assertSee('Название')
             ->clear('title')
             ->fill('title', $newTitle)
@@ -729,7 +761,7 @@ describe('Admin Task Test', function (): void {
             ->clear('comment')
             ->fill('comment', generateTextWithChars(100))
             ->clear('deadline')
-            ->fill('deadline', now()->addYear()->format('Y').'-03-20T12:02')
+            ->fill('deadline', now()->addYear()->format('Y') . '-03-20T12:02')
             ->submit();
 
         $task = $task->fresh();
@@ -763,7 +795,7 @@ describe('Admin Task Test', function (): void {
         $page->navigate($route)
             ->assertSee($company->public_name)
             ->assertSee($task->title)
-            ->click('@edit-task-'.$task->id)
+            ->click('@edit-task-' . $task->id)
             ->assertSee('Название')
             ->click('@delete-task')
             ->click('@delete-btn')
