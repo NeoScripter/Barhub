@@ -31,12 +31,11 @@ export function useCurrentUrl(): UseCurrentUrlReturn {
         const urlString = toUrl(urlToCheck);
 
         if (!urlString.startsWith('http')) {
-            return urlString === urlToCompare;
+            return urlToCompare.startsWith(urlString);
         }
 
         try {
-            const absoluteUrl = new URL(urlString);
-            return absoluteUrl.pathname === urlToCompare;
+            return urlToCompare.startsWith(urlString);
         } catch {
             return false;
         }
