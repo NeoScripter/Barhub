@@ -11,7 +11,7 @@ import {
 import Image from '@/components/ui/Image';
 
 
-const InfoItemCard: FC<NodeProps<{ item: App.Models.InfoItem}>> = ({
+const InfoItemCard: FC<NodeProps<{ item: App.Models.InfoItem }>> = ({
     className,
     item,
 }) => {

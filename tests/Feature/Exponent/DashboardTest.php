@@ -9,6 +9,9 @@ use function Pest\Laravel\actingAs;
 use function Pest\Laravel\get;
 
 describe('Exponent Dashboard Access Control', function (): void {
+    it('displays only the tasks assigned to the exponent company on the page', function (): void {});
+    it('does not display the tasks with completed and to be vefiried status', function (): void {});
+
     it('redirects guest users to login', function (): void {
         get(route('exponent.dashboard'))
             ->assertRedirect(route('login'));
@@ -22,7 +25,7 @@ describe('Exponent Dashboard Access Control', function (): void {
             'email' => $exponent->email,
             'password' => 'password',
         ])
-            ->assertRedirect(route('exponent.dashboard'));
+        ->assertRedirect(route('exponent.dashboard'));
     });
 
     it('allows EXPONENT role to access exponent dashboard', function (): void {
@@ -33,7 +36,7 @@ describe('Exponent Dashboard Access Control', function (): void {
             ->get(route('exponent.dashboard'))
             ->assertOk()
             ->assertInertia(
-                fn ($page) => $page->component('exponent/Dashboard/Dashboard')
+                fn($page) => $page->component('exponent/Dashboard/Dashboard')
             );
     });
 

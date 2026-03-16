@@ -7,7 +7,6 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\InfoItem\InfoItemStoreRequest;
 use App\Http\Requests\Admin\InfoItem\InfoItemUpdateRequest;
-use App\Models\Exhibition;
 use App\Models\Image;
 use App\Models\InfoItem;
 use Illuminate\Support\Facades\Auth;
@@ -35,7 +34,7 @@ final class InfoItemController extends Controller
         ]);
     }
 
-    public function create(Exhibition $exhibition)
+    public function create()
     {
         return Inertia::render('admin/InfoItems/Create');
     }
