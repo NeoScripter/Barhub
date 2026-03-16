@@ -30,14 +30,14 @@ final class CompanySeeder extends Seeder
         }
 
         $exhibitions->each(
-            fn (Exhibition $exhibition) => Company::factory()
+            fn(Exhibition $exhibition) => Company::factory()
                 ->has(
                     Task::factory()
                         ->count(8)
                         ->has(TaskComment::factory()
                             ->when(
                                 $exhibition->users()->first(),
-                                fn ($factory, $user) => $factory->for($user)
+                                fn($factory, $user) => $factory->for($user)
                             )
                             ->has(TaskFile::factory(), 'file')
                             ->count(random_int(1, 3)), 'comments')
@@ -75,6 +75,15 @@ final class CompanySeeder extends Seeder
                             'service_id' => $service->id,
                         ])->create();
                     });
+
+                    $exponent = User::where('email', 'exponent@gmail.com')->first();
+
+                    if (!$exponent) {
+                        $this->command->error('No exponent is found. Fix your seeder first.');
+                        return;
+                    }
+                    $exponent->company()->associate($company->id);
+                    $exponent->save();
                 })
                 ->create()
         );

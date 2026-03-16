@@ -12,9 +12,9 @@ final class InfoItemController extends Controller
 {
     public function index()
     {
-        $exhibition = Auth::user()->getActiveExhibition();
-        $infoItems = $exhibition->infoItems()
-            ->paginate();
+        $company = Auth::user()->company;
+        abort_unless($company != null, 404, 'Компания не найдена');
+        $infoItems = $company->exhibition->infoItems;
 
         return Inertia::render('exponent/InfoItems/Index', [
             'infoItems' => $infoItems,

@@ -354,7 +354,7 @@ describe('Admin Info Item Test', function (): void {
         $this->assertAuthenticated();
 
         $page->navigate($route);
-        $page->assertSee('Информационные элементы');
+        $page->assertSee('Информация и материалы');
         $page->assertSee($infoItems[0]->title);
     });
 
@@ -378,7 +378,7 @@ describe('Admin Info Item Test', function (): void {
         $this->assertAuthenticated();
 
         $page->navigate($route)
-            ->assertSee('Информационные элементы')
+            ->assertSee('Информация и материалы')
             ->click('@create-info-item')
             ->assertSee('Создать информационный элемент')
             ->fill('title', 'New Info Item')
@@ -407,7 +407,7 @@ describe('Admin Info Item Test', function (): void {
         $this->assertAuthenticated();
 
         $page->navigate($route)
-            ->assertSee('Информационные элементы')
+            ->assertSee('Информация и материалы')
             ->click('@create-info-item')
             ->assertSee('Создать информационный элемент')
             ->fill('title', generateTextWithChars(260))
@@ -436,7 +436,7 @@ describe('Admin Info Item Test', function (): void {
         $this->assertAuthenticated();
 
         $page->navigate($route)
-            ->assertSee('Информационные элементы')
+            ->assertSee('Информация и материалы')
             ->click('@create-info-item')
             ->assertSee('Создать информационный элемент')
             ->fill('title', 'Valid Title')
@@ -468,7 +468,7 @@ describe('Admin Info Item Test', function (): void {
         $newTitle = 'Updated Info Item Title';
 
         $page->navigate($route)
-            ->assertSee('Информационные элементы')
+            ->assertSee('Информация и материалы')
             ->assertSee($infoItem->title)
             ->click('@edit-info-item-' . $infoItem->id)
             ->assertSee('Редактировать информационный элемент')
@@ -504,7 +504,7 @@ describe('Admin Info Item Test', function (): void {
         $this->assertAuthenticated();
 
         $page->navigate($route)
-            ->assertSee('Информационные элементы')
+            ->assertSee('Информация и материалы')
             ->assertSee($infoItem->title)
             ->click('@edit-info-item-' . $infoItem->id)
             ->assertSee('Редактировать информационный элемент')
@@ -535,7 +535,7 @@ describe('Admin Info Item Test', function (): void {
         $this->assertAuthenticated();
 
         $page->navigate($route)
-            ->assertSee('Информационные элементы')
+            ->assertSee('Информация и материалы')
             ->assertSee($infoItem->title)
             ->click('@edit-info-item-' . $infoItem->id)
             ->assertSee('Редактировать информационный элемент')
@@ -618,7 +618,7 @@ describe('Admin Info Item Test', function (): void {
         $this->assertAuthenticated();
 
         $page->navigate($route)
-            ->assertSee('Информационные элементы')
+            ->assertSee('Информация и материалы')
             ->assertSee($infoItem->title)
             ->click('@edit-info-item-' . $infoItem->id)
             ->assertSee('Редактировать информационный элемент')
@@ -653,7 +653,7 @@ describe('Admin Info Item Test', function (): void {
         $this->assertAuthenticated();
 
         $page->navigate($route)
-            ->assertSee('Информационные элементы')
+            ->assertSee('Информация и материалы')
             ->click('@edit-info-item-' . $infoItem->id)
             ->assertSee('Редактировать информационный элемент')
             ->assertPresent('@image-present');

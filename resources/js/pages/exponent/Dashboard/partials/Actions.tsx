@@ -2,6 +2,9 @@ import CardLayout from '@/components/layout/CardLayout';
 import { Button } from '@/components/ui/Button';
 import { cn } from '@/lib/utils';
 import { NodeProps } from '@/types/shared';
+import CompanyController from '@/wayfinder/App/Http/Controllers/Exponent/CompanyController';
+import InfoItemController from '@/wayfinder/App/Http/Controllers/Exponent/InfoItemController';
+import { Link } from '@inertiajs/react';
 import { Briefcase, ListChecks, LucideIcon } from 'lucide-react';
 import { FC } from 'react';
 
@@ -37,10 +40,12 @@ const ActionCard: FC<NodeProps<{ card: ActionDataType }>> = ({ card }) => {
             </div>
 
             <Button
+                asChild
                 className="min-w-40 sm:mr-auto"
-                onClick={card.onClick}
             >
+                <Link href={card.url}>
                 {card.btnLabel}
+                </Link>
             </Button>
         </CardLayout>
     );
@@ -51,7 +56,7 @@ type ActionDataType = {
     icon: LucideIcon;
     label: string;
     btnLabel: string;
-    onClick: () => void;
+    url: string;
 };
 
 const actionData: ActionDataType[] = [
@@ -59,14 +64,14 @@ const actionData: ActionDataType[] = [
         id: crypto.randomUUID(),
         icon: Briefcase,
         label: 'Данные о компании',
-        btnLabel: 'Заполнить',
-        onClick: () => {},
+        btnLabel: 'Перейти',
+        url: CompanyController.index().url,
     },
     {
         id: crypto.randomUUID(),
         icon: ListChecks,
         label: 'Материалы выставки',
         btnLabel: 'Ознакомиться',
-        onClick: () => {},
+        url: InfoItemController.index().url,
     },
 ];

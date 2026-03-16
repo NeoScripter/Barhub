@@ -16,7 +16,7 @@ const Index: FC<Inertia.Pages.Admin.InfoItems.Index> = ({
         <>
             <IndexToolbar>
                 <AccentHeading className="mb-2 text-xl sm:mb-3 xl:mb-5">
-                    Информационные элементы
+                    Информация и материалы
                 </AccentHeading>
                 <Button asChild>
                     <Link

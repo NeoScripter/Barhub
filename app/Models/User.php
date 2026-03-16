@@ -22,6 +22,7 @@ final class User extends Authenticatable implements MustVerifyEmail
 
     protected $attributes = [
         'active_exhibition_id' => null,
+        'company_id' => null,
     ];
     /**
      * The attributes that are mass assignable.
