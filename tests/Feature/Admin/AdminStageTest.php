@@ -100,26 +100,10 @@ describe('Admin Stage Test', function (): void {
 
         $event = Event::factory()->for($exhibition)->for($stage)->create();
 
-        $page = visit('/login');
-
-        $page->fill('email', 'admin@example.com')
-            ->fill('password', 'password')
-            ->click('@login-button');
-
-        $this->assertAuthenticated();
-
-        $page->navigate("/admin/events");
-        $page->click('@edit-stages');
-
-        $page->assertSee('Управление площадками');
-
-        // Try to delete the stage
-        $page->click('@delete stage Important Stage');
-
-        // Should see error message
-        $page->assertDontSee('Площадка удалена');
-
-    })->group('browser');
+        $this->actingAs($user)
+            ->delete(route('admin.stages.destroy', ['stage' => $stage]))
+            ->assertForbidden();
+    });
 
     it('allows deleting stages not used by events', function (): void {
         $user = User::factory()->create([
