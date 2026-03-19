@@ -55,6 +55,51 @@ final class EventController extends Controller
             'themes' => Theme::all(),
         ]);
     }
+    public function create()
+    {
+        $exhibition = Auth::user()->getActiveExhibition();
+
+        return Inertia::render('admin/Events/Create', [
+            'stages' => Stage::query()->select(['id', 'name'])->get(),
+            'themes' => Theme::all(),
+            'availablePeople' => Person::query()->select(['id', 'name'])->get(),
+            'roles' => PersonRole::toSelectList(),
+            'exhibition' => $exhibition,
+        ]);
+    }
+
+    public function store(EventStoreRequest $request)
+    {
+        DB::transaction(function () use ($request) {
+            $event = $request->user()
+                ->getActiveExhibition()
+                ->events()
+                ->create($request->only([
+                    'title',
+                    'description',
+                    'stage_id',
+                    'starts_at',
+                    'ends_at',
+                ]));
+
+            if ($request->has('theme_ids')) {
+                $event->themes()->attach($request->theme_ids);
+            }
+
+            if ($request->has('people')) {
+                foreach ($request->people as $personData) {
+                    foreach ($personData['roles'] as $role) {
+                        $event->people()->attach($personData['person_id'], ['role' => $role]);
+                    }
+                }
+            }
+
+            return $event;
+        });
+
+        return to_route('admin.events.index')
+            ->with('success', 'Событие успешно создано');
+    }
 
     public function edit(
         Event $event,
@@ -62,7 +107,7 @@ final class EventController extends Controller
     ) {
         Gate::authorize('view', $event->exhibition);
 
-        $event->load(['stage', 'themes', 'people']);
+        $event->load(['stage', 'themes', 'people', 'exhibition']);
 
         return Inertia::render('admin/Events/Edit', [
             'event' => $event,
@@ -105,48 +150,6 @@ final class EventController extends Controller
             ->with('success', 'Event updated successfully');
     }
 
-    public function create()
-    {
-        return Inertia::render('admin/Events/Create', [
-            'stages' => Stage::query()->select(['id', 'name'])->get(),
-            'themes' => Theme::all(),
-            'availablePeople' => Person::query()->select(['id', 'name'])->get(),
-            'roles' => PersonRole::toSelectList(),
-        ]);
-    }
-
-    public function store(EventStoreRequest $request)
-    {
-        DB::transaction(function () use ($request) {
-            $event = $request->user()
-                ->getActiveExhibition()
-                ->events()
-                ->create($request->only([
-                    'title',
-                    'description',
-                    'stage_id',
-                    'starts_at',
-                    'ends_at',
-                ]));
-
-            if ($request->has('theme_ids')) {
-                $event->themes()->attach($request->theme_ids);
-            }
-
-            if ($request->has('people')) {
-                foreach ($request->people as $personData) {
-                    foreach ($personData['roles'] as $role) {
-                        $event->people()->attach($personData['person_id'], ['role' => $role]);
-                    }
-                }
-            }
-
-            return $event;
-        });
-
-        return to_route('admin.events.index')
-            ->with('success', 'Событие успешно создано');
-    }
 
     public function destroy(EventDestroyRequest $request, Event $event)
     {

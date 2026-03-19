@@ -26,7 +26,6 @@ import { ThemeSelect } from './partials/ThemeSelect';
 
 const Edit: FC<Inertia.Pages.Admin.Events.Edit> = ({
     event,
-    exhibition,
     eventPeople,
     stages,
     themes,
@@ -47,14 +46,14 @@ const Edit: FC<Inertia.Pages.Admin.Events.Edit> = ({
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        put(update({ event, exhibition }).url, {
+        put(update({ event }).url, {
             onSuccess: () => toast.success('Событие успешно обновлено'),
         });
     };
 
     const handleDelete = () => {
         setIsDeleting(true);
-        router.delete(destroy({ event, exhibition }).url, {
+        router.delete(destroy({ event }).url, {
             onSuccess: () => {
                 toast.success('Событие успешно удалено');
             },
@@ -78,7 +77,7 @@ const Edit: FC<Inertia.Pages.Admin.Events.Edit> = ({
 
             <div className="mb-8 flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
                 <CopyLinkBtn
-                    url={`${window.location.origin}/${exhibition.id}/events/${event.id}`}
+                    url={`${window.location.origin}/events/${event.id}`}
                 />
 
                 <DeleteAlertDialog
@@ -201,7 +200,7 @@ const Edit: FC<Inertia.Pages.Admin.Events.Edit> = ({
                 <FormButtons
                     label="Сохранить"
                     processing={processing}
-                    backUrl={index({ exhibition }).url}
+                    backUrl={index().url}
                 />
             </form>
         </div>

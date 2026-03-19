@@ -11,6 +11,7 @@ enum PersonRole: int
     case CURATOR = 3;
     case HOST = 4;
     case RESIDENT = 5;
+    case PARTENER = 6;
 
     public static function toSelectList(): array
     {
@@ -31,6 +32,7 @@ enum PersonRole: int
             self::CURATOR => 'куратор',
             self::HOST => 'ведущий',
             self::RESIDENT => 'резидент',
+            self::PARTENER => 'партенер',
         };
     }
 }

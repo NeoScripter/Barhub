@@ -11,9 +11,8 @@ import { useForm } from '@inertiajs/react';
 import { FC } from 'react';
 import { toast } from 'sonner';
 import { PersonSelect, PersonWithRoles } from './partials/PersonSelect';
-import StageDialog from './partials/StageDialog';
-import ThemeDialog from './partials/ThemeDialog';
 import { ThemeSelect } from './partials/ThemeSelect';
+import { convertDateToInputString } from '@/lib/utils';
 
 const Create: FC<Inertia.Pages.Admin.Events.Create> = ({
     exhibition,
@@ -28,30 +27,26 @@ const Create: FC<Inertia.Pages.Admin.Events.Create> = ({
         stage_id: null as number | null,
         theme_ids: [] as number[],
         people: [] as PersonWithRoles[],
-        starts_at: '',
-        ends_at: '',
+        starts_at: convertDateToInputString(exhibition?.starts_at ?? ''),
+        ends_at: convertDateToInputString(exhibition?.ends_at ?? ''),
     });
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        post(store({ exhibition }).url, {
+        post(store().url, {
             onSuccess: () => toast.success('Событие успешно создано'),
         });
     };
 
     return (
         <div className="mx-auto w-full max-w-250">
-            <div className="text-center mb-8 sm:mb-12">
+            <div className="mb-8 text-center sm:mb-12">
                 <AccentHeading
                     asChild
                     className="mb-1 text-lg text-secondary"
                 >
                     <h2>Создать мероприятие</h2>
                 </AccentHeading>
-            </div>
-            <div className="mb-8 flex flex-col gap-8">
-                <ThemeDialog />
-                <StageDialog />
             </div>
 
             <form
@@ -157,7 +152,7 @@ const Create: FC<Inertia.Pages.Admin.Events.Create> = ({
                 <FormButtons
                     label="Создать"
                     processing={processing}
-                    backUrl={index({ exhibition }).url}
+                    backUrl={index().url}
                 />
             </form>
         </div>
