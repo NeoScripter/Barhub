@@ -41,7 +41,7 @@ describe('Admin Stage Test', function (): void {
 
         // Navigate to event edit page (pick first event)
         $event = Event::query()->first();
-        $page->navigate("/admin/events/{$event->id}/edit");
+        $page->navigate("/admin/events");
         $page->assertSee('Название');
 
         $page->click('@edit-stages');
@@ -54,7 +54,7 @@ describe('Admin Stage Test', function (): void {
         $page->type('name', $newStageName);
 
         // Submit the form
-        $page->click('Добавить');
+        $page->submit();
 
         $page->assertSee('Площадка создана');
 
@@ -81,10 +81,10 @@ describe('Admin Stage Test', function (): void {
 
         $this->assertAuthenticated();
 
-        $page->navigate("/admin/events/{$event->id}/edit");
+        $page->navigate("/admin/events");
         $page->click('@edit-stages');
 
-        $page->press('Добавить');
+        $page->submit();
         $page->assertDontSee('Площадка создана');
     })->group('browser');
 
@@ -108,7 +108,7 @@ describe('Admin Stage Test', function (): void {
 
         $this->assertAuthenticated();
 
-        $page->navigate("/admin/events/{$event->id}/edit");
+        $page->navigate("/admin/events");
         $page->click('@edit-stages');
 
         $page->assertSee('Управление площадками');
@@ -142,7 +142,7 @@ describe('Admin Stage Test', function (): void {
 
         $this->assertAuthenticated();
 
-        $page->navigate("/admin/events/{$event->id}/edit");
+        $page->navigate("/admin/events");
         $page->click('@edit-stages');
 
         $page->assertSee('Used Stage');
@@ -182,7 +182,7 @@ describe('Admin Stage Test', function (): void {
 
         $this->assertAuthenticated();
 
-        $page->navigate("/admin/events/{$event->id}/edit");
+        $page->navigate("/admin/events");
 
         // Verify the event's stage is shown in selector
         $page->assertSee($stages->first()->name);
@@ -215,7 +215,7 @@ describe('Admin Stage Test', function (): void {
 
         $this->assertAuthenticated();
 
-        $page->navigate("/admin/events/{$event->id}/edit");
+        $page->navigate("/admin/events");
         $page->click('@edit-stages');
 
         $page->type('name', 'Existing Stage');

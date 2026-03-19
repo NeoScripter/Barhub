@@ -41,11 +41,11 @@ describe('Admin Theme Test', function (): void {
         $this->assertAuthenticated();
 
         // Navigate to event edit page
-        $page->navigate("/admin/events/{$event->id}/edit");
+        $page->navigate("/admin/events");
         $page->assertSee('Название');
 
         // Click the "Редактировать" button
-        $page->click('Редактировать');
+        $page->click('Направления');
 
         // Wait for dialog to open - use text selector
         $page->wait(1);
@@ -62,8 +62,6 @@ describe('Admin Theme Test', function (): void {
         // Submit the form
         $page->click('Добавить');
 
-        // Wait and verify success
-        $page->wait(1);
         $page->assertSee('Направление создано');
 
         // Verify new theme appears
@@ -90,10 +88,8 @@ describe('Admin Theme Test', function (): void {
 
         $this->assertAuthenticated();
 
-        $page->navigate("/admin/events/{$event->id}/edit");
-        $page->click('Редактировать');
-
-        $page->wait(1);
+        $page->navigate("/admin/events");
+        $page->click('Направления');
 
         // Click color without entering name
         $page->click('button[aria-label="Select color #FFE4E8"]');
@@ -127,7 +123,7 @@ describe('Admin Theme Test', function (): void {
 
         $this->assertAuthenticated();
 
-        $page->navigate("/admin/events/{$event->id}/edit");
+        $page->navigate("/admin/events");
 
         // Verify selected themes are shown
         $themes->take(3)->each(function ($theme) use ($page): void {
@@ -135,9 +131,7 @@ describe('Admin Theme Test', function (): void {
         });
 
         // Click button to open dialog
-        $page->click('Редактировать');
-
-        $page->wait(1);
+        $page->click('Направления');
 
         // All themes should be visible
         $themes->each(function ($theme) use ($page): void {

@@ -30,6 +30,7 @@ const StageDialog = () => {
             <DialogTrigger asChild>
                 <Button
                     variant="ghost"
+                    data-test="edit-stages"
                     className="border border-primary"
                 >
                     Площадки
