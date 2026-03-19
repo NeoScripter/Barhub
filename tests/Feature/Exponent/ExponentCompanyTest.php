@@ -60,13 +60,13 @@ describe('Exponent Company Test - Access Control', function (): void {
 
     it('super exponent can access all exhibitions companies', function (): void {
         $exponent = User::factory()->create();
-        $exponent->assignRole(UserRole::SUPER_exponent);
+        $exponent->assignRole(UserRole::SUPER_ADMIN);
 
         actingAs($exponent)
             ->get(route('exponent.companies.index'))
             ->assertOk();
     });
-})->todo();
+})->skip();
 
 // ─────────────────────────────────────────────────────────────
 // Index
@@ -75,7 +75,7 @@ describe('Exponent Company Test - Access Control', function (): void {
 describe('Company Index', function (): void {
     beforeEach(function (): void {
         $this->exponent = User::factory()->create();
-        $this->exponent->assignRole(UserRole::SUPER_exponent);
+        $this->exponent->assignRole(UserRole::SUPER_ADMIN);
         $this->exhibition = Exhibition::factory()->create();
     });
 
@@ -229,7 +229,7 @@ describe('Company Index', function (): void {
                     ->where('companies.data', fn($data): bool => count($data) === 0)
             );
     });
-})->todo();
+})->skip();
 
 // ─────────────────────────────────────────────────────────────
 // Create
@@ -238,7 +238,7 @@ describe('Company Index', function (): void {
 describe('Company Create', function (): void {
     beforeEach(function (): void {
         $this->exponent = User::factory()->create();
-        $this->exponent->assignRole(UserRole::SUPER_exponent);
+        $this->exponent->assignRole(UserRole::SUPER_ADMIN);
         $this->exhibition = Exhibition::factory()->create();
     });
 
@@ -275,7 +275,7 @@ describe('Company Create', function (): void {
                     ->where('exhibition.id',$this->exhibition->id)
             );
     });
-})->todo();
+})->skip();
 
 // ─────────────────────────────────────────────────────────────
 // Store
@@ -284,7 +284,7 @@ describe('Company Create', function (): void {
 describe('Company Store', function (): void {
     beforeEach(function (): void {
         $this->exponent = User::factory()->create();
-        $this->exponent->assignRole(UserRole::SUPER_exponent);
+        $this->exponent->assignRole(UserRole::SUPER_ADMIN);
         $this->exhibition = Exhibition::factory()->create();
         $this->validData = [
             'public_name' => 'Acme Corporation',
@@ -427,7 +427,7 @@ describe('Company Store', function (): void {
             ->post(route('exponent.companies.store'), $data)
             ->assertSessionHasErrors('tags.0');
     });
-})->todo();
+})->skip();
 
 // ─────────────────────────────────────────────────────────────
 // Edit
@@ -436,7 +436,7 @@ describe('Company Store', function (): void {
 describe('Company Edit', function (): void {
     beforeEach(function (): void {
         $this->exponent = User::factory()->create();
-        $this->exponent->assignRole(UserRole::SUPER_exponent);
+        $this->exponent->assignRole(UserRole::SUPER_ADMIN);
         $this->exhibition = Exhibition::factory()->create();
         $this->company = Company::factory()->for($this->exhibition)->create();
     });
@@ -489,7 +489,7 @@ describe('Company Edit', function (): void {
                     ->has('company.tags', 2)
             );
     });
-})->todo();
+})->skip();
 
 // ─────────────────────────────────────────────────────────────
 // Update
@@ -498,7 +498,7 @@ describe('Company Edit', function (): void {
 describe('Company Update', function (): void {
     beforeEach(function (): void {
         $this->exponent = User::factory()->create();
-        $this->exponent->assignRole(UserRole::SUPER_exponent);
+        $this->exponent->assignRole(UserRole::SUPER_ADMIN);
         $this->exhibition = Exhibition::factory()->create();
         $this->company = Company::factory()->for($this->exhibition)->create([
             'public_name' => 'Original Name',
@@ -734,7 +734,7 @@ describe('Company Update', function (): void {
             ])
             ->assertSessionHasErrors('public_name');
     });
-})->todo();
+})->skip();
 
 // ─────────────────────────────────────────────────────────────
 // Destroy
@@ -743,7 +743,7 @@ describe('Company Update', function (): void {
 describe('Company Destroy', function (): void {
     beforeEach(function (): void {
         $this->exponent = User::factory()->create();
-        $this->exponent->assignRole(UserRole::SUPER_exponent);
+        $this->exponent->assignRole(UserRole::SUPER_ADMIN);
         $this->exhibition = Exhibition::factory()->create();
         $this->company = Company::factory()->for($this->exhibition)->create();
     });
@@ -807,7 +807,7 @@ describe('Company Destroy', function (): void {
         assertDatabaseMissing('companies', ['id' => $assignedCompany->id]);
         assertDatabaseHas('companies', ['id' => $unassignedCompany->id]);
     });
-})->todo();
+})->skip();
 
 // ─────────────────────────────────────────────────────────────
 // Edge Cases
@@ -816,7 +816,7 @@ describe('Company Destroy', function (): void {
 describe('Company Edge Cases', function (): void {
     beforeEach(function (): void {
         $this->exponent = User::factory()->create();
-        $this->exponent->assignRole(UserRole::SUPER_exponent);
+        $this->exponent->assignRole(UserRole::SUPER_ADMIN);
         $this->exhibition = Exhibition::factory()->create();
     });
 
@@ -894,4 +894,4 @@ describe('Company Edge Cases', function (): void {
             'stand_code' => 42,
         ]);
     });
-})->todo();
+})->skip();

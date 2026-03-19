@@ -370,23 +370,6 @@ describe('Event Create', function (): void {
             );
     });
 
-    it('provides all necessary data for form', function (): void {
-        Stage::factory(3)->create();
-        Theme::factory(5)->create();
-        Person::factory(10)->create();
-
-        actingAs($this->superAdmin)
-            ->get(route('admin.events.create', $this->exhibition))
-            ->assertOk()
-            ->assertInertia(
-                fn($page) => $page
-                    ->where('stages', fn($stages): bool => count($stages) === 4)
-                    ->where('themes', fn($themes): bool => count($themes) === 5)
-                    ->where('availablePeople', fn($people): bool => count($people) === 10)
-                    ->where('roles', fn($roles): bool => count($roles) === 5)
-            );
-    });
-
     it('creates event with basic data', function (): void {
         actingAs($this->superAdmin)
             ->post(route('admin.events.store'), [

@@ -12,7 +12,6 @@ use App\Http\Requests\Admin\Event\EventIndexRequest;
 use App\Http\Requests\Admin\Event\EventStoreRequest;
 use App\Http\Requests\Admin\Event\EventUpdateRequest;
 use App\Models\Event;
-use App\Models\Person;
 use App\Models\Stage;
 use App\Models\Theme;
 use App\Sorts\RelationSort;

@@ -63,6 +63,8 @@ describe('Person Index', function (): void {
         $this->event->people()->attach($personA->id, ['role' => PersonRole::SPEAKER->value]);
         $this->event->people()->attach($personB->id, ['role' => PersonRole::SPEAKER->value]);
 
+        $this->exhibition->people()->attach([$personZ->id, $personA->id, $personB->id]);
+
         $people = actingAs($this->superAdmin)
             ->get(route('admin.people.index', [
                 'exhibition' => $this->exhibition,
@@ -80,6 +82,8 @@ describe('Person Index', function (): void {
         $personZ = Person::factory()->create(['name' => 'Zebra Person']);
         $personA = Person::factory()->create(['name' => 'Alpha Person']);
         $personB = Person::factory()->create(['name' => 'Beta Person']);
+
+        $this->exhibition->people()->attach([$personZ->id, $personA->id, $personB->id]);
 
         $this->event->people()->attach($personZ->id, ['role' => PersonRole::SPEAKER->value]);
         $this->event->people()->attach($personA->id, ['role' => PersonRole::SPEAKER->value]);
@@ -103,6 +107,8 @@ describe('Person Index', function (): void {
         $person2 = Person::factory()->create(['name' => 'Jane Doe']);
         $person3 = Person::factory()->create(['name' => 'John Anderson']);
 
+        $this->exhibition->people()->attach([$person1->id, $person2->id, $person3->id]);
+
         $this->event->people()->attach($person1->id, ['role' => PersonRole::SPEAKER->value]);
         $this->event->people()->attach($person2->id, ['role' => PersonRole::SPEAKER->value]);
         $this->event->people()->attach($person3->id, ['role' => PersonRole::SPEAKER->value]);
@@ -124,6 +130,8 @@ describe('Person Index', function (): void {
         $person = Person::factory()->create(['name' => 'Alice Johnson']);
         $this->event->people()->attach($person->id, ['role' => PersonRole::SPEAKER->value]);
 
+        $this->exhibition->people()->attach($person->id);
+
         $people = actingAs($this->superAdmin)
             ->get(route('admin.people.index', [
                 'exhibition' => $this->exhibition,
@@ -142,6 +150,9 @@ describe('Person Index', function (): void {
         $event3 = Event::factory()->for($this->exhibition)->create();
 
         $person = Person::factory()->create();
+
+        $this->exhibition->people()->attach($person->id);
+
         $event1->people()->attach($person->id, ['role' => PersonRole::SPEAKER->value]);
         $event2->people()->attach($person->id, ['role' => PersonRole::ORGANIZER->value]);
         $event3->people()->attach($person->id, ['role' => PersonRole::HOST->value]);
@@ -157,6 +168,7 @@ describe('Person Index', function (): void {
 
     it('shows each person only once even if they have multiple roles', function (): void {
         $person = Person::factory()->create(['name' => 'Multi Role Person']);
+        $this->exhibition->people()->attach($person->id);
 
         $this->event->people()->attach($person->id, ['role' => PersonRole::SPEAKER->value]);
         $this->event->people()->attach($person->id, ['role' => PersonRole::ORGANIZER->value]);
