@@ -181,7 +181,24 @@ describe('Person Index', function (): void {
             );
     });
 
-    it('shows the person on the exhibition list after creating them', function (): void {})->todo();
+    it('shows the person on the exhibition list after creating them', function (): void {
+        actingAs($this->superAdmin)
+            ->post(route('admin.people.store'), [
+                'name'    => 'Test Person',
+                'regalia' => 'PhD in Computer Science',
+                'bio'     => 'This is a test bio for the person',
+            ]);
+
+        $person = Person::query()->where('name', 'Test Person')->first();
+
+        actingAs($this->superAdmin)
+            ->get(route('admin.people.index'))
+            ->assertOk()
+            ->assertInertia(
+                fn($page) => $page->component('admin/People/Index')
+                    ->where('people.data.0.name', $person->name)
+            );
+    });
 });
 
 describe('Person Create', function (): void {
