@@ -50,7 +50,10 @@ final class EventController extends Controller
 
         return Inertia::render('admin/Events/Index', [
             'events' => $events,
-            'stages' => Stage::query()->select(['id', 'name'])->get(),
+            'stages' => Stage::query()
+                ->select(['id', 'name'])
+                ->withCount('events')
+                ->get(),
             'themes' => Theme::all(),
         ]);
     }

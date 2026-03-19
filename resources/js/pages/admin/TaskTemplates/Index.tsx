@@ -19,10 +19,10 @@ const Index: FC<Inertia.Pages.Admin.TaskTemplates.Index> = ({
             <IndexToolbar>
                 <div>
                     <AccentHeading className="mb-2 text-xl sm:mb-3 xl:mb-5">
-                        Общие задачи
+                        Работа с партнерами
                     </AccentHeading>
                     <AccentHeading className="text-lg text-secondary 2xl:text-xl">
-                        Услуги
+                        Общие задачи
                     </AccentHeading>
                 </div>
                 <Button asChild>
