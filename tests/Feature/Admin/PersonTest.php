@@ -180,6 +180,8 @@ describe('Person Index', function (): void {
                     ->where('people.data', fn($people): bool => count($people) === 0)
             );
     });
+
+    it('shows the person on the exhibition list after creating them', function (): void {})->todo();
 });
 
 describe('Person Create', function (): void {

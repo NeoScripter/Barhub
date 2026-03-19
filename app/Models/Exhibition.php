@@ -30,6 +30,11 @@ final class Exhibition extends Model
         return $this->hasMany(Event::class);
     }
 
+    public function people(): BelongsToMany
+    {
+        return $this->belongsToMany(Person::class);
+    }
+
     public function infoItems(): HasMany
     {
         return $this->hasMany(InfoItem::class);

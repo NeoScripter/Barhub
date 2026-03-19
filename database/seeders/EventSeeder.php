@@ -27,12 +27,12 @@ final class EventSeeder extends Seeder
         }
 
         $exhibitions->each(
-            fn (Exhibition $exhibition) => Event::factory()
+            fn(Exhibition $exhibition) => Event::factory()
                 ->count(10)
                 ->for($exhibition)
                 ->for($stages->random())
                 ->hasAttached($themes->random(random_int(1, 3)))
-                ->afterCreating(function (Event $event): void {
+                ->afterCreating(function (Event $event) use ($exhibition): void {
                     $peopleCount = random_int(1, 3);
 
                     for ($i = 0; $i < $peopleCount; $i++) {
@@ -68,7 +68,10 @@ final class EventSeeder extends Seeder
                         collect(PersonRole::cases())
                             ->random(random_int(1, 2))
                             ->each(
-                                fn (PersonRole $role) => $event->people()->attach($person->id, ['role' => $role->value])
+                                function (PersonRole $role) use ($person, $event, $exhibition) {
+                                    $event->people()->attach($person->id, ['role' => $role->value]);
+                                    $exhibition->people()->syncWithoutDetaching($person->id);
+                                }
                             );
                     }
                 })

@@ -27,6 +27,11 @@ final class Person extends Model
             ->withPivot('role');
     }
 
+    public function exhibitions(): BelongsToMany
+    {
+        return $this->belongsToMany(Exhibition::class);
+    }
+
     public function images()
     {
         return $this->morphMany(Image::class, 'imageable');
@@ -53,7 +58,7 @@ final class Person extends Model
         }
 
         return $query->pluck('role')
-            ->map(fn ($role) => PersonRole::from($role)->label())
+            ->map(fn($role) => PersonRole::from($role)->label())
             ->values();
     }
 }

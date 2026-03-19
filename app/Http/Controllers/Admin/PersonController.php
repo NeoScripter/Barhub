@@ -28,7 +28,7 @@ final class PersonController extends Controller
 
         /** @var LengthAwarePaginator<Person> $people */
         $people = QueryBuilder::for(
-            Person::query()->whereHas('events', fn($q) => $q->whereIn('events.id', $eventIds))
+            $exhibition->people()
         )
             ->select('people.*')
             ->withCount('events')
@@ -59,6 +59,9 @@ final class PersonController extends Controller
                 'bio',
                 'telegram',
             ]));
+
+            $exhibition = Auth::user()->getActiveExhibition();
+            $exhibition->people()->syncWithoutDetaching($person->id);
 
             // Handle avatar
             if ($request->hasFile('avatar')) {
