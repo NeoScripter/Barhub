@@ -1,33 +1,32 @@
 import InputError from '@/components/form/InputError';
+import AccentHeading from '@/components/ui/AccentHeading';
 import { Button } from '@/components/ui/Button';
 import CopyLinkBtn from '@/components/ui/CopyLinkBtn';
 import { DeleteAlertDialog } from '@/components/ui/DeleteAlertDialog';
-import ImgInput from '@/components/ui/ImgInput';
 import { Input } from '@/components/ui/Input';
 import { Label } from '@/components/ui/Label';
 import RadioCheckbox from '@/components/ui/RadioCheckbox';
 import { Spinner } from '@/components/ui/Spinner';
-import { Textarea } from '@/components/ui/Textarea';
 import CompanyLayout from '@/layouts/app/CompanyLayout';
+import { index } from '@/wayfinder/routes/admin/companies';
 import { Inertia } from '@/wayfinder/types';
-import { router, useForm } from '@inertiajs/react';
+import { Link, router, useForm } from '@inertiajs/react';
 import { Trash2 } from 'lucide-react';
 import { FC, useState } from 'react';
 import { toast } from 'sonner';
 import TagDialog from './partials/TagDialog';
 import { TagSelect } from './partials/TagSelect';
-import AccentHeading from '@/components/ui/AccentHeading';
 
-const Edit: FC<Inertia.Pages.Admin.Companies.Edit> = ({
-    company,
-    tags,
-}) => {
+const Edit: FC<Inertia.Pages.Admin.Companies.Edit> = ({ company, tags }) => {
     const { data, setData, post, processing, errors } = useForm({
         _method: 'PUT',
         public_name: company.public_name,
         legal_name: company.legal_name,
         stand_code: String(company.stand_code),
+        stand_area: company.stand_area,
         show_on_site: !!company.show_on_site,
+        power_kw: company.power_kw,
+        storage_enabled: !!company.storage_enabled,
         tags:
             company.tags?.map((t: { id: number }) => t.id) ?? ([] as number[]),
     });
@@ -43,16 +42,13 @@ const Edit: FC<Inertia.Pages.Admin.Companies.Edit> = ({
 
     const handleDelete = () => {
         setIsDeleting(true);
-        router.delete(
-            `/admin/companies/${company.id}`,
-            {
-                onSuccess: () => toast.success('Компания успешно удалена'),
-                onError: () => {
-                    toast.error('Ошибка при удалении компании');
-                    setIsDeleting(false);
-                },
+        router.delete(`/admin/companies/${company.id}`, {
+            onSuccess: () => toast.success('Компания успешно удалена'),
+            onError: () => {
+                toast.error('Ошибка при удалении компании');
+                setIsDeleting(false);
             },
-        );
+        });
     };
 
     return (
@@ -81,14 +77,14 @@ const Edit: FC<Inertia.Pages.Admin.Companies.Edit> = ({
                         isLoading={isDeleting}
                     />
                 </div>
-            <div className="mb-8 text-center md:mb-12">
-                <AccentHeading
-                    asChild
-                    className="mb-1 text-lg text-secondary"
-                >
-                    <h2>Редактировать компанию</h2>
-                </AccentHeading>
-            </div>
+                <div className="mb-8 text-center md:mb-12">
+                    <AccentHeading
+                        asChild
+                        className="mb-1 text-lg text-secondary"
+                    >
+                        <h2>Редактировать компанию</h2>
+                    </AccentHeading>
+                </div>
 
                 <div className="mb-8 flex flex-col gap-8">
                     <TagDialog />
@@ -135,15 +131,44 @@ const Edit: FC<Inertia.Pages.Admin.Companies.Edit> = ({
                             <Label htmlFor="stand_code">Номер стенда</Label>
                             <Input
                                 id="stand_code"
-                                type="number"
+                                type="text"
                                 required
-                                min={1}
                                 value={data.stand_code}
                                 onChange={(e) =>
                                     setData('stand_code', e.target.value)
                                 }
                             />
                             <InputError message={errors.stand_code} />
+                        </div>
+                        <div className="grid gap-2">
+                            <Label htmlFor="power_kw">
+                                Электричество (кВт)
+                            </Label>
+                            <Input
+                                id="power_kw"
+                                type="text"
+                                required
+                                min={1}
+                                value={data.power_kw}
+                                onChange={(e) =>
+                                    setData('power_kw', e.target.value)
+                                }
+                            />
+                            <InputError message={errors.power_kw} />
+                        </div>
+
+                        <div className="grid gap-2">
+                            <Label htmlFor="stand_area">Площадь стенда</Label>
+                            <Input
+                                id="stand_area"
+                                type="number"
+                                required
+                                value={data.stand_area}
+                                onChange={(e) =>
+                                    setData('stand_area', e.target.value)
+                                }
+                            />
+                            <InputError message={errors.stand_area} />
                         </div>
 
                         {tags.length > 0 && (
@@ -160,7 +185,16 @@ const Edit: FC<Inertia.Pages.Admin.Companies.Edit> = ({
 
                         <div className="md:col-span-2">
                             <RadioCheckbox
-                                label='Показывать на сайте'
+                                label="Склад (да/нет)"
+                                value={data.storage_enabled}
+                                onChange={(val) =>
+                                    setData('storage_enabled', val)
+                                }
+                            />
+                        </div>
+                        <div className="md:col-span-2">
+                            <RadioCheckbox
+                                label="Показывать на сайте"
                                 value={data.show_on_site}
                                 onChange={(val) => setData('show_on_site', val)}
                             />
@@ -176,14 +210,7 @@ const Edit: FC<Inertia.Pages.Admin.Companies.Edit> = ({
                             {processing && <Spinner />}
                             Сохранить
                         </Button>
-                        <Button
-                            type="button"
-                            variant="tertiary"
-                            className="w-fit rounded-md!"
-                            onClick={() => history.back()}
-                        >
-                            Отмена
-                        </Button>
+                        <Link href={index().url}>Отмена</Link>
                     </div>
                 </form>
             </div>

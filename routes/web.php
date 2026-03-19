@@ -70,6 +70,7 @@ Route::prefix('/admin')
             ->middleware(['role:' . UserRole::SUPER_ADMIN->value])
             ->only(['index', 'destroy', 'update']);
 
+        Route::resource('companies', AdminCompanyController::class)->except(['show']);
         Route::resource('all-tasks', AdminPartnerController::class)
             ->only(['index', 'edit', 'update']);
         Route::resource('followups', AdminFollowupController::class)
@@ -83,5 +84,4 @@ Route::prefix('/admin')
 
         Route::resource('events', AdminEventController::class)->except('show');
         Route::resource('people', AdminPersonController::class)->except(['show']);
-        Route::resource('companies', AdminCompanyController::class)->except(['show']);
     });

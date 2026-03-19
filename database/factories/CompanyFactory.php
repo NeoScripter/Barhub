@@ -31,7 +31,7 @@ final class CompanyFactory extends Factory
             'instagram' => mb_substr($faker->url(), 0, 25),
             'telegram' => mb_substr($faker->url(), 0, 25),
             'activities' => $faker->sentence(),
-            'stand_code' => $faker->numberBetween(101, 700),
+            'stand_code' => $faker->postcode(),
             'show_on_site' => true,
             'stand_area' => $faker->numberBetween(10, 30),
             'power_kw' => $faker->numberBetween(10, 30),

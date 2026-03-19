@@ -1,40 +1,32 @@
 import InputError from '@/components/form/InputError';
+import AccentHeading from '@/components/ui/AccentHeading';
 import { Button } from '@/components/ui/Button';
-import ImgInput from '@/components/ui/ImgInput';
 import { Input } from '@/components/ui/Input';
 import { Label } from '@/components/ui/Label';
 import RadioCheckbox from '@/components/ui/RadioCheckbox';
 import { Spinner } from '@/components/ui/Spinner';
-import { Textarea } from '@/components/ui/Textarea';
+import { index, store } from '@/wayfinder/routes/admin/companies';
 import { Inertia } from '@/wayfinder/types';
-import { useForm } from '@inertiajs/react';
+import { Link, useForm } from '@inertiajs/react';
 import { FC } from 'react';
 import { toast } from 'sonner';
 import { TagSelect } from './partials/TagSelect';
-import AccentHeading from '@/components/ui/AccentHeading';
 
-const Create: FC<Inertia.Pages.Admin.Companies.Create> = ({
-    tags,
-}) => {
-    const { data, setData, post, processing, errors, progress } = useForm({
+const Create: FC<Inertia.Pages.Admin.Companies.Create> = ({ tags }) => {
+    const { data, setData, post, processing, errors } = useForm({
         public_name: '',
         legal_name: '',
-        description: '',
-        phone: '',
-        email: '',
-        site_url: '',
-        instagram: '',
-        telegram: '',
         stand_code: '',
+        power_kw: '',
+        stand_area: '',
         show_on_site: false,
-        activities: '',
+        storage_enabled: false,
         tags: [] as number[],
-        logo: null as File | null,
     });
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        post(`/admin/companies`, {
+        post(store().url, {
             onSuccess: () => toast.success('Компания успешно создана'),
         });
     };
@@ -88,7 +80,7 @@ const Create: FC<Inertia.Pages.Admin.Companies.Create> = ({
                         <Label htmlFor="stand_code">Номер стенда</Label>
                         <Input
                             id="stand_code"
-                            type="number"
+                            type="text"
                             required
                             min={1}
                             value={data.stand_code}
@@ -97,6 +89,35 @@ const Create: FC<Inertia.Pages.Admin.Companies.Create> = ({
                             }
                         />
                         <InputError message={errors.stand_code} />
+                    </div>
+
+                    <div className="grid gap-2">
+                        <Label htmlFor="power_kw">Электричество (кВт)</Label>
+                        <Input
+                            id="power_kw"
+                            type="text"
+                            required
+                            min={1}
+                            value={data.power_kw}
+                            onChange={(e) =>
+                                setData('power_kw', e.target.value)
+                            }
+                        />
+                        <InputError message={errors.power_kw} />
+                    </div>
+
+                    <div className="grid gap-2">
+                        <Label htmlFor="stand_area">Площадь стенда</Label>
+                        <Input
+                            id="stand_area"
+                            type="number"
+                            required
+                            value={data.stand_area}
+                            onChange={(e) =>
+                                setData('stand_area', e.target.value)
+                            }
+                        />
+                        <InputError message={errors.stand_area} />
                     </div>
 
                     {tags.length > 0 && (
@@ -113,7 +134,14 @@ const Create: FC<Inertia.Pages.Admin.Companies.Create> = ({
 
                     <div className="md:col-span-2">
                         <RadioCheckbox
-                            label='Показывать на сайте'
+                            label="Склад (да/нет)"
+                            value={data.storage_enabled}
+                            onChange={(val) => setData('storage_enabled', val)}
+                        />
+                    </div>
+                    <div className="md:col-span-2">
+                        <RadioCheckbox
+                            label="Показывать на сайте"
                             value={data.show_on_site}
                             onChange={(val) => setData('show_on_site', val)}
                         />
@@ -130,12 +158,11 @@ const Create: FC<Inertia.Pages.Admin.Companies.Create> = ({
                         Создать
                     </Button>
                     <Button
-                        type="button"
                         variant="tertiary"
                         className="w-fit rounded-md!"
-                        onClick={() => history.back()}
+                        asChild
                     >
-                        Отмена
+                        <Link href={index().url}>Отмена</Link>
                     </Button>
                 </div>
             </form>

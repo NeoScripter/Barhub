@@ -25,7 +25,7 @@ return new class extends Migration
             $table->string('telegram')->nullable();
             $table->text('activities')->nullable();
             $table->string('legal_name');
-            $table->unsignedInteger('stand_code');
+            $table->string('stand_code');
             $table->boolean('show_on_site');
             $table->unsignedInteger('stand_area');
             $table->unsignedInteger('power_kw');
