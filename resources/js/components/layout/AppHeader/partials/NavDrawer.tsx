@@ -56,7 +56,6 @@ const NavDrawer: FC<NavDrawerProps> = ({ item, className, expanded }) => {
                                 <li className="group w-fit text-secondary">
                                     <Link
                                         href={link.url}
-                                        prefetch
                                         preserveState
                                         onSuccess={handleClick}
                                         className={cn(

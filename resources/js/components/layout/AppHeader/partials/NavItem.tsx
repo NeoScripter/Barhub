@@ -28,7 +28,6 @@ const NavItem: FC<{ item: NavItemType; expanded: boolean }> = ({
                         'link-hover w-fit whitespace-nowrap',
                         whenCurrentUrl(item.url, 'text-primary'),
                     )}
-                    prefetch
                     preserveState
                     onSuccess={handleClick}
                     href={item.url}
