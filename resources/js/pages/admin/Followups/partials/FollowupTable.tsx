@@ -10,9 +10,8 @@ import { FC } from 'react';
 const FollowupTable: FC<
     NodeProps<{
         followups: App.Models.Followup[] | undefined;
-        exhibition: App.Models.Exhibition;
     }>
-> = ({ className, followups, exhibition }) => {
+> = ({ className, followups }) => {
     if (!followups) {
         return null;
     }
@@ -45,7 +44,6 @@ const FollowupTable: FC<
                             data-test={`edit-followup-${followup.id}`}
                             href={edit({
                                 followup: followup.id,
-                                exhibition: exhibition,
                             })}
                         >
                             <VisuallyHidden>Принять услугу</VisuallyHidden>

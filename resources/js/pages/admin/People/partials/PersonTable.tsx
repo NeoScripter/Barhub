@@ -10,9 +10,8 @@ import { FC } from 'react';
 const PersonTable: FC<
     NodeProps<{
         people: App.Models.Person[] | undefined;
-        exhibition: App.Models.Exhibition;
     }>
-> = ({ className, people, exhibition }) => {
+> = ({ className, people }) => {
     if (!people) {
         return null;
     }
@@ -68,7 +67,6 @@ const PersonTable: FC<
                         <Link
                             href={edit({
                                 person: person.id,
-                                exhibition: exhibition.id,
                             })}
                         >
                             <PencilLine />

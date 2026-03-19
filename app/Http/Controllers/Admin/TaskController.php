@@ -64,7 +64,7 @@ final class TaskController extends Controller
         ]);
     }
 
-    public function store(TaskStoreRequest $request,  Company $company)
+    public function store(TaskStoreRequest $request, Company $company)
     {
         Gate::authorize('view', $company->exhibition);
 

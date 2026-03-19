@@ -8,7 +8,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\TaskTemplate\TaskTemplateIndexRequest;
 use App\Http\Requests\Admin\TaskTemplate\TaskTemplateStoreRequest;
 use App\Http\Requests\Admin\TaskTemplate\TaskTemplateUpdateRequest;
-use App\Models\Exhibition;
 use App\Models\TaskTemplate;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;

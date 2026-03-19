@@ -11,9 +11,8 @@ import { FC } from 'react';
 const TemplateTable: FC<
     NodeProps<{
         templates: App.Models.TaskTemplate[] | undefined;
-        exhibition: App.Models.Exhibition;
     }>
-> = ({ className, templates, exhibition }) => {
+> = ({ className, templates }) => {
     if (!templates) {
         return null;
     }
@@ -45,7 +44,6 @@ const TemplateTable: FC<
                             data-test={`edit-task-${template.id}`}
                             href={edit({
                                 task_template: template.id,
-                                exhibition: exhibition,
                             })}
                         >
                             <VisuallyHidden>

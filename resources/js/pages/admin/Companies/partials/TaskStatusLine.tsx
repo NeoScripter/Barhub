@@ -18,8 +18,8 @@ const TaskStatusLine: FC<{
     if (matchingTasks === 0) return null;
 
     return (
-        <span className='block text-sm'>
-            {taskStatusMap[status]} : <strong>{matchingTasks}</strong>
+        <span className='block text-sm whitespace-nowrap'>
+            {taskStatusMap[status]}: <strong>{matchingTasks}</strong>
         </span>
     );
 };

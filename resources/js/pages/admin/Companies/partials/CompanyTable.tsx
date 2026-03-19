@@ -12,9 +12,8 @@ import TaskStatusLine from './TaskStatusLine';
 const CompanyTable: FC<
     NodeProps<{
         companies: App.Models.Company[] | undefined;
-        exhibition: App.Models.Exhibition;
     }>
-> = ({ className, companies, exhibition }) => {
+> = ({ className, companies }) => {
     if (!companies) {
         return null;
     }
@@ -54,7 +53,7 @@ const CompanyTable: FC<
                     </Table.Cell>
                     <Table.Cell
                         key="tags"
-                        width={1.5}
+                        width={1}
                     >
                         <ul className="flex flex-wrap items-baseline gap-2">
                             {company.tags.map((tag) => (
@@ -69,7 +68,7 @@ const CompanyTable: FC<
                     </Table.Cell>
                     <Table.Cell
                         key="tasks"
-                        width={1.5}
+                        width={2}
                     >
                         {range(1, 5).map((num) => (
                             <TaskStatusLine
@@ -94,7 +93,6 @@ const CompanyTable: FC<
                         <Link
                             href={edit({
                                 company: company.id,
-                                exhibition: exhibition.id,
                             })}
                         >
                             <PencilLine />

@@ -14,7 +14,6 @@ import { create } from '@/wayfinder/routes/admin/companies';
 
 const Index: FC<Inertia.Pages.Admin.Companies.Index> = ({
     companies,
-    exhibition,
 }) => {
     return (
         <>
@@ -22,7 +21,7 @@ const Index: FC<Inertia.Pages.Admin.Companies.Index> = ({
                 <AccentHeading className="text-xl">Компании</AccentHeading>
                 <SearchInput placeholder="Поиск по названию" />
                 <Button asChild>
-                    <Link href={create({ exhibition }).url}>
+                    <Link href={create().url}>
                         <Plus /> Добавить компанию
                     </Link>
                 </Button>
@@ -35,7 +34,6 @@ const Index: FC<Inertia.Pages.Admin.Companies.Index> = ({
                 <CompanyTableHeader />
                 <CompanyTable
                     companies={companies.data}
-                    exhibition={exhibition}
                 />
             </Table>
 

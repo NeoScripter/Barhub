@@ -7,7 +7,6 @@ namespace App\Http\Controllers\Admin;
 use App\Enums\FollowupStatus;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Followup\FollowupIndexRequest;
-use App\Models\Exhibition;
 use App\Models\Followup;
 use App\Sorts\RelationSort;
 use Illuminate\Support\Facades\Auth;

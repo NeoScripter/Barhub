@@ -11,9 +11,8 @@ import { FC } from 'react';
 const EventTable: FC<
     NodeProps<{
         events: App.Models.Event[] | undefined;
-        exhibition: App.Models.Exhibition;
     }>
-> = ({ className, events, exhibition }) => {
+> = ({ className, events }) => {
     if (!events) {
         return null;
     }
@@ -63,7 +62,6 @@ const EventTable: FC<
                         <Link
                             href={edit({
                                 event: event.id,
-                                exhibition: exhibition,
                             })}
                         >
                             <PencilLine />
