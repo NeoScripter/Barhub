@@ -62,7 +62,7 @@ final class EventController extends Controller
         return Inertia::render('admin/Events/Create', [
             'stages' => Stage::query()->select(['id', 'name'])->get(),
             'themes' => Theme::all(),
-            'availablePeople' => Person::query()->select(['id', 'name'])->get(),
+            'availablePeople' => $exhibition->people()->select(['id', 'name'])->get(),
             'roles' => PersonRole::toSelectList(),
             'exhibition' => $exhibition,
         ]);
@@ -112,7 +112,7 @@ final class EventController extends Controller
         return Inertia::render('admin/Events/Edit', [
             'event' => $event,
             'eventPeople' => $formatPeople->execute($event),
-            'availablePeople' => Person::query()->select(['id', 'name'])->get(),
+            'availablePeople' => $event->exhibition->people()->select(['id', 'name'])->get(),
             'roles' => PersonRole::toSelectList(),
             'stages' => Stage::query()->select(['id', 'name'])->get(),
             'themes' => Theme::all(),
