@@ -12,9 +12,8 @@ import { FC } from 'react';
 const TaskTable: FC<
     NodeProps<{
         tasks: App.Models.Task[] | undefined;
-        exhibition: App.Models.Exhibition;
     }>
-> = ({ className, tasks, exhibition }) => {
+> = ({ className, tasks }) => {
     if (!tasks) {
         return null;
     }
@@ -63,7 +62,6 @@ const TaskTable: FC<
                             data-test={`edit-task-${task.id}`}
                             href={edit({
                                 all_task: task.id,
-                                exhibition: exhibition,
                             })}
                         >
                             <VisuallyHidden>

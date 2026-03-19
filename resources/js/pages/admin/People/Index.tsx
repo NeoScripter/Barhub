@@ -14,7 +14,6 @@ import PersonTableHeader from './partials/PersonTableHeader';
 
 const Index: FC<Inertia.Pages.Admin.People.Index> = ({
     people,
-    exhibition,
 }) => {
     return (
         <>
@@ -23,7 +22,7 @@ const Index: FC<Inertia.Pages.Admin.People.Index> = ({
                 <SearchInput placeholder="Поиск по имени" />
 
                 <Button asChild>
-                    <Link href={create(exhibition).url}>
+                    <Link href={create().url}>
                         <Plus /> Добавить человека
                     </Link>
                 </Button>
@@ -35,7 +34,6 @@ const Index: FC<Inertia.Pages.Admin.People.Index> = ({
                 <PersonTableHeader />
                 <PersonTable
                     people={people.data}
-                    exhibition={exhibition}
                 />
             </Table>
             <Pagination data={people} />

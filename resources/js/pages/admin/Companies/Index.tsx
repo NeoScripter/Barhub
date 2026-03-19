@@ -11,12 +11,16 @@ import { FC } from 'react';
 import CompanyTable from './partials/CompanyTable';
 import CompanyTableHeader from './partials/CompanyTableHeader';
 import { create } from '@/wayfinder/routes/admin/companies';
+import TagDialog from './partials/TagDialog';
 
 const Index: FC<Inertia.Pages.Admin.Companies.Index> = ({
     companies,
 }) => {
     return (
         <>
+            <IndexToolbar className='justify-start'>
+                <TagDialog />
+            </IndexToolbar>
             <IndexToolbar>
                 <AccentHeading className="text-xl">Компании</AccentHeading>
                 <SearchInput placeholder="Поиск по названию" />

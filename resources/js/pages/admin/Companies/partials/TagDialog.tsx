@@ -7,9 +7,11 @@ import {
     DialogTitle,
     DialogTrigger,
 } from '@/components/ui/Dialog';
+import { VisuallyHidden } from '@radix-ui/react-visually-hidden';
 import { useState } from 'react';
 import CreateTag from './CreateTag';
 import DeleteTag from './DeleteTag';
+import { Hash } from 'lucide-react';
 
 const TagDialog = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -19,20 +21,21 @@ const TagDialog = () => {
             open={isOpen}
             onOpenChange={setIsOpen}
         >
-            <div className="space-y-3">
+            <VisuallyHidden>
                 <DialogTitle>Управление тегами</DialogTitle>
-                <DialogDescription>
-                    Создание и удаление тегов
-                </DialogDescription>
-                <DialogTrigger asChild>
-                    <Button
-                        variant="secondary"
-                        data-test="edit-tags"
-                    >
-                        Редактировать
-                    </Button>
-                </DialogTrigger>
-            </div>
+                <DialogDescription>Создание и удаление тегов</DialogDescription>
+            </VisuallyHidden>
+
+            <DialogTrigger asChild>
+                <Button
+                    variant="ghost"
+                    data-test="edit-tags"
+                    className="border border-primary"
+                >
+                    Тэги
+                    <Hash />
+                </Button>
+            </DialogTrigger>
             <DialogContent className="h-max max-w-95">
                 <div>
                     <AccentHeading className="text-base! text-secondary">

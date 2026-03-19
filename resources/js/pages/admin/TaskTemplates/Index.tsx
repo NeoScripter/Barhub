@@ -13,7 +13,6 @@ import { create } from '@/wayfinder/routes/admin/task-templates';
 
 const Index: FC<Inertia.Pages.Admin.TaskTemplates.Index> = ({
     templates,
-    exhibition,
 }) => {
     return (
         <>
@@ -29,7 +28,7 @@ const Index: FC<Inertia.Pages.Admin.TaskTemplates.Index> = ({
                 <Button asChild>
                     <Link
                         data-test="create-task"
-                        href={create({ exhibition })}
+                        href={create()}
                     >
                         <Plus />
                         Добавить задачу
@@ -44,7 +43,6 @@ const Index: FC<Inertia.Pages.Admin.TaskTemplates.Index> = ({
                 <TemplateTableHeader />
                 <TemplateTable
                     templates={templates.data}
-                    exhibition={exhibition}
                 />
             </Table>
             <Pagination data={templates} />

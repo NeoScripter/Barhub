@@ -12,14 +12,13 @@ import TaskTableHeader from './partials/TaskTableHeader';
 
 const Index: FC<Inertia.Pages.Admin.Tasks.Index> = ({
     tasks,
-    exhibition,
     company,
 }) => {
     const CreateLink = () => (
         <Button asChild>
             <Link
                 data-test="create-task"
-                href={create({ exhibition, company })}
+                href={create({ company })}
             >
                 Создать задачу
                 <Plus />
@@ -38,7 +37,6 @@ const Index: FC<Inertia.Pages.Admin.Tasks.Index> = ({
                 <TaskTableHeader />
                 <TaskTable
                     tasks={tasks.data}
-                    exhibition={exhibition}
                     company={company}
                 />
             </Table>

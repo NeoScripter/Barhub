@@ -8,7 +8,6 @@ import FollowupTable from './partials/FollowupTable';
 import FollowupTableHeader from './partials/FollowupTableHeader';
 
 const Index: FC<Inertia.Pages.Admin.Followups.Index> = ({
-    exhibition,
     followups
 }) => {
     return (
@@ -29,7 +28,6 @@ const Index: FC<Inertia.Pages.Admin.Followups.Index> = ({
                 <FollowupTableHeader />
                 <FollowupTable
                     followups={followups.data}
-                    exhibition={exhibition}
                 />
             </Table>
             <Pagination data={followups} />

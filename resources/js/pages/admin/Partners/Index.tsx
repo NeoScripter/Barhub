@@ -11,7 +11,6 @@ import TaskTableHeader from './partials/TaskTableHeader';
 
 const Index: FC<Inertia.Pages.Admin.Tasks.Index> = ({
     tasks,
-    exhibition,
     summary,
 }) => {
     return (
@@ -46,7 +45,6 @@ const Index: FC<Inertia.Pages.Admin.Tasks.Index> = ({
                 <TaskTableHeader />
                 <TaskTable
                     tasks={tasks.data}
-                    exhibition={exhibition}
                 />
             </Table>
             <Pagination data={tasks} />

@@ -11,13 +11,16 @@ import { Plus } from 'lucide-react';
 import { FC } from 'react';
 import EventTable from './partials/EventTable';
 import EventTableHeader from './partials/EventTableHeader';
+import StageDialog from './partials/StageDialog';
+import ThemeDialog from './partials/ThemeDialog';
 
-const Index: FC<Inertia.Pages.Admin.Events.Index> = ({
-    events,
-    exhibition,
-}) => {
+const Index: FC<Inertia.Pages.Admin.Events.Index> = ({ events }) => {
     return (
         <>
+            <IndexToolbar className='justify-start'>
+                <ThemeDialog />
+                <StageDialog />
+            </IndexToolbar>
             <IndexToolbar>
                 <AccentHeading className="text-xl">
                     События выставки
@@ -25,7 +28,7 @@ const Index: FC<Inertia.Pages.Admin.Events.Index> = ({
                 <SearchInput placeholder="Поиск события" />
 
                 <Button asChild>
-                    <Link href={create({ exhibition })}>
+                    <Link href={create()}>
                         <Plus /> Добавить событие
                     </Link>
                 </Button>
@@ -35,10 +38,7 @@ const Index: FC<Inertia.Pages.Admin.Events.Index> = ({
                 placeholder="По вашему запросу не найдено ни одного события"
             >
                 <EventTableHeader />
-                <EventTable
-                    events={events.data}
-                    exhibition={exhibition}
-                />
+                <EventTable events={events.data} />
             </Table>
             <Pagination data={events} />
         </>

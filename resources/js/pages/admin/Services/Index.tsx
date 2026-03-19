@@ -10,14 +10,13 @@ import ServiceCard from './partials/ServiceCard';
 
 const Index: FC<Inertia.Pages.Admin.Services.Index> = ({
     services,
-    exhibition,
     company,
 }) => {
     const CreateLink = () => (
         <Button asChild>
             <Link
                 data-test="create-service"
-                href={create({ exhibition, company })}
+                href={create({ company })}
             >
                 Добавить услугу
                 <Plus />

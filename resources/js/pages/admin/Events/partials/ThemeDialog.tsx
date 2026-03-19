@@ -7,6 +7,8 @@ import {
     DialogTitle,
     DialogTrigger,
 } from '@/components/ui/Dialog';
+import { VisuallyHidden } from '@radix-ui/react-visually-hidden';
+import { Rocket } from 'lucide-react';
 import { useState } from 'react';
 import CreateTheme from './CreateTheme';
 import DeleteTheme from './DeleteTheme';
@@ -19,19 +21,22 @@ const ThemeDialog = () => {
             open={isOpen}
             onOpenChange={setIsOpen}
         >
-            <div className="space-y-3">
+            <VisuallyHidden>
                 <DialogTitle>Управление направлениями</DialogTitle>
                 <DialogDescription>
                     Создание и удаление направлений
                 </DialogDescription>
-                <DialogTrigger asChild>
-                    <Button
-                        variant="secondary"
-                    >
-                        Редактировать
-                    </Button>
-                </DialogTrigger>
-            </div>
+            </VisuallyHidden>
+
+            <DialogTrigger asChild>
+                <Button
+                    variant="ghost"
+                    className="border border-primary"
+                >
+                    Направления
+                    <Rocket />
+                </Button>
+            </DialogTrigger>
             <DialogContent className="h-max max-w-95">
                 <div>
                     <AccentHeading className="text-base! text-secondary">

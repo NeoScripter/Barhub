@@ -7,6 +7,8 @@ import {
     DialogTitle,
     DialogTrigger,
 } from '@/components/ui/Dialog';
+import { VisuallyHidden } from '@radix-ui/react-visually-hidden';
+import { MapPin } from 'lucide-react';
 import { useState } from 'react';
 import CreateStage from './CreateStage';
 import DeleteStage from './DeleteStage';
@@ -19,20 +21,21 @@ const StageDialog = () => {
             open={isOpen}
             onOpenChange={setIsOpen}
         >
-            <div className="space-y-3">
+            <VisuallyHidden>
                 <DialogTitle>Управление площадками</DialogTitle>
                 <DialogDescription>
                     Создание и удаление площадок
                 </DialogDescription>
-                <DialogTrigger asChild>
-                    <Button
-                        variant="secondary"
-                        data-test="edit-stages"
-                    >
-                        Редактировать
-                    </Button>
-                </DialogTrigger>
-            </div>
+            </VisuallyHidden>
+            <DialogTrigger asChild>
+                <Button
+                    variant="ghost"
+                    className="border border-primary"
+                >
+                    Площадки
+                    <MapPin />
+                </Button>
+            </DialogTrigger>
             <DialogContent className="h-max max-w-95">
                 <div>
                     <AccentHeading className="text-base! text-secondary">

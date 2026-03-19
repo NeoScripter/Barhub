@@ -14,7 +14,6 @@ import { Link, router, useForm } from '@inertiajs/react';
 import { Trash2 } from 'lucide-react';
 import { FC, useState } from 'react';
 import { toast } from 'sonner';
-import TagDialog from './partials/TagDialog';
 import { TagSelect } from './partials/TagSelect';
 
 const Edit: FC<Inertia.Pages.Admin.Companies.Edit> = ({ company, tags }) => {
@@ -84,10 +83,6 @@ const Edit: FC<Inertia.Pages.Admin.Companies.Edit> = ({ company, tags }) => {
                     >
                         <h2>Редактировать компанию</h2>
                     </AccentHeading>
-                </div>
-
-                <div className="mb-8 flex flex-col gap-8">
-                    <TagDialog />
                 </div>
 
                 <form

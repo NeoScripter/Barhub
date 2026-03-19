@@ -100,11 +100,6 @@ const Edit: FC<Inertia.Pages.Admin.Events.Edit> = ({
                 />
             </div>
 
-            <div className="mb-8 flex flex-col gap-8">
-                <ThemeDialog />
-                <StageDialog />
-            </div>
-
             <form
                 onSubmit={handleSubmit}
                 className="flex flex-col gap-6"
