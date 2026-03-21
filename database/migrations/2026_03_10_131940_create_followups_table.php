@@ -19,7 +19,7 @@ return new class extends Migration
             $table->foreignId('user_id')->nullable()->constrained()->nullOnDelete();
             $table->string('name');
             $table->text('description');
-            $table->text('comment');
+            $table->text('comment')->nullable();
             $table->unsignedInteger('status');
             $table->timestamps();
         });

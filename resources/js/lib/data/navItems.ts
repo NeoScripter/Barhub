@@ -97,6 +97,12 @@ export const adminNavItems: NavItemType[] = [
                 url: '/admin/services',
             },
             {
+                id: 'followups',
+                type: 'link',
+                label: 'Заявки на услуги',
+                url: '/admin/followups',
+            },
+            {
                 id: 'info-items',
                 type: 'link',
                 label: 'Информация и материалы',

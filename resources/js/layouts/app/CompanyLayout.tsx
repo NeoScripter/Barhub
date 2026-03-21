@@ -111,7 +111,7 @@ const navLinks: NavLinkType[] = [
     {
         id: crypto.randomUUID(),
         label: 'Услуги',
-        url: (path: string) => `/${path}/services`,
+        url: (path: string) => `/${path}/followups`,
     },
 ];
 

@@ -5,52 +5,44 @@ import { Button } from '@/components/ui/Button';
 import { DeleteAlertDialog } from '@/components/ui/DeleteAlertDialog';
 import { Input } from '@/components/ui/Input';
 import { Label } from '@/components/ui/Label';
-import RadioCheckbox from '@/components/ui/RadioCheckbox';
-import { Spinner } from '@/components/ui/Spinner';
 import { Textarea } from '@/components/ui/Textarea';
-import {
-    destroy,
-    index,
-    update,
-} from '@/wayfinder/routes/admin/services';
+import { update, destroy, index } from '@/wayfinder/App/Http/Controllers/Admin/CompanyFollowupController';
 import { Inertia } from '@/wayfinder/types';
 import { router, useForm } from '@inertiajs/react';
 import { Trash2 } from 'lucide-react';
 import { FC, useState } from 'react';
 import { toast } from 'sonner';
 
-const Edit: FC<Inertia.Pages.Admin.Services.Edit> = ({
-    exhibition,
+const Edit: FC<Inertia.Pages.Admin.CompanyFollowups.Edit> = ({
     company,
-    service,
+    followup,
 }) => {
     const { data, setData, put, processing, errors } = useForm({
-        name: service.name,
-        description: service.description,
-        placeholder: service.placeholder,
-        is_active: !!service.is_active,
+        name: followup.name,
+        description: followup.description,
+        comment: followup.comment,
     });
 
     const [isDeleting, setIsDeleting] = useState(false);
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        put(update({ exhibition, company, service: service.id }).url, {
+        put(update({ company: company.id, followup: followup.id }).url, {
             onSuccess: () => {
-                toast.success('Услуга успешно обновлена');
+                toast.success('Заявка на услугу успешно обновлена');
             },
         });
     };
 
     const handleDelete = () => {
         setIsDeleting(true);
-        router.delete(destroy({ exhibition, company, service }).url, {
+        router.delete(destroy({ company: company.id, followup }).url, {
             onSuccess: () => {
-                router.visit(index({ exhibition, company }).url);
-                toast.success('Услуга успешно удалена');
+                router.visit(index({ company: company.id }).url);
+                toast.success('Заявка на услугу успешно удалена');
             },
             onError: () => {
-                toast.error('Ошибка при удалении услуги');
+                toast.error('Ошибка при удалении заявки на услугу');
                 setIsDeleting(false);
             },
         });
@@ -64,14 +56,14 @@ const Edit: FC<Inertia.Pages.Admin.Services.Edit> = ({
                         <Button
                             variant="destructive"
                             type="button"
-                            data-test="delete-service"
+                            data-test="delete-followup"
                         >
-                            Удалить услугу
+                            Удалить заявку на услугу
                             <Trash2 />
                         </Button>
                     }
-                    title="Удалить услугу?"
-                    description={`Вы уверены, что хотите удалить услугу "${service.name}"? Это действие нельзя отменить.`}
+                    title="Удалить заявку на услугу?"
+                    description={`Вы уверены, что хотите удалить заявку на услугу "${followup.name}"? Это действие нельзя отменить.`}
                     onConfirm={handleDelete}
                     confirmText="Удалить"
                     cancelText="Отмена"
@@ -84,7 +76,7 @@ const Edit: FC<Inertia.Pages.Admin.Services.Edit> = ({
                     asChild
                     className="mb-1 text-lg text-secondary"
                 >
-                    <h2>Редактировать услугу</h2>
+                    <h2>Редактировать заявку на услугу</h2>
                 </AccentHeading>
             </div>
             <form
@@ -100,7 +92,7 @@ const Edit: FC<Inertia.Pages.Admin.Services.Edit> = ({
                             name="name"
                             value={data.name}
                             onChange={(e) => setData('name', e.target.value)}
-                            placeholder="Введите название услуги"
+                            placeholder="Введите название заявки на услугу"
                         />
                         <InputError message={errors.name} />
                     </div>
@@ -115,38 +107,32 @@ const Edit: FC<Inertia.Pages.Admin.Services.Edit> = ({
                                 setData('description', e.target.value)
                             }
                             className="max-w-full"
-                            placeholder="Введите описание услуги"
+                            placeholder="Введите описание заявки на услугу"
                         />
                         <InputError message={errors.description} />
                     </div>
 
                     <div className="grid md:col-span-2 gap-2">
-                        <Label htmlFor="placeholder">Подсказка</Label>
+                        <Label htmlFor="comment">Комментарий</Label>
                         <Textarea
-                            id="placeholder"
-                            name="placeholder"
-                            value={data.placeholder}
+                            id="comment"
+                            name="comment"
+                            value={data.comment}
                             onChange={(e) =>
-                                setData('placeholder', e.target.value)
+                                setData('comment', e.target.value)
                             }
                             className="max-w-full"
-                            placeholder="Введите подсказку"
+                            placeholder="Введите комментарий"
                         />
-                        <InputError message={errors.placeholder} />
+                        <InputError message={errors.comment} />
                     </div>
 
-                    <div className="md:col-span-2">
-                        <RadioCheckbox
-                            value={data.is_active}
-                            onChange={(val) => setData('is_active', val)}
-                        />
-                    </div>
                 </div>
 
                 <FormButtons
                     label="Сохранить"
                     processing={processing}
-                    backUrl={index({ exhibition, company }).url}
+                    backUrl={index({ company: company.id }).url}
                 />
             </form>
         </div>

@@ -4,82 +4,55 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Admin;
 
+use App\Enums\FollowupStatus;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Admin\Service\ServiceStoreRequest;
-use App\Http\Requests\Admin\Service\ServiceUpdateRequest;
-use App\Models\Company;
-use App\Models\Service;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Gate;
+use App\Http\Requests\Admin\Followup\FollowupIndexRequest;
+use App\Models\Followup;
+use App\Sorts\RelationSort;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
+use Spatie\QueryBuilder\AllowedSort;
+use Spatie\QueryBuilder\QueryBuilder;
 
-final class ServiceController extends Controller
+final class FollowupController extends Controller
 {
-    public function index(Request $request, Company $company)
+    public function index(FollowupIndexRequest $request)
     {
-        Gate::authorize('view', $company->exhibition);
+        $exhibition = Auth::user()->getActiveExhibition();
 
-        $services = $company->services()->select(['name', 'id', 'placeholder', 'description'])
+        $followups = QueryBuilder::for(Followup::query()->select(['followups.comment', 'followups.status', 'followups.id'])
+            ->forExhibition($exhibition->id))
+            ->with('service')
+            ->where('status', '!=', FollowupStatus::COMPLETED)
+            ->allowedSorts([
+                AllowedSort::custom('service.name', new RelationSort('services', 'name', 'service_id')),
+            ])
             ->paginate()
+            ->through(fn($followup): array => [
+                ...$followup->toArray(),
+                'status' => $followup->status->label(),
+            ])
             ->appends($request->query());
 
-        return Inertia::render('admin/Services/Index', [
-            'company' => $company,
-            'services' => $services,
+        return Inertia::render('admin/Followups/Index', [
+            'followups' => $followups,
         ]);
     }
 
-    public function edit(Company $company, Service $service)
+    public function edit(Followup $followup)
     {
-        Gate::authorize('view', $company->exhibition);
+        $followup->load(['service.company:public_name,id', 'user:name,id']);
 
-        return Inertia::render('admin/Services/Edit', [
-            'company' => $company,
-            'service' => $service,
+        return Inertia::render('admin/Followups/Edit', [
+            'followup' => $followup,
         ]);
     }
 
-    public function create(Company $company)
+    public function update(Followup $followup)
     {
-        Gate::authorize('view', $company->exhibition);
+        abort_if($followup->status !== FollowupStatus::IMCOMPLETE, 403);
+        $followup->update(['status' => FollowupStatus::COMPLETED]);
 
-        return Inertia::render('admin/Services/Create', [
-            'company' => $company,
-        ]);
-    }
-
-    public function store(ServiceStoreRequest $request,  Company $company)
-    {
-        Gate::authorize('view', $company->exhibition);
-
-        $company->services()->create(
-            $request->only(['name', 'id', 'placeholder', 'description', 'is_active'])
-        );
-
-        return to_route('admin.services.index', [
-            'company' => $company,
-        ]);
-    }
-
-    public function update(ServiceUpdateRequest $request,  Company $company, Service $service)
-    {
-        Gate::authorize('view', $company->exhibition);
-
-        $service->update($request->only(['name', 'id', 'placeholder', 'description', 'is_active']));
-
-        return to_route('admin.services.index', [
-            'company' => $company,
-        ]);
-    }
-
-    public function destroy(Company $company, Service $service)
-    {
-        Gate::authorize('view', $company->exhibition);
-
-        $service->delete();
-
-        return to_route('admin.services.index', [
-            'company' => $company,
-        ]);
+        return to_route('admin.followups.index' );
     }
 }

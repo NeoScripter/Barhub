@@ -3,31 +3,28 @@ import InputError from '@/components/form/InputError';
 import AccentHeading from '@/components/ui/AccentHeading';
 import { Input } from '@/components/ui/Input';
 import { Label } from '@/components/ui/Label';
-import RadioCheckbox from '@/components/ui/RadioCheckbox';
 import { Textarea } from '@/components/ui/Textarea';
-import { index, store } from '@/wayfinder/routes/admin/services';
+import { store, index } from '@/wayfinder/App/Http/Controllers/Admin/CompanyFollowupController';
 import { Inertia } from '@/wayfinder/types';
 import { router, useForm } from '@inertiajs/react';
 import { FC } from 'react';
 import { toast } from 'sonner';
 
 const Create: FC<Inertia.Pages.Admin.Tasks.Create> = ({
-    exhibition,
     company,
 }) => {
     const { data, setData, post, processing, errors } = useForm({
         name: '',
         description: '',
-        placeholder: '',
-        is_active: true,
+        comment: '',
     });
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        post(store({ exhibition, company }).url, {
+        post(store({ company }).url, {
             onSuccess: () => {
-                router.visit(index({ exhibition, company }));
-                toast.success('Услуга успешно создана');
+                router.visit(index({ company }));
+                toast.success('Заявка на услугу успешно создана');
             },
         });
     };
@@ -39,7 +36,7 @@ const Create: FC<Inertia.Pages.Admin.Tasks.Create> = ({
                     asChild
                     className="mb-1 text-lg text-secondary"
                 >
-                    <h2>Создать услугу</h2>
+                    <h2>Создать заявку на услугу</h2>
                 </AccentHeading>
             </div>
             <form
@@ -56,7 +53,7 @@ const Create: FC<Inertia.Pages.Admin.Tasks.Create> = ({
                             name="name"
                             value={data.name}
                             onChange={(e) => setData('name', e.target.value)}
-                            placeholder="Введите название задачи"
+                            placeholder="Введите название заявки на услугу"
                         />
                         <InputError message={errors.name} />
                     </div>
@@ -71,38 +68,31 @@ const Create: FC<Inertia.Pages.Admin.Tasks.Create> = ({
                                 setData('description', e.target.value)
                             }
                             className="max-w-full"
-                            placeholder="Введите описание задачи"
+                            placeholder="Введите описание заявки на услугу"
                         />
                         <InputError message={errors.description} />
                     </div>
 
                     <div className="grid gap-2 md:col-span-2">
-                        <Label htmlFor="placeholder">Подсказка</Label>
+                        <Label htmlFor="comment">Подсказка</Label>
                         <Textarea
-                            id="placeholder"
-                            name="placeholder"
-                            value={data.placeholder}
+                            id="comment"
+                            name="comment"
+                            value={data.comment}
                             onChange={(e) =>
-                                setData('placeholder', e.target.value)
+                                setData('comment', e.target.value)
                             }
                             className="max-w-full"
-                            placeholder="Введите подсказку"
+                            placeholder="Введите комментарий"
                         />
-                        <InputError message={errors.placeholder} />
-                    </div>
-
-                    <div className="md:col-span-2">
-                        <RadioCheckbox
-                            value={data.is_active}
-                            onChange={(val) => setData('is_active', val)}
-                        />
+                        <InputError message={errors.comment} />
                     </div>
                 </div>
 
                 <FormButtons
                     label="Создать"
                     processing={processing}
-                    backUrl={index({ exhibition, company }).url}
+                    backUrl={index({ company }).url}
                 />
             </form>
         </div>

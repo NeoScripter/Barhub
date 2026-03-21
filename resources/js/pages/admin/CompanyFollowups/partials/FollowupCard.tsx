@@ -5,16 +5,16 @@ import {
     TooltipProvider,
     TooltipTrigger,
 } from '@/components/ui/Tooltip';
-import { edit } from '@/wayfinder/routes/admin/services';
-import { App, Inertia } from '@/wayfinder/types';
-import { Link, usePage } from '@inertiajs/react';
+import { edit } from '@/wayfinder/App/Http/Controllers/Admin/CompanyFollowupController';
+import { App } from '@/wayfinder/types';
+import { Link } from '@inertiajs/react';
 import { Pencil } from 'lucide-react';
 import { FC } from 'react';
 
-const ServiceCard: FC<{ service: App.Models.Service }> = ({ service }) => {
-    const { exhibition, company } =
-        usePage<Inertia.Pages.Admin.Services.Index>().props;
-
+const FollowupCard: FC<{
+    followup: App.Models.Followup;
+    company: App.Models.Company;
+}> = ({ followup, company }) => {
     return (
         <li>
             <TooltipProvider delayDuration={0}>
@@ -22,23 +22,22 @@ const ServiceCard: FC<{ service: App.Models.Service }> = ({ service }) => {
                     <Link
                         href={
                             edit({
-                                exhibition,
-                                company,
-                                service: service.id,
+                                company: company.id,
+                                followup: followup.id,
                             }).url
                         }
-                        data-test={`edit-service-${service.id}`}
+                        data-test={`edit-followup-${followup.id}`}
                         className="absolute top-4 right-4 flex items-center justify-center p-1"
                     >
                         <Pencil className="size-5 opacity-50" />
                     </Link>
                     <h3 className="mb-3 text-center text-lg font-bold text-balance sm:mb-3 sm:text-xl md:mb-4 lg:mb-5">
-                        {service.name}
+                        {followup.name}
                     </h3>
                     <Tooltip>
                         <TooltipTrigger>
                             <p className="text-sm sm:text-base">
-                                {service.description}
+                                {followup.description}
                             </p>
                         </TooltipTrigger>
                         <TooltipContent
@@ -46,7 +45,7 @@ const ServiceCard: FC<{ service: App.Models.Service }> = ({ service }) => {
                             align="end"
                             className="p-4 text-xs text-foreground"
                         >
-                            <p>{service.placeholder}</p>
+                            <p>{followup.comment}</p>
                         </TooltipContent>
                     </Tooltip>
                 </CardLayout>
@@ -55,4 +54,4 @@ const ServiceCard: FC<{ service: App.Models.Service }> = ({ service }) => {
     );
 };
 
-export default ServiceCard;
+export default FollowupCard;
