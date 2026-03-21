@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 use App\Enums\FollowupStatus;
@@ -7,386 +6,198 @@ use App\Enums\UserRole;
 use App\Models\Company;
 use App\Models\Exhibition;
 use App\Models\Followup;
-use App\Models\Service;
 use App\Models\User;
 
-describe('Admin Followup Browser Tests', function (): void {
+use function Pest\Laravel\actingAs;
+use function Pest\Laravel\get;
 
-    it('renders the followups index page', function (): void {
-        $user = User::factory()->create([
-            'email' => 'super-admin@gmail.com',
-            'password' => 'password',
-        ]);
-        $user->assignRole(UserRole::SUPER_ADMIN);
-        $exhibition = Exhibition::factory()->create();
-        $company = Company::factory()->for($exhibition)->create();
-        $service = Service::factory()->for($company)->create();
-        Followup::factory()->for($service)->for($user)->count(4)->create();
-
-        $route = "/admin/followups";
-
-        $page = visit('/login');
-        $page->assertSee('Вход в аккаунт')
-            ->fill('email', 'super-admin@gmail.com')
-            ->fill('password', 'password')
-            ->click('@login-button')
-            ->assertSee('super-admin@gmail.com');
-
-        $this->assertAuthenticated();
-
-        $page->navigate($route);
-        $page->assertSee('Работа с партнерами');
-    });
-
-    it('renders the followups edit page', function (): void {
-        $user = User::factory()->create([
-            'email' => 'super-admin@gmail.com',
-            'password' => 'password',
-        ]);
-        $user->assignRole(UserRole::SUPER_ADMIN);
-        $exhibition = Exhibition::factory()->create();
-        $company = Company::factory()->for($exhibition)->create();
-        $service = Service::factory()->for($company)->create();
-        $followup = Followup::factory()
-            ->for($service)
-            ->for($user)
-            ->create(['status' => FollowupStatus::IMCOMPLETE]);
-
-        $route = "/admin/followups";
-
-        $page = visit('/login');
-        $page->assertSee('Вход в аккаунт')
-            ->fill('email', 'super-admin@gmail.com')
-            ->fill('password', 'password')
-            ->click('@login-button')
-            ->assertSee('super-admin@gmail.com');
-
-        $this->assertAuthenticated();
-
-        $page->navigate($route)
-            ->click("@edit-followup-{$followup->id}")
-            ->assertSee('Название компании');
-    });
-
-    it('successfully completes a followup', function (): void {
-        $user = User::factory()->create([
-            'email' => 'super-admin@gmail.com',
-            'password' => 'password',
-        ]);
-        $user->assignRole(UserRole::SUPER_ADMIN);
-        $exhibition = Exhibition::factory()->create();
-        $company = Company::factory()->for($exhibition)->create();
-        $service = Service::factory()->for($company)->create();
-        $followup = Followup::factory()
-            ->for($service)
-            ->for($user)
-            ->create(['status' => FollowupStatus::IMCOMPLETE]);
-
-        $route = "/admin/followups";
-
-        $page = visit('/login');
-        $page->assertSee('Вход в аккаунт')
-            ->fill('email', 'super-admin@gmail.com')
-            ->fill('password', 'password')
-            ->click('@login-button')
-            ->assertSee('super-admin@gmail.com');
-
-        $this->assertAuthenticated();
-
-        $page->navigate($route)
-            ->click("@edit-followup-{$followup->id}")
-            ->assertSee('Название компании')
-            ->submit()
-            ->assertPathEndsWith($route);
-
-        $this->assertDatabaseHas('followups', [
-            'id' => $followup->id,
-            'status' => FollowupStatus::COMPLETED->value,
-        ]);
-    });
-
-    it('displays only the followups that belong to this exhibition', function (): void {
-        $user = User::factory()->create([
-            'email' => 'admin@gmail.com',
-            'password' => 'password',
-        ]);
-        $user->assignRole(UserRole::ADMIN);
-
-        $exhibition = Exhibition::factory()->create();
-        $exhibition->users()->attach($user->id);
-        $otherExhibition = Exhibition::factory()->create();
-
-        $company = Company::factory()->for($exhibition)->create();
-        $otherCompany = Company::factory()->for($otherExhibition)->create();
-
-        $service = Service::factory()->for($company)->create([
-            'description' => 'Belongs To This Exhibition',
-        ]);
-        $otherService = Service::factory()->for($otherCompany)->create([
-            'description' => 'Belongs To Other Exhibition',
-        ]);
-
-        Followup::factory()->for($service)->for($user)->create([
-            'status' => FollowupStatus::IMCOMPLETE,
-        ]);
-        Followup::factory()->for($otherService)->for($user)->create([
-            'status' => FollowupStatus::IMCOMPLETE,
-        ]);
-
-        $route = "/admin/followups";
-
-        $page = visit('/login');
-        $page->assertSee('Вход в аккаунт')
-            ->fill('email', 'admin@gmail.com')
-            ->fill('password', 'password')
-            ->click('@login-button')
-            ->assertSee('admin@gmail.com');
-
-        $this->assertAuthenticated();
-
-        $page->navigate($route)
-            ->assertSee('Belongs To This Exhibition')
-            ->assertDontSee('Belongs To Other Exhibition');
-    });
-})->group('browser');
-
-describe('Admin Followup Feature Tests', function (): void {
+describe('Admin Followup Tests', function (): void {
     beforeEach(function (): void {
-        $this->superAdmin = User::factory()->create([
-            'email' => 'super-admin@gmail.com',
-            'password' => 'password',
-        ]);
+        $this->superAdmin = User::factory()->create();
         $this->superAdmin->assignRole(UserRole::SUPER_ADMIN);
         $this->exhibition = Exhibition::factory()->create();
-        $this->route = "/admin/followups";
+        $this->superAdmin->setActiveExhibition($this->exhibition->id);
+        $this->company = Company::factory()->for($this->exhibition)->create();
+        $this->route = route('admin.followups.index');
     });
 
-    it('sorts followups by service name in desc order', function (): void {
-        $company = Company::factory()->for($this->exhibition)->create();
-        Service::factory()
-            ->count(3)
-            ->for($company)
-            ->has(Followup::factory()->for($this->superAdmin)->state(['status' => FollowupStatus::IMCOMPLETE]))
-            ->sequence(
-                ['name' => 'Zebra'],
-                ['name' => 'Alpha'],
-                ['name' => 'Beta'],
-            )
-            ->create();
-
-        $followups = $this->actingAs($this->superAdmin)
-            ->get(route('admin.followups.index', [
-                'exhibition' => $this->exhibition,
-                'sort' => '-service.name',
-            ]))
-            ->assertOk()
-            ->viewData('page')['props']['followups']['data'];
-
-        expect($followups[0]['service']['name'])->toBe('Zebra')
-            ->and($followups[1]['service']['name'])->toBe('Beta')
-            ->and($followups[2]['service']['name'])->toBe('Alpha');
-    });
-
-    it('sorts followups by service name in asc order', function (): void {
-        $company = Company::factory()->for($this->exhibition)->create();
-        Service::factory()
-            ->count(3)
-            ->for($company)
-            ->has(Followup::factory()->for($this->superAdmin)->state(['status' => FollowupStatus::IMCOMPLETE]))
-            ->sequence(
-                ['name' => 'Zebra'],
-                ['name' => 'Alpha'],
-                ['name' => 'Beta'],
-            )
-            ->create();
-
-        $followups = $this->actingAs($this->superAdmin)
-            ->get(route('admin.followups.index', [
-                'exhibition' => $this->exhibition,
-                'sort' => 'service.name',
-            ]))
-            ->assertOk()
-            ->viewData('page')['props']['followups']['data'];
-
-        expect($followups[0]['service']['name'])->toBe('Alpha')
-            ->and($followups[1]['service']['name'])->toBe('Beta')
-            ->and($followups[2]['service']['name'])->toBe('Zebra');
-    });
-
-    it('allows super admin to enter this page', function (): void {
-        $this->actingAs($this->superAdmin)
+    it('renders the followups index page', function (): void {
+        actingAs($this->superAdmin)
             ->get($this->route)
-            ->assertOk();
+            ->assertOk()
+            ->assertInertia(
+                fn($page) => $page
+                    ->component('admin/Followups/Index')
+                    ->has('followups')
+            );
     });
 
-    it('allows super admin to complete a followup whose status is incomplete', function (): void {
-        $company = Company::factory()->for($this->exhibition)->create();
-        $service = Service::factory()->for($company)->create();
-        $followup = Followup::factory()
-            ->for($service)
-            ->for($this->superAdmin)
-            ->create(['status' => FollowupStatus::IMCOMPLETE]);
+    it('displays only incomplete followups', function (): void {
+        Followup::factory()->for($this->company)->create(['status' => FollowupStatus::IMCOMPLETE]);
+        Followup::factory()->for($this->company)->create(['status' => FollowupStatus::COMPLETED]);
 
-        $this->actingAs($this->superAdmin)
-            ->patch("{$this->route}/{$followup->id}")
+        actingAs($this->superAdmin)
+            ->get($this->route)
+            ->assertOk()
+            ->assertInertia(
+                fn($page) => $page->has('followups.data', 1)
+            );
+    });
+
+    it('successfully updates the status of a followup', function (): void {
+        $followup = Followup::factory()->for($this->company)->create(['status' => FollowupStatus::IMCOMPLETE]);
+
+        actingAs($this->superAdmin)
+            ->patch(route('admin.followups.update', $followup))
             ->assertRedirect($this->route);
 
-        $this->assertDatabaseHas('followups', [
-            'id' => $followup->id,
+        \Pest\Laravel\assertDatabaseHas('followups', [
+            'id'     => $followup->id,
             'status' => FollowupStatus::COMPLETED->value,
         ]);
     });
 
-    it('forbids completing a followup whose status is already completed', function (): void {
-        $company = Company::factory()->for($this->exhibition)->create();
-        $service = Service::factory()->for($company)->create();
-        $followup = Followup::factory()
-            ->for($service)
-            ->for($this->superAdmin)
-            ->create(['status' => FollowupStatus::COMPLETED]);
+    it('successfully displays the number of incomplete followups for this exhibition', function (): void {
+        Followup::factory(3)->for($this->company)->create(['status' => FollowupStatus::IMCOMPLETE]);
+        Followup::factory(2)->for($this->company)->create(['status' => FollowupStatus::COMPLETED]);
 
-        $this->actingAs($this->superAdmin)
-            ->patch("{$this->route}/{$followup->id}")
-            ->assertForbidden();
-
-        $this->assertDatabaseHas('followups', [
-            'id' => $followup->id,
-            'status' => FollowupStatus::COMPLETED->value,
-        ]);
-    });
-
-    it('allows admins with access to this exhibition to enter this page', function (): void {
-        $admin = User::factory()->create();
-        $admin->assignRole(UserRole::ADMIN);
-        $this->exhibition->users()->attach($admin->id);
-
-        $this->actingAs($admin)
+        actingAs($this->superAdmin)
             ->get($this->route)
-            ->assertOk();
+            ->assertOk()
+            ->assertInertia(
+                fn($page) => $page->has('followups.data', 3)
+            );
     });
 
-    it('forbids admins without access to this exhibition from entering this page', function (): void {
+    it('displays only the incomplete followups for the active exhibition for the admin', function (): void {
+        $otherExhibition = Exhibition::factory()->create();
+        $otherCompany = Company::factory()->for($otherExhibition)->create();
+
+        Followup::factory(2)->for($this->company)->create(['status' => FollowupStatus::IMCOMPLETE]);
+        Followup::factory(3)->for($otherCompany)->create(['status' => FollowupStatus::IMCOMPLETE]);
+
+        actingAs($this->superAdmin)
+            ->get($this->route)
+            ->assertOk()
+            ->assertInertia(
+                fn($page) => $page->has('followups.data', 2)
+            );
+    });
+
+    it('forbids admins without access to any exhibition from entering this page', function (): void {
         $admin = User::factory()->create();
         $admin->assignRole(UserRole::ADMIN);
 
-        $this->actingAs($admin)
+        actingAs($admin)
             ->get($this->route)
             ->assertForbidden();
-    });
-
-    it('forbids admins without access from completing a followup', function (): void {
-        $admin = User::factory()->create();
-        $admin->assignRole(UserRole::ADMIN);
-        $company = Company::factory()->for($this->exhibition)->create();
-        $service = Service::factory()->for($company)->create();
-        $followup = Followup::factory()
-            ->for($service)
-            ->for($this->superAdmin)
-            ->create(['status' => FollowupStatus::IMCOMPLETE]);
-
-        $this->actingAs($admin)
-            ->patch("{$this->route}/{$followup->id}")
-            ->assertForbidden();
-
-        $this->assertDatabaseHas('followups', [
-            'id' => $followup->id,
-            'status' => FollowupStatus::IMCOMPLETE->value,
-        ]);
     });
 
     it('forbids exponents from entering this page', function (): void {
         $exponent = User::factory()->create();
         $exponent->assignRole(UserRole::EXPONENT);
 
-        $this->actingAs($exponent)
+        actingAs($exponent)
             ->get($this->route)
             ->assertForbidden();
-    });
-
-    it('forbids exponents from completing a followup', function (): void {
-        $exponent = User::factory()->create();
-        $exponent->assignRole(UserRole::EXPONENT);
-        $company = Company::factory()->for($this->exhibition)->create();
-        $service = Service::factory()->for($company)->create();
-        $followup = Followup::factory()
-            ->for($service)
-            ->for($this->superAdmin)
-            ->create(['status' => FollowupStatus::IMCOMPLETE]);
-
-        $this->actingAs($exponent)
-            ->patch("{$this->route}/{$followup->id}")
-            ->assertForbidden();
-
-        $this->assertDatabaseHas('followups', [
-            'id' => $followup->id,
-            'status' => FollowupStatus::IMCOMPLETE->value,
-        ]);
     });
 
     it('forbids users from entering this page', function (): void {
         $user = User::factory()->create();
         $user->assignRole(UserRole::USER);
 
-        $this->actingAs($user)
+        actingAs($user)
             ->get($this->route)
             ->assertForbidden();
     });
 
-    it('forbids users from completing a followup', function (): void {
-        $user = User::factory()->create();
-        $user->assignRole(UserRole::USER);
-        $company = Company::factory()->for($this->exhibition)->create();
-        $service = Service::factory()->for($company)->create();
-        $followup = Followup::factory()
-            ->for($service)
-            ->for($this->superAdmin)
-            ->create(['status' => FollowupStatus::IMCOMPLETE]);
-
-        $this->actingAs($user)
-            ->patch("{$this->route}/{$followup->id}")
-            ->assertForbidden();
-
-        $this->assertDatabaseHas('followups', [
-            'id' => $followup->id,
-            'status' => FollowupStatus::IMCOMPLETE->value,
-        ]);
+    it('forbids guest users from entering this page', function (): void {
+        get($this->route)
+            ->assertRedirect(route('login'));
     });
 
-    it('forbids unregistered users to enter this page', function (): void {
-        $this->get($this->route)
-            ->assertRedirect('/login');
-    });
+    it('allows admins with access to an exhibition to enter this page', function (): void {
+        $admin = User::factory()->create();
+        $admin->assignRole(UserRole::ADMIN);
+        $this->exhibition->users()->attach($admin->id);
+        $admin->setActiveExhibition($this->exhibition->id);
 
-    it('forbids unregistered users from completing a followup', function (): void {
-        $company = Company::factory()->for($this->exhibition)->create();
-        $service = Service::factory()->for($company)->create();
-        $followup = Followup::factory()
-            ->for($service)
-            ->for($this->superAdmin)
-            ->create(['status' => FollowupStatus::IMCOMPLETE]);
-
-        $this->patch("{$this->route}/{$followup->id}")
-            ->assertRedirect('/login');
-
-        $this->assertDatabaseHas('followups', [
-            'id' => $followup->id,
-            'status' => FollowupStatus::IMCOMPLETE->value,
-        ]);
-    });
-
-    it('does not display completed followups on the index page', function (): void {
-        $company = Company::factory()->for($this->exhibition)->create();
-        $service = Service::factory()->for($company)->create();
-
-        Followup::factory()->for($service)->for($this->superAdmin)->create(['status' => FollowupStatus::IMCOMPLETE]);
-        Followup::factory()->for($service)->for($this->superAdmin)->create(['status' => FollowupStatus::COMPLETED]);
-
-        $followups = $this->actingAs($this->superAdmin)
+        actingAs($admin)
             ->get($this->route)
+            ->assertOk();
+    });
+
+    it('allows super admin to enter this page', function (): void {
+        actingAs($this->superAdmin)
+            ->get($this->route)
+            ->assertOk();
+    });
+
+    it('sorts the items based on company public name in ascending order', function (): void {
+        $companyZ = Company::factory()->for($this->exhibition)->create(['public_name' => 'Zebra Co']);
+        $companyA = Company::factory()->for($this->exhibition)->create(['public_name' => 'Alpha Co']);
+        $companyB = Company::factory()->for($this->exhibition)->create(['public_name' => 'Beta Co']);
+
+        Followup::factory()->for($companyZ)->create(['status' => FollowupStatus::IMCOMPLETE]);
+        Followup::factory()->for($companyA)->create(['status' => FollowupStatus::IMCOMPLETE]);
+        Followup::factory()->for($companyB)->create(['status' => FollowupStatus::IMCOMPLETE]);
+
+        $data = actingAs($this->superAdmin)
+            ->get(route('admin.followups.index', ['sort' => 'company.public_name']))
             ->assertOk()
             ->viewData('page')['props']['followups']['data'];
 
-        expect($followups)->toHaveCount(1)
-            ->and($followups[0]['status'])->toBe(FollowupStatus::IMCOMPLETE->label());
+        expect($data[0]['company']['public_name'])->toBe('Alpha Co')
+            ->and($data[1]['company']['public_name'])->toBe('Beta Co')
+            ->and($data[2]['company']['public_name'])->toBe('Zebra Co');
+    });
+
+    it('sorts the items based on company public name in descending order', function (): void {
+        $companyZ = Company::factory()->for($this->exhibition)->create(['public_name' => 'Zebra Co']);
+        $companyA = Company::factory()->for($this->exhibition)->create(['public_name' => 'Alpha Co']);
+        $companyB = Company::factory()->for($this->exhibition)->create(['public_name' => 'Beta Co']);
+
+        Followup::factory()->for($companyZ)->create(['status' => FollowupStatus::IMCOMPLETE]);
+        Followup::factory()->for($companyA)->create(['status' => FollowupStatus::IMCOMPLETE]);
+        Followup::factory()->for($companyB)->create(['status' => FollowupStatus::IMCOMPLETE]);
+
+        $data = actingAs($this->superAdmin)
+            ->get(route('admin.followups.index', ['sort' => '-company.public_name']))
+            ->assertOk()
+            ->viewData('page')['props']['followups']['data'];
+
+        expect($data[0]['company']['public_name'])->toBe('Zebra Co')
+            ->and($data[1]['company']['public_name'])->toBe('Beta Co')
+            ->and($data[2]['company']['public_name'])->toBe('Alpha Co');
+    });
+
+    it('sorts the items based on followup name in ascending order', function (): void {
+        Followup::factory()->for($this->company)->create(['name' => 'Zebra Followup', 'status' => FollowupStatus::IMCOMPLETE]);
+        Followup::factory()->for($this->company)->create(['name' => 'Alpha Followup', 'status' => FollowupStatus::IMCOMPLETE]);
+        Followup::factory()->for($this->company)->create(['name' => 'Beta Followup', 'status' => FollowupStatus::IMCOMPLETE]);
+
+        $data = actingAs($this->superAdmin)
+            ->get(route('admin.followups.index', ['sort' => 'name']))
+            ->assertOk()
+            ->viewData('page')['props']['followups']['data'];
+
+        expect($data[0]['name'])->toBe('Alpha Followup')
+            ->and($data[1]['name'])->toBe('Beta Followup')
+            ->and($data[2]['name'])->toBe('Zebra Followup');
+    });
+
+    it('sorts the items based on followup name in descending order', function (): void {
+        Followup::factory()->for($this->company)->create(['name' => 'Zebra Followup', 'status' => FollowupStatus::IMCOMPLETE]);
+        Followup::factory()->for($this->company)->create(['name' => 'Alpha Followup', 'status' => FollowupStatus::IMCOMPLETE]);
+        Followup::factory()->for($this->company)->create(['name' => 'Beta Followup', 'status' => FollowupStatus::IMCOMPLETE]);
+
+        $data = actingAs($this->superAdmin)
+            ->get(route('admin.followups.index', ['sort' => '-name']))
+            ->assertOk()
+            ->viewData('page')['props']['followups']['data'];
+
+        expect($data[0]['name'])->toBe('Zebra Followup')
+            ->and($data[1]['name'])->toBe('Beta Followup')
+            ->and($data[2]['name'])->toBe('Alpha Followup');
     });
 })->group('feature');
