@@ -5,81 +5,72 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\Service\ServiceIndexRequest;
 use App\Http\Requests\Admin\Service\ServiceStoreRequest;
 use App\Http\Requests\Admin\Service\ServiceUpdateRequest;
-use App\Models\Company;
 use App\Models\Service;
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Inertia\Inertia;
+use Spatie\QueryBuilder\QueryBuilder;
 
 final class ServiceController extends Controller
 {
-    public function index(Request $request, Company $company)
+    public function index(ServiceIndexRequest $request)
     {
-        Gate::authorize('view', $company->exhibition);
+        $exhibition = Auth::user()->getActiveExhibition();
 
-        $services = $company->services()->select(['name', 'id', 'placeholder', 'description'])
+        $services = QueryBuilder::for($exhibition->services()->select(['name', 'description', 'id']))
+            ->allowedSorts(['name'])
             ->paginate()
             ->appends($request->query());
 
         return Inertia::render('admin/Services/Index', [
-            'company' => $company,
             'services' => $services,
         ]);
     }
 
-    public function edit(Company $company, Service $service)
+
+    public function edit(Service $service)
     {
-        Gate::authorize('view', $company->exhibition);
+        Gate::authorize('view', $service->exhibition);
 
         return Inertia::render('admin/Services/Edit', [
-            'company' => $company,
             'service' => $service,
         ]);
     }
 
-    public function create(Company $company)
+    public function create()
     {
-        Gate::authorize('view', $company->exhibition);
-
-        return Inertia::render('admin/Services/Create', [
-            'company' => $company,
-        ]);
+        return Inertia::render('admin/Services/Create');
     }
 
-    public function store(ServiceStoreRequest $request,  Company $company)
+    public function store(ServiceStoreRequest $request)
     {
-        Gate::authorize('view', $company->exhibition);
+        $exhibition = Auth::user()->getActiveExhibition();
 
-        $company->services()->create(
+        $exhibition->services()->create(
             $request->only(['name', 'id', 'placeholder', 'description', 'is_active'])
         );
 
-        return to_route('admin.services.index', [
-            'company' => $company,
-        ]);
+        return to_route('admin.services.index');
     }
 
-    public function update(ServiceUpdateRequest $request,  Company $company, Service $service)
+    public function update(ServiceUpdateRequest $request, Service $service)
     {
-        Gate::authorize('view', $company->exhibition);
+        Gate::authorize('view', $service->exhibition);
 
         $service->update($request->only(['name', 'id', 'placeholder', 'description', 'is_active']));
 
-        return to_route('admin.services.index', [
-            'company' => $company,
-        ]);
+        return to_route('admin.services.index');
     }
 
-    public function destroy(Company $company, Service $service)
+    public function destroy(Service $service)
     {
-        Gate::authorize('view', $company->exhibition);
+        Gate::authorize('view', $service->exhibition);
 
         $service->delete();
 
-        return to_route('admin.services.index', [
-            'company' => $company,
-        ]);
+        return to_route('admin.services.index');
     }
 }

@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('services', function (Blueprint $table): void {
             $table->id();
-            $table->foreignId('company_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('exhibition_id')->constrained()->cascadeOnDelete();
             $table->string('name');
             $table->text('description');
             $table->text('placeholder');

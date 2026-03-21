@@ -1,90 +1,45 @@
 import FormButtons from '@/components/form/FormButtons';
 import InputError from '@/components/form/InputError';
 import AccentHeading from '@/components/ui/AccentHeading';
-import { Button } from '@/components/ui/Button';
-import { DeleteAlertDialog } from '@/components/ui/DeleteAlertDialog';
 import { Input } from '@/components/ui/Input';
 import { Label } from '@/components/ui/Label';
 import RadioCheckbox from '@/components/ui/RadioCheckbox';
-import { Spinner } from '@/components/ui/Spinner';
 import { Textarea } from '@/components/ui/Textarea';
-import {
-    destroy,
-    index,
-    update,
-} from '@/wayfinder/routes/admin/services';
+import { index, store } from '@/wayfinder/routes/admin/services';
 import { Inertia } from '@/wayfinder/types';
 import { router, useForm } from '@inertiajs/react';
-import { Trash2 } from 'lucide-react';
-import { FC, useState } from 'react';
+import { FC } from 'react';
 import { toast } from 'sonner';
 
-const Edit: FC<Inertia.Pages.Admin.Services.Edit> = ({
+const Create: FC<Inertia.Pages.Admin.Tasks.Create> = ({
     exhibition,
     company,
-    service,
 }) => {
-    const { data, setData, put, processing, errors } = useForm({
-        name: service.name,
-        description: service.description,
-        placeholder: service.placeholder,
-        is_active: !!service.is_active,
+    const { data, setData, post, processing, errors } = useForm({
+        name: '',
+        description: '',
+        placeholder: '',
+        is_active: true,
     });
-
-    const [isDeleting, setIsDeleting] = useState(false);
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        put(update({ exhibition, company, service: service.id }).url, {
+        post(store({ exhibition, company }).url, {
             onSuccess: () => {
-                toast.success('Услуга успешно обновлена');
-            },
-        });
-    };
-
-    const handleDelete = () => {
-        setIsDeleting(true);
-        router.delete(destroy({ exhibition, company, service }).url, {
-            onSuccess: () => {
-                router.visit(index({ exhibition, company }).url);
-                toast.success('Услуга успешно удалена');
-            },
-            onError: () => {
-                toast.error('Ошибка при удалении услуги');
-                setIsDeleting(false);
+                router.visit(index({ exhibition, company }));
+                toast.success('Услуга успешно создана');
             },
         });
     };
 
     return (
         <div className="mx-auto w-full max-w-250">
-            <div className="mb-8 flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
-                <DeleteAlertDialog
-                    trigger={
-                        <Button
-                            variant="destructive"
-                            type="button"
-                            data-test="delete-service"
-                        >
-                            Удалить услугу
-                            <Trash2 />
-                        </Button>
-                    }
-                    title="Удалить услугу?"
-                    description={`Вы уверены, что хотите удалить услугу "${service.name}"? Это действие нельзя отменить.`}
-                    onConfirm={handleDelete}
-                    confirmText="Удалить"
-                    cancelText="Отмена"
-                    isLoading={isDeleting}
-                />
-            </div>
-
             <div className="mb-8 text-center md:mb-12">
                 <AccentHeading
                     asChild
                     className="mb-1 text-lg text-secondary"
                 >
-                    <h2>Редактировать услугу</h2>
+                    <h2>Создать услугу</h2>
                 </AccentHeading>
             </div>
             <form
@@ -97,15 +52,16 @@ const Edit: FC<Inertia.Pages.Admin.Services.Edit> = ({
                         <Input
                             id="name"
                             type="text"
+                            required
                             name="name"
                             value={data.name}
                             onChange={(e) => setData('name', e.target.value)}
-                            placeholder="Введите название услуги"
+                            placeholder="Введите название задачи"
                         />
                         <InputError message={errors.name} />
                     </div>
 
-                    <div className="grid md:col-span-2 gap-2">
+                    <div className="grid gap-2 md:col-span-2">
                         <Label htmlFor="description">Описание</Label>
                         <Textarea
                             id="description"
@@ -115,12 +71,12 @@ const Edit: FC<Inertia.Pages.Admin.Services.Edit> = ({
                                 setData('description', e.target.value)
                             }
                             className="max-w-full"
-                            placeholder="Введите описание услуги"
+                            placeholder="Введите описание задачи"
                         />
                         <InputError message={errors.description} />
                     </div>
 
-                    <div className="grid md:col-span-2 gap-2">
+                    <div className="grid gap-2 md:col-span-2">
                         <Label htmlFor="placeholder">Подсказка</Label>
                         <Textarea
                             id="placeholder"
@@ -144,7 +100,7 @@ const Edit: FC<Inertia.Pages.Admin.Services.Edit> = ({
                 </div>
 
                 <FormButtons
-                    label="Сохранить"
+                    label="Создать"
                     processing={processing}
                     backUrl={index({ exhibition, company }).url}
                 />
@@ -153,4 +109,4 @@ const Edit: FC<Inertia.Pages.Admin.Services.Edit> = ({
     );
 };
 
-export default Edit;
+export default Create;

@@ -45,6 +45,11 @@ final class Exhibition extends Model
         return $this->hasMany(Company::class);
     }
 
+    public function services(): HasMany
+    {
+        return $this->hasMany(Service::class);
+    }
+
     public function taskTemplates(): HasMany
     {
         return $this->hasMany(TaskTemplate::class);

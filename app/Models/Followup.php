@@ -17,9 +17,9 @@ final class Followup extends Model
     /** @use HasFactory<FollowupFactory> */
     use HasFactory;
 
-    public function service(): BelongsTo
+    public function company(): BelongsTo
     {
-        return $this->belongsTo(Service::class);
+        return $this->belongsTo(Company::class);
     }
 
     public function user(): BelongsTo
@@ -43,18 +43,8 @@ final class Followup extends Model
     protected function forExhibition(Builder $query, int $exhibitionId): Builder
     {
         return $query
-            ->join('services', 'followups.service_id', '=', 'services.id')
-            ->join('companies', 'services.company_id', '=', 'companies.id')
+            ->join('companies', 'followups.company_id', '=', 'companies.id')
             ->where('companies.exhibition_id', $exhibitionId)
-            ->select('followups.*');
-    }
-
-    #[Scope]
-    protected function forCompany(Builder $query, int $companyId): Builder
-    {
-        return $query
-            ->join('services', 'followups.service_id', '=', 'services.id')
-            ->where('services.company_id', $companyId)
             ->select('followups.*');
     }
 }

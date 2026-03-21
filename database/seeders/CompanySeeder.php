@@ -42,8 +42,8 @@ final class CompanySeeder extends Seeder
                             ->has(TaskFile::factory(), 'file')
                             ->count(random_int(1, 3)), 'comments')
                 )
-                ->has(Service::factory()
-                    ->count(5))
+                ->has(Followup::factory()
+                    ->count(rand(2, 7)))
                 ->count(10)
                 ->for($exhibition)
                 ->hasAttached($tags->random(random_int(1, 3)))
@@ -61,7 +61,7 @@ final class CompanySeeder extends Seeder
                         'type' => 'logo',
                     ]);
 
-                    $company->services()->each(function ($service) use ($company): void {
+                    $company->followups()->each(function ($followup) use ($company): void {
                         $data = User::factory()->make([
                             'role' => UserRole::EXPONENT->value,
                         ])->getAttributes();
@@ -70,10 +70,7 @@ final class CompanySeeder extends Seeder
                             ['email' => $data['email']],
                             $data
                         );
-                        Followup::factory([
-                            'user_id' => $user->id,
-                            'service_id' => $service->id,
-                        ])->create();
+                        $followup->update(['user_id' => $user->id]);
                     });
 
                     $exponent = User::where('email', 'exponent@gmail.com')->first();

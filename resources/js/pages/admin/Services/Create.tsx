@@ -11,10 +11,7 @@ import { router, useForm } from '@inertiajs/react';
 import { FC } from 'react';
 import { toast } from 'sonner';
 
-const Create: FC<Inertia.Pages.Admin.Tasks.Create> = ({
-    exhibition,
-    company,
-}) => {
+const Create: FC<Inertia.Pages.Admin.Tasks.Create> = () => {
     const { data, setData, post, processing, errors } = useForm({
         name: '',
         description: '',
@@ -24,9 +21,9 @@ const Create: FC<Inertia.Pages.Admin.Tasks.Create> = ({
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        post(store({ exhibition, company }).url, {
+        post(store().url, {
             onSuccess: () => {
-                router.visit(index({ exhibition, company }));
+                router.visit(index());
                 toast.success('Услуга успешно создана');
             },
         });
@@ -102,7 +99,7 @@ const Create: FC<Inertia.Pages.Admin.Tasks.Create> = ({
                 <FormButtons
                     label="Создать"
                     processing={processing}
-                    backUrl={index({ exhibition, company }).url}
+                    backUrl={index().url}
                 />
             </form>
         </div>

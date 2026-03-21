@@ -6,24 +6,15 @@ import { DeleteAlertDialog } from '@/components/ui/DeleteAlertDialog';
 import { Input } from '@/components/ui/Input';
 import { Label } from '@/components/ui/Label';
 import RadioCheckbox from '@/components/ui/RadioCheckbox';
-import { Spinner } from '@/components/ui/Spinner';
 import { Textarea } from '@/components/ui/Textarea';
-import {
-    destroy,
-    index,
-    update,
-} from '@/wayfinder/routes/admin/services';
+import { destroy, index, update } from '@/wayfinder/routes/admin/services';
 import { Inertia } from '@/wayfinder/types';
 import { router, useForm } from '@inertiajs/react';
 import { Trash2 } from 'lucide-react';
 import { FC, useState } from 'react';
 import { toast } from 'sonner';
 
-const Edit: FC<Inertia.Pages.Admin.Services.Edit> = ({
-    exhibition,
-    company,
-    service,
-}) => {
+const Edit: FC<Inertia.Pages.Admin.Services.Edit> = ({ service }) => {
     const { data, setData, put, processing, errors } = useForm({
         name: service.name,
         description: service.description,
@@ -35,7 +26,7 @@ const Edit: FC<Inertia.Pages.Admin.Services.Edit> = ({
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        put(update({ exhibition, company, service: service.id }).url, {
+        put(update({ service: service.id }).url, {
             onSuccess: () => {
                 toast.success('Услуга успешно обновлена');
             },
@@ -44,9 +35,9 @@ const Edit: FC<Inertia.Pages.Admin.Services.Edit> = ({
 
     const handleDelete = () => {
         setIsDeleting(true);
-        router.delete(destroy({ exhibition, company, service }).url, {
+        router.delete(destroy({ service }).url, {
             onSuccess: () => {
-                router.visit(index({ exhibition, company }).url);
+                router.visit(index().url);
                 toast.success('Услуга успешно удалена');
             },
             onError: () => {
@@ -105,7 +96,7 @@ const Edit: FC<Inertia.Pages.Admin.Services.Edit> = ({
                         <InputError message={errors.name} />
                     </div>
 
-                    <div className="grid md:col-span-2 gap-2">
+                    <div className="grid gap-2 md:col-span-2">
                         <Label htmlFor="description">Описание</Label>
                         <Textarea
                             id="description"
@@ -120,7 +111,7 @@ const Edit: FC<Inertia.Pages.Admin.Services.Edit> = ({
                         <InputError message={errors.description} />
                     </div>
 
-                    <div className="grid md:col-span-2 gap-2">
+                    <div className="grid gap-2 md:col-span-2">
                         <Label htmlFor="placeholder">Подсказка</Label>
                         <Textarea
                             id="placeholder"
@@ -146,7 +137,7 @@ const Edit: FC<Inertia.Pages.Admin.Services.Edit> = ({
                 <FormButtons
                     label="Сохранить"
                     processing={processing}
-                    backUrl={index({ exhibition, company }).url}
+                    backUrl={index().url}
                 />
             </form>
         </div>

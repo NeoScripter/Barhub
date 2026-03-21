@@ -7,7 +7,9 @@ namespace Database\Seeders;
 use App\Constants\ExhibitionName;
 use App\Enums\UserRole;
 use App\Models\Exhibition;
+use App\Models\Service;
 use App\Models\User;
+use Database\Factories\ServiceFactory;
 use Illuminate\Database\Seeder;
 
 final class ExhibitionSeeder extends Seeder
@@ -18,7 +20,7 @@ final class ExhibitionSeeder extends Seeder
     public function run(): void
     {
         foreach (ExhibitionName::NAMES as $name) {
-            Exhibition::factory()->create(['name' => $name]);
+            Exhibition::factory()->has(Service::factory(rand(3, 5)))->create(['name' => $name]);
         }
 
         $admin = User::query()->where('role', UserRole::ADMIN)->first();

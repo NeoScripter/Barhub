@@ -91,10 +91,10 @@ export const adminNavItems: NavItemType[] = [
                 url: '/admin/task-templates',
             },
             {
-                id: 'followups',
+                id: 'services',
                 type: 'link',
                 label: 'Услуги',
-                url: '/admin/followups',
+                url: '/admin/services',
             },
             {
                 id: 'info-items',

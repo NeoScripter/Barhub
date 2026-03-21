@@ -15,8 +15,10 @@ return new class extends Migration
     {
         Schema::create('followups', function (Blueprint $table): void {
             $table->id();
-            $table->foreignId('service_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('company_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('user_id')->nullable()->constrained()->nullOnDelete();
+            $table->string('name');
+            $table->text('description');
             $table->text('comment');
             $table->unsignedInteger('status');
             $table->timestamps();

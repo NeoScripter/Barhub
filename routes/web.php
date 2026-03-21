@@ -9,7 +9,6 @@ use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\EventController as AdminEventController;
 use App\Http\Controllers\Admin\ExhibitionController as AdminExhibitionController;
 use App\Http\Controllers\Admin\ExponentController as AdminExponentController;
-use App\Http\Controllers\Admin\FollowupController as AdminFollowupController;
 use App\Http\Controllers\Admin\InfoItemController;
 use App\Http\Controllers\Admin\LinkController;
 use App\Http\Controllers\Admin\PartnerController as AdminPartnerController;
@@ -73,14 +72,15 @@ Route::prefix('/admin')
         Route::resource('companies', AdminCompanyController::class)->except(['show']);
         Route::resource('all-tasks', AdminPartnerController::class)
             ->only(['index', 'edit', 'update']);
-        Route::resource('followups', AdminFollowupController::class)
-            ->only(['index', 'edit', 'update']);
+        // Route::resource('followups', AdminFollowupController::class)
+        //     ->only(['index', 'edit', 'update']);
+        Route::resource('services', AdminServiceController::class);
         Route::resource('companies/{company}/exponents', AdminExponentController::class)
             ->only(['update', 'index', 'destroy']);
         Route::resource('companies/{company}/tasks', AdminTaskController::class);
         Route::resource('task-templates', TaskTemplateController::class);
         Route::resource('info-items', InfoItemController::class);
-        Route::resource('companies/{company}/services', AdminServiceController::class);
+        // Route::resource('companies/{company}/followups', AdminFollowupController::class);
 
         Route::resource('events', AdminEventController::class)->except('show');
         Route::resource('people', AdminPersonController::class)->except(['show']);

@@ -56,18 +56,8 @@ final class Company extends Model
         return $this->hasMany(Task::class);
     }
 
-    public function services(): HasMany
+    public function followups(): HasMany
     {
-        return $this->hasMany(Service::class);
-    }
-
-    public function followups()
-    {
-        return $this->hasManyThrough(
-            Followup::class,
-            Service::class,
-            'company_id',
-            'service_id'
-        );
+        return $this->hasMany(Followup::class);
     }
 }

@@ -3,26 +3,29 @@
 declare(strict_types=1);
 
 use App\Enums\UserRole;
-use App\Models\Company;
 use App\Models\Exhibition;
 use App\Models\Service;
 use App\Models\User;
 
+use function Pest\Laravel\actingAs;
+
 describe('Admin Service Test', function (): void {
 
-    it('renders the service index page', function (): void {
-        $user = User::factory()->create([
-            'email' => 'super-admin@gmail.com',
+    beforeEach(function (): void {
+        $this->user = User::factory()->create([
+            'email'    => 'super-admin@gmail.com',
             'password' => 'password',
         ]);
-        $user->assignRole(UserRole::SUPER_ADMIN);
-        $exhibition = Exhibition::factory()->create();
-        $company = Company::factory()->for($exhibition)->create();
-        $services = Service::factory(3)->for($company)->create();
-        $route = "/admin/companies/{$company->id}/services";
+        $this->user->assignRole(UserRole::SUPER_ADMIN);
+        $this->exhibition = Exhibition::factory()->create();
+        $this->user->setActiveExhibition($this->exhibition->id);
+        $this->route = '/admin/services';
+    });
+
+    it('renders the service index page', function (): void {
+        $services = Service::factory(3)->for($this->exhibition)->create();
 
         $page = visit('/login');
-
         $page->assertSee('Вход в аккаунт')
             ->fill('email', 'super-admin@gmail.com')
             ->fill('password', 'password')
@@ -31,23 +34,13 @@ describe('Admin Service Test', function (): void {
 
         $this->assertAuthenticated();
 
-        $page->navigate($route);
-        $page->assertSee($company->public_name);
+        $page->navigate($this->route);
+        $page->assertSee('Услуги');
         $page->assertSee($services[0]->name);
     });
 
     it('doesnt allow to create a service when the name is too long', function (): void {
-        $user = User::factory()->create([
-            'email' => 'super-admin@gmail.com',
-            'password' => 'password',
-        ]);
-        $user->assignRole(UserRole::SUPER_ADMIN);
-        $exhibition = Exhibition::factory()->create();
-        $company = Company::factory()->for($exhibition)->create();
-        $route = "/admin/companies/{$company->id}/services";
-
         $page = visit('/login');
-
         $page->assertSee('Вход в аккаунт')
             ->fill('email', 'super-admin@gmail.com')
             ->fill('password', 'password')
@@ -56,8 +49,7 @@ describe('Admin Service Test', function (): void {
 
         $this->assertAuthenticated();
 
-        $page->navigate($route)
-            ->assertSee($company->public_name)
+        $page->navigate($this->route)
             ->click('@create-service')
             ->assertSee('Название')
             ->fill('name', generateTextWithChars(204))
@@ -68,17 +60,7 @@ describe('Admin Service Test', function (): void {
     });
 
     it('doesnt allow to create a service when the description is too short', function (): void {
-        $user = User::factory()->create([
-            'email' => 'super-admin@gmail.com',
-            'password' => 'password',
-        ]);
-        $user->assignRole(UserRole::SUPER_ADMIN);
-        $exhibition = Exhibition::factory()->create();
-        $company = Company::factory()->for($exhibition)->create();
-        $route = "/admin/companies/{$company->id}/services";
-
         $page = visit('/login');
-
         $page->assertSee('Вход в аккаунт')
             ->fill('email', 'super-admin@gmail.com')
             ->fill('password', 'password')
@@ -87,8 +69,7 @@ describe('Admin Service Test', function (): void {
 
         $this->assertAuthenticated();
 
-        $page->navigate($route)
-            ->assertSee($company->public_name)
+        $page->navigate($this->route)
             ->click('@create-service')
             ->assertSee('Название')
             ->fill('name', generateTextWithChars(50))
@@ -99,17 +80,7 @@ describe('Admin Service Test', function (): void {
     });
 
     it('doesnt allow to create a service when the description is too long', function (): void {
-        $user = User::factory()->create([
-            'email' => 'super-admin@gmail.com',
-            'password' => 'password',
-        ]);
-        $user->assignRole(UserRole::SUPER_ADMIN);
-        $exhibition = Exhibition::factory()->create();
-        $company = Company::factory()->for($exhibition)->create();
-        $route = "/admin/companies/{$company->id}/services";
-
         $page = visit('/login');
-
         $page->assertSee('Вход в аккаунт')
             ->fill('email', 'super-admin@gmail.com')
             ->fill('password', 'password')
@@ -118,8 +89,7 @@ describe('Admin Service Test', function (): void {
 
         $this->assertAuthenticated();
 
-        $page->navigate($route)
-            ->assertSee($company->public_name)
+        $page->navigate($this->route)
             ->click('@create-service')
             ->assertSee('Название')
             ->fill('name', generateTextWithChars(50))
@@ -130,17 +100,7 @@ describe('Admin Service Test', function (): void {
     });
 
     it('doesnt allow to create a service when the placeholder is too short', function (): void {
-        $user = User::factory()->create([
-            'email' => 'super-admin@gmail.com',
-            'password' => 'password',
-        ]);
-        $user->assignRole(UserRole::SUPER_ADMIN);
-        $exhibition = Exhibition::factory()->create();
-        $company = Company::factory()->for($exhibition)->create();
-        $route = "/admin/companies/{$company->id}/services";
-
         $page = visit('/login');
-
         $page->assertSee('Вход в аккаунт')
             ->fill('email', 'super-admin@gmail.com')
             ->fill('password', 'password')
@@ -149,8 +109,7 @@ describe('Admin Service Test', function (): void {
 
         $this->assertAuthenticated();
 
-        $page->navigate($route)
-            ->assertSee($company->public_name)
+        $page->navigate($this->route)
             ->click('@create-service')
             ->assertSee('Название')
             ->fill('name', generateTextWithChars(50))
@@ -159,18 +118,9 @@ describe('Admin Service Test', function (): void {
             ->submit()
             ->assertSee('Подсказка должна содержать не менее 10 символов');
     });
+
     it('doesnt allow to create a service when the placeholder is too long', function (): void {
-        $user = User::factory()->create([
-            'email' => 'super-admin@gmail.com',
-            'password' => 'password',
-        ]);
-        $user->assignRole(UserRole::SUPER_ADMIN);
-        $exhibition = Exhibition::factory()->create();
-        $company = Company::factory()->for($exhibition)->create();
-        $route = "/admin/companies/{$company->id}/services";
-
         $page = visit('/login');
-
         $page->assertSee('Вход в аккаунт')
             ->fill('email', 'super-admin@gmail.com')
             ->fill('password', 'password')
@@ -179,8 +129,7 @@ describe('Admin Service Test', function (): void {
 
         $this->assertAuthenticated();
 
-        $page->navigate($route)
-            ->assertSee($company->public_name)
+        $page->navigate($this->route)
             ->click('@create-service')
             ->assertSee('Название')
             ->fill('name', generateTextWithChars(50))
@@ -191,17 +140,7 @@ describe('Admin Service Test', function (): void {
     });
 
     it('allows to create a service with valid data', function (): void {
-        $user = User::factory()->create([
-            'email' => 'super-admin@gmail.com',
-            'password' => 'password',
-        ]);
-        $user->assignRole(UserRole::SUPER_ADMIN);
-        $exhibition = Exhibition::factory()->create();
-        $company = Company::factory()->for($exhibition)->create();
-        $route = "/admin/companies/{$company->id}/services";
-
         $page = visit('/login');
-
         $page->assertSee('Вход в аккаунт')
             ->fill('email', 'super-admin@gmail.com')
             ->fill('password', 'password')
@@ -210,32 +149,20 @@ describe('Admin Service Test', function (): void {
 
         $this->assertAuthenticated();
 
-        $page->navigate($route)
-            ->assertSee($company->public_name)
+        $page->navigate($this->route)
             ->click('@create-service')
             ->assertSee('Название')
             ->fill('name', generateTextWithChars(50))
             ->fill('description', generateTextWithChars(20))
             ->fill('placeholder', generateTextWithChars(100))
             ->submit()
-            ->assertPathEndsWith($route);
+            ->assertPathEndsWith($this->route);
     });
 
     it('doesnt allow to update a service when the name is too long', function (): void {
-        $user = User::factory()->create([
-            'email' => 'super-admin@gmail.com',
-            'password' => 'password',
-        ]);
-        $user->assignRole(UserRole::SUPER_ADMIN);
-        $exhibition = Exhibition::factory()->create();
-        $company = Company::factory()->for($exhibition)->create();
-        $service = Service::factory()
-            ->for($company)
-            ->create(['name' => 'Zebra']);
-        $route = "/admin/companies/{$company->id}/services";
+        $service = Service::factory()->for($this->exhibition)->create(['name' => 'Zebra']);
 
         $page = visit('/login');
-
         $page->assertSee('Вход в аккаунт')
             ->fill('email', 'super-admin@gmail.com')
             ->fill('password', 'password')
@@ -244,10 +171,9 @@ describe('Admin Service Test', function (): void {
 
         $this->assertAuthenticated();
 
-        $page->navigate($route)
-            ->assertSee($company->public_name)
+        $page->navigate($this->route)
             ->assertSee($service->name)
-            ->click('@edit-service-'.$service->id)
+            ->click('@edit-service-' . $service->id)
             ->assertSee('Название')
             ->clear('name')
             ->fill('name', generateTextWithChars(205))
@@ -256,20 +182,9 @@ describe('Admin Service Test', function (): void {
     });
 
     it('doesnt allow to update a service when the description is too short', function (): void {
-        $user = User::factory()->create([
-            'email' => 'super-admin@gmail.com',
-            'password' => 'password',
-        ]);
-        $user->assignRole(UserRole::SUPER_ADMIN);
-        $exhibition = Exhibition::factory()->create();
-        $company = Company::factory()->for($exhibition)->create();
-        $service = Service::factory()
-            ->for($company)
-            ->create(['name' => 'Zebra']);
-        $route = "/admin/companies/{$company->id}/services";
+        $service = Service::factory()->for($this->exhibition)->create(['name' => 'Zebra']);
 
         $page = visit('/login');
-
         $page->assertSee('Вход в аккаунт')
             ->fill('email', 'super-admin@gmail.com')
             ->fill('password', 'password')
@@ -278,10 +193,9 @@ describe('Admin Service Test', function (): void {
 
         $this->assertAuthenticated();
 
-        $page->navigate($route)
-            ->assertSee($company->public_name)
+        $page->navigate($this->route)
             ->assertSee($service->name)
-            ->click('@edit-service-'.$service->id)
+            ->click('@edit-service-' . $service->id)
             ->assertSee('Название')
             ->clear('description')
             ->fill('description', generateTextWithChars(3))
@@ -290,20 +204,9 @@ describe('Admin Service Test', function (): void {
     });
 
     it('doesnt allow to update a service when the description is too long', function (): void {
-        $user = User::factory()->create([
-            'email' => 'super-admin@gmail.com',
-            'password' => 'password',
-        ]);
-        $user->assignRole(UserRole::SUPER_ADMIN);
-        $exhibition = Exhibition::factory()->create();
-        $company = Company::factory()->for($exhibition)->create();
-        $service = Service::factory()
-            ->for($company)
-            ->create(['name' => 'Zebra']);
-        $route = "/admin/companies/{$company->id}/services";
+        $service = Service::factory()->for($this->exhibition)->create(['name' => 'Zebra']);
 
         $page = visit('/login');
-
         $page->assertSee('Вход в аккаунт')
             ->fill('email', 'super-admin@gmail.com')
             ->fill('password', 'password')
@@ -312,10 +215,9 @@ describe('Admin Service Test', function (): void {
 
         $this->assertAuthenticated();
 
-        $page->navigate($route)
-            ->assertSee($company->public_name)
+        $page->navigate($this->route)
             ->assertSee($service->name)
-            ->click('@edit-service-'.$service->id)
+            ->click('@edit-service-' . $service->id)
             ->assertSee('Название')
             ->clear('description')
             ->fill('description', generateTextWithChars(5005))
@@ -324,20 +226,9 @@ describe('Admin Service Test', function (): void {
     });
 
     it('doesnt allow to update a service when the placeholder is too short', function (): void {
-        $user = User::factory()->create([
-            'email' => 'super-admin@gmail.com',
-            'password' => 'password',
-        ]);
-        $user->assignRole(UserRole::SUPER_ADMIN);
-        $exhibition = Exhibition::factory()->create();
-        $company = Company::factory()->for($exhibition)->create();
-        $service = Service::factory()
-            ->for($company)
-            ->create(['name' => 'Zebra']);
-        $route = "/admin/companies/{$company->id}/services";
+        $service = Service::factory()->for($this->exhibition)->create(['name' => 'Zebra']);
 
         $page = visit('/login');
-
         $page->assertSee('Вход в аккаунт')
             ->fill('email', 'super-admin@gmail.com')
             ->fill('password', 'password')
@@ -346,10 +237,9 @@ describe('Admin Service Test', function (): void {
 
         $this->assertAuthenticated();
 
-        $page->navigate($route)
-            ->assertSee($company->public_name)
+        $page->navigate($this->route)
             ->assertSee($service->name)
-            ->click('@edit-service-'.$service->id)
+            ->click('@edit-service-' . $service->id)
             ->assertSee('Название')
             ->clear('placeholder')
             ->fill('placeholder', generateTextWithChars(3))
@@ -358,20 +248,9 @@ describe('Admin Service Test', function (): void {
     });
 
     it('doesnt allow to update a service when the placeholder is too long', function (): void {
-        $user = User::factory()->create([
-            'email' => 'super-admin@gmail.com',
-            'password' => 'password',
-        ]);
-        $user->assignRole(UserRole::SUPER_ADMIN);
-        $exhibition = Exhibition::factory()->create();
-        $company = Company::factory()->for($exhibition)->create();
-        $service = Service::factory()
-            ->for($company)
-            ->create(['name' => 'Zebra']);
-        $route = "/admin/companies/{$company->id}/services";
+        $service = Service::factory()->for($this->exhibition)->create(['name' => 'Zebra']);
 
         $page = visit('/login');
-
         $page->assertSee('Вход в аккаунт')
             ->fill('email', 'super-admin@gmail.com')
             ->fill('password', 'password')
@@ -380,10 +259,9 @@ describe('Admin Service Test', function (): void {
 
         $this->assertAuthenticated();
 
-        $page->navigate($route)
-            ->assertSee($company->public_name)
+        $page->navigate($this->route)
             ->assertSee($service->name)
-            ->click('@edit-service-'.$service->id)
+            ->click('@edit-service-' . $service->id)
             ->assertSee('Название')
             ->clear('placeholder')
             ->fill('placeholder', generateTextWithChars(5005))
@@ -392,20 +270,9 @@ describe('Admin Service Test', function (): void {
     });
 
     it('allows to update a service with valid data', function (): void {
-        $user = User::factory()->create([
-            'email' => 'super-admin@gmail.com',
-            'password' => 'password',
-        ]);
-        $user->assignRole(UserRole::SUPER_ADMIN);
-        $exhibition = Exhibition::factory()->create();
-        $company = Company::factory()->for($exhibition)->create();
-        $service = Service::factory()
-            ->for($company)
-            ->create(['name' => 'Zebra']);
-        $route = "/admin/companies/{$company->id}/services";
+        $service = Service::factory()->for($this->exhibition)->create(['name' => 'Zebra']);
 
         $page = visit('/login');
-
         $page->assertSee('Вход в аккаунт')
             ->fill('email', 'super-admin@gmail.com')
             ->fill('password', 'password')
@@ -414,16 +281,15 @@ describe('Admin Service Test', function (): void {
 
         $this->assertAuthenticated();
 
-        $newname = 'new name of the service';
+        $newName = 'new name of the service';
         $newDescription = 'new long description of the service';
 
-        $page->navigate($route)
-            ->assertSee($company->public_name)
+        $page->navigate($this->route)
             ->assertSee($service->name)
-            ->click('@edit-service-'.$service->id)
+            ->click('@edit-service-' . $service->id)
             ->assertSee('Название')
             ->clear('name')
-            ->fill('name', $newname)
+            ->fill('name', $newName)
             ->clear('description')
             ->fill('description', $newDescription)
             ->clear('placeholder')
@@ -431,25 +297,14 @@ describe('Admin Service Test', function (): void {
             ->submit();
 
         $service = $service->fresh();
-        $this->assertEquals($service->name, $newname);
+        $this->assertEquals($service->name, $newName);
         $this->assertEquals($service->description, $newDescription);
     });
 
     it('allows to delete a service', function (): void {
-        $user = User::factory()->create([
-            'email' => 'super-admin@gmail.com',
-            'password' => 'password',
-        ]);
-        $user->assignRole(UserRole::SUPER_ADMIN);
-        $exhibition = Exhibition::factory()->create();
-        $company = Company::factory()->for($exhibition)->create();
-        $service = Service::factory()
-            ->for($company)
-            ->create(['name' => 'Zebra']);
-        $route = "/admin/companies/{$company->id}/services";
+        $service = Service::factory()->for($this->exhibition)->create(['name' => 'Zebra']);
 
         $page = visit('/login');
-
         $page->assertSee('Вход в аккаунт')
             ->fill('email', 'super-admin@gmail.com')
             ->fill('password', 'password')
@@ -458,87 +313,54 @@ describe('Admin Service Test', function (): void {
 
         $this->assertAuthenticated();
 
-        $page->navigate($route)
-            ->assertSee($company->public_name)
+        $page->navigate($this->route)
             ->assertSee($service->name)
-            ->click('@edit-service-'.$service->id)
+            ->click('@edit-service-' . $service->id)
             ->assertSee('Название')
             ->click('@delete-service')
             ->click('@delete-btn')
-            ->assertPathEndsWith($route)
+            ->assertPathEndsWith($this->route)
             ->assertDontSee($service->name);
     });
 
     it('allows only super admin and admin with exhibition access to see the services index page', function (): void {
-        $adminWithAccess = User::factory()->create([
-            'email' => 'admin1@gmail.com',
-            'password' => 'password',
-        ]);
-        $adminWithoutAccess = User::factory()->create([
-            'email' => 'admin2@gmail.com',
-            'password' => 'password',
-        ]);
-        $exponent = User::factory()->create([
-            'email' => 'exponent@gmail.com',
-            'password' => 'password',
-        ]);
+        $adminWithAccess = User::factory()->create();
         $adminWithAccess->assignRole(UserRole::ADMIN);
+        $this->exhibition->users()->attach($adminWithAccess->id);
+        $adminWithAccess->setActiveExhibition($this->exhibition->id);
+
+        $adminWithoutAccess = User::factory()->create();
         $adminWithoutAccess->assignRole(UserRole::ADMIN);
+        $newExhibition = Exhibition::factory()->create();
+        $newExhibition->users()->attach($adminWithoutAccess->id);
+        $adminWithoutAccess->setActiveExhibition($newExhibition->id);
+
+        $exponent = User::factory()->create();
         $exponent->assignRole(UserRole::EXPONENT);
-        $exhibitionWithCompany = Exhibition::factory()->create();
-        $exhibitionWithoutCompany = Exhibition::factory()->create();
-        $exhibitionWithCompany->users()->attach($adminWithAccess->id);
-        $exhibitionWithoutCompany->users()->attach($adminWithoutAccess->id);
-        $company = Company::factory()->for($exhibitionWithCompany)->create();
-        $services = Service::factory(3)->for($company)->create();
-        $route = "/admin/companies/{$company->id}/services";
 
-        visit($route)->assertSee('Вход в аккаунт');
+        $services = Service::factory(3)->for($this->exhibition)->create();
 
-        $page = visit('/login');
+        $this->get($this->route)
+            ->assertRedirect(route('login'));
 
-        $page->assertSee('Вход в аккаунт')
-            ->fill('email', 'admin1@gmail.com')
-            ->fill('password', 'password')
-            ->click('@login-button')
-            ->assertSee('admin1@gmail.com');
+        $this->actingAs($adminWithAccess)
+            ->get($this->route)
+            ->assertOk()
+            ->assertInertia(
+                fn($page) => $page
+                    ->component('admin/Services/Index')
+                    ->has('services.data', 3)
+            );
 
-        $this->assertAuthenticated();
+        \Pest\Laravel\actingAs($adminWithoutAccess)
+            ->get($this->route)
+            ->assertOk()
+            ->assertInertia(
+                fn($page) => $page->has('services.data', 0)
+            );
 
-        $page->navigate($route);
-        $page->assertSee($company->public_name);
-        $page->assertSee($services[0]->name);
-
-        $page->click('@logout-dropdown');
-        $page->assertSee('Выйти');
-        $page->click('@logout-button');
-
-        $page = visit('/login');
-
-        $page->assertSee('Вход в аккаунт')
-            ->fill('email', 'admin2@gmail.com')
-            ->fill('password', 'password')
-            ->click('@login-button')
-            ->assertSee('admin2@gmail.com');
-
-        $this->assertAuthenticated();
-
-        $page->navigate($route)->assertSee('Unauthorized');
-        $page->navigate('/admin/dashboard');
-        $page->click('@logout-dropdown');
-        $page->assertSee('Выйти');
-        $page->click('@logout-button');
-
-        $page = visit('/login');
-
-        $page->assertSee('Вход в аккаунт')
-            ->fill('email', 'exponent@gmail.com')
-            ->fill('password', 'password')
-            ->click('@login-button')
-            ->assertSee('exponent@gmail.com');
-
-        $this->assertAuthenticated();
-
-        $page->navigate($route)->assertSee('Unauthorized');
+        \Pest\Laravel\actingAs($exponent)
+            ->get($this->route)
+            ->assertForbidden();
     });
 });
