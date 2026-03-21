@@ -5,10 +5,9 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Exponent;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\exponent\Company\CompanyUpdateRequest;
+use App\Http\Requests\Exponent\Company\CompanyUpdateRequest;
 use App\Models\Company;
 use App\Models\Image;
-use App\Models\Tag;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -29,8 +28,6 @@ final class CompanyController extends Controller
 
     public function edit(Company $company)
     {
-        $company->load(['tags']);
-
         return Inertia::render('exponent/Companies/Edit', [
             'company' => $company,
         ]);
@@ -67,7 +64,7 @@ final class CompanyController extends Controller
             }
         });
 
-        return to_route('exponent.companies.show')
+        return to_route('exponent.companies.index')
             ->with('success', 'Компания успешно обновлена');
     }
 }

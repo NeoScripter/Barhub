@@ -25,7 +25,6 @@ final class CompanyUpdateRequest extends FormRequest
             'telegram' => ['nullable', 'string', 'max:255'],
             'activities' => ['nullable', 'string', 'max:5000'],
             'logo' => ['nullable', 'image', 'max:51200'],
-            'logo_alt' => ['nullable', 'string', 'max:255'],
         ];
     }
 
