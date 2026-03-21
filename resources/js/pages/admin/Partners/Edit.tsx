@@ -28,8 +28,6 @@ const Edit: FC<Inertia.Pages.Admin.Tasks.Edit> = ({ task }) => {
         });
     };
 
-    console.log(task.status)
-
     const isToBeVefified = task.status === 3;
 
     return (
@@ -60,37 +58,39 @@ const Edit: FC<Inertia.Pages.Admin.Tasks.Edit> = ({ task }) => {
                 <LabeledContent label="Описание задачи">
                     <p>{task.description}</p>
                 </LabeledContent>
-                <LabeledContent label="История комментариев">
-                    <ul className="space-y-5">
-                        {task.comments?.map((comment) => (
-                            <li
-                                key={comment.id}
-                                className="space-y-1"
-                            >
-                                <small className="block">
-                                    {comment.user?.name}
-                                </small>
-                                <small className="block">
-                                    {formatDateAndTime(
-                                        new Date(comment.created_at)!,
+                {task.comments && task.comments.length > 0 && (
+                    <LabeledContent label="Комментарии">
+                        <ul className="space-y-5">
+                            {task.comments?.map((comment) => (
+                                <li
+                                    key={comment.id}
+                                    className="space-y-1"
+                                >
+                                    <small className="block">
+                                        {comment.user?.name}
+                                    </small>
+                                    <small className="block">
+                                        {formatDateAndTime(
+                                            new Date(comment.created_at)!,
+                                        )}
+                                    </small>
+                                    {comment.file && (
+                                        <span className="block">
+                                            <DownloadFileLink
+                                                href={comment.file?.url}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                filename={comment.file?.name}
+                                                className="my-4"
+                                            />
+                                        </span>
                                     )}
-                                </small>
-                                {comment.file && (
-                                    <span className="block">
-                                        <DownloadFileLink
-                                            href={comment.file?.url}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            filename={comment.file?.name}
-                                            className="my-4"
-                                        />
-                                    </span>
-                                )}
-                                <p>{comment.content}</p>
-                            </li>
-                        ))}
-                    </ul>
-                </LabeledContent>
+                                    <p>{comment.content}</p>
+                                </li>
+                            ))}
+                        </ul>
+                    </LabeledContent>
+                )}
             </div>
             {isToBeVefified && (
                 <form

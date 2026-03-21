@@ -64,7 +64,7 @@ final class PartnerController extends Controller
     {
         abort_if($allTask->status !== TaskStatus::TO_BE_VERIFIED, 403);
         $task = $allTask;
-        $newStatus = $request->boolean('is_accepted') === true ? TaskStatus::COMPLETED : TaskStatus::IMCOMPLETE;
+        $newStatus = $request->boolean('is_accepted') === true ? TaskStatus::COMPLETED : TaskStatus::INCOMPLETE;
         $task->update(['status' => $newStatus]);
 
         return to_route('admin.all-tasks.index');

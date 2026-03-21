@@ -9,10 +9,7 @@ import { FC } from 'react';
 import TaskTable from './partials/TaskTable';
 import TaskTableHeader from './partials/TaskTableHeader';
 
-const Index: FC<Inertia.Pages.Admin.Tasks.Index> = ({
-    tasks,
-    summary,
-}) => {
+const Index: FC<Inertia.Pages.Admin.Tasks.Index> = ({ tasks, summary }) => {
     return (
         <div>
             <IndexToolbar className="items-center md:flex-col md:items-start">
@@ -24,7 +21,7 @@ const Index: FC<Inertia.Pages.Admin.Tasks.Index> = ({
                 </AccentHeading>
             </IndexToolbar>
 
-            <ul className="mb-12 grid w-full grid-cols-[repeat(auto-fill,minmax(10rem,1fr))] justify-items-center gap-3 sm:justify-items-start md:mb-14 2xl:grid-cols-[repeat(auto-fill,minmax(13.5rem,1fr))] 2xl:mb-18 xl:gap-6">
+            <ul className="mb-12 grid w-full grid-cols-[repeat(auto-fill,minmax(10rem,1fr))] justify-items-center gap-3 sm:justify-items-start md:mb-14 xl:gap-6 2xl:mb-18 2xl:grid-cols-[repeat(auto-fill,minmax(13.5rem,1fr))]">
                 {summary.map((task) => (
                     <TaskCard
                         key={task.id}
@@ -34,7 +31,9 @@ const Index: FC<Inertia.Pages.Admin.Tasks.Index> = ({
                             {task.status}
                         </TaskCard.Badge>
                         <TaskCard.Digit value={task.count} />
-                        <TaskCard.Label>задач</TaskCard.Label>
+                        <TaskCard.Label>
+                            {conjugateTasks(task.count)}
+                        </TaskCard.Label>
                     </TaskCard>
                 ))}
             </ul>
@@ -43,9 +42,7 @@ const Index: FC<Inertia.Pages.Admin.Tasks.Index> = ({
                 placeholder="По вашему запросу не найдено ни одной задачи"
             >
                 <TaskTableHeader />
-                <TaskTable
-                    tasks={tasks.data}
-                />
+                <TaskTable tasks={tasks.data} />
             </Table>
             <Pagination data={tasks} />
         </div>
@@ -53,3 +50,16 @@ const Index: FC<Inertia.Pages.Admin.Tasks.Index> = ({
 };
 
 export default Index;
+
+function conjugateTasks(count: number): string {
+    const lastTwo = count % 100;
+    const lastOne = count % 10;
+
+    if (lastTwo >= 11 && lastTwo <= 19) {
+        return 'задач';
+    }
+
+    if (lastOne === 1) return 'задача';
+    if (lastOne >= 2 && lastOne <= 4) return 'задачи';
+    return 'задач';
+}

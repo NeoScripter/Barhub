@@ -136,7 +136,7 @@ describe('Admin Partner Browser Tests', function (): void {
 
         $this->assertDatabaseHas('tasks', [
             'id' => $company->tasks[0]->id,
-            'status' => TaskStatus::IMCOMPLETE->value,
+            'status' => TaskStatus::INCOMPLETE->value,
         ]);
     });
 
@@ -415,7 +415,7 @@ describe('Admin Partner Feature Tests', function (): void {
 
     it('forbids users to update the status of a task whose status is not to be verified', function (): void {
         $company = Company::factory()->for($this->exhibition)->create();
-        $task = Task::factory(['status' => TaskStatus::IMCOMPLETE->value])
+        $task = Task::factory(['status' => TaskStatus::INCOMPLETE->value])
             ->for($company)
             ->create();
 
@@ -468,7 +468,7 @@ describe('Admin Partner Feature Tests', function (): void {
         $admin = User::factory()->create();
         $admin->assignRole(UserRole::ADMIN);
         $company = Company::factory()->for($this->exhibition)->create();
-        $task = Task::factory(['status' => TaskStatus::IMCOMPLETE->value])
+        $task = Task::factory(['status' => TaskStatus::INCOMPLETE->value])
             ->for($company)
             ->create();
 
@@ -478,7 +478,7 @@ describe('Admin Partner Feature Tests', function (): void {
 
         $this->assertDatabaseHas('tasks', [
             'id' => $task->id,
-            'status' => TaskStatus::IMCOMPLETE->value,
+            'status' => TaskStatus::INCOMPLETE->value,
         ]);
     });
 
@@ -495,7 +495,7 @@ describe('Admin Partner Feature Tests', function (): void {
         $exponent = User::factory()->create();
         $exponent->assignRole(UserRole::EXPONENT);
         $company = Company::factory()->for($this->exhibition)->create();
-        $task = Task::factory(['status' => TaskStatus::IMCOMPLETE->value])
+        $task = Task::factory(['status' => TaskStatus::INCOMPLETE->value])
             ->for($company)
             ->create();
 
@@ -505,7 +505,7 @@ describe('Admin Partner Feature Tests', function (): void {
 
         $this->assertDatabaseHas('tasks', [
             'id' => $task->id,
-            'status' => TaskStatus::IMCOMPLETE->value,
+            'status' => TaskStatus::INCOMPLETE->value,
         ]);
     });
 
@@ -522,7 +522,7 @@ describe('Admin Partner Feature Tests', function (): void {
         $user = User::factory()->create();
         $user->assignRole(UserRole::USER);
         $company = Company::factory()->for($this->exhibition)->create();
-        $task = Task::factory(['status' => TaskStatus::IMCOMPLETE->value])
+        $task = Task::factory(['status' => TaskStatus::INCOMPLETE->value])
             ->for($company)
             ->create();
 
@@ -532,7 +532,7 @@ describe('Admin Partner Feature Tests', function (): void {
 
         $this->assertDatabaseHas('tasks', [
             'id' => $task->id,
-            'status' => TaskStatus::IMCOMPLETE->value,
+            'status' => TaskStatus::INCOMPLETE->value,
         ]);
     });
 
@@ -543,7 +543,7 @@ describe('Admin Partner Feature Tests', function (): void {
 
     it('forbids unregistered users to update the status of a task', function (): void {
         $company = Company::factory()->for($this->exhibition)->create();
-        $task = Task::factory(['status' => TaskStatus::IMCOMPLETE->value])
+        $task = Task::factory(['status' => TaskStatus::INCOMPLETE->value])
             ->for($company)
             ->create();
 
@@ -552,7 +552,7 @@ describe('Admin Partner Feature Tests', function (): void {
 
         $this->assertDatabaseHas('tasks', [
             'id' => $task->id,
-            'status' => TaskStatus::IMCOMPLETE->value,
+            'status' => TaskStatus::INCOMPLETE->value,
         ]);
     });
 
@@ -579,7 +579,7 @@ describe('Admin Partner Feature Tests', function (): void {
             ['status' => TaskStatus::DELAYED],
             ['status' => TaskStatus::TO_BE_COMPLETED],
             ['status' => TaskStatus::COMPLETED],
-            ['status' => TaskStatus::IMCOMPLETE],
+            ['status' => TaskStatus::INCOMPLETE],
         ]);
 
         $response = $this->actingAs($this->superAdmin)
@@ -597,7 +597,7 @@ describe('Admin Partner Feature Tests', function (): void {
 
         Task::factory()->count(3)->for($company)->create(['status' => TaskStatus::TO_BE_VERIFIED]);
         Task::factory()->count(2)->for($company)->create(['status' => TaskStatus::DELAYED]);
-        Task::factory()->count(1)->for($company)->create(['status' => TaskStatus::IMCOMPLETE]);
+        Task::factory()->count(1)->for($company)->create(['status' => TaskStatus::INCOMPLETE]);
         Task::factory()->count(4)->for($company)->create(['status' => TaskStatus::COMPLETED]);
 
         $response = $this->actingAs($this->superAdmin)
@@ -608,6 +608,6 @@ describe('Admin Partner Feature Tests', function (): void {
 
         expect(collect($summary)->firstWhere('status', TaskStatus::TO_BE_VERIFIED->label())['count'])->toBe(3)
             ->and(collect($summary)->firstWhere('status', TaskStatus::DELAYED->label())['count'])->toBe(2)
-            ->and(collect($summary)->firstWhere('status', TaskStatus::IMCOMPLETE->label())['count'])->toBe(1);
+            ->and(collect($summary)->firstWhere('status', TaskStatus::INCOMPLETE->label())['count'])->toBe(1);
     });
 })->group('feature');

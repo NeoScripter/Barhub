@@ -20,7 +20,6 @@ import { FC, useState } from 'react';
 import { toast } from 'sonner';
 
 const Edit: FC<Inertia.Pages.Admin.Tasks.Edit> = ({
-    exhibition,
     company,
     task,
 }) => {
@@ -40,7 +39,7 @@ const Edit: FC<Inertia.Pages.Admin.Tasks.Edit> = ({
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        post(update({ exhibition, company, task }).url, {
+        post(update({ company, task }).url, {
             preserveScroll: false,
             onSuccess: () => {
                 toast.success('Задача успешно обновлена');
@@ -195,7 +194,7 @@ const Edit: FC<Inertia.Pages.Admin.Tasks.Edit> = ({
                 <FormButtons
                     label="Сохранить"
                     processing={processing}
-                    backUrl={index({ exhibition, company }).url}
+                    backUrl={index({ company }).url}
                 />
             </form>
         </div>

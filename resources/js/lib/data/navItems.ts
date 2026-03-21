@@ -1,7 +1,7 @@
 import AdminDash from '@/wayfinder/App/Http/Controllers/Admin/DashboardController';
 import AdminExpos from '@/wayfinder/App/Http/Controllers/Admin/ExhibitionController';
 import LinkController from '@/wayfinder/App/Http/Controllers/Admin/LinkController';
-import ExponentDash from '@/wayfinder/App/Http/Controllers/Exponent/DashboardController';
+import ExponentDash from '@/wayfinder/App/Http/Controllers/Exponent/TaskController';
 import ExponentCompany from '@/wayfinder/App/Http/Controllers/Exponent/CompanyController';
 import ExponentFollowups from '@/wayfinder/App/Http/Controllers/Exponent/FollowupController';
 import ExponentInfoItems from '@/wayfinder/App/Http/Controllers/Exponent/InfoItemController';
@@ -131,7 +131,7 @@ export const exponentNavItems: NavItemType[] = [
         id: 'home',
         type: 'link',
         label: 'Главная',
-        url: ExponentDash.url(),
+        url: ExponentDash.index.url(),
         icon: House,
     },
     {
@@ -176,7 +176,7 @@ export const userNavItems: NavItemType[] = [
         id: 'admin-panel',
         type: 'link',
         label: 'Личный кабинет экспонента',
-        url: ExponentDash.url(),
+        url: ExponentDash.index.url(),
         icon: UserSearch,
     },
     {

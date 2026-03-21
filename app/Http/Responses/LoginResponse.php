@@ -18,7 +18,7 @@ final class LoginResponse implements LoginResponseContract
         }
 
         if ($user->hasRole(UserRole::EXPONENT)) {
-            return redirect()->intended(route('exponent.dashboard'));
+            return redirect()->intended(route('exponent.tasks.index'));
         }
 
         return redirect()->intended(route('/'));

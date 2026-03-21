@@ -3,6 +3,8 @@
 declare(strict_types=1);
 
 use App\Enums\UserRole;
+use App\Models\Company;
+use App\Models\Exhibition;
 use App\Models\User;
 
 use function Pest\Laravel\actingAs;
@@ -13,7 +15,7 @@ describe('Exponent Dashboard Access Control', function (): void {
     it('does not display the tasks with completed and to be vefiried status', function (): void {});
 
     it('redirects guest users to login', function (): void {
-        get(route('exponent.dashboard'))
+        get(route('exponent.tasks.index'))
             ->assertRedirect(route('login'));
     });
 
@@ -25,15 +27,17 @@ describe('Exponent Dashboard Access Control', function (): void {
             'email' => $exponent->email,
             'password' => 'password',
         ])
-        ->assertRedirect(route('exponent.dashboard'));
+        ->assertRedirect(route('exponent.tasks.index'));
     });
 
     it('allows EXPONENT role to access exponent dashboard', function (): void {
-        $exponent = User::factory()->create();
+        $exhibition = Exhibition::factory()->create();
+        $company = Company::factory()->for($exhibition)->create();
+        $exponent = User::factory()->for($company)->create();
         $exponent->assignRole(UserRole::EXPONENT);
 
         actingAs($exponent)
-            ->get(route('exponent.dashboard'))
+            ->get(route('exponent.tasks.index'))
             ->assertOk()
             ->assertInertia(
                 fn($page) => $page->component('exponent/Dashboard/Dashboard')
@@ -45,7 +49,7 @@ describe('Exponent Dashboard Access Control', function (): void {
         $user->assignRole(UserRole::USER);
 
         actingAs($user)
-            ->get(route('exponent.dashboard'))
+            ->get(route('exponent.tasks.index'))
             ->assertForbidden();
     });
 
@@ -54,7 +58,7 @@ describe('Exponent Dashboard Access Control', function (): void {
         $admin->assignRole(UserRole::ADMIN);
 
         actingAs($admin)
-            ->get(route('exponent.dashboard'))
+            ->get(route('exponent.tasks.index'))
             ->assertForbidden();
     });
 
@@ -63,12 +67,12 @@ describe('Exponent Dashboard Access Control', function (): void {
         $superAdmin->assignRole(UserRole::SUPER_ADMIN);
 
         actingAs($superAdmin)
-            ->get(route('exponent.dashboard'))
+            ->get(route('exponent.tasks.index'))
             ->assertForbidden();
     });
 
     it('redirects unauthenticated users to login page', function (): void {
-        get(route('exponent.dashboard'))
+        get(route('exponent.tasks.index'))
             ->assertRedirect(route('login'));
     });
 });

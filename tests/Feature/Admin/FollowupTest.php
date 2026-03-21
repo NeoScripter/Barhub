@@ -33,7 +33,7 @@ describe('Admin Followup Tests', function (): void {
     });
 
     it('displays only incomplete followups', function (): void {
-        Followup::factory()->for($this->company)->create(['status' => FollowupStatus::IMCOMPLETE]);
+        Followup::factory()->for($this->company)->create(['status' => FollowupStatus::INCOMPLETE]);
         Followup::factory()->for($this->company)->create(['status' => FollowupStatus::COMPLETED]);
 
         actingAs($this->superAdmin)
@@ -45,7 +45,7 @@ describe('Admin Followup Tests', function (): void {
     });
 
     it('successfully updates the status of a followup', function (): void {
-        $followup = Followup::factory()->for($this->company)->create(['status' => FollowupStatus::IMCOMPLETE]);
+        $followup = Followup::factory()->for($this->company)->create(['status' => FollowupStatus::INCOMPLETE]);
 
         actingAs($this->superAdmin)
             ->patch(route('admin.followups.update', $followup))
@@ -58,7 +58,7 @@ describe('Admin Followup Tests', function (): void {
     });
 
     it('successfully displays the number of incomplete followups for this exhibition', function (): void {
-        Followup::factory(3)->for($this->company)->create(['status' => FollowupStatus::IMCOMPLETE]);
+        Followup::factory(3)->for($this->company)->create(['status' => FollowupStatus::INCOMPLETE]);
         Followup::factory(2)->for($this->company)->create(['status' => FollowupStatus::COMPLETED]);
 
         actingAs($this->superAdmin)
@@ -73,8 +73,8 @@ describe('Admin Followup Tests', function (): void {
         $otherExhibition = Exhibition::factory()->create();
         $otherCompany = Company::factory()->for($otherExhibition)->create();
 
-        Followup::factory(2)->for($this->company)->create(['status' => FollowupStatus::IMCOMPLETE]);
-        Followup::factory(3)->for($otherCompany)->create(['status' => FollowupStatus::IMCOMPLETE]);
+        Followup::factory(2)->for($this->company)->create(['status' => FollowupStatus::INCOMPLETE]);
+        Followup::factory(3)->for($otherCompany)->create(['status' => FollowupStatus::INCOMPLETE]);
 
         actingAs($this->superAdmin)
             ->get($this->route)
@@ -138,9 +138,9 @@ describe('Admin Followup Tests', function (): void {
         $companyA = Company::factory()->for($this->exhibition)->create(['public_name' => 'Alpha Co']);
         $companyB = Company::factory()->for($this->exhibition)->create(['public_name' => 'Beta Co']);
 
-        Followup::factory()->for($companyZ)->create(['status' => FollowupStatus::IMCOMPLETE]);
-        Followup::factory()->for($companyA)->create(['status' => FollowupStatus::IMCOMPLETE]);
-        Followup::factory()->for($companyB)->create(['status' => FollowupStatus::IMCOMPLETE]);
+        Followup::factory()->for($companyZ)->create(['status' => FollowupStatus::INCOMPLETE]);
+        Followup::factory()->for($companyA)->create(['status' => FollowupStatus::INCOMPLETE]);
+        Followup::factory()->for($companyB)->create(['status' => FollowupStatus::INCOMPLETE]);
 
         $data = actingAs($this->superAdmin)
             ->get(route('admin.followups.index', ['sort' => 'company.public_name']))
@@ -157,9 +157,9 @@ describe('Admin Followup Tests', function (): void {
         $companyA = Company::factory()->for($this->exhibition)->create(['public_name' => 'Alpha Co']);
         $companyB = Company::factory()->for($this->exhibition)->create(['public_name' => 'Beta Co']);
 
-        Followup::factory()->for($companyZ)->create(['status' => FollowupStatus::IMCOMPLETE]);
-        Followup::factory()->for($companyA)->create(['status' => FollowupStatus::IMCOMPLETE]);
-        Followup::factory()->for($companyB)->create(['status' => FollowupStatus::IMCOMPLETE]);
+        Followup::factory()->for($companyZ)->create(['status' => FollowupStatus::INCOMPLETE]);
+        Followup::factory()->for($companyA)->create(['status' => FollowupStatus::INCOMPLETE]);
+        Followup::factory()->for($companyB)->create(['status' => FollowupStatus::INCOMPLETE]);
 
         $data = actingAs($this->superAdmin)
             ->get(route('admin.followups.index', ['sort' => '-company.public_name']))
@@ -172,9 +172,9 @@ describe('Admin Followup Tests', function (): void {
     });
 
     it('sorts the items based on followup name in ascending order', function (): void {
-        Followup::factory()->for($this->company)->create(['name' => 'Zebra Followup', 'status' => FollowupStatus::IMCOMPLETE]);
-        Followup::factory()->for($this->company)->create(['name' => 'Alpha Followup', 'status' => FollowupStatus::IMCOMPLETE]);
-        Followup::factory()->for($this->company)->create(['name' => 'Beta Followup', 'status' => FollowupStatus::IMCOMPLETE]);
+        Followup::factory()->for($this->company)->create(['name' => 'Zebra Followup', 'status' => FollowupStatus::INCOMPLETE]);
+        Followup::factory()->for($this->company)->create(['name' => 'Alpha Followup', 'status' => FollowupStatus::INCOMPLETE]);
+        Followup::factory()->for($this->company)->create(['name' => 'Beta Followup', 'status' => FollowupStatus::INCOMPLETE]);
 
         $data = actingAs($this->superAdmin)
             ->get(route('admin.followups.index', ['sort' => 'name']))
@@ -187,9 +187,9 @@ describe('Admin Followup Tests', function (): void {
     });
 
     it('sorts the items based on followup name in descending order', function (): void {
-        Followup::factory()->for($this->company)->create(['name' => 'Zebra Followup', 'status' => FollowupStatus::IMCOMPLETE]);
-        Followup::factory()->for($this->company)->create(['name' => 'Alpha Followup', 'status' => FollowupStatus::IMCOMPLETE]);
-        Followup::factory()->for($this->company)->create(['name' => 'Beta Followup', 'status' => FollowupStatus::IMCOMPLETE]);
+        Followup::factory()->for($this->company)->create(['name' => 'Zebra Followup', 'status' => FollowupStatus::INCOMPLETE]);
+        Followup::factory()->for($this->company)->create(['name' => 'Alpha Followup', 'status' => FollowupStatus::INCOMPLETE]);
+        Followup::factory()->for($this->company)->create(['name' => 'Beta Followup', 'status' => FollowupStatus::INCOMPLETE]);
 
         $data = actingAs($this->superAdmin)
             ->get(route('admin.followups.index', ['sort' => '-name']))

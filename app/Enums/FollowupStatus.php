@@ -7,13 +7,13 @@ namespace App\Enums;
 enum FollowupStatus: int
 {
     case COMPLETED = 1;
-    case IMCOMPLETE = 2;
+    case INCOMPLETE = 2;
 
     public function label(): string
     {
         return match ($this) {
             self::COMPLETED => 'Закрыт',
-            self::IMCOMPLETE => 'Открыт',
+            self::INCOMPLETE => 'Открыт',
         };
     }
 }

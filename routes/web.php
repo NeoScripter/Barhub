@@ -22,9 +22,9 @@ use App\Http\Controllers\Admin\TaskController as AdminTaskController;
 use App\Http\Controllers\Admin\TaskTemplateController;
 use App\Http\Controllers\Admin\ThemeController;
 use App\Http\Controllers\Exponent\FollowupController as ExponentFollowupController;
+use App\Http\Controllers\Exponent\TaskController as ExponentTaskControlller;
 use App\Http\Controllers\Exponent\InfoItemController as ExponentInfoItemController;
 use App\Http\Controllers\Exponent\CompanyController as ExponentCompanyController;
-use App\Http\Controllers\Exponent\DashboardController as ExponentDashboardController;
 use App\Http\Controllers\User\EventController as UserEventController;
 use App\Http\Controllers\User\ExhibitionController as UserExhibitionController;
 use App\Http\Controllers\User\HomeController;
@@ -46,7 +46,7 @@ Route::prefix('/exponent')
         'role:' . UserRole::EXPONENT->value,
     ])
     ->group(function (): void {
-        Route::get('/dashboard', ExponentDashboardController::class)->name('dashboard');
+        Route::resource('tasks', ExponentTaskControlller::class)->only(['index', 'edit', 'update']);
         Route::resource('followups', ExponentFollowupController::class)->only(['index', 'store']);
         Route::resource('info-items', ExponentInfoItemController::class)->only(['index']);
         Route::resource('companies', ExponentCompanyController::class)->only(['index', 'edit', 'update']);

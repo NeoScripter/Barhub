@@ -58,7 +58,7 @@ describe('Admin Company Followup Tests', function (): void {
 
     it('displays only completed followups', function (): void {
         Followup::factory()->for($this->company)->create(['status' => FollowupStatus::COMPLETED]);
-        Followup::factory()->for($this->company)->create(['status' => FollowupStatus::IMCOMPLETE]);
+        Followup::factory()->for($this->company)->create(['status' => FollowupStatus::INCOMPLETE]);
 
         actingAs($this->superAdmin)
             ->get($this->route)

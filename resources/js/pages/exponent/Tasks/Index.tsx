@@ -3,7 +3,7 @@ import { cn } from '@/lib/utils';
 import Actions from './partials/Actions';
 import Tasks from './partials/Tasks';
 
-const Dashboard = () => {
+const Index = () => {
     return (
         <div className="spacing flex flex-col">
             <AccentHeading
@@ -40,4 +40,4 @@ const Dashboard = () => {
     );
 };
 
-export default Dashboard;
+export default Index;

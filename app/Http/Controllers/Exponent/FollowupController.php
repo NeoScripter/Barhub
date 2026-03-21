@@ -33,7 +33,7 @@ final class FollowupController extends Controller
 
     public function store()
     {
-        abort_if($followup->status !== FollowupStatus::IMCOMPLETE, 403);
+        abort_if($followup->status !== FollowupStatus::INCOMPLETE, 403);
         $followup->update(['status' => FollowupStatus::COMPLETED]);
 
         return to_route('exponent.followups.index' );

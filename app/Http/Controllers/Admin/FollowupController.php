@@ -47,7 +47,7 @@ final class FollowupController extends Controller
 
     public function update(Followup $followup)
     {
-        abort_if($followup->status !== FollowupStatus::IMCOMPLETE, 403);
+        abort_if($followup->status !== FollowupStatus::INCOMPLETE, 403);
         $followup->update(['status' => FollowupStatus::COMPLETED]);
 
         return to_route('admin.followups.index' );

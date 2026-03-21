@@ -9,7 +9,7 @@ enum TaskStatus: int
     case COMPLETED = 1;
     case TO_BE_COMPLETED = 2;
     case TO_BE_VERIFIED = 3;
-    case IMCOMPLETE = 4;
+    case INCOMPLETE = 4;
     case DELAYED = 5;
 
     public function label(): string
@@ -18,7 +18,7 @@ enum TaskStatus: int
             self::COMPLETED => 'Выполнена',
             self::TO_BE_COMPLETED => 'Ожидает выполнения',
             self::TO_BE_VERIFIED => 'На проверке',
-            self::IMCOMPLETE => 'Требует доработки',
+            self::INCOMPLETE => 'Требует доработки',
             self::DELAYED => 'Просрочена',
         };
     }
