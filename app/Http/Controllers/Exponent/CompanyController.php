@@ -18,14 +18,15 @@ final class CompanyController extends Controller
 {
     public function index()
     {
-        $company = Auth::user()->company();
+        $company = Auth::user()->company()->first();
         abort_unless($company, 404, 'Компания не найдена');
         $company->load(['tags']);
 
-        return Inertia::render('exponent/Companies/Edit', [
+        return Inertia::render('exponent/Companies/Index', [
             'company' => $company,
         ]);
     }
+
     public function edit(Company $company)
     {
         $company->load(['tags']);
