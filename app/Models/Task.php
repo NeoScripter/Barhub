@@ -49,8 +49,25 @@ final class Task extends Model
             ->where('tasks.status', '!=', TaskStatus::COMPLETED)
             ->groupBy('tasks.status')
             ->get()
-            ->map(fn ($task): array => [
+            ->map(fn($task): array => [
                 'count' => $task->count,
+                'status' => $task->status->label(),
+            ]);
+    }
+
+    #[Scope]
+    protected function forExponent(Builder $query, int $companyId): Collection
+    {
+        return $query
+            ->select(['tasks.status', 'tasks.id', 'tasks.title', DB::raw('count(*) as count')])
+            ->join('companies', 'companies.id', '=', 'tasks.company_id')
+            ->where('companies.id', $companyId)
+            ->groupBy('tasks.status')
+            ->get()
+            ->map(fn($task): array => [
+                'id' => $task->id,
+                'count' => $task->count,
+                'title' => $task->title,
                 'status' => $task->status->label(),
             ]);
     }

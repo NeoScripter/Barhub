@@ -1,9 +1,13 @@
 import TaskCard from '@/components/ui/TaskCard';
-import { cn } from '@/lib/utils';
+import { cn, getTaskStatus } from '@/lib/utils';
 import { NodeProps } from '@/types/shared';
+import { Inertia } from '@/wayfinder/types';
+import { usePage } from '@inertiajs/react';
 import { FC } from 'react';
 
 const Tasks: FC<NodeProps> = ({ className }) => {
+    const { tasks } = usePage<{ tasks: Inertia.Pages.Exponent.Dashboard }>()
+        .props;
     return (
         <ul
             className={cn(
@@ -16,11 +20,13 @@ const Tasks: FC<NodeProps> = ({ className }) => {
                     key={task.id}
                     className="basis-40 xl:basis-55"
                 >
-                    <TaskCard.Badge variant={task.variant}>
+                    <TaskCard.Badge variant={getTaskStatus(task.status)}>
                         {task.status}
                     </TaskCard.Badge>
-                    <TaskCard.Digit value={task.number} />
-                    <TaskCard.Label>задач</TaskCard.Label>
+                    <TaskCard.Digit value={task.count} />
+                    <TaskCard.Label>{conjugateTasks(task.count)}</TaskCard.Label>
+                    <hr className="mx-auto block h-0.5 w-4/5 bg-gray-300 text-gray-400" />
+                    <p className="text-center text-foreground">{task.title}</p>
                 </TaskCard>
             ))}
         </ul>
@@ -29,47 +35,16 @@ const Tasks: FC<NodeProps> = ({ className }) => {
 
 export default Tasks;
 
-const tasks = [
-    {
-        id: crypto.randomUUID(),
-        status: 'просрочено',
-        variant: 'danger',
-        number: 5,
-    },
-    {
-        id: crypto.randomUUID(),
-        status: 'на проверке',
-        variant: 'warning',
-        number: 16,
-    },
-    {
-        id: crypto.randomUUID(),
-        status: 'требуют доработки',
-        variant: 'default',
-        number: 10,
-    },
-    {
-        id: crypto.randomUUID(),
-        status: 'просрочено',
-        variant: 'danger',
-        number: 5,
-    },
-    {
-        id: crypto.randomUUID(),
-        status: 'на проверке',
-        variant: 'warning',
-        number: 16,
-    },
-    {
-        id: crypto.randomUUID(),
-        status: 'требуют доработки',
-        variant: 'default',
-        number: 10,
-    },
-    {
-        id: crypto.randomUUID(),
-        status: 'на проверке',
-        variant: 'warning',
-        number: 16,
-    },
-];
+
+function conjugateTasks(count: number): string {
+    const lastTwo = count % 100;
+    const lastOne = count % 10;
+
+    if (lastTwo >= 11 && lastTwo <= 19) {
+        return 'задач';
+    }
+
+    if (lastOne === 1) return 'задача';
+    if (lastOne >= 2 && lastOne <= 4) return 'задачи';
+    return 'задач';
+}
