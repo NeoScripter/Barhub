@@ -1,4 +1,5 @@
 import Table from '@/components/ui/Table';
+import TaskCard from '@/components/ui/TaskCard';
 import { NodeProps } from '@/types/shared';
 import { edit } from '@/wayfinder/routes/admin/followups';
 import { App } from '@/wayfinder/types';
@@ -24,18 +25,30 @@ const FollowupTable: FC<
             {followups.map((followup) => (
                 <Table.Row key={followup.id}>
                     <Table.Cell
-                        key="name"
+                        key="company"
                         width={1}
                     >
-                        {followup.service?.name}
+                        {followup.company?.public_name}
                     </Table.Cell>
                     <Table.Cell
-                        key="description"
+                        key="name"
                         width={2}
-                        className='max-w-80'
+                        className="max-w-80"
                     >
-                        <p>{followup.service?.description}</p>
+                        <p>{followup.name}</p>
                     </Table.Cell>
+                    <Table.Cell
+                        width={0.5}
+                        key="status"
+                    >
+                        <TaskCard.Badge
+                            className="ml-0"
+                            variant='success'
+                        >
+                            заявка на услуги
+                        </TaskCard.Badge>
+                    </Table.Cell>
+
                     <Table.Cell
                         key="edit-btn"
                         width={0.5}

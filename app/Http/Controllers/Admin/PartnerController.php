@@ -60,7 +60,7 @@ final class PartnerController extends Controller
         ]);
     }
 
-    public function update(PartnerUpdateRequest $request,  Task $allTask)
+    public function update(PartnerUpdateRequest $request, Task $allTask)
     {
         abort_if($allTask->status !== TaskStatus::TO_BE_VERIFIED, 403);
         $task = $allTask;

@@ -6,8 +6,9 @@ import { ChevronsUpDown } from 'lucide-react';
 type Column = { label: string; query?: string };
 
 const HEADER_COLS: Column[] = [
-    { label: 'Название', query: 'service.name' },
-    { label: 'Описание'},
+    { label: 'Компания', query: 'company.public_name' },
+    { label: 'Название', query: 'name' },
+    { label: 'Статус'},
     { label: 'Действия' },
 ] as const;
 

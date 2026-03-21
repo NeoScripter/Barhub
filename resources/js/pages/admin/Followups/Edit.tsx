@@ -37,13 +37,13 @@ const Edit: FC<Inertia.Pages.Admin.Followups.Edit> = ({
 
             <div className="mb-6 flex flex-col gap-6">
                 <LabeledContent label="Название компании">
-                    <p>{followup.service?.company?.public_name}</p>
+                    <p>{followup.company?.public_name}</p>
                 </LabeledContent>
                 <LabeledContent label="Название услуги">
-                    <p>{followup.service?.name}</p>
+                    <p>{followup.name}</p>
                 </LabeledContent>
                 <LabeledContent label="Описание услуги">
-                    <p>{followup.service?.description}</p>
+                    <p>{followup.description}</p>
                 </LabeledContent>
                 <LabeledContent label="Комментарий экспонента">
                     {followup.user && (

@@ -22,16 +22,13 @@ final class FollowupController extends Controller
 
         $followups = QueryBuilder::for(Followup::query()->select(['followups.comment', 'followups.status', 'followups.id'])
             ->forExhibition($exhibition->id))
-            ->with('service')
+            ->with('company')
             ->where('status', '!=', FollowupStatus::COMPLETED)
             ->allowedSorts([
-                AllowedSort::custom('service.name', new RelationSort('services', 'name', 'service_id')),
+                'name',
+                AllowedSort::custom('company.public_name', new RelationSort('companies', 'public_name', 'company_id')),
             ])
             ->paginate()
-            ->through(fn($followup): array => [
-                ...$followup->toArray(),
-                'status' => $followup->status->label(),
-            ])
             ->appends($request->query());
 
         return Inertia::render('admin/Followups/Index', [
@@ -41,7 +38,7 @@ final class FollowupController extends Controller
 
     public function edit(Followup $followup)
     {
-        $followup->load(['service.company:public_name,id', 'user:name,id']);
+        $followup->load(['company:public_name,id', 'user:name,id']);
 
         return Inertia::render('admin/Followups/Edit', [
             'followup' => $followup,

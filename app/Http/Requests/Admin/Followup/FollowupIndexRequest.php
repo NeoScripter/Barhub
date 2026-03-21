@@ -21,8 +21,10 @@ final class FollowupIndexRequest extends FormRequest
                 'sometimes',
                 'string',
                 Rule::in([
-                    'service.name',
-                    '-service.name',
+                    'name',
+                    '-name',
+                    'company.public_name',
+                    '-company.public_name',
                 ]),
             ],
             'page' => ['sometimes', 'integer', 'min:1'],

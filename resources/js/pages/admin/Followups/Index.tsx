@@ -6,6 +6,7 @@ import { Inertia } from '@/wayfinder/types';
 import { FC } from 'react';
 import FollowupTable from './partials/FollowupTable';
 import FollowupTableHeader from './partials/FollowupTableHeader';
+import TaskCard from '@/components/ui/TaskCard';
 
 const Index: FC<Inertia.Pages.Admin.Followups.Index> = ({
     followups
@@ -21,9 +22,21 @@ const Index: FC<Inertia.Pages.Admin.Followups.Index> = ({
                 </AccentHeading>
             </IndexToolbar>
 
+            <ul className="mb-12 grid w-full grid-cols-[repeat(auto-fill,minmax(10rem,1fr))] justify-items-center gap-3 sm:justify-items-start md:mb-14 2xl:grid-cols-[repeat(auto-fill,minmax(13.5rem,1fr))] 2xl:mb-18 xl:gap-6">
+                    <TaskCard
+                        className="w-40 2xl:w-55"
+                    >
+                        <TaskCard.Badge variant="success">
+                            заявки на услуги
+                        </TaskCard.Badge>
+                        <TaskCard.Digit value={followups.data.length} />
+                        <TaskCard.Label>{conjugateFollowup(followups.data.length)}</TaskCard.Label>
+                    </TaskCard>
+            </ul>
+
             <Table
                 isEmpty={followups?.data?.length === 0}
-                placeholder="По вашему запросу не найдено ни одной услуги"
+                placeholder="По вашему запросу не найдено ни одной заявки на услугу"
             >
                 <FollowupTableHeader />
                 <FollowupTable
@@ -36,3 +49,16 @@ const Index: FC<Inertia.Pages.Admin.Followups.Index> = ({
 };
 
 export default Index;
+
+function conjugateFollowup(count: number): string {
+    const lastTwo = count % 100;
+    const lastOne = count % 10;
+
+    if (lastTwo >= 11 && lastTwo <= 19) {
+        return 'заявок';
+    }
+
+    if (lastOne === 1) return 'заявка';
+    if (lastOne >= 2 && lastOne <= 4) return 'заявки';
+    return 'заявок';
+}

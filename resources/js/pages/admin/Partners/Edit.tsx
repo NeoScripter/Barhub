@@ -11,14 +11,14 @@ import { useForm } from '@inertiajs/react';
 import { FC } from 'react';
 import { toast } from 'sonner';
 
-const Edit: FC<Inertia.Pages.Admin.Tasks.Edit> = ({ exhibition, task }) => {
+const Edit: FC<Inertia.Pages.Admin.Tasks.Edit> = ({ task }) => {
     const { data, setData, patch, processing } = useForm({
         is_accepted: true,
     });
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        patch(update({ exhibition, all_task: task.id }).url, {
+        patch(update({ all_task: task.id }).url, {
             onSuccess: () => {
                 const message = data.is_accepted
                     ? 'Задача успешно закрыта'
@@ -104,7 +104,7 @@ const Edit: FC<Inertia.Pages.Admin.Tasks.Edit> = ({ exhibition, task }) => {
                     <FormButtons
                         label="Сохранить"
                         processing={processing}
-                        backUrl={PartnerController.index({ exhibition }).url}
+                        backUrl={PartnerController.index().url}
                     />
                 </form>
             )}

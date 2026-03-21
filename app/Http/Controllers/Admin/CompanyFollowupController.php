@@ -55,7 +55,6 @@ final class CompanyFollowupController extends Controller
     public function edit(Company $company, Followup $followup)
     {
         Gate::authorize('view', $company->exhibition);
-        $followup->load(['user:id,name']);
 
         return Inertia::render('admin/CompanyFollowups/Edit', [
             'followup' => $followup,
