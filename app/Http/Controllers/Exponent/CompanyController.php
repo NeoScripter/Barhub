@@ -17,7 +17,7 @@ final class CompanyController extends Controller
 {
     public function index()
     {
-        $company = Auth::user()->company()->first();
+        $company = Auth::user()->company;
         abort_unless($company, 404, 'Компания не найдена');
         $company->load(['tags']);
 
