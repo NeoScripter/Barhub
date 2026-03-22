@@ -19,7 +19,7 @@ const FollowupCard: FC<{
                 <Badge
                     className="relative bottom-2 lg:bottom-4"
                     variant={
-                        followup.status === 'Закрыт' ? 'success' : 'danger'
+                        followup.status !== 'Закрыт' ? 'success' : 'danger'
                     }
                 >
                     {followup.status}

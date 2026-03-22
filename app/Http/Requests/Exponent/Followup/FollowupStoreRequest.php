@@ -23,7 +23,7 @@ final class FollowupStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'service_id' => ['required', 'exists.services,id'],
+            'service_id' => ['required', 'exists:services,id'],
             'comment' => ['required', 'string', 'min:10', 'max:5000'],
         ];
     }

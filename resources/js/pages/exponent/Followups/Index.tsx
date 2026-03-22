@@ -65,18 +65,6 @@ const Index: FC<Inertia.Pages.Exponent.Followups.Index> = ({
                         </li>
                     </AccentHeading>
                 </ul>
-
-                <p className="xl:pt-2">
-                    <AccentHeading
-                        asChild
-                        className="text-xl lg:text-2xl"
-                    >
-                        <span>Дополнительные услуги: </span>
-                    </AccentHeading>
-                    <span className="text-foreground lg:text-lg xl:ml-4 xl:text-xl">
-                        {`${company.power_kw} кВт`}
-                    </span>{' '}
-                </p>
             </div>
             <div>
                 <AccentHeading className="mb-10 text-center text-xl text-secondary lg:text-2xl">

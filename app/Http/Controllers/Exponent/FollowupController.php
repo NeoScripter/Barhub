@@ -32,6 +32,7 @@ final class FollowupController extends Controller
                 'status' => $followup->status->label(),
             ]);
 
+
         return Inertia::render('exponent/Followups/Index', [
             'followups' => $followups,
             'services' => $services,
@@ -50,10 +51,10 @@ final class FollowupController extends Controller
 
         Followup::create([
             'name' => $service->name,
-            'descrption' => $service->descrption,
+            'description' => $service->description,
             'comment' => $validated['comment'],
             'status' => FollowupStatus::INCOMPLETE->value,
-            'user_id' => $request->user->id,
+            'user_id' => $request->user()->id,
             'company_id' => $company->id,
         ]);
 
