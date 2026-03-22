@@ -2,7 +2,7 @@ import InputError from '@/components/form/InputError';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { Label } from '@/components/ui/Label';
-import { store } from '@/wayfinder/routes/admin/followups';
+import { store } from '@/wayfinder/routes/exponent/followups';
 import { useForm } from '@inertiajs/react';
 import { Plus } from 'lucide-react';
 import { FC } from 'react';
