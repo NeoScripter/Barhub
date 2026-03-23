@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Requests\Exponent\Company;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 final class CompanyUpdateRequest extends FormRequest
 {
@@ -13,20 +14,13 @@ final class CompanyUpdateRequest extends FormRequest
         return $this->user()->company->id === $this->company->id;
     }
 
-    protected function prepareForValidation(): void
-    {
-        $this->merge([
-            'email' => strtolower($this->email),
-        ]);
-    }
-
     public function rules(): array
     {
         return [
             'public_name' => ['sometimes', 'string', 'min:1', 'max:255'],
             'description' => ['sometimes', 'string', 'min:10', 'max:5000'],
             'phone' => ['sometimes', 'string', 'max:50'],
-            'email' => ['sometimes', 'email', 'max:255', 'unique:companies,email,' . $this->company?->id],
+            'email' => ['sometimes', 'email', 'max:255', Rule::unique('companies', 'email')->ignore($this->company?->id)],
             'site_url' => ['nullable', 'url', 'max:255'],
             'instagram' => ['nullable', 'string', 'max:255'],
             'telegram' => ['nullable', 'string', 'max:255'],

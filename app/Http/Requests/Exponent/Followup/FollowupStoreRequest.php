@@ -13,13 +13,6 @@ final class FollowupStoreRequest extends FormRequest
         return true;
     }
 
-    protected function prepareForValidation(): void
-    {
-        $this->merge([
-            'comment' => trim($this->comment)
-        ]);
-    }
-
     public function rules(): array
     {
         return [
