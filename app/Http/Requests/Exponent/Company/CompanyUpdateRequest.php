@@ -16,7 +16,6 @@ final class CompanyUpdateRequest extends FormRequest
     protected function prepareForValidation(): void
     {
         $this->merge([
-            'comment' => trim($this->comment),
             'email' => strtolower($this->email),
         ]);
     }
