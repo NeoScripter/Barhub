@@ -45,14 +45,15 @@ final class ImageResizer
 
                 Storage::disk('public')->put($path, (string) $encoded);
 
-                $paths[$columnName] = $path;
+                $paths[$columnName] = Storage::disk('public')->url($path);
             }
         }
 
         $tiny = $manager->read($file)->scaleDown(width: 20)->toWebp(80);
         $tinyPath = "/uploads/{$folder}/{$filename}-tiny.webp";
         Storage::disk('public')->put($tinyPath, (string) $tiny);
-        $paths['tiny'] = $tinyPath;
+
+        $paths['tiny'] = Storage::disk('public')->url($tinyPath);
 
         return $paths;
     }
