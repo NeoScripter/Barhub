@@ -28,6 +28,9 @@ jobs:
             rm -rf storage/wayfinder-cache && \
             rm -rf storage/framework/surveyor && \
             rm -rf storage/framework/cache && \
+            rm -rf bootstrap/cache && \
+            mkdir -p bootstrap/cache && \
+            mkdir -p storage/framework/cache && \
             php artisan optimize:clear && \
             composer dump-autoload && \
             pnpm install && \
@@ -38,6 +41,6 @@ jobs:
             php artisan config:cache && \
             php artisan route:cache && \
             php artisan view:cache && \
-            sudo service php8.3-fpm reload
+            sudo service php8.3-fpm restart
             "
 

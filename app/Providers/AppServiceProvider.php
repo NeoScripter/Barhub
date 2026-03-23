@@ -11,6 +11,7 @@ use Carbon\CarbonImmutable;
 use Illuminate\Auth\Events\Login;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
+use Illuminate\Foundation\Http\Middleware\TrimStrings;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
@@ -55,7 +56,7 @@ final class AppServiceProvider extends ServiceProvider
         );
 
         Model::unguard();
-        Model::shouldBeStrict();
+        // Model::shouldBeStrict();
         Model::automaticallyEagerLoadRelationships();
 
         Relation::enforceMorphMap([

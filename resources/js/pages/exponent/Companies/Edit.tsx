@@ -15,10 +15,10 @@ import { toast } from 'sonner';
 const Edit: FC<Inertia.Pages.Admin.Companies.Edit> = ({ company }) => {
     const { data, setData, post, processing, errors, progress } = useForm({
         _method: 'PUT',
-        public_name: company.public_name,
-        description: company.description,
-        phone: company.phone,
-        email: company.email,
+        public_name: company.public_name ?? '',
+        description: company.description ?? '',
+        phone: company.phone ?? '',
+        email: company.email ?? '',
         site_url: company.site_url ?? '',
         instagram: company.instagram ?? '',
         telegram: company.telegram ?? '',
@@ -26,9 +26,11 @@ const Edit: FC<Inertia.Pages.Admin.Companies.Edit> = ({ company }) => {
         logo: null as File | null,
     });
 
+    console.log(company)
+
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        post(update({ company }).url, {
+        post(update({ company: company.id }).url, {
             onSuccess: () => toast.success('Данные компании успешно обновлены'),
         });
     };
