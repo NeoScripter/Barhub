@@ -18,7 +18,7 @@ final class CompanyFollowupUpdateRequest extends FormRequest
         return [
             'name' => ['sometimes', 'string', 'min:1', 'max:200'],
             'description' => ['sometimes', 'string', 'min:10', 'max:5000'],
-            'comment' => ['sometimes', 'string', 'min:10', 'max:5000'],
+            'comment' => ['sometimes', 'string', 'min:1', 'max:5000'],
         ];
     }
 

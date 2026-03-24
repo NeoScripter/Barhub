@@ -18,7 +18,7 @@ final class CompanyFollowupStoreRequest extends FormRequest
         return [
             'name' => ['required', 'string', 'min:1', 'max:200'],
             'description' => ['required', 'string', 'min:10', 'max:5000'],
-            'comment' => ['required', 'string', 'min:10', 'max:5000'],
+            'comment' => ['required', 'string', 'min:1', 'max:5000'],
         ];
     }
 

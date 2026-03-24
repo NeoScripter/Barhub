@@ -17,7 +17,7 @@ final class FollowupStoreRequest extends FormRequest
     {
         return [
             'service_id' => ['required', 'exists:services,id'],
-            'comment' => ['required', 'string', 'min:10', 'max:5000'],
+            'comment' => ['required', 'string', 'min:1', 'max:5000'],
         ];
     }
 
