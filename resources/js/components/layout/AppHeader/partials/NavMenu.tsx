@@ -6,13 +6,20 @@ import { NodeProps } from '@/types/shared';
 import { App } from '@/wayfinder/types';
 import { usePage } from '@inertiajs/react';
 import { ArrowLeftToLine } from 'lucide-react';
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import AccountDropdown from './AccountDropdown';
 import NavItem from './NavItem';
 
 const NavMenu: FC<NodeProps> = ({ className }) => {
     const [expanded, setExpanded] = useState(false);
     const { currentUrl } = useCurrentUrl();
+
+    useEffect(() => {
+        const collapseMenu = () => setExpanded(false);
+        document.addEventListener('closeNavMenu', collapseMenu);
+
+        return () => document.removeEventListener('closeNavMenu', collapseMenu);
+    }, []);
 
     return (
         <div
@@ -40,15 +47,13 @@ const NavMenu: FC<NodeProps> = ({ className }) => {
                             'lg:place-content-center lg:place-items-center',
                     )}
                 >
-                    {renderNavItems(currentUrl).map(
-                        (item) => (
-                            <NavItem
-                                expanded={expanded}
-                                key={item.id}
-                                item={item}
-                            />
-                        ),
-                    )}
+                    {renderNavItems(currentUrl).map((item) => (
+                        <NavItem
+                            expanded={expanded}
+                            key={item.id}
+                            item={item}
+                        />
+                    ))}
                 </ul>
             </nav>
         </div>
