@@ -11,17 +11,24 @@ import { Link, useForm } from '@inertiajs/react';
 import { FC } from 'react';
 import { toast } from 'sonner';
 import { TagSelect } from './partials/TagSelect';
+import { Textarea } from '@/components/ui/Textarea';
+import ImgInput from '@/components/ui/ImgInput';
 
 const Create: FC<Inertia.Pages.Admin.Companies.Create> = ({ tags }) => {
-    const { data, setData, post, processing, errors } = useForm({
+    const { data, setData, post, progress, processing, errors } = useForm({
         public_name: '',
         legal_name: '',
+        description: '',
+        phone: '',
+        email: '',
+        site_url: '',
+        instagram: '',
+        telegram: '',
         stand_code: '',
-        power_kw: '',
-        stand_area: '',
         show_on_site: false,
-        storage_enabled: false,
+        activities: '',
         tags: [] as number[],
+        logo: null as File | null,
     });
 
     const handleSubmit = (e: React.FormEvent) => {
@@ -74,6 +81,98 @@ const Create: FC<Inertia.Pages.Admin.Companies.Create> = ({ tags }) => {
                             placeholder="ООО «Название»"
                         />
                         <InputError message={errors.legal_name} />
+                    </div>
+
+                    <ImgInput
+                        key="logo-input"
+                        progress={progress}
+                        label="Логотип"
+                        isEdited={true}
+                        onChange={(file) => setData('logo', file)}
+                        error={errors.logo}
+                    />
+
+                    <div className="grid gap-2 md:col-span-2">
+                        <Label htmlFor="description">Описание</Label>
+                        <Textarea
+                            id="description"
+                            required
+                            value={data.description}
+                            onChange={(e) =>
+                                setData('description', e.target.value)
+                            }
+                            className="max-w-full"
+                            placeholder="Описание компании"
+                        />
+                        <InputError message={errors.description} />
+                    </div>
+
+                    <div className="grid gap-2">
+                        <Label htmlFor="phone">Телефон</Label>
+                        <Input
+                            id="phone"
+                            type="text"
+                            required
+                            value={data.phone}
+                            onChange={(e) => setData('phone', e.target.value)}
+                            placeholder="+7 (999) 000-00-00"
+                        />
+                        <InputError message={errors.phone} />
+                    </div>
+
+                    <div className="grid gap-2">
+                        <Label htmlFor="email">Email</Label>
+                        <Input
+                            id="email"
+                            type="email"
+                            required
+                            value={data.email}
+                            onChange={(e) => setData('email', e.target.value)}
+                            placeholder="company@example.com"
+                        />
+                        <InputError message={errors.email} />
+                    </div>
+
+                    <div className="grid gap-2">
+                        <Label htmlFor="site_url">Сайт</Label>
+                        <Input
+                            id="site_url"
+                            type="url"
+                            value={data.site_url}
+                            onChange={(e) =>
+                                setData('site_url', e.target.value)
+                            }
+                            placeholder="https://example.com"
+                        />
+                        <InputError message={errors.site_url} />
+                    </div>
+
+                    <div className="grid gap-2">
+                        <Label htmlFor="instagram">Instagram</Label>
+                        <Input
+                            id="instagram"
+                            type="text"
+                            value={data.instagram}
+                            onChange={(e) =>
+                                setData('instagram', e.target.value)
+                            }
+                            placeholder="@username"
+                        />
+                        <InputError message={errors.instagram} />
+                    </div>
+
+                    <div className="grid gap-2">
+                        <Label htmlFor="telegram">Telegram</Label>
+                        <Input
+                            id="telegram"
+                            type="text"
+                            value={data.telegram}
+                            onChange={(e) =>
+                                setData('telegram', e.target.value)
+                            }
+                            placeholder="@username"
+                        />
+                        <InputError message={errors.telegram} />
                     </div>
 
                     <div className="grid gap-2">
