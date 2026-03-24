@@ -1,7 +1,7 @@
 import { cn } from '@/lib/utils';
 import { NodeProps } from '@/types/shared';
 import { App } from '@/wayfinder/types';
-import { usePage } from '@inertiajs/react';
+import { Head, usePage } from '@inertiajs/react';
 import { FC } from 'react';
 import AccentHeading from '../../ui/AccentHeading';
 import AppLogo from '../AppLogo';
@@ -24,6 +24,9 @@ const AppHeader: FC<Props> = ({ variant = 'admin' }) => {
                 { 'sm:items-baseline': !isAdmin },
             )}
         >
+            <Head>
+                <title>{exhibition?.name ?? ''}</title>
+            </Head>
             <div className="flex-[1_0_0]">
                 <AppLogo />
             </div>

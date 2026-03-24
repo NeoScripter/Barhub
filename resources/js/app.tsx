@@ -9,7 +9,7 @@ const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 const pages = import.meta.glob('./pages/**/*.tsx');
 
 createInertiaApp({
-    title: (title) => (title ? `${title} - ${appName}` : appName),
+    title: (title) => (title ? `${title}` : appName),
     resolve: async (name) => {
         const mod: any = await pages[`./pages/${name}.tsx`]();
 
