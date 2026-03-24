@@ -18,9 +18,9 @@ final class CompanyStoreRequest extends FormRequest
         return [
             'public_name' => ['required', 'string', 'min:1', 'max:255'],
             'legal_name' => ['required', 'string', 'min:1', 'max:255'],
-            'description' => ['required', 'string', 'min:10', 'max:5000'],
-            'phone' => ['required', 'string', 'max:50'],
-            'email' => ['required', 'email', 'max:255', 'unique:companies,email'],
+            'description' => ['nullable', 'string', 'min:10', 'max:5000'],
+            'phone' => ['nullable', 'string', 'max:50'],
+            'email' => ['nullable', 'email', 'max:255', 'unique:companies,email'],
             'site_url' => ['nullable', 'url', 'max:255'],
             'instagram' => ['nullable', 'string', 'max:255'],
             'telegram' => ['nullable', 'string', 'max:255'],

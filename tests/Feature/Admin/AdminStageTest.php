@@ -20,9 +20,9 @@ describe('Admin Stage Test', function (): void {
         // Create test data
         $exhibition = Exhibition::factory()->create();
 
-        $stage1 = Stage::factory()->create(['name' => 'Главная сцена']);
-        $stage2 = Stage::factory()->create(['name' => 'Малая сцена']);
-        $stage3 = Stage::factory()->create(['name' => 'Открытая площадка']);
+        $stage1 = Stage::factory()->for($exhibition)->for($exhibition)->create(['name' => 'Главная сцена']);
+        $stage2 = Stage::factory()->for($exhibition)->for($exhibition)->create(['name' => 'Малая сцена']);
+        $stage3 = Stage::factory()->for($exhibition)->for($exhibition)->create(['name' => 'Открытая площадка']);
 
         Event::factory()->for($exhibition)->for($stage1)->create();
         Event::factory()->for($exhibition)->for($stage2)->create();
@@ -70,7 +70,7 @@ describe('Admin Stage Test', function (): void {
         $user->assignRole(UserRole::SUPER_ADMIN);
 
         $exhibition = Exhibition::factory()->create();
-        $stage = Stage::factory()->create();
+        $stage = Stage::factory()->for($exhibition)->for($exhibition)->create();
         $event = Event::factory()->for($exhibition)->for($stage)->create();
 
         $page = visit('/login');
@@ -96,7 +96,7 @@ describe('Admin Stage Test', function (): void {
         $user->assignRole(UserRole::SUPER_ADMIN);
 
         $exhibition = Exhibition::factory()->create();
-        $stage = Stage::factory()->create(['name' => 'Important Stage']);
+        $stage = Stage::factory()->for($exhibition)->for($exhibition)->create(['name' => 'Important Stage']);
 
         $event = Event::factory()->for($exhibition)->for($stage)->create();
 
@@ -113,8 +113,8 @@ describe('Admin Stage Test', function (): void {
         $user->assignRole(UserRole::SUPER_ADMIN);
 
         $exhibition = Exhibition::factory()->create();
-        $usedStage = Stage::factory()->create(['name' => 'Used Stage']);
-        $unusedStage = Stage::factory()->create(['name' => 'Unused Stage']);
+        $usedStage = Stage::factory()->for($exhibition)->for($exhibition)->create(['name' => 'Used Stage']);
+        $unusedStage = Stage::factory()->for($exhibition)->for($exhibition)->create(['name' => 'Unused Stage']);
 
         $event = Event::factory()->for($exhibition)->for($usedStage)->create();
 
@@ -153,7 +153,7 @@ describe('Admin Stage Test', function (): void {
 
         $exhibition = Exhibition::factory()->create();
 
-        $stages = Stage::factory(5)->create();
+        $stages = Stage::factory(5)->for($exhibition)->create();
 
         // Create event with first stage
         $event = Event::factory()->for($exhibition)->for($stages->first())->create();
@@ -188,7 +188,7 @@ describe('Admin Stage Test', function (): void {
         $user->assignRole(UserRole::SUPER_ADMIN);
 
         $exhibition = Exhibition::factory()->create();
-        $existingStage = Stage::factory()->create(['name' => 'Existing Stage']);
+        $existingStage = Stage::factory()->for($exhibition)->create(['name' => 'Existing Stage']);
         $event = Event::factory()->for($exhibition)->for($existingStage)->create();
 
         $page = visit('/login');

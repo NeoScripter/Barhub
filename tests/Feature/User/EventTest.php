@@ -14,7 +14,7 @@ use function Pest\Laravel\get;
 describe('Public Event Index Page', function (): void {
     it('renders events index page with exhibition data', function (): void {
         $exhibition = Exhibition::factory()->create();
-        $stage = Stage::factory()->create();
+        $stage = Stage::factory()->for($exhibition)->create();
         Event::factory(3)->for($exhibition)->for($stage)->create();
 
         get(route('events.index', $exhibition))
@@ -31,7 +31,7 @@ describe('Public Event Index Page', function (): void {
 
     it('displays all events for an exhibition', function (): void {
         $exhibition = Exhibition::factory()->create();
-        $stage = Stage::factory()->create();
+        $stage = Stage::factory()->for($exhibition)->create();
         $events = Event::factory(5)->for($exhibition)->for($stage)->create();
 
         $response = get(route('events.index', $exhibition));
@@ -44,7 +44,7 @@ describe('Public Event Index Page', function (): void {
 
     it('includes people with roles attached to events', function (): void {
         $exhibition = Exhibition::factory()->create();
-        $stage = Stage::factory()->create();
+        $stage = Stage::factory()->for($exhibition)->create();
         $event = Event::factory()->for($exhibition)->for($stage)->create();
         $person = Person::factory()->create();
 
@@ -63,7 +63,7 @@ describe('Public Event Index Page', function (): void {
 
     it('returns unique themes from all events', function (): void {
         $exhibition = Exhibition::factory()->create();
-        $stage = Stage::factory()->create();
+        $stage = Stage::factory()->for($exhibition)->create();
 
         $theme1 = Theme::factory()->create(['name' => 'Technology']);
         $theme2 = Theme::factory()->create(['name' => 'Art']);
@@ -88,8 +88,8 @@ describe('Public Event Index Page', function (): void {
     it('returns all unique stages', function (): void {
         $exhibition = Exhibition::factory()->create();
 
-        $stage1 = Stage::factory()->create(['name' => 'Main Hall']);
-        $stage2 = Stage::factory()->create(['name' => 'Workshop Room']);
+        $stage1 = Stage::factory()->for($exhibition)->create(['name' => 'Main Hall']);
+        $stage2 = Stage::factory()->for($exhibition)->create(['name' => 'Workshop Room']);
 
         Event::factory()->for($exhibition)->for($stage1)->create();
         Event::factory()->for($exhibition)->for($stage2)->create();
@@ -107,7 +107,7 @@ describe('Public Event Index Page', function (): void {
 
     it('returns unique event days sorted', function (): void {
         $exhibition = Exhibition::factory()->create();
-        $stage = Stage::factory()->create();
+        $stage = Stage::factory()->for($exhibition)->create();
 
         Event::factory()->for($exhibition)->for($stage)->create(['starts_at' => '2025-03-15 14:00:00']);
         Event::factory()->for($exhibition)->for($stage)->create(['starts_at' => '2025-03-15 14:00:00']);
@@ -131,8 +131,8 @@ describe('Event Filtering', function (): void {
     it('filters events by stage name', function (): void {
         $exhibition = Exhibition::factory()->create();
 
-        $mainStage = Stage::factory()->create(['name' => 'Main Stage']);
-        $sideStage = Stage::factory()->create(['name' => 'Side Stage']);
+        $mainStage = Stage::factory()->for($exhibition)->create(['name' => 'Main Stage']);
+        $sideStage = Stage::factory()->for($exhibition)->create(['name' => 'Side Stage']);
 
         Event::factory()->for($exhibition)->for($mainStage)->create(['title' => 'Main Event']);
         Event::factory()->for($exhibition)->for($sideStage)->create(['title' => 'Side Event']);
@@ -149,7 +149,7 @@ describe('Event Filtering', function (): void {
 
     it('filters events by theme name', function (): void {
         $exhibition = Exhibition::factory()->create();
-        $stage = Stage::factory()->create();
+        $stage = Stage::factory()->for($exhibition)->create();
 
         $techTheme = Theme::factory()->create(['name' => 'Technology']);
         $artTheme = Theme::factory()->create(['name' => 'Art']);
@@ -172,7 +172,7 @@ describe('Event Filtering', function (): void {
 
     it('filters events by start date', function (): void {
         $exhibition = Exhibition::factory()->create();
-        $stage = Stage::factory()->create();
+        $stage = Stage::factory()->for($exhibition)->create();
 
         Event::factory()->for($exhibition)->for($stage)->create([
             'title' => 'March Event',
@@ -196,8 +196,8 @@ describe('Event Filtering', function (): void {
     it('filters events by multiple criteria', function (): void {
         $exhibition = Exhibition::factory()->create();
 
-        $mainStage = Stage::factory()->create(['name' => 'Main Stage']);
-        $sideStage = Stage::factory()->create(['name' => 'Side Stage']);
+        $mainStage = Stage::factory()->for($exhibition)->create(['name' => 'Main Stage']);
+        $sideStage = Stage::factory()->for($exhibition)->create(['name' => 'Side Stage']);
 
         $techTheme = Theme::factory()->create(['name' => 'Technology']);
         $artTheme = Theme::factory()->create(['name' => 'Art']);
@@ -238,7 +238,7 @@ describe('Event Filtering', function (): void {
 describe('Public Event Show Page', function (): void {
     it('renders event show page', function (): void {
         $exhibition = Exhibition::factory()->create();
-        $stage = Stage::factory()->create();
+        $stage = Stage::factory()->for($exhibition)->create();
         $event = Event::factory()->for($exhibition)->for($stage)->create();
 
         get(route('events.show', [
@@ -256,7 +256,7 @@ describe('Public Event Show Page', function (): void {
 
     it('displays event details', function (): void {
         $exhibition = Exhibition::factory()->create();
-        $stage = Stage::factory()->create();
+        $stage = Stage::factory()->for($exhibition)->create();
         $event = Event::factory()->for($exhibition)->for($stage)->create([
             'title' => 'Amazing Conference',
             'description' => 'A conference about amazing things',
@@ -275,7 +275,7 @@ describe('Public Event Show Page', function (): void {
 describe('Event Relationships', function (): void {
     it('includes stage information with events', function (): void {
         $exhibition = Exhibition::factory()->create();
-        $stage = Stage::factory()->create(['name' => 'Grand Hall']);
+        $stage = Stage::factory()->for($exhibition)->create(['name' => 'Grand Hall']);
         $event = Event::factory()->for($exhibition)->for($stage)->create();
 
         get(route('events.index', $exhibition))
@@ -288,7 +288,7 @@ describe('Event Relationships', function (): void {
 
     it('includes themes information with events', function (): void {
         $exhibition = Exhibition::factory()->create();
-        $stage = Stage::factory()->create();
+        $stage = Stage::factory()->for($exhibition)->create();
         $event = Event::factory()->for($exhibition)->for($stage)->create();
 
         $theme1 = Theme::factory()->create(['name' => 'Innovation']);

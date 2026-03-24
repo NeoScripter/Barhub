@@ -527,7 +527,7 @@ describe('Person Destroy', function (): void {
     });
 
     it('cascades delete to event_person pivot', function (): void {
-        $stage = Stage::factory()->create();
+        $stage = Stage::factory()->for($this->exhibition)->create();
         $event = Event::factory()->for($this->exhibition)->for($stage)->create();
         $event->people()->attach($this->person->id, ['role' => 1]);
 
@@ -558,7 +558,7 @@ describe('Person Destroy', function (): void {
     });
 
     it('does not delete associated events', function (): void {
-        $stage = Stage::factory()->create();
+        $stage = Stage::factory()->for($this->exhibition)->create();
         $event = Event::factory()->for($this->exhibition)->for($stage)->create();
         $event->people()->attach($this->person->id, ['role' => 1]);
 
@@ -572,8 +572,8 @@ describe('Person Destroy', function (): void {
         $admin = User::factory()->create();
         $admin->assignRole(UserRole::ADMIN);
 
-        $stage = Stage::factory()->create();
         $assignedExhibition = Exhibition::factory()->create();
+        $stage = Stage::factory()->for($assignedExhibition)->create();
         $assignedExhibition->users()->attach($admin);
         $event = Event::factory()->for($assignedExhibition)->for($stage)->create();
 

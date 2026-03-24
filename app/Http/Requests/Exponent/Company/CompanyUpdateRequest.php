@@ -13,16 +13,6 @@ final class CompanyUpdateRequest extends FormRequest
         return $this->user()->company->id === $this->company->id;
     }
 
-    /**
-     * Prepare the data for validation.
-     */
-    protected function prepareForValidation(): void
-    {
-        $data = $this->toArray();
-
-        $this->merge($data);
-    }
-
     public function rules(): array
     {
         return [

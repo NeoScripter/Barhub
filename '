@@ -18,6 +18,7 @@ final class StageSeeder extends Seeder
         $exhibitions = Exhibition::all();
 
         $exhibitions->each(function ($exhibition) {
+
             Stage::factory()->for($exhibition)->create();
         });
     }

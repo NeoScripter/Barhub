@@ -38,6 +38,7 @@ final class CompanyController extends Controller
 
         return Inertia::render('admin/Companies/Index', [
             'companies' => $companies,
+            'tags' => Tag::query()->orderBy('name')->get(),
         ]);
     }
 

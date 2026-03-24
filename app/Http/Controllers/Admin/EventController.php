@@ -50,7 +50,8 @@ final class EventController extends Controller
 
         return Inertia::render('admin/Events/Index', [
             'events' => $events,
-            'stages' => Stage::forExhibition($exhibition->id)
+            'stages' => $exhibition
+                ->stages()
                 ->withCount('events')
                 ->get(),
             'themes' => Theme::all(),

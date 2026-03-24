@@ -98,7 +98,7 @@ describe('Event Index', function (): void {
     });
 
     it('displays all events for an exhibition', function (): void {
-        $stage = Stage::factory()->create();
+        $stage = Stage::factory()->for($this->exhibition)->create();
         Event::factory(5)->for($this->exhibition)->for($stage)->create();
 
         actingAs($this->superAdmin)
@@ -125,7 +125,7 @@ describe('Event Index', function (): void {
     });
 
     it('eager loads relationships', function (): void {
-        $stage = Stage::factory()->create();
+        $stage = Stage::factory()->for($this->exhibition)->create();
         $theme = Theme::factory()->create();
         $person = Person::factory()->create();
 
@@ -248,9 +248,9 @@ describe('Event Index', function (): void {
     });
 
     it('sorts events by stage name ascending', function (): void {
-        $stageZ = Stage::factory()->create(['name' => 'Zulu Stage']);
-        $stageA = Stage::factory()->create(['name' => 'Alpha Stage']);
-        $stageB = Stage::factory()->create(['name' => 'Bravo Stage']);
+        $stageZ = Stage::factory()->for($this->exhibition)->create(['name' => 'Zulu Stage']);
+        $stageA = Stage::factory()->for($this->exhibition)->create(['name' => 'Alpha Stage']);
+        $stageB = Stage::factory()->for($this->exhibition)->create(['name' => 'Bravo Stage']);
 
         Event::factory()->for($this->exhibition)->for($stageZ)->create();
         Event::factory()->for($this->exhibition)->for($stageA)->create();
@@ -270,9 +270,9 @@ describe('Event Index', function (): void {
     });
 
     it('sorts events by stage name descending', function (): void {
-        $stageZ = Stage::factory()->create(['name' => 'Zulu Stage']);
-        $stageA = Stage::factory()->create(['name' => 'Alpha Stage']);
-        $stageB = Stage::factory()->create(['name' => 'Bravo Stage']);
+        $stageZ = Stage::factory()->for($this->exhibition)->create(['name' => 'Zulu Stage']);
+        $stageA = Stage::factory()->for($this->exhibition)->create(['name' => 'Alpha Stage']);
+        $stageB = Stage::factory()->for($this->exhibition)->create(['name' => 'Bravo Stage']);
 
         Event::factory()->for($this->exhibition)->for($stageZ)->create();
         Event::factory()->for($this->exhibition)->for($stageA)->create();
@@ -352,7 +352,7 @@ describe('Event Create', function (): void {
         $this->superAdmin = User::factory()->create();
         $this->superAdmin->assignRole(UserRole::SUPER_ADMIN);
         $this->exhibition = Exhibition::factory()->create();
-        $this->stage = Stage::factory()->create();
+        $this->stage = Stage::factory()->for($this->exhibition)->create();
     });
 
     it('displays create form', function (): void {
@@ -588,7 +588,7 @@ describe('Event Edit', function (): void {
     });
 
     it('updates basic event data', function (): void {
-        $newStage = Stage::factory()->create();
+        $newStage = Stage::factory()->for($this->exhibition)->create();
 
         actingAs($this->superAdmin)
             ->put(route('admin.events.update', [$this->exhibition, $this->event]), [

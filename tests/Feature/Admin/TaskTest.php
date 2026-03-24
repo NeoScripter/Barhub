@@ -889,6 +889,7 @@ describe('Admin Task Test', function (): void {
         $exhibitionWithCompany->users()->attach($adminWithAccess->id);
         $exhibitionWithoutCompany->users()->attach($adminWithoutAccess->id);
         $company = Company::factory()->for($exhibitionWithCompany)->create();
+        $exponent->update(['company_id' => $company->id]);
         $tasks = Task::factory(3)->for($company)->create();
         $route = "/admin/companies/{$company->id}/tasks";
 

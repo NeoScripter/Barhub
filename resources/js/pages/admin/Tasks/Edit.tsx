@@ -49,7 +49,7 @@ const Edit: FC<Inertia.Pages.Admin.Tasks.Edit> = ({
 
     const handleDelete = () => {
         setIsDeleting(true);
-        router.delete(destroy({ exhibition, company, task }).url, {
+        router.delete(destroy({ company, task }).url, {
             onSuccess: () => {
                 toast.success('Задача успешно удалена');
             },

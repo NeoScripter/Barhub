@@ -562,20 +562,32 @@ describe('Company Update', function (): void {
         ];
     });
 
+
     it('successfully creates a company with a logo', function (): void {
-        Storage::fake('local');
+        Storage::fake('public'); // Should be 'public' not 'local' based on your controller
+
+        $data = [
+            'public_name' => 'Logo Company',
+            'legal_name' => 'Logo Company LLC',
+            'description' => 'This is a valid description with at least 10 characters',
+            'phone' => '+7 (999) 000-00-00',
+            'email' => 'logo@example.com',
+            'stand_code' => '10',
+            'show_on_site' => true,
+            'stand_area' => 10,
+            'power_kw' => 5,
+            'storage_enabled' => false,
+            'logo' => UploadedFile::fake()->image('logo.jpg'),
+        ];
 
         actingAs($this->superAdmin)
-            ->post(route('admin.companies.store'), [
-                'public_name' => 'Logo Company',
-                'legal_name'  => 'Logo Company LLC',
-                'stand_code'  => 10,
-                'logo'        => UploadedFile::fake()->image('logo.jpg'),
-            ])
+            ->post(route('admin.companies.store'), $data)
             ->assertRedirect(route('admin.companies.index'));
 
+        // Find by the public_name we just created
         $company = Company::query()->where('public_name', 'Logo Company')->first();
-        expect($company->logo)->not->toBeNull();
+        expect($company)->not->toBeNull()
+            ->and($company->logo)->not->toBeNull();
     });
 
     it('successfully updates the logo of a company', function (): void {
@@ -632,7 +644,9 @@ describe('Company Update', function (): void {
             ->put(route('admin.companies.update', [$this->company]), [
                 'public_name' => 'Updated Name',
                 'legal_name'  => 'Updated Legal LLC',
-                'stand_code'  => 99,
+                'stand_code'  => "99",
+                'power_kw'  => 99,
+                'stand_area'  => 99,
                 'email'       => 'updated@example.com',
                 'show_on_site' => false,
             ])
@@ -642,7 +656,8 @@ describe('Company Update', function (): void {
             'id'          => $this->company->id,
             'public_name' => 'Updated Name',
             'email'       => 'updated@example.com',
-            'stand_code'  => 99,
+            'stand_code'  => "99",
+            'stand_area'  => 99,
         ]);
     });
 

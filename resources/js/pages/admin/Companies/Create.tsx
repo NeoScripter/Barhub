@@ -26,6 +26,7 @@ const Create: FC<Inertia.Pages.Admin.Companies.Create> = ({ tags }) => {
         telegram: '',
         stand_code: '',
         show_on_site: false,
+        storage_enabled: false,
         activities: '',
         tags: [] as number[],
         logo: null as File | null,
@@ -96,7 +97,6 @@ const Create: FC<Inertia.Pages.Admin.Companies.Create> = ({ tags }) => {
                         <Label htmlFor="description">Описание</Label>
                         <Textarea
                             id="description"
-                            required
                             value={data.description}
                             onChange={(e) =>
                                 setData('description', e.target.value)
@@ -112,7 +112,6 @@ const Create: FC<Inertia.Pages.Admin.Companies.Create> = ({ tags }) => {
                         <Input
                             id="phone"
                             type="text"
-                            required
                             value={data.phone}
                             onChange={(e) => setData('phone', e.target.value)}
                             placeholder="+7 (999) 000-00-00"
@@ -125,7 +124,6 @@ const Create: FC<Inertia.Pages.Admin.Companies.Create> = ({ tags }) => {
                         <Input
                             id="email"
                             type="email"
-                            required
                             value={data.email}
                             onChange={(e) => setData('email', e.target.value)}
                             placeholder="company@example.com"

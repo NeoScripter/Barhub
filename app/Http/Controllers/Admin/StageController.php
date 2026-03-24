@@ -14,7 +14,10 @@ final class StageController extends Controller
 {
     public function store(StageStoreRequest $request): RedirectResponse
     {
-        Stage::query()->create($request->validated());
+        $exhibition = $request->user()->getActiveExhibition();
+        Stage::query()->create(
+            [...$request->validated(), 'exhibition_id' => $exhibition->id]
+        );
 
         return back()
             ->with('success', 'Площадка успешно создана');

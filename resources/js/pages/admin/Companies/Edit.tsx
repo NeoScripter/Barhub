@@ -1,4 +1,5 @@
 import InputError from '@/components/form/InputError';
+import AccentHeading from '@/components/ui/AccentHeading';
 import { Button } from '@/components/ui/Button';
 import CopyLinkBtn from '@/components/ui/CopyLinkBtn';
 import { DeleteAlertDialog } from '@/components/ui/DeleteAlertDialog';
@@ -14,14 +15,9 @@ import { router, useForm } from '@inertiajs/react';
 import { Trash2 } from 'lucide-react';
 import { FC, useState } from 'react';
 import { toast } from 'sonner';
-import TagDialog from './partials/TagDialog';
 import { TagSelect } from './partials/TagSelect';
-import AccentHeading from '@/components/ui/AccentHeading';
 
-const Edit: FC<Inertia.Pages.Admin.Companies.Edit> = ({
-    company,
-    tags,
-}) => {
+const Edit: FC<Inertia.Pages.Admin.Companies.Edit> = ({ company, tags }) => {
     const { data, setData, post, processing, errors, progress } = useForm({
         _method: 'PUT',
         public_name: company.public_name ?? '',
@@ -35,6 +31,7 @@ const Edit: FC<Inertia.Pages.Admin.Companies.Edit> = ({
         stand_code: String(company.stand_code) ?? '',
         stand_area: company.stand_area ?? '',
         show_on_site: !!company.show_on_site,
+        storage_enabled: !!company.storage_enabled,
         activities: company.activities ?? '',
         tags:
             company.tags?.map((t: { id: number }) => t.id) ?? ([] as number[]),
@@ -52,16 +49,13 @@ const Edit: FC<Inertia.Pages.Admin.Companies.Edit> = ({
 
     const handleDelete = () => {
         setIsDeleting(true);
-        router.delete(
-            `/admin/companies/${company.id}`,
-            {
-                onSuccess: () => toast.success('Компания успешно удалена'),
-                onError: () => {
-                    toast.error('Ошибка при удалении компании');
-                    setIsDeleting(false);
-                },
+        router.delete(`/admin/companies/${company.id}`, {
+            onSuccess: () => toast.success('Компания успешно удалена'),
+            onError: () => {
+                toast.error('Ошибка при удалении компании');
+                setIsDeleting(false);
             },
-        );
+        });
     };
 
     return (
@@ -90,14 +84,14 @@ const Edit: FC<Inertia.Pages.Admin.Companies.Edit> = ({
                         isLoading={isDeleting}
                     />
                 </div>
-            <div className="mb-8 text-center md:mb-12">
-                <AccentHeading
-                    asChild
-                    className="mb-1 text-lg text-secondary"
-                >
-                    <h2>Редактировать компанию</h2>
-                </AccentHeading>
-            </div>
+                <div className="mb-8 text-center md:mb-12">
+                    <AccentHeading
+                        asChild
+                        className="mb-1 text-lg text-secondary"
+                    >
+                        <h2>Редактировать компанию</h2>
+                    </AccentHeading>
+                </div>
 
                 <form
                     onSubmit={handleSubmit}
@@ -150,7 +144,6 @@ const Edit: FC<Inertia.Pages.Admin.Companies.Edit> = ({
                             <Label htmlFor="description">Описание</Label>
                             <Textarea
                                 id="description"
-                                required
                                 value={data.description}
                                 onChange={(e) =>
                                     setData('description', e.target.value)
@@ -165,7 +158,6 @@ const Edit: FC<Inertia.Pages.Admin.Companies.Edit> = ({
                             <Input
                                 id="phone"
                                 type="text"
-                                required
                                 value={data.phone}
                                 onChange={(e) =>
                                     setData('phone', e.target.value)
@@ -179,7 +171,6 @@ const Edit: FC<Inertia.Pages.Admin.Companies.Edit> = ({
                             <Input
                                 id="email"
                                 type="email"
-                                required
                                 value={data.email}
                                 onChange={(e) =>
                                     setData('email', e.target.value)
@@ -274,6 +265,16 @@ const Edit: FC<Inertia.Pages.Admin.Companies.Edit> = ({
 
                         <div className="md:col-span-2">
                             <RadioCheckbox
+                                label="Склад (да/нет)"
+                                value={data.storage_enabled}
+                                onChange={(val) =>
+                                    setData('storage_enabled', val)
+                                }
+                            />
+                        </div>
+                        <div className="md:col-span-2">
+                            <RadioCheckbox
+                                label="Показывать на сайте"
                                 value={data.show_on_site}
                                 onChange={(val) => setData('show_on_site', val)}
                             />

@@ -20,7 +20,7 @@ describe('Admin Theme Test', function (): void {
 
         // Create test data
         $exhibition = Exhibition::factory()->create();
-        $stage = Stage::factory()->create();
+        $stage = Stage::factory()->for($exhibition)->create();
 
         $theme1 = Theme::factory()->create(['name' => 'Выставка', 'color_hex' => '#F9BBD2']);
         $theme2 = Theme::factory()->create(['name' => 'Турнир', 'color_hex' => '#E4FFA3']);
@@ -77,7 +77,7 @@ describe('Admin Theme Test', function (): void {
         $user->assignRole(UserRole::SUPER_ADMIN);
 
         $exhibition = Exhibition::factory()->create();
-        $stage = Stage::factory()->create();
+        $stage = Stage::factory()->for($exhibition)->create();
         $event = Event::factory()->for($exhibition)->for($stage)->create();
 
         $page = visit('/login');
@@ -108,7 +108,7 @@ describe('Admin Theme Test', function (): void {
         $user->assignRole(UserRole::SUPER_ADMIN);
 
         $exhibition = Exhibition::factory()->create();
-        $stage = Stage::factory()->create();
+        $stage = Stage::factory()->for($exhibition)->create();
 
         $themes = Theme::factory(5)->create();
 
