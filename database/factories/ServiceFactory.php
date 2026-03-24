@@ -22,7 +22,6 @@ final class ServiceFactory extends Factory
         return [
             'name' => fake()->words(3, true),
             'description' => fake()->sentences(3, true),
-            'placeholder' => fake()->sentences(3, true),
             'is_active' => true,
         ];
     }

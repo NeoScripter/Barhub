@@ -18,7 +18,6 @@ const Edit: FC<Inertia.Pages.Admin.Services.Edit> = ({ service }) => {
     const { data, setData, put, processing, errors } = useForm({
         name: service.name,
         description: service.description,
-        placeholder: service.placeholder,
         is_active: !!service.is_active,
     });
 
@@ -109,21 +108,6 @@ const Edit: FC<Inertia.Pages.Admin.Services.Edit> = ({ service }) => {
                             placeholder="Введите описание услуги"
                         />
                         <InputError message={errors.description} />
-                    </div>
-
-                    <div className="grid gap-2 md:col-span-2">
-                        <Label htmlFor="placeholder">Подсказка</Label>
-                        <Textarea
-                            id="placeholder"
-                            name="placeholder"
-                            value={data.placeholder}
-                            onChange={(e) =>
-                                setData('placeholder', e.target.value)
-                            }
-                            className="max-w-full"
-                            placeholder="Введите подсказку"
-                        />
-                        <InputError message={errors.placeholder} />
                     </div>
 
                     <div className="md:col-span-2">

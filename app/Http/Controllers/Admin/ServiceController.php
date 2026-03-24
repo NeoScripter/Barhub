@@ -50,7 +50,7 @@ final class ServiceController extends Controller
         $exhibition = Auth::user()->getActiveExhibition();
 
         $exhibition->services()->create(
-            $request->only(['name', 'id', 'placeholder', 'description', 'is_active'])
+            $request->only(['name', 'id', 'description', 'is_active'])
         );
 
         return to_route('admin.services.index');
@@ -60,7 +60,7 @@ final class ServiceController extends Controller
     {
         Gate::authorize('view', $service->exhibition);
 
-        $service->update($request->only(['name', 'id', 'placeholder', 'description', 'is_active']));
+        $service->update($request->only(['name', 'id', 'description', 'is_active']));
 
         return to_route('admin.services.index');
     }

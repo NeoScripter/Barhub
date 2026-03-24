@@ -15,7 +15,6 @@ const Create: FC<Inertia.Pages.Admin.Tasks.Create> = () => {
     const { data, setData, post, processing, errors } = useForm({
         name: '',
         description: '',
-        placeholder: '',
         is_active: true,
     });
 
@@ -71,21 +70,6 @@ const Create: FC<Inertia.Pages.Admin.Tasks.Create> = () => {
                             placeholder="Введите описание задачи"
                         />
                         <InputError message={errors.description} />
-                    </div>
-
-                    <div className="grid gap-2 md:col-span-2">
-                        <Label htmlFor="placeholder">Подсказка</Label>
-                        <Textarea
-                            id="placeholder"
-                            name="placeholder"
-                            value={data.placeholder}
-                            onChange={(e) =>
-                                setData('placeholder', e.target.value)
-                            }
-                            className="max-w-full"
-                            placeholder="Введите подсказку"
-                        />
-                        <InputError message={errors.placeholder} />
                     </div>
 
                     <div className="md:col-span-2">

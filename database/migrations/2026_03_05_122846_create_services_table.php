@@ -18,7 +18,6 @@ return new class extends Migration
             $table->foreignId('exhibition_id')->constrained()->cascadeOnDelete();
             $table->string('name');
             $table->text('description');
-            $table->text('placeholder');
             $table->boolean('is_active');
             $table->timestamps();
         });

@@ -18,7 +18,6 @@ final class ServiceStoreRequest extends FormRequest
         return [
             'name' => ['required', 'string', 'min:1', 'max:200'],
             'description' => ['required', 'string', 'min:10', 'max:5000'],
-            'placeholder' => ['required', 'string', 'min:10', 'max:5000'],
             'is_active' => ['required', 'boolean'],
         ];
     }
@@ -32,9 +31,6 @@ final class ServiceStoreRequest extends FormRequest
             'description.required' => 'Введите описание',
             'description.min' => 'Описание должно содержать не менее 10 символов',
             'description.max' => 'Описание не должно превышать 5000 символов',
-            'placeholder.required' => 'Введите подсказку',
-            'placeholder.min' => 'Подсказка должна содержать не менее 10 символов',
-            'placeholder.max' => 'Длина подсказки не должна превышать 5000 символов',
             'is_active.required' => 'Укажите статус активности',
             'is_active.boolean' => 'Статус активности может быть только да или нет',
         ];

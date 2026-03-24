@@ -27,7 +27,7 @@ const ServiceCard: FC<{
             >
                 <VisuallyHidden>
                     <DialogTitle>Создать запрос на услугу</DialogTitle>
-                    <DialogDescription>{service.placeholder}</DialogDescription>
+                    <DialogDescription>{service.description}</DialogDescription>
                 </VisuallyHidden>
                 <CardLayout
                     className={cn(

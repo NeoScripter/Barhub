@@ -54,7 +54,6 @@ describe('Admin Service Test', function (): void {
             ->assertSee('Название')
             ->fill('name', generateTextWithChars(204))
             ->fill('description', generateTextWithChars(5004))
-            ->fill('placeholder', generateTextWithChars(50))
             ->submit()
             ->assertSee('Название не должно превышать 200 символов');
     });
@@ -74,7 +73,6 @@ describe('Admin Service Test', function (): void {
             ->assertSee('Название')
             ->fill('name', generateTextWithChars(50))
             ->fill('description', generateTextWithChars(3))
-            ->fill('placeholder', generateTextWithChars(40))
             ->submit()
             ->assertSee('Описание должно содержать не менее 10 символов');
     });
@@ -94,49 +92,8 @@ describe('Admin Service Test', function (): void {
             ->assertSee('Название')
             ->fill('name', generateTextWithChars(50))
             ->fill('description', generateTextWithChars(5004))
-            ->fill('placeholder', generateTextWithChars(40))
             ->submit()
             ->assertSee('Описание не должно превышать 5000 символов');
-    });
-
-    it('doesnt allow to create a service when the placeholder is too short', function (): void {
-        $page = visit('/login');
-        $page->assertSee('Вход в аккаунт')
-            ->fill('email', 'super-admin@gmail.com')
-            ->fill('password', 'password')
-            ->click('@login-button')
-            ->assertSee('super-admin@gmail.com');
-
-        $this->assertAuthenticated();
-
-        $page->navigate($this->route)
-            ->click('@create-service')
-            ->assertSee('Название')
-            ->fill('name', generateTextWithChars(50))
-            ->fill('description', generateTextWithChars(20))
-            ->fill('placeholder', generateTextWithChars(3))
-            ->submit()
-            ->assertSee('Подсказка должна содержать не менее 10 символов');
-    });
-
-    it('doesnt allow to create a service when the placeholder is too long', function (): void {
-        $page = visit('/login');
-        $page->assertSee('Вход в аккаунт')
-            ->fill('email', 'super-admin@gmail.com')
-            ->fill('password', 'password')
-            ->click('@login-button')
-            ->assertSee('super-admin@gmail.com');
-
-        $this->assertAuthenticated();
-
-        $page->navigate($this->route)
-            ->click('@create-service')
-            ->assertSee('Название')
-            ->fill('name', generateTextWithChars(50))
-            ->fill('description', generateTextWithChars(100))
-            ->fill('placeholder', generateTextWithChars(5005))
-            ->submit()
-            ->assertSee('Длина подсказки не должна превышать 5000 символов');
     });
 
     it('allows to create a service with valid data', function (): void {
@@ -154,7 +111,6 @@ describe('Admin Service Test', function (): void {
             ->assertSee('Название')
             ->fill('name', generateTextWithChars(50))
             ->fill('description', generateTextWithChars(20))
-            ->fill('placeholder', generateTextWithChars(100))
             ->submit()
             ->assertPathEndsWith($this->route);
     });
@@ -225,49 +181,6 @@ describe('Admin Service Test', function (): void {
             ->assertSee('Описание не должно превышать 5000 символов');
     });
 
-    it('doesnt allow to update a service when the placeholder is too short', function (): void {
-        $service = Service::factory()->for($this->exhibition)->create(['name' => 'Zebra']);
-
-        $page = visit('/login');
-        $page->assertSee('Вход в аккаунт')
-            ->fill('email', 'super-admin@gmail.com')
-            ->fill('password', 'password')
-            ->click('@login-button')
-            ->assertSee('super-admin@gmail.com');
-
-        $this->assertAuthenticated();
-
-        $page->navigate($this->route)
-            ->assertSee($service->name)
-            ->click('@edit-service-' . $service->id)
-            ->assertSee('Название')
-            ->clear('placeholder')
-            ->fill('placeholder', generateTextWithChars(3))
-            ->submit()
-            ->assertSee('Подсказка должна содержать не менее 10 символов');
-    });
-
-    it('doesnt allow to update a service when the placeholder is too long', function (): void {
-        $service = Service::factory()->for($this->exhibition)->create(['name' => 'Zebra']);
-
-        $page = visit('/login');
-        $page->assertSee('Вход в аккаунт')
-            ->fill('email', 'super-admin@gmail.com')
-            ->fill('password', 'password')
-            ->click('@login-button')
-            ->assertSee('super-admin@gmail.com');
-
-        $this->assertAuthenticated();
-
-        $page->navigate($this->route)
-            ->assertSee($service->name)
-            ->click('@edit-service-' . $service->id)
-            ->assertSee('Название')
-            ->clear('placeholder')
-            ->fill('placeholder', generateTextWithChars(5005))
-            ->submit()
-            ->assertSee('Длина подсказки не должна превышать 5000 символов');
-    });
 
     it('allows to update a service with valid data', function (): void {
         $service = Service::factory()->for($this->exhibition)->create(['name' => 'Zebra']);
@@ -292,8 +205,6 @@ describe('Admin Service Test', function (): void {
             ->fill('name', $newName)
             ->clear('description')
             ->fill('description', $newDescription)
-            ->clear('placeholder')
-            ->fill('placeholder', generateTextWithChars(100))
             ->submit();
 
         $service = $service->fresh();

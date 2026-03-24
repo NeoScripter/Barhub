@@ -18,7 +18,6 @@ const Create: FC<Inertia.Pages.Admin.Tasks.Create> = ({
     const { data, setData, post, processing, errors } = useForm({
         name: '',
         description: '',
-        placeholder: '',
         is_active: true,
     });
 
