@@ -26,7 +26,7 @@ const Edit: FC<Inertia.Pages.Admin.Companies.Edit> = ({ company }) => {
         logo: null as File | null,
     });
 
-    console.log(company)
+    console.log(company);
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
@@ -87,6 +87,10 @@ const Edit: FC<Inertia.Pages.Admin.Companies.Edit> = ({ company }) => {
                         />
                         <InputError message={errors.description} />
                     </div>
+
+                    <AccentHeading className="text-lg text-secondary md:col-span-2">
+                        Контакты на сайте
+                    </AccentHeading>
 
                     <div className="grid gap-2">
                         <Label htmlFor="phone">Телефон</Label>

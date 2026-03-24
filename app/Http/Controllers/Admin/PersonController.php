@@ -9,7 +9,6 @@ use App\Http\Requests\Admin\Person\PersonDeleteRequest;
 use App\Http\Requests\Admin\Person\PersonIndexRequest;
 use App\Http\Requests\Admin\Person\PersonStoreRequest;
 use App\Http\Requests\Admin\Person\PersonUpdateRequest;
-use App\Models\Exhibition;
 use App\Models\Image;
 use App\Models\Person;
 use Illuminate\Pagination\LengthAwarePaginator;

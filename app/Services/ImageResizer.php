@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Services;
 
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Intervention\Image\Drivers\Imagick\Driver;
@@ -25,6 +26,7 @@ final class ImageResizer
 
     public function handleImage(UploadedFile $file, string $folder, int $baseWidth): array
     {
+        Log::warning('it works');
         $originalName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
         $filename = Str::slug($originalName).'-'.uniqid();
         $manager = new ImageManager(new Driver());
