@@ -33,7 +33,8 @@ final class TaskController extends Controller
             ]);
 
         return Inertia::render('exponent/Tasks/Index', [
-            'tasks' => $tasks
+            'tasks' => $tasks,
+            'company' => $user->company->public_name,
         ]);
     }
 

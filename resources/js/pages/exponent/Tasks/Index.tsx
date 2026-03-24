@@ -1,16 +1,19 @@
 import AccentHeading from '@/components/ui/AccentHeading';
 import { cn } from '@/lib/utils';
+import { usePage } from '@inertiajs/react';
 import Actions from './partials/Actions';
 import Tasks from './partials/Tasks';
 
 const Index = () => {
+    const { company } = usePage<{ company: string }>().props;
+
     return (
         <div className="spacing flex flex-col">
             <AccentHeading
                 asChild
                 className="heading text-center text-base"
             >
-                <h1>Название компании</h1>
+                <h1>{company}</h1>
             </AccentHeading>
 
             <article>
