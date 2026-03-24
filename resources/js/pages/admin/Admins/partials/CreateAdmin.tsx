@@ -7,7 +7,7 @@ import { useState } from 'react';
 import { toast } from 'sonner';
 
 const CreateAdmin = () => {
-    const { users, exhibition } =
+    const { users, exhibition, } =
         usePage<Inertia.Pages.Admin.Admins.Index>().props;
     const [selectedId, setSelectedId] = useState<string | null>(null);
 

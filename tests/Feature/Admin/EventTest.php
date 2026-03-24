@@ -34,7 +34,7 @@ describe('Event Access Control', function (): void {
     });
 
     it('redirects guest users to login on edit', function (): void {
-        get(route('admin.events.edit', [$this->exhibition, $this->event]))
+        get(route('admin.events.edit', [$this->event]))
             ->assertRedirect(route('login'));
     });
 
@@ -151,7 +151,6 @@ describe('Event Index', function (): void {
 
         $events = actingAs($this->superAdmin)
             ->get(route('admin.events.index', [
-                'exhibition' => $this->exhibition,
                 'search'     => 'Innovation',
             ]))
             ->assertOk()
@@ -166,7 +165,6 @@ describe('Event Index', function (): void {
 
         $events = actingAs($this->superAdmin)
             ->get(route('admin.events.index', [
-                'exhibition' => $this->exhibition,
                 'search'     => 'innovation',
             ]))
             ->assertOk()
@@ -182,7 +180,6 @@ describe('Event Index', function (): void {
 
         $events = actingAs($this->superAdmin)
             ->get(route('admin.events.index', [
-                'exhibition' => $this->exhibition,
                 'sort'       => 'title',
             ]))
             ->assertOk()
@@ -200,7 +197,6 @@ describe('Event Index', function (): void {
 
         $events = actingAs($this->superAdmin)
             ->get(route('admin.events.index', [
-                'exhibition' => $this->exhibition,
                 'sort'       => '-title',
             ]))
             ->assertOk()
@@ -218,7 +214,6 @@ describe('Event Index', function (): void {
 
         $events = actingAs($this->superAdmin)
             ->get(route('admin.events.index', [
-                'exhibition' => $this->exhibition,
                 'sort'       => 'starts_at',
             ]))
             ->assertOk()
@@ -236,7 +231,6 @@ describe('Event Index', function (): void {
 
         $events = actingAs($this->superAdmin)
             ->get(route('admin.events.index', [
-                'exhibition' => $this->exhibition,
                 'sort'       => '-starts_at',
             ]))
             ->assertOk()
@@ -258,7 +252,6 @@ describe('Event Index', function (): void {
 
         $events = actingAs($this->superAdmin)
             ->get(route('admin.events.index', [
-                'exhibition' => $this->exhibition,
                 'sort'       => 'stage.name',
             ]))
             ->assertOk()
@@ -280,7 +273,6 @@ describe('Event Index', function (): void {
 
         $events = actingAs($this->superAdmin)
             ->get(route('admin.events.index', [
-                'exhibition' => $this->exhibition,
                 'sort'       => '-stage.name',
             ]))
             ->assertOk()
@@ -557,7 +549,7 @@ describe('Event Edit', function (): void {
 
     it('displays edit form', function (): void {
         actingAs($this->superAdmin)
-            ->get(route('admin.events.edit', [$this->exhibition, $this->event]))
+            ->get(route('admin.events.edit', [$this->event]))
             ->assertOk()
             ->assertInertia(
                 fn($page) => $page
@@ -578,7 +570,7 @@ describe('Event Edit', function (): void {
         $this->event->people()->attach($person->id, ['role' => PersonRole::HOST->value]);
 
         actingAs($this->superAdmin)
-            ->get(route('admin.events.edit', [$this->exhibition, $this->event]))
+            ->get(route('admin.events.edit', [$this->event]))
             ->assertOk()
             ->assertInertia(
                 fn($page) => $page
@@ -591,7 +583,7 @@ describe('Event Edit', function (): void {
         $newStage = Stage::factory()->for($this->exhibition)->create();
 
         actingAs($this->superAdmin)
-            ->put(route('admin.events.update', [$this->exhibition, $this->event]), [
+            ->put(route('admin.events.update', [$this->event]), [
                 'title'       => 'Updated Title',
                 'description' => 'Updated description text here',
                 'stage_id'    => $newStage->id,
@@ -613,7 +605,7 @@ describe('Event Edit', function (): void {
         $this->event->themes()->attach($oldThemes->pluck('id'));
 
         actingAs($this->superAdmin)
-            ->put(route('admin.events.update', [$this->exhibition, $this->event]), [
+            ->put(route('admin.events.update', [$this->event]), [
                 'title'       => $this->event->title,
                 'description' => $this->event->description,
                 'starts_at'   => $this->event->starts_at,
@@ -632,7 +624,7 @@ describe('Event Edit', function (): void {
         $this->event->people()->attach($oldPerson->id, ['role' => PersonRole::SPEAKER->value]);
 
         actingAs($this->superAdmin)
-            ->put(route('admin.events.update', [$this->exhibition, $this->event]), [
+            ->put(route('admin.events.update', [$this->event]), [
                 'title'       => $this->event->title,
                 'description' => $this->event->description,
                 'starts_at'   => $this->event->starts_at,
@@ -652,7 +644,7 @@ describe('Event Edit', function (): void {
         $this->event->people()->attach($person->id, ['role' => PersonRole::SPEAKER->value]);
 
         actingAs($this->superAdmin)
-            ->put(route('admin.events.update', [$this->exhibition, $this->event]), [
+            ->put(route('admin.events.update', [$this->event]), [
                 'title'       => $this->event->title,
                 'description' => $this->event->description,
                 'starts_at'   => $this->event->starts_at,
@@ -667,7 +659,7 @@ describe('Event Edit', function (): void {
         $person = Person::factory()->create();
 
         actingAs($this->superAdmin)
-            ->put(route('admin.events.update', [$this->exhibition, $this->event]), [
+            ->put(route('admin.events.update', [$this->event]), [
                 'title'       => $this->event->title,
                 'description' => $this->event->description,
                 'starts_at'   => $this->event->starts_at,
@@ -687,7 +679,7 @@ describe('Event Edit', function (): void {
 
     it('validates update data', function (): void {
         actingAs($this->superAdmin)
-            ->put(route('admin.events.update', [$this->exhibition, $this->event]), ['title' => ''])
+            ->put(route('admin.events.update', [$this->event]), ['title' => ''])
             ->assertSessionHasErrors('title');
     });
 });
@@ -702,7 +694,7 @@ describe('Event Destroy', function (): void {
 
     it('deletes event', function (): void {
         actingAs($this->superAdmin)
-            ->delete(route('admin.events.destroy', [$this->exhibition, $this->event]))
+            ->delete(route('admin.events.destroy', [$this->event]))
             ->assertRedirect();
 
         assertDatabaseMissing('events', ['id' => $this->event->id]);
@@ -713,7 +705,7 @@ describe('Event Destroy', function (): void {
         $this->event->people()->attach($person->id, ['role' => PersonRole::SPEAKER->value]);
 
         actingAs($this->superAdmin)
-            ->delete(route('admin.events.destroy', [$this->exhibition, $this->event]));
+            ->delete(route('admin.events.destroy', [$this->event]));
 
         assertDatabaseMissing('event_person', ['event_id' => $this->event->id]);
     });
@@ -723,7 +715,7 @@ describe('Event Destroy', function (): void {
         $this->event->themes()->attach($theme);
 
         actingAs($this->superAdmin)
-            ->delete(route('admin.events.destroy', [$this->exhibition, $this->event]));
+            ->delete(route('admin.events.destroy', [$this->event]));
 
         assertDatabaseMissing('event_theme', ['event_id' => $this->event->id]);
     });
@@ -733,7 +725,7 @@ describe('Event Destroy', function (): void {
         $this->event->people()->attach($person->id, ['role' => PersonRole::SPEAKER->value]);
 
         actingAs($this->superAdmin)
-            ->delete(route('admin.events.destroy', [$this->exhibition, $this->event]));
+            ->delete(route('admin.events.destroy', [$this->event]));
 
         assertDatabaseHas('people', ['id' => $person->id]);
     });

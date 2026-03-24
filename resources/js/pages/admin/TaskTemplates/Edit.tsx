@@ -20,7 +20,6 @@ import { FC, useState } from 'react';
 import { toast } from 'sonner';
 
 const Edit: FC<Inertia.Pages.Admin.TaskTemplates.Edit> = ({
-    exhibition,
     template,
 }) => {
     const { data, setData, post, processing, errors } = useForm({
@@ -37,7 +36,7 @@ const Edit: FC<Inertia.Pages.Admin.TaskTemplates.Edit> = ({
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        post(update({ exhibition, task_template: template.id }).url, {
+        post(update({ task_template: template.id }).url, {
             preserveScroll: false,
             onSuccess: () => {
                 toast.success('Задача успешно обновлена');
@@ -47,7 +46,7 @@ const Edit: FC<Inertia.Pages.Admin.TaskTemplates.Edit> = ({
 
     const handleDelete = () => {
         setIsDeleting(true);
-        router.delete(destroy({ exhibition, task_template: template.id }).url, {
+        router.delete(destroy({ task_template: template.id }).url, {
             onSuccess: () => {
                 toast.success('Задача успешно удалена');
             },
@@ -181,7 +180,7 @@ const Edit: FC<Inertia.Pages.Admin.TaskTemplates.Edit> = ({
                 <FormButtons
                     label="Сохранить"
                     processing={processing}
-                    backUrl={index({ exhibition }).url}
+                    backUrl={index().url}
                 />
             </form>
         </div>

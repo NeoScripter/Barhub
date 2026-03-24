@@ -12,7 +12,6 @@ import { FC } from 'react';
 import { toast } from 'sonner';
 
 const Create: FC<Inertia.Pages.Admin.Tasks.Create> = ({
-    exhibition,
     company,
 }) => {
     const { data, setData, post, processing, errors } = useForm({
@@ -26,16 +25,14 @@ const Create: FC<Inertia.Pages.Admin.Tasks.Create> = ({
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        post(store({ exhibition, company }).url, {
+        post(store({ company }).url, {
             preserveScroll: false,
             onSuccess: () => {
-                router.visit(index({ exhibition, company }));
+                router.visit(index({ company }));
                 toast.success('Задача успешно создана');
             },
         });
     };
-
-    const hasComment = data.comment != null && data.comment !== '';
 
     return (
         <div className="mx-auto w-full max-w-250">
@@ -97,42 +94,33 @@ const Create: FC<Inertia.Pages.Admin.Tasks.Create> = ({
                         <InputError message={errors.deadline} />
                     </div>
 
-                    {hasComment && (
-                        <>
-                            <div className="grid gap-2">
-                                <Label htmlFor="file">
-                                    Прикрепить новый файл
-                                </Label>
-                                <FileInput
-                                    isEdited={true}
-                                    id="file"
-                                    error={errors.file}
-                                    onChange={(file) => {
-                                        setData('file', file);
-                                        if (file)
-                                            setData('file_name', file.name);
-                                    }}
-                                />
-                                <InputError message={errors.file} />
-                            </div>
-                            <div className="grid gap-2">
-                                <Label htmlFor="file_name">
-                                    Название файла
-                                </Label>
-                                <Input
-                                    id="file_name"
-                                    type="text"
-                                    name="file_name"
-                                    value={data.file_name}
-                                    onChange={(e) =>
-                                        setData('file_name', e.target.value)
-                                    }
-                                    placeholder="Введите название файла"
-                                />
-                                <InputError message={errors.file_name} />
-                            </div>
-                        </>
-                    )}
+                    <div className="grid gap-2">
+                        <Label htmlFor="file">Прикрепить новый файл</Label>
+                        <FileInput
+                            isEdited={true}
+                            id="file"
+                            error={errors.file}
+                            onChange={(file) => {
+                                setData('file', file);
+                                if (file) setData('file_name', file.name);
+                            }}
+                        />
+                        <InputError message={errors.file} />
+                    </div>
+                    <div className="grid gap-2">
+                        <Label htmlFor="file_name">Название файла</Label>
+                        <Input
+                            id="file_name"
+                            type="text"
+                            name="file_name"
+                            value={data.file_name}
+                            onChange={(e) =>
+                                setData('file_name', e.target.value)
+                            }
+                            placeholder="Введите название файла"
+                        />
+                        <InputError message={errors.file_name} />
+                    </div>
 
                     <div className="grid gap-2">
                         <Label htmlFor="comment">Комментарий</Label>
@@ -151,7 +139,7 @@ const Create: FC<Inertia.Pages.Admin.Tasks.Create> = ({
                 <FormButtons
                     label="Создать"
                     processing={processing}
-                    backUrl={index({ exhibition, company }).url}
+                    backUrl={index({ company }).url}
                 />
             </form>
         </div>

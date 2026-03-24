@@ -14,14 +14,14 @@ const ExponentRow: FC<
         user: Pick<App.Models.User, 'id' | 'name' | 'email' | 'last_login_at'>;
     }>
 > = ({ className, user }) => {
-    const { exhibition, company } =
+    const { company } =
         usePage<Inertia.Pages.Admin.Exponents.Index>().props;
     const [isDeleting, setIsDeleting] = useState(false);
 
     const handleDelete = () => {
         setIsDeleting(true);
 
-        router.delete(destroy({ exhibition, company, exponent: user.id }).url, {
+        router.delete(destroy({ company, exponent: user.id }).url, {
             onSuccess: () => {
                 toast.success(
                     'Пользователь удален из экспонентов данной компании',

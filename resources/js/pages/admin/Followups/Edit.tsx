@@ -10,14 +10,14 @@ import { FC } from 'react';
 import { toast } from 'sonner';
 
 const Edit: FC<Inertia.Pages.Admin.Followups.Edit> = ({
-    exhibition,
+
     followup,
 }) => {
     const { patch, processing } = useForm();
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        patch(update({ exhibition, followup: followup.id }).url, {
+        patch(update({ followup: followup.id }).url, {
             onSuccess: () => {
                 toast.success('Услуга успешно подтверждена');
             },

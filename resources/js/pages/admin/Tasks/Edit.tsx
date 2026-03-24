@@ -8,21 +8,14 @@ import { Input } from '@/components/ui/Input';
 import { Label } from '@/components/ui/Label';
 import { Textarea } from '@/components/ui/Textarea';
 import { convertDateToInputString } from '@/lib/utils';
-import {
-    destroy,
-    index,
-    update,
-} from '@/wayfinder/routes/admin/tasks';
+import { destroy, index, update } from '@/wayfinder/routes/admin/tasks';
 import { Inertia } from '@/wayfinder/types';
 import { router, useForm } from '@inertiajs/react';
 import { Trash2 } from 'lucide-react';
 import { FC, useState } from 'react';
 import { toast } from 'sonner';
 
-const Edit: FC<Inertia.Pages.Admin.Tasks.Edit> = ({
-    company,
-    task,
-}) => {
+const Edit: FC<Inertia.Pages.Admin.Tasks.Edit> = ({ company, task }) => {
     const comment = task.comments?.[0] ?? null;
 
     const { data, setData, post, processing, errors } = useForm({
@@ -59,8 +52,6 @@ const Edit: FC<Inertia.Pages.Admin.Tasks.Edit> = ({
             },
         });
     };
-
-    const hasComment = data.comment != null && data.comment !== '';
 
     return (
         <div className="mx-auto w-full max-w-250">
@@ -151,44 +142,35 @@ const Edit: FC<Inertia.Pages.Admin.Tasks.Edit> = ({
                         <InputError message={errors.comment} />
                     </div>
 
-                    {hasComment && (
-                        <>
-                            <div className="grid gap-2">
-                                <Label htmlFor="file">
-                                    Прикрепить новый файл
-                                </Label>
-                                <FileInput
-                                    isEdited={true}
-                                    id="file"
-                                    src={comment?.file?.url}
-                                    filename={comment?.file?.name}
-                                    error={errors.file}
-                                    onChange={(file) => {
-                                        setData('file', file);
-                                        if (file)
-                                            setData('file_name', file.name);
-                                    }}
-                                />
-                                <InputError message={errors.file} />
-                            </div>
-                            <div className="grid gap-2">
-                                <Label htmlFor="file_name">
-                                    Название файла
-                                </Label>
-                                <Input
-                                    id="file_name"
-                                    type="text"
-                                    name="file_name"
-                                    value={data.file_name}
-                                    onChange={(e) =>
-                                        setData('file_name', e.target.value)
-                                    }
-                                    placeholder="Введите название файла"
-                                />
-                                <InputError message={errors.file_name} />
-                            </div>
-                        </>
-                    )}
+                    <div className="grid gap-2">
+                        <Label htmlFor="file">Прикрепить новый файл</Label>
+                        <FileInput
+                            isEdited={true}
+                            id="file"
+                            src={comment?.file?.url}
+                            filename={comment?.file?.name}
+                            error={errors.file}
+                            onChange={(file) => {
+                                setData('file', file);
+                                if (file) setData('file_name', file.name);
+                            }}
+                        />
+                        <InputError message={errors.file} />
+                    </div>
+                    <div className="grid gap-2">
+                        <Label htmlFor="file_name">Название файла</Label>
+                        <Input
+                            id="file_name"
+                            type="text"
+                            name="file_name"
+                            value={data.file_name}
+                            onChange={(e) =>
+                                setData('file_name', e.target.value)
+                            }
+                            placeholder="Введите название файла"
+                        />
+                        <InputError message={errors.file_name} />
+                    </div>
                 </div>
 
                 <FormButtons

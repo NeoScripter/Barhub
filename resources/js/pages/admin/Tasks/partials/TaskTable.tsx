@@ -2,7 +2,8 @@ import Table from '@/components/ui/Table';
 import TaskCard from '@/components/ui/TaskCard';
 import { formatDateAndTime, getTaskStatus } from '@/lib/utils';
 import { NodeProps } from '@/types/shared';
-import { edit } from '@/wayfinder/routes/admin/tasks';
+import PartnerController from '@/wayfinder/App/Http/Controllers/Admin/PartnerController';
+import TaskController from '@/wayfinder/App/Http/Controllers/Admin/TaskController';
 import { App } from '@/wayfinder/types';
 import { Link } from '@inertiajs/react';
 import { VisuallyHidden } from '@radix-ui/react-visually-hidden';
@@ -14,7 +15,7 @@ const TaskTable: FC<
         tasks: App.Models.Task[] | undefined;
         company: App.Models.Company;
     }>
-> = ({ className, tasks , company }) => {
+> = ({ className, tasks, company }) => {
     if (!tasks) {
         return null;
     }
@@ -55,10 +56,16 @@ const TaskTable: FC<
                     >
                         <Link
                             data-test={`edit-task-${task.id}`}
-                            href={edit({
-                                task: task.id,
-                                company: company,
-                            })}
+                            href={
+                                task.status !== 'На проверке'
+                                    ? TaskController.edit({
+                                          task: task.id,
+                                          company: company,
+                                      })
+                                    : PartnerController.edit({
+                                          all_task: task.id,
+                                      })
+                            }
                         >
                             <VisuallyHidden>
                                 Редактировать задачу

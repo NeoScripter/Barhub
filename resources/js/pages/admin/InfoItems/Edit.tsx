@@ -14,7 +14,6 @@ import { FC, useState } from 'react';
 import { toast } from 'sonner';
 
 const Edit: FC<Inertia.Pages.Admin.InfoItems.Edit> = ({
-    exhibition,
     infoItem,
 }) => {
     const { data, setData, post, processing, errors } = useForm({
@@ -29,14 +28,14 @@ const Edit: FC<Inertia.Pages.Admin.InfoItems.Edit> = ({
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        post(update({ exhibition, info_item: infoItem.id }).url, {
+        post(update({ info_item: infoItem.id }).url, {
             onSuccess: () => toast.success('Элемент успешно обновлён'),
         });
     };
 
     const handleDelete = () => {
         setIsDeleting(true);
-        router.delete(destroy({ exhibition, info_item: infoItem.id }).url, {
+        router.delete(destroy({ info_item: infoItem.id }).url, {
             onSuccess: () => toast.success('Элемент успешно удалён'),
             onError: () => {
                 toast.error('Ошибка при удалении элемента');
@@ -117,7 +116,7 @@ const Edit: FC<Inertia.Pages.Admin.InfoItems.Edit> = ({
                 <FormButtons
                     label="Сохранить"
                     processing={processing}
-                    backUrl={index({ exhibition }).url}
+                    backUrl={index().url}
                 />
             </form>
         </div>

@@ -7,14 +7,14 @@ import { useState } from 'react';
 import { toast } from 'sonner';
 
 const CreateExponent = () => {
-    const { users, exhibition, company } =
+    const { users, company } =
         usePage<Inertia.Pages.Admin.Exponents.Index>().props;
     const [selectedId, setSelectedId] = useState<string | null>(null);
 
     const handleClick = () => {
         if (!selectedId) return;
 
-        router.visit(update({ exhibition, company, exponent: selectedId }), {
+        router.visit(update({ company, exponent: selectedId }), {
             method: 'patch',
             onSuccess: () => {
                 toast.success('Экспонент успешно создан');

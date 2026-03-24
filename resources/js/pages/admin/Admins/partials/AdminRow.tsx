@@ -14,14 +14,14 @@ const AdminRow: FC<
         user: Pick<App.Models.User, 'id' | 'name' | 'email' | 'last_login_at'>;
     }>
 > = ({ className, user }) => {
-    const { exhibition, company } =
+    const { exhibition } =
         usePage<Inertia.Pages.Admin.Admins.Index>().props;
     const [isDeleting, setIsDeleting] = useState(false);
 
     const handleDelete = () => {
         setIsDeleting(true);
 
-        router.delete(destroy({ exhibition, company, admin: user.id }).url, {
+        router.delete(destroy({ exhibition, admin: user.id }).url, {
             onSuccess: () => {
                 toast.success(
                     'Пользователь больше не является администратором данной выставки',
