@@ -74,6 +74,7 @@ const Create: FC<Inertia.Pages.Admin.Tasks.Create> = () => {
 
                     <div className="md:col-span-2">
                         <RadioCheckbox
+                            label='Статус услуги'
                             value={data.is_active}
                             onChange={(val) => setData('is_active', val)}
                         />

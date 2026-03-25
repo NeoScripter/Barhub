@@ -112,6 +112,7 @@ const Edit: FC<Inertia.Pages.Admin.Services.Edit> = ({ service }) => {
 
                     <div className="md:col-span-2">
                         <RadioCheckbox
+                            label='Статус услуги'
                             value={data.is_active}
                             onChange={(val) => setData('is_active', val)}
                         />
