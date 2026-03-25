@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\EventController as AdminEventController;
 use App\Http\Controllers\Admin\ExhibitionController as AdminExhibitionController;
 use App\Http\Controllers\Admin\ExponentController as AdminExponentController;
+use App\Http\Controllers\Admin\ExponentEmailController;
 use App\Http\Controllers\Admin\InfoItemController;
 use App\Http\Controllers\Admin\LinkController;
 use App\Http\Controllers\Admin\PartnerController as AdminPartnerController;
@@ -63,6 +64,9 @@ Route::prefix('/admin')
             ->middleware(['role:' . UserRole::SUPER_ADMIN->value])
             ->except('show');
 
+        Route::resource('companies/{company}/emails', ExponentEmailController::class)
+            ->only(['store', 'destroy']);
+
         Route::resource('themes', ThemeController::class)->only(['store', 'destroy']);
         Route::resource('stages', StageController::class)->only(['store', 'destroy']);
         Route::resource('tags', TagController::class)->only(['store', 'destroy']);
@@ -87,3 +91,12 @@ Route::prefix('/admin')
         Route::resource('events', AdminEventController::class)->except('show');
         Route::resource('people', AdminPersonController::class)->except(['show']);
     });
+
+
+// Route::get('/preview-email', function () {
+//     $notification = new \App\Notifications\CreateExponentNotification('test@example.com');
+
+//     $mailMessage = $notification->toMail(new \Illuminate\Notifications\AnonymousNotifiable());
+
+//     return $mailMessage->render();
+// });

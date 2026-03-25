@@ -46,6 +46,11 @@ final class Company extends Model
         return $this->hasMany(User::class);
     }
 
+    public function exponentEmails(): HasMany
+    {
+        return $this->hasMany(ExponentEmail::class);
+    }
+
     public function tags(): BelongsToMany
     {
         return $this->belongsToMany(Tag::class);

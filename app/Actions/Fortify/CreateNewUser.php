@@ -6,6 +6,8 @@ namespace App\Actions\Fortify;
 
 use App\Concerns\PasswordValidationRules;
 use App\Concerns\ProfileValidationRules;
+use App\Enums\UserRole;
+use App\Models\ExponentEmail;
 use App\Models\User;
 use Illuminate\Support\Facades\Validator;
 use Laravel\Fortify\Contracts\CreatesNewUsers;
@@ -26,10 +28,22 @@ final class CreateNewUser implements CreatesNewUsers
             'password' => $this->passwordRules(),
         ])->validate();
 
-        return User::query()->create([
+        $user = User::query()->create([
             'name' => $input['name'],
             'email' => $input['email'],
             'password' => $input['password'],
         ]);
+
+        $exponentRecord = ExponentEmail::where('email', $user->email)->first();
+
+        if (! $exponentRecord) {
+            return $user;
+        }
+
+        $user->update(['role' => UserRole::EXPONENT->value]);
+
+        $exponentRecord->delete();
+
+        return $user;
     }
 }

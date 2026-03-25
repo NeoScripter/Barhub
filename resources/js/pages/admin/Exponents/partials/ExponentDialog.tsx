@@ -9,10 +9,9 @@ import {
 } from '@/components/ui/Dialog';
 import { VisuallyHidden } from '@radix-ui/react-visually-hidden';
 import { Plus } from 'lucide-react';
-import { useState } from 'react';
-import CreateExponent from './CreateExponent';
+import { FC, useState } from 'react';
 
-const ExponentDialog = () => {
+const ExponentDialog: FC<{children: React.ReactNode, label: string}> = ({children, label}) => {
     const [isOpen, setIsOpen] = useState(false);
 
     return (
@@ -34,7 +33,7 @@ const ExponentDialog = () => {
                         data-test="select-exponent"
                         size='lg'
                     >
-                        Добавить
+                        {label}
                         <Plus />
                     </Button>
                 </DialogTrigger>
@@ -44,7 +43,7 @@ const ExponentDialog = () => {
                     <AccentHeading className="mb-4 text-lg! text-secondary sm:mb-6 lg:mb-8">
                         Пользователи
                     </AccentHeading>
-                    <CreateExponent />
+                    {children}
                 </div>
             </DialogContent>
         </Dialog>

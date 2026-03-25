@@ -565,7 +565,7 @@ describe('Admin Task Test', function (): void {
         $company = Company::factory()->for($exhibition)->create();
         $task = Task::factory()
             ->for($company)
-            ->create(['title' => 'Zebra', 'deadline' => now()]);
+            ->create(['title' => 'Zebra', 'deadline' => now(), 'status' => TaskStatus::INCOMPLETE]);
         $route = "/admin/companies/{$company->id}/tasks";
 
         $page = visit('/login');

@@ -7,7 +7,7 @@ namespace App\Http\Controllers\Admin;
 use App\Enums\UserRole;
 use App\Http\Controllers\Controller;
 use App\Models\Company;
-use App\Models\Exhibition;
+use App\Models\ExponentEmail;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
@@ -21,11 +21,13 @@ final class ExponentController extends Controller
             ->where('role', UserRole::USER)
             ->whereNotIn('id', $exponents->pluck('id'))
             ->get();
+        $pending = ExponentEmail::select('email')->get();
 
         return Inertia::render('admin/Exponents/Index', [
             'company' => $company,
             'exponents' => $exponents,
             'users' => $users,
+            'pending' => $pending,
         ]);
     }
 
