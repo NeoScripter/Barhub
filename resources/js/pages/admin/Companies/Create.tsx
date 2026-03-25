@@ -1,18 +1,18 @@
 import InputError from '@/components/form/InputError';
 import AccentHeading from '@/components/ui/AccentHeading';
 import { Button } from '@/components/ui/Button';
+import ImgInput from '@/components/ui/ImgInput';
 import { Input } from '@/components/ui/Input';
 import { Label } from '@/components/ui/Label';
 import RadioCheckbox from '@/components/ui/RadioCheckbox';
 import { Spinner } from '@/components/ui/Spinner';
+import { Textarea } from '@/components/ui/Textarea';
 import { index, store } from '@/wayfinder/routes/admin/companies';
 import { Inertia } from '@/wayfinder/types';
 import { Link, useForm } from '@inertiajs/react';
 import { FC } from 'react';
 import { toast } from 'sonner';
 import { TagSelect } from './partials/TagSelect';
-import { Textarea } from '@/components/ui/Textarea';
-import ImgInput from '@/components/ui/ImgInput';
 
 const Create: FC<Inertia.Pages.Admin.Companies.Create> = ({ tags }) => {
     const { data, setData, post, progress, processing, errors } = useForm({
@@ -106,6 +106,12 @@ const Create: FC<Inertia.Pages.Admin.Companies.Create> = ({ tags }) => {
                         />
                         <InputError message={errors.description} />
                     </div>
+                    <AccentHeading
+                        asChild
+                        className="py-4 text-center text-lg text-secondary md:col-span-2"
+                    >
+                        <h3>Контакты на сайте</h3>
+                    </AccentHeading>
 
                     <div className="grid gap-2">
                         <Label htmlFor="phone">Телефон</Label>
@@ -242,6 +248,25 @@ const Create: FC<Inertia.Pages.Admin.Companies.Create> = ({ tags }) => {
                             value={data.show_on_site}
                             onChange={(val) => setData('show_on_site', val)}
                         />
+                    </div>
+                    <AccentHeading
+                        asChild
+                        className="py-4 text-center text-lg text-secondary md:col-span-2"
+                    >
+                        <h3>Активности на стенде</h3>
+                    </AccentHeading>
+
+                    <div className="grid gap-2 md:col-span-2">
+                        <Label htmlFor="activities">Активности на стенде</Label>
+                        <Textarea
+                            id="activities"
+                            value={data.activities}
+                            onChange={(e) =>
+                                setData('activities', e.target.value)
+                            }
+                            className="max-w-full"
+                        />
+                        <InputError message={errors.activities} />
                     </div>
                 </div>
 

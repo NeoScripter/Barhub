@@ -31,6 +31,10 @@ final class TaskIndexRequest extends FormRequest
                     '-company.public_name',
                 ]),
             ],
+            'filters' => [
+                'sometimes',
+                'string',
+            ],
             'page' => ['sometimes', 'integer', 'min:1'],
         ];
     }

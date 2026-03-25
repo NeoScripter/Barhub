@@ -3,8 +3,14 @@ import IndexToolbar from '@/components/ui/IndexToolbar';
 import Pagination from '@/components/ui/Pagination';
 import Table from '@/components/ui/Table';
 import TaskCard from '@/components/ui/TaskCard';
-import { getTaskStatus } from '@/lib/utils';
+import {
+    cn,
+    getSingleFilterUrl,
+    getTaskStatus,
+    isActiveFilter,
+} from '@/lib/utils';
 import { Inertia } from '@/wayfinder/types';
+import { Link } from '@inertiajs/react';
 import { FC } from 'react';
 import TaskTable from './partials/TaskTable';
 import TaskTableHeader from './partials/TaskTableHeader';
@@ -25,8 +31,16 @@ const Index: FC<Inertia.Pages.Admin.Tasks.Index> = ({ tasks, summary }) => {
                 {summary.map((task) => (
                     <TaskCard
                         key={task.id}
-                        className="w-40 2xl:w-55"
+                        className={cn(
+                            'relative w-40 2xl:w-55',
+                            isActiveFilter('status', task.rawStatus) &&
+                                'ring-2 ring-primary/70',
+                        )}
                     >
+                        <Link
+                            href={getSingleFilterUrl('status', task.rawStatus)}
+                            className={cn('absolute inset-0')}
+                        />
                         <TaskCard.Badge variant={getTaskStatus(task.status)}>
                             {task.status}
                         </TaskCard.Badge>

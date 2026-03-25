@@ -8,11 +8,11 @@ use App\Enums\TaskStatus;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Partner\PartnerUpdateRequest;
 use App\Http\Requests\Admin\Task\TaskIndexRequest;
-use App\Models\Exhibition;
 use App\Models\Task;
 use App\Sorts\RelationSort;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
+use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\AllowedSort;
 use Spatie\QueryBuilder\QueryBuilder;
 
@@ -31,6 +31,9 @@ final class PartnerController extends Controller
                 'deadline',
                 'status',
                 AllowedSort::custom('company.public_name', new RelationSort('companies', 'public_name', 'company_id')),
+            ])
+            ->allowedFilters([
+                AllowedFilter::exact('status'),
             ])
             ->paginate()
             ->through(fn($task): array => [

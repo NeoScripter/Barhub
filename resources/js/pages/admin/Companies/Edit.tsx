@@ -153,6 +153,13 @@ const Edit: FC<Inertia.Pages.Admin.Companies.Edit> = ({ company, tags }) => {
                             <InputError message={errors.description} />
                         </div>
 
+                        <AccentHeading
+                            asChild
+                            className="text-center py-4 text-lg text-secondary md:col-span-2"
+                        >
+                            <h3>Контакты на сайте</h3>
+                        </AccentHeading>
+
                         <div className="grid gap-2">
                             <Label htmlFor="phone">Телефон</Label>
                             <Input
@@ -279,6 +286,12 @@ const Edit: FC<Inertia.Pages.Admin.Companies.Edit> = ({ company, tags }) => {
                                 onChange={(val) => setData('show_on_site', val)}
                             />
                         </div>
+                        <AccentHeading
+                            asChild
+                            className="text-center py-4 text-lg text-secondary md:col-span-2"
+                        >
+                            <h3>Активности на стенде</h3>
+                        </AccentHeading>
 
                         <div className="grid gap-2 md:col-span-2">
                             <Label htmlFor="activities">

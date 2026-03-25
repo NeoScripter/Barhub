@@ -86,7 +86,7 @@ export const getFilterUrl = (key: string, value: string): string => {
         params.get(paramKey)?.split(',').filter(Boolean) ?? [],
     );
 
-    if (values.has(value)) {
+    if (values.has(value.toString())) {
         values.delete(value);
     } else {
         values.add(value);
@@ -104,12 +104,28 @@ export const getFilterUrl = (key: string, value: string): string => {
     return qs ? `${pathname}?${decodeURIComponent(qs)}` : pathname;
 };
 
+export const getSingleFilterUrl = (key: string, value: string): string => {
+    const { pathname, search } = window.location;
+    const params = new URLSearchParams(search);
+    const paramKey = `filter[${key}]`;
+
+    if (params.get(paramKey) === value.toString()) {
+        params.delete(paramKey);
+    } else {
+        params.set(paramKey, value.toString());
+    }
+
+    params.set('page', '1');
+    const qs = params.toString();
+    return qs ? `${pathname}?${decodeURIComponent(qs)}` : pathname;
+};
+
 export const isActiveFilter = (key: string, value: string): boolean => {
     const params = new URLSearchParams(window.location.search);
     const filterKey = `filter[${key}]`;
     const currentFilters = params.get(filterKey)?.split(',') || [];
 
-    return currentFilters.includes(value);
+    return currentFilters.includes(value.toString());
 };
 
 export function shortenDescription(desc: string, limit = 15) {

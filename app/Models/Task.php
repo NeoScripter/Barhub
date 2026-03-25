@@ -52,6 +52,7 @@ final class Task extends Model
             ->map(fn($task): array => [
                 'count' => $task->count,
                 'status' => $task->status->label(),
+                'rawStatus' => $task->status
             ]);
     }
 
