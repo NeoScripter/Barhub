@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Events\TaskTemplateCreated;
 use Database\Factories\TaskTemplateFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -14,6 +15,10 @@ final class TaskTemplate extends Model
 {
     /** @use HasFactory<TaskTemplateFactory> */
     use HasFactory;
+
+    protected $dispatchesEvents = [
+        'created' => TaskTemplateCreated::class,
+    ];
 
     public function user(): BelongsTo
     {

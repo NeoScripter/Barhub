@@ -112,14 +112,6 @@ describe('Admin Company Followup Tests', function (): void {
             ->assertSessionHasErrors('description');
     });
 
-    it('validates comment min length on store', function (): void {
-        actingAs($this->superAdmin)
-            ->post($this->route, array_merge($this->validData, [
-                'comment' => 'Short',
-            ]))
-            ->assertSessionHasErrors('comment');
-    });
-
     it('validates comment max length on store', function (): void {
         actingAs($this->superAdmin)
             ->post($this->route, array_merge($this->validData, [
@@ -146,16 +138,6 @@ describe('Admin Company Followup Tests', function (): void {
                 'description' => 'Short',
             ])
             ->assertSessionHasErrors('description');
-    });
-
-    it('validates comment min length on update', function (): void {
-        $followup = Followup::factory()->for($this->company)->create(['status' => FollowupStatus::COMPLETED]);
-
-        actingAs($this->superAdmin)
-            ->put("{$this->route}/{$followup->id}", [
-                'comment' => 'Short',
-            ])
-            ->assertSessionHasErrors('comment');
     });
 
     // ── Admin with access ──

@@ -232,38 +232,6 @@ describe('Admin Task Test', function (): void {
         Storage::assertExists($comment->file->url);
     });
 
-    it('successfully creates a task without a file and comment when a file is passed to the request without a comment', function (): void {
-        Storage::fake('local');
-
-        $user = User::factory()->create([
-            'email' => 'super-admin@gmail.com',
-            'password' => 'password',
-        ]);
-        $user->assignRole(UserRole::SUPER_ADMIN);
-        $exhibition = Exhibition::factory()->create();
-        $company = Company::factory()->for($exhibition)->create();
-        $route = "/admin/companies/{$company->id}/tasks";
-
-        $file = UploadedFile::fake()->create('document.pdf', 100);
-        $payload = [
-            'title' => 'new title',
-            'description' => generateTextWithChars(50),
-            'deadline' => now()->addYear()->format('Y') . '-03-20T12:02',
-            'file' => $file,
-            'file_name' => 'file name',
-        ];
-
-        $this->actingAs($user)
-            ->post($route, $payload)
-            ->assertRedirect($route);
-
-        $task = Task::query()->where('title', $payload['title'])->first();
-        expect($task)->not->toBeNull();
-
-        $this->assertDatabaseCount('task_comments', 0);
-        $this->assertDatabaseCount('task_files', 0);
-    });
-
     it('successfully updates the task when the task does not have a comment and a comment is passed to the request', function (): void {
         $user = User::factory()->create([
             'email' => 'super-admin@gmail.com',

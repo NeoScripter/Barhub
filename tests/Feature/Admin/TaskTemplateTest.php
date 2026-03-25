@@ -230,6 +230,18 @@ describe('Admin Task Template Test', function (): void {
         assertDatabaseCount('tasks', 5);
     });
 
+    it('creates a new task for this exhibition when a new task template is created', function (): void {
+        assertDatabaseCount('task_templates', 0);
+        assertDatabaseCount('tasks', 0);
+
+        $exhibition = Exhibition::factory()->create();
+        Company::factory()->for($exhibition)->create();
+        TaskTemplate::factory(4)->for($exhibition)->create();
+
+        assertDatabaseCount('task_templates', 5);
+        assertDatabaseCount('tasks', 5);
+    });
+
     it('has a default task template that requires each new exponent to fill in the information about their company', function (): void {
         assertDatabaseCount('task_templates', 0);
 
