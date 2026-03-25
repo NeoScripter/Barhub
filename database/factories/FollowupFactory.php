@@ -23,7 +23,7 @@ final class FollowupFactory extends Factory
             'name' => fake()->words(3, true),
             'description' => fake()->sentences(3, true),
             'comment' => fake()->words(random_int(20, 30), true),
-            'status' => random_int(1, 2),
+            'status' => random_int(1, 3),
         ];
     }
 }

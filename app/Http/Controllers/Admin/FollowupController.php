@@ -52,4 +52,12 @@ final class FollowupController extends Controller
 
         return to_route('admin.followups.index' );
     }
+
+    public function destroy(Followup $followup)
+    {
+        abort_if($followup->status !== FollowupStatus::INCOMPLETE, 403);
+        $followup->update(['status' => FollowupStatus::REJECTED]);
+
+        return to_route('admin.followups.index' );
+    }
 }

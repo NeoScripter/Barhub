@@ -1,22 +1,38 @@
-import FormButtons from '@/components/form/FormButtons';
 import AccentHeading from '@/components/ui/AccentHeading';
+import { Button } from '@/components/ui/Button';
 import LabeledContent from '@/components/ui/LabeledContent';
-import { formatDateAndTime } from '@/lib/utils';
+import { Spinner } from '@/components/ui/Spinner';
+import { cn, formatDateAndTime } from '@/lib/utils';
 import FollowupController from '@/wayfinder/App/Http/Controllers/Admin/FollowupController';
-import { update } from '@/wayfinder/routes/admin/followups';
+import { destroy, update } from '@/wayfinder/routes/admin/followups';
 import { Inertia } from '@/wayfinder/types';
-import { useForm } from '@inertiajs/react';
-import { FC } from 'react';
+import { Link, router } from '@inertiajs/react';
+import { FC, useState } from 'react';
 import { toast } from 'sonner';
 
 const Edit: FC<Inertia.Pages.Admin.Followups.Edit> = ({ followup }) => {
-    const { patch, processing } = useForm();
+    const [processing, setProcessing] = useState(false);
 
-    const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault();
-        patch(update({ followup: followup.id }).url, {
+    const handleAcceptClick = () => {
+        router.patch(
+            update({ followup: followup.id }).url,
+            {},
+            {
+                onStart: () => setProcessing(true),
+                onFinish: () => setProcessing(false),
+                onSuccess: () => {
+                    toast.success('Услуга успешно подтверждена');
+                },
+            },
+        );
+    };
+
+    const handleRejectClick = () => {
+        router.delete(destroy({ followup: followup.id }).url, {
+            onStart: () => setProcessing(true),
+            onFinish: () => setProcessing(false),
             onSuccess: () => {
-                toast.success('Услуга успешно подтверждена');
+                toast.success('Услуга успешно отклонена');
             },
         });
     };
@@ -40,7 +56,9 @@ const Edit: FC<Inertia.Pages.Admin.Followups.Edit> = ({ followup }) => {
                     <p>{followup.name}</p>
                 </LabeledContent>
                 <LabeledContent label="Описание услуги">
-                    <p className='whitespace-pre-line'>{followup.description}</p>
+                    <p className="whitespace-pre-line">
+                        {followup.description}
+                    </p>
                 </LabeledContent>
                 <LabeledContent label="Комментарий экспонента">
                     {followup.user && (
@@ -55,16 +73,37 @@ const Edit: FC<Inertia.Pages.Admin.Followups.Edit> = ({ followup }) => {
                     <p>{followup.comment}</p>
                 </LabeledContent>
             </div>
-            <form
-                className="flex flex-col gap-6"
-                onSubmit={handleSubmit}
-            >
-                <FormButtons
-                    label="Подтвердить"
-                    processing={processing}
-                    backUrl={FollowupController.index().url}
-                />
-            </form>
+            <div className="flex flex-col gap-6">
+                <div className={cn('mt-2 flex flex-wrap items-center gap-4')}>
+                    <Button
+                        className="w-fit"
+                        onClick={handleAcceptClick}
+                        disabled={processing}
+                    >
+                        {processing && <Spinner />}
+                        Подтвердить
+                    </Button>
+                    <Button
+                        className="w-fit"
+                        variant="destructive"
+                        onClick={handleRejectClick}
+                        disabled={processing}
+                    >
+                        {processing && <Spinner />}
+                        Отклонить
+                    </Button>
+                    <Button
+                        type="button"
+                        variant="tertiary"
+                        className="w-fit rounded-md!"
+                        asChild
+                    >
+                        <Link href={FollowupController.index().url}>
+                            Отмена
+                        </Link>
+                    </Button>
+                </div>
+            </div>
         </div>
     );
 };
