@@ -21,6 +21,7 @@ const CreateExponent = () => {
             method: 'post',
             onSuccess: () => {
                 toast.success('Уведомление отправлено на указанный емаил пользователя');
+                document.dispatchEvent(new Event('closeExponentModal'));
             },
             preserveScroll: true,
         });

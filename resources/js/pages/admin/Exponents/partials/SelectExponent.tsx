@@ -18,6 +18,7 @@ const SelectExponent = () => {
             method: 'patch',
             onSuccess: () => {
                 toast.success('Экспонент успешно создан');
+                document.dispatchEvent(new Event('closeExponentModal'));
             },
             preserveScroll: true,
         });

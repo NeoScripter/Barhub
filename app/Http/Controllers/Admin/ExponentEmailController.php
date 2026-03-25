@@ -25,13 +25,13 @@ class ExponentEmailController extends Controller
         Notification::route('mail', $email->email)
             ->notify(new CreateExponentNotification($email->email));
 
-        return to_route('admin.companies.index', ['company' => $company]);
+        return to_route('admin.exponents.index', ['company' => $company]);
     }
 
     public function destroy(Company $company, ExponentEmail $email)
     {
         $email->delete();
 
-        return to_route('admin.companies.index', ['company' => $company]);
+        return to_route('admin.exponents.index', ['company' => $company]);
     }
 }

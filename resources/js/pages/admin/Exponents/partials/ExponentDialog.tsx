@@ -9,10 +9,22 @@ import {
 } from '@/components/ui/Dialog';
 import { VisuallyHidden } from '@radix-ui/react-visually-hidden';
 import { Plus } from 'lucide-react';
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 
-const ExponentDialog: FC<{children: React.ReactNode, label: string}> = ({children, label}) => {
+const ExponentDialog: FC<{ children: React.ReactNode; label: string }> = ({
+    children,
+    label,
+}) => {
     const [isOpen, setIsOpen] = useState(false);
+
+    useEffect(() => {
+        const handleClose = () => setIsOpen(false);
+
+        document.addEventListener('closeExponentModal', handleClose);
+
+        return () =>
+            document.removeEventListener('closeExponentModal', handleClose);
+    }, []);
 
     return (
         <Dialog
@@ -31,7 +43,7 @@ const ExponentDialog: FC<{children: React.ReactNode, label: string}> = ({childre
                     <Button
                         variant="secondary"
                         data-test="select-exponent"
-                        size='lg'
+                        size="lg"
                     >
                         {label}
                         <Plus />
