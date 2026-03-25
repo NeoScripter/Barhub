@@ -48,7 +48,7 @@ const Edit: FC<Inertia.Pages.Admin.Tasks.Edit> = ({ task }) => {
                     <p>{task.title}</p>
                 </LabeledContent>
                 <LabeledContent label="Описание задачи">
-                    <p>{task.description}</p>
+                    <p className='whitespace-pre-line'>{task.description}</p>
                 </LabeledContent>
                 <LabeledContent label="Комментарий">
                     {task.comments?.map((comment) => (

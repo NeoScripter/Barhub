@@ -56,7 +56,7 @@ const Edit: FC<Inertia.Pages.Admin.Tasks.Edit> = ({ task }) => {
                     <p>{formatDateAndTime(new Date(task.deadline))}</p>
                 </LabeledContent>
                 <LabeledContent label="Описание задачи">
-                    <p>{task.description}</p>
+                    <p className='whitespace-pre-line'>{task.description}</p>
                 </LabeledContent>
                 {task.comments && task.comments.length > 0 && (
                     <LabeledContent label="Комментарии">
