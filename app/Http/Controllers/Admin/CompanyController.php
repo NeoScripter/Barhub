@@ -12,11 +12,13 @@ use App\Http\Requests\Admin\Company\CompanyUpdateRequest;
 use App\Models\Company;
 use App\Models\Image;
 use App\Models\Tag;
+use App\Sorts\ManyToManySort;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
+use Spatie\QueryBuilder\AllowedSort;
 use Spatie\QueryBuilder\QueryBuilder;
 
 final class CompanyController extends Controller
@@ -31,7 +33,17 @@ final class CompanyController extends Controller
                 ->with(['tags', 'tasks:id,status,company_id'])
                 ->withCount('followups')
         )
-            ->allowedSorts(['public_name'])
+            ->allowedSorts([
+                'public_name',
+                AllowedSort::custom('tags.name', new ManyToManySort(
+                    pivotTable: 'company_tag',
+                    relatedTable: 'tags',
+                    pivotForeignKey: 'company_id',
+                    pivotRelatedKey: 'tag_id',
+                    column: 'name',
+                )),
+            ])
+
             ->withSearch('public_name', $request->string('search'))
             ->paginate()
             ->appends($request->query());

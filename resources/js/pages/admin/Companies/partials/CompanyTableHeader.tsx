@@ -10,7 +10,7 @@ const HEADER_COLS: Column[] = [
     { label: 'Название', query: 'public_name' },
     { label: 'Юрлицо'},
     { label: 'Код стэнда'},
-    { label: 'Тэги'},
+    { label: 'Тэги', query: 'tags.name' },
     { label: 'Статусы задач'},
     { label: 'Услуги' },
     { label: 'Действия' },
