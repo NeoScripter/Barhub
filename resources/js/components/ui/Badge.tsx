@@ -10,6 +10,8 @@ const badgeVariants = cva(
             variant: {
                 success:
                     'border-badge-success/50 bg-badge-success/12 text-badge-success',
+                warning:
+                    'border-amber-500/50 bg-amber-500/12 text-amber-500',
                 danger: 'border-badge-danger/50 bg-badge-danger/12 text-badge-danger',
             },
         },

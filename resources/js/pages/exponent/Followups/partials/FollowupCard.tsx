@@ -8,6 +8,17 @@ const FollowupCard: FC<{
     followup: App.Models.Followup;
     className?: string;
 }> = ({ followup, className }) => {
+    const [statusLabel, variant] = (() => {
+        switch (followup.status) {
+            case 'Закрыт':
+                return ['Подтверждена', 'success'];
+            case 'Открыт':
+                return ['На согласовании', 'warning'];
+            default:
+                return ['Отклонена', 'danger'];
+        }
+    })();
+
     return (
         <li>
             <CardLayout
@@ -18,16 +29,16 @@ const FollowupCard: FC<{
             >
                 <Badge
                     className="relative bottom-2 lg:bottom-4"
-                    variant={
-                        followup.status === 'Закрыт' ? 'success' : 'danger'
-                    }
+                    variant={variant}
                 >
-                    {followup.status === 'Закрыт' ? 'Подтверждена' : 'На проверке'}
+                    {statusLabel}
                 </Badge>
-                <h3 className="mb-3 text-center mt-2 text-lg font-bold text-balance sm:mb-3 sm:text-xl md:mb-4 lg:mb-5">
+                <h3 className="mt-2 mb-3 text-center text-lg font-bold text-balance sm:mb-3 sm:text-xl md:mb-4 lg:mb-5">
                     {followup.name}
                 </h3>
-                <p className="text-sm sm:text-base whitespace-pre-line">{followup.description}</p>
+                <p className="text-sm whitespace-pre-line sm:text-base">
+                    {followup.description}
+                </p>
             </CardLayout>
         </li>
     );
