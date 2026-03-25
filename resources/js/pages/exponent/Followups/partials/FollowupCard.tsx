@@ -27,7 +27,7 @@ const FollowupCard: FC<{
                 <h3 className="mb-3 text-center mt-2 text-lg font-bold text-balance sm:mb-3 sm:text-xl md:mb-4 lg:mb-5">
                     {followup.name}
                 </h3>
-                <p className="text-sm sm:text-base">{followup.description}</p>
+                <p className="text-sm sm:text-base whitespace-pre-line">{followup.description}</p>
             </CardLayout>
         </li>
     );

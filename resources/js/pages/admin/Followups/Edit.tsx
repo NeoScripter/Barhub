@@ -9,10 +9,7 @@ import { useForm } from '@inertiajs/react';
 import { FC } from 'react';
 import { toast } from 'sonner';
 
-const Edit: FC<Inertia.Pages.Admin.Followups.Edit> = ({
-
-    followup,
-}) => {
+const Edit: FC<Inertia.Pages.Admin.Followups.Edit> = ({ followup }) => {
     const { patch, processing } = useForm();
 
     const handleSubmit = (e: React.FormEvent) => {
@@ -43,7 +40,7 @@ const Edit: FC<Inertia.Pages.Admin.Followups.Edit> = ({
                     <p>{followup.name}</p>
                 </LabeledContent>
                 <LabeledContent label="Описание услуги">
-                    <p>{followup.description}</p>
+                    <p className='whitespace-pre-line'>{followup.description}</p>
                 </LabeledContent>
                 <LabeledContent label="Комментарий экспонента">
                     {followup.user && (
@@ -51,7 +48,7 @@ const Edit: FC<Inertia.Pages.Admin.Followups.Edit> = ({
                             {followup.user?.name}
                         </small>
                     )}
-                    <small className="block mb-2">
+                    <small className="mb-2 block">
                         {formatDateAndTime(new Date(followup.created_at)!)}
                     </small>
 
@@ -65,7 +62,7 @@ const Edit: FC<Inertia.Pages.Admin.Followups.Edit> = ({
                 <FormButtons
                     label="Подтвердить"
                     processing={processing}
-                    backUrl={FollowupController.index({ exhibition }).url}
+                    backUrl={FollowupController.index().url}
                 />
             </form>
         </div>

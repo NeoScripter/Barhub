@@ -36,7 +36,7 @@ const FollowupCard: FC<{
                     </h3>
                     <Tooltip>
                         <TooltipTrigger>
-                            <p className="text-sm sm:text-base">
+                            <p className="text-sm whitespace-pre-line sm:text-base">
                                 {followup.description}
                             </p>
                         </TooltipTrigger>
