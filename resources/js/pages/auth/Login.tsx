@@ -100,18 +100,6 @@ export default function Login({
                                 Войти
                             </Button>
                         </div>
-
-                        {canRegister && (
-                            <div className="text-center text-sm text-muted-foreground">
-                                Нет аккаунта?{' '}
-                                <TextLink
-                                    href={register()}
-                                    tabIndex={5}
-                                >
-                                    Зарегистрироваться
-                                </TextLink>
-                            </div>
-                        )}
                     </>
                 )}
             </Form>
