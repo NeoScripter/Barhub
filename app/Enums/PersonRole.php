@@ -11,7 +11,7 @@ enum PersonRole: int
     case CURATOR = 3;
     case HOST = 4;
     case RESIDENT = 5;
-    case PARTENER = 6;
+    case PARTNER = 6;
 
     public static function toSelectList(): array
     {
@@ -27,12 +27,12 @@ enum PersonRole: int
     public function label(): string
     {
         return match ($this) {
-            self::SPEAKER => 'спикер',
-            self::ORGANIZER => 'организатор',
-            self::CURATOR => 'куратор',
-            self::HOST => 'ведущий',
-            self::RESIDENT => 'резидент',
-            self::PARTENER => 'партенер',
+            self::SPEAKER => 'Спикер',
+            self::ORGANIZER => 'Организатор',
+            self::CURATOR => 'Куратор',
+            self::HOST => 'Ведущий',
+            self::RESIDENT => 'Резидент',
+            self::PARTNER => 'Партнер',
         };
     }
 }
