@@ -85,6 +85,8 @@ const Index: FC<Inertia.Pages.Admin.Exponents.Index> = ({
                 >
                     <CreateExponent />
                 </ExponentDialog>
+
+
             </div>
         </CompanyLayout>
     );
