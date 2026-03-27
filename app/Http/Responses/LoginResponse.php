@@ -21,6 +21,6 @@ final class LoginResponse implements LoginResponseContract
             return redirect()->intended(route('exponent.tasks.index'));
         }
 
-        return redirect()->intended(route('/'));
+        return redirect()->intended(route('exhibitions.index'));
     }
 }

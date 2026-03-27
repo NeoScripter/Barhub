@@ -54,7 +54,9 @@ final class EventController extends Controller
                 ->stages()
                 ->withCount('events')
                 ->get(),
-            'themes' => Theme::all(),
+            'themes' => $exhibition
+                ->themes()
+                ->get(),
         ]);
     }
     public function create()

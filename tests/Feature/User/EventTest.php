@@ -65,8 +65,8 @@ describe('Public Event Index Page', function (): void {
         $exhibition = Exhibition::factory()->create();
         $stage = Stage::factory()->for($exhibition)->create();
 
-        $theme1 = Theme::factory()->create(['name' => 'Technology']);
-        $theme2 = Theme::factory()->create(['name' => 'Art']);
+        $theme1 = Theme::factory()->for($exhibition)->create(['name' => 'Technology']);
+        $theme2 = Theme::factory()->for($exhibition)->create(['name' => 'Art']);
 
         $event1 = Event::factory()->for($exhibition)->for($stage)->create();
         $event2 = Event::factory()->for($exhibition)->for($stage)->create();
@@ -151,8 +151,8 @@ describe('Event Filtering', function (): void {
         $exhibition = Exhibition::factory()->create();
         $stage = Stage::factory()->for($exhibition)->create();
 
-        $techTheme = Theme::factory()->create(['name' => 'Technology']);
-        $artTheme = Theme::factory()->create(['name' => 'Art']);
+        $techTheme = Theme::factory()->for($exhibition)->create(['name' => 'Technology']);
+        $artTheme = Theme::factory()->for($exhibition)->create(['name' => 'Art']);
 
         $techEvent = Event::factory()->for($exhibition)->for($stage)->create(['title' => 'Tech Talk']);
         $artEvent = Event::factory()->for($exhibition)->for($stage)->create(['title' => 'Art Workshop']);
@@ -199,8 +199,8 @@ describe('Event Filtering', function (): void {
         $mainStage = Stage::factory()->for($exhibition)->create(['name' => 'Main Stage']);
         $sideStage = Stage::factory()->for($exhibition)->create(['name' => 'Side Stage']);
 
-        $techTheme = Theme::factory()->create(['name' => 'Technology']);
-        $artTheme = Theme::factory()->create(['name' => 'Art']);
+        $techTheme = Theme::factory()->for($exhibition)->create(['name' => 'Technology']);
+        $artTheme = Theme::factory()->for($exhibition)->create(['name' => 'Art']);
 
         $event1 = Event::factory()->for($exhibition)->for($mainStage)->create([
             'title' => 'Main Tech Talk',
@@ -291,8 +291,8 @@ describe('Event Relationships', function (): void {
         $stage = Stage::factory()->for($exhibition)->create();
         $event = Event::factory()->for($exhibition)->for($stage)->create();
 
-        $theme1 = Theme::factory()->create(['name' => 'Innovation']);
-        $theme2 = Theme::factory()->create(['name' => 'Design']);
+        $theme1 = Theme::factory()->for($exhibition)->create(['name' => 'Innovation']);
+        $theme2 = Theme::factory()->for($exhibition)->create(['name' => 'Design']);
 
         $event->themes()->attach([$theme1->id, $theme2->id]);
 

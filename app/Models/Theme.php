@@ -7,6 +7,7 @@ namespace App\Models;
 use Database\Factories\ThemeFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 final class Theme extends Model
@@ -17,5 +18,10 @@ final class Theme extends Model
     public function events(): BelongsToMany
     {
         return $this->belongsToMany(Event::class);
+    }
+
+    public function exhibition(): BelongsTo
+    {
+        return $this->belongsTo(Exhibition::class);
     }
 }

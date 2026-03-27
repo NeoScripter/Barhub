@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('themes', function (Blueprint $table): void {
             $table->id();
+            $table->foreignId('exhibition_id')->constrained()->cascadeOnDelete();
             $table->string('name');
             $table->string('color_hex');
             $table->timestamps();

@@ -51,6 +51,11 @@ final class Exhibition extends Model
         return $this->hasMany(Stage::class);
     }
 
+    public function themes(): HasMany
+    {
+        return $this->hasMany(Theme::class);
+    }
+
     public function services(): HasMany
     {
         return $this->hasMany(Service::class);

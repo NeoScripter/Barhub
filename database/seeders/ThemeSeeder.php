@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Database\Seeders;
 
+use App\Models\Exhibition;
 use App\Models\Theme;
 use Illuminate\Database\Seeder;
 
@@ -21,8 +22,12 @@ final class ThemeSeeder extends Seeder
             ['name' => 'Семинар', 'color_hex' => '#fcba03'],
         ];
 
-        foreach ($data as $theme) {
-            Theme::factory($theme)->create();
-        }
+        $exhibitions = Exhibition::all();
+
+        $exhibitions->each(function ($exhibition) use ($data) {
+            foreach ($data as $theme) {
+                Theme::factory($theme)->for($exhibition)->create();
+            }
+        });
     }
 }

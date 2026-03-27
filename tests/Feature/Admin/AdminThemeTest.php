@@ -22,9 +22,9 @@ describe('Admin Theme Test', function (): void {
         $exhibition = Exhibition::factory()->create();
         $stage = Stage::factory()->for($exhibition)->create();
 
-        $theme1 = Theme::factory()->create(['name' => 'Выставка', 'color_hex' => '#F9BBD2']);
-        $theme2 = Theme::factory()->create(['name' => 'Турнир', 'color_hex' => '#E4FFA3']);
-        $theme3 = Theme::factory()->create(['name' => 'Лекция', 'color_hex' => '#D8DBFF']);
+        $theme1 = Theme::factory()->for($exhibition)->create(['name' => 'Выставка', 'color_hex' => '#F9BBD2']);
+        $theme2 = Theme::factory()->for($exhibition)->create(['name' => 'Турнир', 'color_hex' => '#E4FFA3']);
+        $theme3 = Theme::factory()->for($exhibition)->create(['name' => 'Лекция', 'color_hex' => '#D8DBFF']);
 
         $event = Event::factory()->for($exhibition)->for($stage)->create();
         $event->themes()->attach([$theme1->id, $theme2->id, $theme3->id]);
@@ -110,7 +110,7 @@ describe('Admin Theme Test', function (): void {
         $exhibition = Exhibition::factory()->create();
         $stage = Stage::factory()->for($exhibition)->create();
 
-        $themes = Theme::factory(5)->create();
+        $themes = Theme::factory(5)->for($exhibition)->create();
 
         $event = Event::factory()->for($exhibition)->for($stage)->create();
         $event->themes()->attach($themes->take(3)->pluck('id'));

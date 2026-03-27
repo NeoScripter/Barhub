@@ -14,7 +14,8 @@ final class ThemeController extends Controller
 {
     public function store(ThemeStoreRequest $request): RedirectResponse
     {
-        Theme::query()->create($request->validated());
+        $exhibition = $request->user()->getActiveExhibition();
+        Theme::query()->create([...$request->validated(), 'exhibition_id' => $exhibition->id]);
 
         return back()
             ->with('success', 'Направление успешно создано');

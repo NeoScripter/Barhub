@@ -126,7 +126,7 @@ describe('Event Index', function (): void {
 
     it('eager loads relationships', function (): void {
         $stage = Stage::factory()->for($this->exhibition)->create();
-        $theme = Theme::factory()->create();
+        $theme = Theme::factory()->for($this->exhibition)->create();
         $person = Person::factory()->create();
 
         $event = Event::factory()->for($this->exhibition)->for($stage)->create();
@@ -381,7 +381,7 @@ describe('Event Create', function (): void {
     });
 
     it('creates event with themes', function (): void {
-        $themes = Theme::factory(3)->create();
+        $themes = Theme::factory(3)->for($this->exhibition)->create();
 
         actingAs($this->superAdmin)
             ->post(route('admin.events.store'), [
@@ -600,8 +600,8 @@ describe('Event Edit', function (): void {
     });
 
     it('updates event themes', function (): void {
-        $oldThemes = Theme::factory(2)->create();
-        $newThemes = Theme::factory(3)->create();
+        $oldThemes = Theme::factory(2)->for($this->exhibition)->create();
+        $newThemes = Theme::factory(3)->for($this->exhibition)->create();
         $this->event->themes()->attach($oldThemes->pluck('id'));
 
         actingAs($this->superAdmin)
@@ -711,7 +711,7 @@ describe('Event Destroy', function (): void {
     });
 
     it('cascades delete to event_theme pivot', function (): void {
-        $theme = Theme::factory()->create();
+        $theme = Theme::factory()->for($this->exhibition)->create();
         $this->event->themes()->attach($theme);
 
         actingAs($this->superAdmin)
