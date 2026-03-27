@@ -10,7 +10,7 @@
     <link rel="preload" href="{{ asset('fonts/UcCo3FwrK3iLTcvmYwYL8g.woff2') }}" as="font" type="font/woff2"
         crossorigin>
     {{-- <link rel="icon" href="/favicon.ico" sizes="any"> --}}
-    <link rel="icon" href="/favicon.webp" type="image/webp">
+    <link rel="icon" href="/favicon.svg" type="image/svg">
     <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 
     <style>
