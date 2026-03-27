@@ -38,7 +38,7 @@ class CreateExponentNotification extends Notification // implements ShouldQueue
             ->line('Рады сообщить вам, что вам предоставлен доступ к личному кабинету экпонента.')
             ->action('Регистрация', url('/register'))
             ->line('Данное сообщение сгенерировано автоматически. Пожалуйста, не отвечайте на него')
-            ->salutation(new HtmlString('<p>С уважением, <br>Barhub</p>'));
+            ->salutation(new HtmlString('<p>С уважением, <br>bar hub</p>'));
     }
 
     /**
