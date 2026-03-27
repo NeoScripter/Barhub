@@ -40,7 +40,7 @@ final class CreateNewUser implements CreatesNewUsers
             return $user;
         }
 
-        $user->update(['role' => UserRole::EXPONENT->value]);
+        $user->update(['role' => UserRole::EXPONENT->value, 'company_id' => $exponentRecord->company_id]);
 
         $exponentRecord->delete();
 
