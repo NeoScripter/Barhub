@@ -1,0 +1,26 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Http\Responses;
+
+use App\Enums\UserRole;
+use Laravel\Fortify\Contracts\RegisterResponse as RegisterResponseContract;
+
+final class RegisterResponse implements RegisterResponseContract
+{
+    public function toResponse($request)
+    {
+        $user = auth()->user();
+
+        if ($user->hasRole(UserRole::SUPER_ADMIN) || $user->hasRole(UserRole::ADMIN)) {
+            return redirect()->intended(route('admin.dashboard.index'));
+        }
+
+        if ($user->hasRole(UserRole::EXPONENT)) {
+            return redirect()->intended(route('exponent.tasks.index'));
+        }
+
+        return redirect()->intended(route('/'));
+    }
+}
