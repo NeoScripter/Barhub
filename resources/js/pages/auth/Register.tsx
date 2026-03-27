@@ -99,16 +99,6 @@ export default function Register() {
                                 Создать аккаунт
                             </Button>
                         </div>
-
-                        <div className="text-center text-sm text-muted-foreground">
-                            Уже есть аккаунт?{' '}
-                            <TextLink
-                                href={login()}
-                                tabIndex={6}
-                            >
-                                Войти
-                            </TextLink>
-                        </div>
                     </>
                 )}
             </Form>
