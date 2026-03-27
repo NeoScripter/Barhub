@@ -74,7 +74,7 @@ const Create: FC<Inertia.Pages.Admin.Tasks.Create> = ({
                     </div>
 
                     <div className="grid gap-2 md:col-span-2">
-                        <Label htmlFor="comment">Подсказка</Label>
+                        <Label htmlFor="comment">Комментарий</Label>
                         <Textarea
                             id="comment"
                             name="comment"
