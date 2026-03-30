@@ -8,8 +8,8 @@ type Column = { label: string; query?: string };
 const HEADER_COLS: Column[] = [
     { label: 'Лого' },
     { label: 'Название', query: 'public_name' },
-    { label: 'Юрлицо'},
-    { label: 'Код стэнда'},
+    { label: 'Юр. лицо'},
+    { label: 'Код стенда'},
     { label: 'Тэги', query: 'tags.name' },
     { label: 'Статусы задач'},
     { label: 'Услуги' },

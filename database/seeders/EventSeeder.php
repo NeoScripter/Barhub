@@ -28,12 +28,12 @@ final class EventSeeder extends Seeder
 
         $exhibitions->each(
             fn(Exhibition $exhibition) => Event::factory()
-                ->count(10)
+                ->count(2)
                 ->for($exhibition)
                 ->for($stages->random())
                 ->hasAttached($themes->random(random_int(1, 3)))
                 ->afterCreating(function (Event $event) use ($exhibition): void {
-                    $peopleCount = random_int(1, 3);
+                    $peopleCount = 2;
 
                     for ($i = 0; $i < $peopleCount; $i++) {
                         $person = Person::factory()
