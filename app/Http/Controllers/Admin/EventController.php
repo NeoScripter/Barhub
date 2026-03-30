@@ -64,8 +64,8 @@ final class EventController extends Controller
         $exhibition = Auth::user()->getActiveExhibition();
 
         return Inertia::render('admin/Events/Create', [
-            'stages' => Stage::query()->select(['id', 'name'])->get(),
-            'themes' => Theme::all(),
+            'stages' => $exhibition->stages()->get(),
+            'themes' => $exhibition->themes()->get(),
             'availablePeople' => $exhibition->people()->select(['id', 'name'])->get(),
             'roles' => PersonRole::toSelectList(),
             'exhibition' => $exhibition,
@@ -118,8 +118,9 @@ final class EventController extends Controller
             'eventPeople' => $formatPeople->execute($event),
             'availablePeople' => $event->exhibition->people()->select(['id', 'name'])->get(),
             'roles' => PersonRole::toSelectList(),
-            'stages' => Stage::query()->select(['id', 'name'])->get(),
-            'themes' => Theme::all(),
+            'stages' => $event->exhibition->stages()->get(),
+            'themes' => $event->exhibition->themes()->get(),
+
         ]);
     }
 
