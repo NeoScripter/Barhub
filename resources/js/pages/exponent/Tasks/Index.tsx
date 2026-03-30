@@ -23,7 +23,7 @@ const Index = () => {
                         'heading text-center text-base text-foreground md:text-left',
                     )}
                 >
-                    <h2>Ближайшие задачи</h2>
+                    <h2>Задачи</h2>
                 </AccentHeading>
                 <Tasks />
             </article>

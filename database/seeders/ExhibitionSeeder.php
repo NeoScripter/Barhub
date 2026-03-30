@@ -20,7 +20,7 @@ final class ExhibitionSeeder extends Seeder
     public function run(): void
     {
         foreach (ExhibitionName::NAMES as $name) {
-            Exhibition::factory()->has(Service::factory(rand(3, 5)))->create(['name' => $name]);
+            Exhibition::factory()->has(Service::factory(2))->create(['name' => $name]);
         }
 
         $admin = User::query()->where('role', UserRole::ADMIN)->first();

@@ -22,7 +22,7 @@ final class TaskTemplateSeeder extends Seeder
             ->first();
 
         TaskTemplate::factory()
-            ->count(random_int(2, 5))
+            ->count(random_int(1, 3))
             ->for($admin, 'user')
             ->for($admin->exhibitions()->first(), 'exhibition')
             ->create();

@@ -33,7 +33,7 @@ final class CompanySeeder extends Seeder
             fn(Exhibition $exhibition) => Company::factory()
                 ->has(
                     Task::factory()
-                        ->count(8)
+                        ->count(3)
                         ->has(TaskComment::factory()
                             ->when(
                                 $exhibition->users()->first(),
@@ -43,8 +43,8 @@ final class CompanySeeder extends Seeder
                             ->count(random_int(1, 3)), 'comments')
                 )
                 ->has(Followup::factory()
-                    ->count(rand(2, 7)))
-                ->count(10)
+                    ->count(rand(2, 4)))
+                ->count(3)
                 ->for($exhibition)
                 ->hasAttached($tags->random(random_int(1, 3)))
                 ->afterCreating(function (Company $company): void {
