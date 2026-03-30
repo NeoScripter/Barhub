@@ -72,12 +72,12 @@ const Index: FC<Inertia.Pages.Admin.Exponents.Index> = ({
             </ul>
 
             <div className="flex flex-wrap items-center justify-center gap-4">
-                <ExponentDialog
-                    key="select-exponent"
-                    label="Выбрать из списка"
-                >
-                    <SelectExponent />
-                </ExponentDialog>
+                {/* <ExponentDialog */}
+                {/*     key="select-exponent" */}
+                {/*     label="Выбрать из списка" */}
+                {/* > */}
+                {/*     <SelectExponent /> */}
+                {/* </ExponentDialog> */}
 
                 <ExponentDialog
                     key="create-exponent"

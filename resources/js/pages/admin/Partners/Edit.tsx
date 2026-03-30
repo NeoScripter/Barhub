@@ -85,7 +85,7 @@ const Edit: FC<Inertia.Pages.Admin.Tasks.Edit> = ({ task }) => {
                                             />
                                         </span>
                                     )}
-                                    <p>{comment.content}</p>
+                                    {comment.content && <p>{comment.content}</p>}
                                 </li>
                             ))}
                         </ul>

@@ -48,7 +48,7 @@ const Edit: FC<Inertia.Pages.Admin.Tasks.Edit> = ({ task }) => {
                     <p>{task.title}</p>
                 </LabeledContent>
                 <LabeledContent label="Описание задачи">
-                    <p className='whitespace-pre-line'>{task.description}</p>
+                    <p className="whitespace-pre-line">{task.description}</p>
                 </LabeledContent>
                 <LabeledContent label="Комментарий">
                     {task.comments?.map((comment) => (
@@ -66,10 +66,10 @@ const Edit: FC<Inertia.Pages.Admin.Tasks.Edit> = ({ task }) => {
                                     new Date(comment.created_at),
                                 )}
                             </small>
-                            <p>{comment.content}</p>
+                            {comment.content && <p>{comment.content}</p>}
                             {comment.file && (
                                 <DownloadFileLink
-                                    className='my-4'
+                                    className="my-4"
                                     href={comment.file?.url}
                                     target="_blank"
                                     rel="noopener noreferrer"

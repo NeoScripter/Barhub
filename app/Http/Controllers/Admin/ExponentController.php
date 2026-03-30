@@ -45,8 +45,9 @@ final class ExponentController extends Controller
     public function destroy(Company $company, int $id): RedirectResponse
     {
         $user = User::query()->find($id);
-        $user->update(['company_id' => null, 'role' => UserRole::USER]);
-        $user->save();
+        // $user->update(['company_id' => null, 'role' => UserRole::USER]);
+        // $user->save();
+        $user->delete();
 
         return back();
     }
