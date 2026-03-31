@@ -61,7 +61,7 @@ const Index: FC<Inertia.Pages.Exponent.Companies.Index> = ({ company }) => {
                 {company.site_url && (
                     <InfoItem>
                         <Globe />
-                        {company.site_url}
+                        {company.site_url.slice(0, 30)}
                     </InfoItem>
                 )}
                 {company.telegram && (
