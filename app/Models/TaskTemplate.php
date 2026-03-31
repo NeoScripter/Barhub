@@ -36,6 +36,19 @@ final class TaskTemplate extends Model
             if ($taskTemplate->file_url) {
                 Storage::delete($taskTemplate->file_url);
             }
+
+            $exhibition = $taskTemplate->exhibition;
+
+            $exhibition->companies()->each(function ($company) use ($taskTemplate): void {
+                $company->tasks()->each(function ($task) use ($taskTemplate) {
+                    if (
+                        $task->title === $taskTemplate->title
+                        && $task->description === $taskTemplate->description
+                    ) {
+                        $task->delete();
+                    }
+                });
+            });
         });
     }
 }

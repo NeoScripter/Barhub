@@ -5,6 +5,7 @@ declare(strict_types=1);
 use App\Enums\UserRole;
 use App\Models\Company;
 use App\Models\Exhibition;
+use App\Models\Task;
 use App\Models\TaskTemplate;
 use App\Models\User;
 use Illuminate\Http\UploadedFile;
@@ -216,6 +217,34 @@ describe('Admin Task Template Permission Test', function (): void {
 
 
 describe('Admin Task Template Test', function (): void {
+    it('deletes all the tasks created from task template after the task template was deleted', function (): void {
+
+        assertDatabaseCount('task_templates', 0);
+
+        $admin = User::factory()->create();
+        $admin->assignRole(UserRole::ADMIN);
+
+        $exhibition = Exhibition::factory()->create();
+        $exhibition->users()->attach($admin->id);
+
+        $template = TaskTemplate::factory()->for($exhibition)->create();
+
+        assertDatabaseCount('task_templates', 2);
+        assertDatabaseCount('tasks', 0);
+
+        $company = Company::factory()->for($exhibition)->create();
+
+        Task::factory()->for($company)->create();
+
+        assertDatabaseCount('tasks', 3);
+
+        $this->actingAs($admin)
+            ->delete(route('admin.task-templates.destroy', ['task_template' => $template]));
+
+        assertDatabaseCount('tasks', 2);
+    });
+
+
     it('creates a list of new tasks for this exhibition when a new exponent is created based on the current task templates', function (): void {
         assertDatabaseCount('task_templates', 0);
 

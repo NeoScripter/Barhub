@@ -84,4 +84,11 @@ final class Task extends Model
             'status' => TaskStatus::class,
         ];
     }
+
+    protected static function booted(): void
+    {
+        self::deleting(function (Task $task): void {
+            $task->comments()->each(fn($comment) => $comment->delete());
+        });
+    }
 }

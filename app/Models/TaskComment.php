@@ -29,4 +29,11 @@ final class TaskComment extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    protected static function booted(): void
+    {
+        self::deleting(function (TaskComment $comment): void {
+            $comment->file?->delete();
+        });
+    }
 }
