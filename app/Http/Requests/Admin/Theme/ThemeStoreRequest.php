@@ -25,7 +25,6 @@ final class ThemeStoreRequest extends FormRequest
     {
         return [
             'name.required' => 'Введите название направления',
-            'name.unique' => 'Направление с таким названием уже существует',
             'name.max' => 'Название не должно превышать 50 символов',
             'color_hex.required' => 'Выберите цвет',
             'color_hex.regex' => 'Неверный формат цвета',

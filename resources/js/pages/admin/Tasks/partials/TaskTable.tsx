@@ -7,7 +7,7 @@ import TaskController from '@/wayfinder/App/Http/Controllers/Admin/TaskControlle
 import { App } from '@/wayfinder/types';
 import { Link } from '@inertiajs/react';
 import { VisuallyHidden } from '@radix-ui/react-visually-hidden';
-import { PencilLine } from 'lucide-react';
+import { Eye, PencilLine } from 'lucide-react';
 import { FC } from 'react';
 
 const TaskTable: FC<
@@ -19,6 +19,8 @@ const TaskTable: FC<
     if (!tasks) {
         return null;
     }
+
+    console.log(tasks)
 
     return (
         <Table.Body
@@ -57,7 +59,7 @@ const TaskTable: FC<
                         <Link
                             data-test={`edit-task-${task.id}`}
                             href={
-                                task.status !== 'На проверке'
+                                task.status === 'Ожидает выполнения'
                                     ? TaskController.edit({
                                           task: task.id,
                                           company: company,
@@ -68,9 +70,16 @@ const TaskTable: FC<
                             }
                         >
                             <VisuallyHidden>
-                                Редактировать задачу
+                                {task.status === 'Ожидает выполнения'
+                                    ? 'Редактировать задачу'
+                                    : 'Посмотреть задачу'}{' '}
                             </VisuallyHidden>
-                            <PencilLine />
+                            {/* Status is to be verified */}
+                            {task.status === 'Ожидает выполнения' ? (
+                                <PencilLine />
+                            ) : (
+                                <Eye />
+                            )}
                         </Link>
                     </Table.Cell>
                 </Table.Row>

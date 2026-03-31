@@ -73,7 +73,7 @@ final class TaskController extends Controller
             'status' => TaskStatus::TO_BE_COMPLETED,
         ]);
 
-        if ($request->filled('comment')) {
+        if ($request->filled('comment') || $request->hasFile('file')) {
             $comment = $task->comments()->create([
                 'content' => $request->validated('comment'),
             ]);
@@ -98,7 +98,7 @@ final class TaskController extends Controller
 
         $task->update($request->only(['title', 'description', 'deadline']));
 
-        if ($request->filled('comment')) {
+        if ($request->filled('comment') || $request->hasFile('file')) {
             $user = Auth::user();
             $comment = $task->comments()->where('user_id', $user->id)
                 ->latest()

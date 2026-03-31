@@ -32,6 +32,8 @@ const Edit: FC<Inertia.Pages.Admin.Tasks.Edit> = ({ task }) => {
         });
     };
 
+    console.log(task.comments)
+
     return (
         <div className="mx-auto w-full max-w-250">
             <div className="mb-8 text-center md:mb-12">
@@ -39,7 +41,7 @@ const Edit: FC<Inertia.Pages.Admin.Tasks.Edit> = ({ task }) => {
                     asChild
                     className="mb-1 text-lg text-secondary"
                 >
-                    <h2>Описать выполнение задачи</h2>
+                    <h2>Ответ на задачу</h2>
                 </AccentHeading>
             </div>
 
