@@ -39,6 +39,9 @@ final class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
+        $exhibition = $request['exhibition'] ??
+            $request->user()?->getActiveExhibition();
+
         return [
             ...parent::share($request),
             'name' => config('app.name'),
@@ -46,7 +49,7 @@ final class HandleInertiaRequests extends Middleware
                 'user' => $request->user(),
             ],
             'isProd' => app()->isProduction(),
-            'exhibition' => $request->user()?->getActiveExhibition(),
+            'exhibition' => $exhibition,
         ];
     }
 }
