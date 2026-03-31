@@ -31,16 +31,16 @@ jobs:
             rm -rf bootstrap/cache && \
             mkdir -p bootstrap/cache && \
             mkdir -p storage/framework/cache && \
-            php artisan optimize:clear && \
+            php8.5 artisan optimize:clear && \
             composer dump-autoload && \
             pnpm install && \
             pnpm run build && \
-            php artisan config:clear && \
-            php artisan view:clear && \
-            php artisan route:clear && \
-            php artisan config:cache && \
-            php artisan route:cache && \
-            php artisan view:cache && \
-            sudo service php8.3-fpm restart
+            php8.5 artisan config:clear && \
+            php8.5 artisan view:clear && \
+            php8.5 artisan route:clear && \
+            php8.5 artisan config:cache && \
+            php8.5 artisan route:cache && \
+            php8.5 artisan view:cache && \
+            sudo service php8.5-fpm restart
             "
 
