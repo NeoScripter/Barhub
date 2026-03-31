@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Http\Requests\Admin\Stage;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
 final class StageStoreRequest extends FormRequest
 {
@@ -17,7 +16,7 @@ final class StageStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['required', 'string', 'min:1', 'max:150', Rule::unique('stages', 'name')],
+            'name' => ['required', 'string', 'min:1', 'max:150'],
         ];
     }
 
