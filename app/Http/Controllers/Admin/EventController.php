@@ -56,6 +56,7 @@ final class EventController extends Controller
                 ->get(),
             'themes' => $exhibition
                 ->themes()
+                ->withCount('events')
                 ->get(),
         ]);
     }

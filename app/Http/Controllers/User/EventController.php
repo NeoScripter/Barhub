@@ -34,17 +34,16 @@ final class EventController extends Controller
         $allEvents = $exhibition->events()->with(['stage', 'themes'])->get();
 
         /** @var string[] $themes */
-        $themes = $allEvents
-            ->pluck('themes')
-            ->flatten()
+        $themes = $exhibition
+            ->themes()
             ->pluck('name')
-            ->unique()
             ->values();
 
         /** @var string[] $stages */
-        $stages = Stage::query()
-            ->distinct()
-            ->pluck('name');
+        $stages = $exhibition
+            ->stages()
+            ->pluck('name')
+            ->values();
 
         /** @var string[] $days */
         $days = $allEvents
