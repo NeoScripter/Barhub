@@ -12,6 +12,15 @@ import Instagram from './partials/Instagram';
 const Index: FC<Inertia.Pages.Exponent.Companies.Index> = ({ company }) => {
     return (
         <div className="space-y-8 md:space-y-11 2xl:space-y-13">
+            <div className="mb-8 text-center md:mb-12">
+                <AccentHeading
+                    asChild
+                    className="mb-1 text-lg text-secondary"
+                >
+                    <h2>Информация о компании  для сайта и приложения</h2>
+                </AccentHeading>
+            </div>
+
             <div className="flex flex-col items-center justify-between gap-4 sm:flex-row">
                 <div className="flex flex-col items-center gap-4 sm:flex-row sm:gap-9">
                     {company.logo && (
