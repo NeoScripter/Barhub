@@ -25,8 +25,10 @@ final class ThemeSeeder extends Seeder
         $exhibitions = Exhibition::all();
 
         $exhibitions->each(function ($exhibition) use ($data) {
-            foreach ($data as $theme) {
-                Theme::factory($theme)->for($exhibition)->create();
+            $event = $exhibition->events()->first();
+            foreach ($data as $name) {
+                $theme = Theme::factory($name)->for($exhibition)->create();
+                $theme->events()->attach($event->id);
             }
         });
     }

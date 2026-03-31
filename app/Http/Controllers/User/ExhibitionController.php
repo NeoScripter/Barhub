@@ -14,7 +14,7 @@ final class ExhibitionController extends Controller
     {
         $expos = Exhibition::query()->select(['name', 'id'])->get();
 
-        return Inertia::render('user/Exhibitions/Index', [
+        return Inertia::render('user/Exhibitions', [
             'expos' => $expos,
         ]);
     }

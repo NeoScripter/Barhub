@@ -9,19 +9,16 @@ use App\Models\Event;
 use App\Models\Exhibition;
 use App\Models\Person;
 use App\Models\Stage;
-use App\Models\Theme;
 use Illuminate\Database\Seeder;
 
 final class EventSeeder extends Seeder
 {
     public function run(): void
     {
-        $stages = Stage::all();
-        $themes = Theme::all();
         $exhibitions = Exhibition::all();
 
-        if ($stages->isEmpty() || $themes->isEmpty() || $exhibitions->isEmpty()) {
-            $this->command->error('Missing required data. Run Stage, Theme, and Exhibition seeders first.');
+        if ($exhibitions->isEmpty()) {
+            $this->command->error('Missing required data. Run Exhibition seeders first.');
 
             return;
         }
@@ -30,8 +27,6 @@ final class EventSeeder extends Seeder
             fn(Exhibition $exhibition) => Event::factory()
                 ->count(2)
                 ->for($exhibition)
-                ->for($stages->random())
-                ->hasAttached($themes->random(random_int(1, 3)))
                 ->afterCreating(function (Event $event) use ($exhibition): void {
                     $peopleCount = 2;
 

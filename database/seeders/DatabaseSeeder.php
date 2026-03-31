@@ -16,10 +16,10 @@ final class DatabaseSeeder extends Seeder
         $this->call([
             UserSeeder::class,
             ExhibitionSeeder::class,
-            ThemeSeeder::class,
             TagSeeder::class,
-            StageSeeder::class,
             EventSeeder::class,
+            ThemeSeeder::class,
+            StageSeeder::class,
             CompanySeeder::class,
             TaskTemplateSeeder::class,
             InfoItemSeeder::class,
