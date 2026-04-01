@@ -23,9 +23,9 @@ final class CreateTasksFromTemplates
                     'status'      => TaskStatus::TO_BE_COMPLETED,
                 ]);
 
-                if ($template->comment) {
+                if ($template->comment || $template->file_url) {
                     $comment = $task->comments()->create([
-                        'content' => $template->comment,
+                        'content' => $template->comment ?? null,
                     ]);
 
                     if ($template->file_url) {

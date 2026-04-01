@@ -15,6 +15,7 @@ class CompanyController extends Controller
         // TODO: find a general partner by tag
         return Inertia::render('user/Companies/Index', [
             'companies' => $exhibition->companies()
+                ->with('tags')
                 ->withSearch(
                     'public_name',
                     $request->string('search')

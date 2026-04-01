@@ -14,6 +14,8 @@ final class Tag extends Model
     /** @use HasFactory<TagFactory> */
     use HasFactory;
 
+    protected $withCount = ['companies'];
+
     public function companies(): BelongsToMany
     {
         return $this->belongsToMany(Company::class);
