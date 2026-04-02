@@ -98,7 +98,7 @@ final class CompanyController extends Controller
     {
         $tags = Tag::query()->orderBy('name')->get();
 
-        $company->load(['tags']);
+        $company->load(['tags', 'exhibition']);
 
         return Inertia::render('admin/Companies/Edit', [
             'company' => $company,

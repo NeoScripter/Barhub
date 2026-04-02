@@ -10,6 +10,7 @@ import RadioCheckbox from '@/components/ui/RadioCheckbox';
 import { Spinner } from '@/components/ui/Spinner';
 import { Textarea } from '@/components/ui/Textarea';
 import CompanyLayout from '@/layouts/app/CompanyLayout';
+import CompanyController from '@/wayfinder/App/Http/Controllers/User/CompanyController';
 import { Inertia } from '@/wayfinder/types';
 import { router, useForm } from '@inertiajs/react';
 import { Trash2 } from 'lucide-react';
@@ -63,7 +64,12 @@ const Edit: FC<Inertia.Pages.Admin.Companies.Edit> = ({ company, tags }) => {
             <div className="mx-auto w-full max-w-250">
                 <div className="mb-8 flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
                     <CopyLinkBtn
-                        url={`${window.location.origin}/companies/${company.id}`}
+                        url={
+                            window.origin + CompanyController.show({
+                                exhibition: company.exhibition!,
+                                company: company.id,
+                            }).url
+                        }
                     />
 
                     <DeleteAlertDialog
@@ -155,7 +161,7 @@ const Edit: FC<Inertia.Pages.Admin.Companies.Edit> = ({ company, tags }) => {
 
                         <AccentHeading
                             asChild
-                            className="text-center py-4 text-lg text-secondary md:col-span-2"
+                            className="py-4 text-center text-lg text-secondary md:col-span-2"
                         >
                             <h3>Контакты на сайте</h3>
                         </AccentHeading>
@@ -288,7 +294,7 @@ const Edit: FC<Inertia.Pages.Admin.Companies.Edit> = ({ company, tags }) => {
                         </div>
                         <AccentHeading
                             asChild
-                            className="text-center py-4 text-lg text-secondary md:col-span-2"
+                            className="py-4 text-center text-lg text-secondary md:col-span-2"
                         >
                             <h3>Активности на стенде</h3>
                         </AccentHeading>

@@ -21,6 +21,7 @@ import { FC, useState } from 'react';
 import { toast } from 'sonner';
 import { PersonSelect, PersonWithRoles } from './partials/PersonSelect';
 import { ThemeSelect } from './partials/ThemeSelect';
+import EventController from '@/wayfinder/App/Http/Controllers/User/EventController';
 
 const Edit: FC<Inertia.Pages.Admin.Events.Edit> = ({
     event,
@@ -79,7 +80,7 @@ const Edit: FC<Inertia.Pages.Admin.Events.Edit> = ({
 
             <div className="mb-8 flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
                 <CopyLinkBtn
-                    url={`${window.location.origin}/events/${event.id}`}
+                    url={window.origin + EventController.show({exhibition: event.exhibition!, event: event.id}).url}
                 />
 
                 <DeleteAlertDialog
