@@ -31,16 +31,22 @@ const EventCard: FC<
                     'group slide-down-parent relative w-full items-start gap-6 text-foreground transition-transform duration-150 ease-in-out hover:scale-105 sm:gap-9 lg:flex-row',
                 )}
             >
-                <Link className='absolute inset-0' href={show({ exhibition, event }).url} />
+                <Link
+                    className="absolute inset-0"
+                    href={show({ exhibition, event }).url}
+                />
                 <div className="flex flex-col items-start gap-6 sm:w-full sm:flex-row sm:justify-between lg:gap-10">
                     <EventDateInfo
                         event={event}
                         className="sm:w-53 lg:w-30 2xl:w-40"
                     />
 
-                    <p className="text-sm font-bold sm:shrink-100 sm:text-base lg:text-sm 2xl:text-base">
-                        {shortenDescription(event.description)}
-                    </p>
+                    <div className="text-sm sm:shrink-100 sm:text-base lg:text-sm 2xl:text-base">
+                        <p className="mb-2 font-bold text-lg 2xl:text-xl">{event.title}</p>
+                        <p>
+                            {shortenDescription(event.description)}
+                        </p>
+                    </div>
                 </div>
 
                 <div className="flex flex-col items-start gap-6 sm:w-full sm:flex-row lg:gap-2 xl:gap-6 2xl:gap-8">
