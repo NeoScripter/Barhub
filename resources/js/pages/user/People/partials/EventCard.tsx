@@ -32,7 +32,7 @@ const EventCard: FC<
                         className="sm:w-53 lg:w-30 2xl:w-40"
                     />
                     <h4 className="text-lg font-bold text-primary">
-                        asd ads dsad{event.title}
+                        {event.title}
                     </h4>
                 </div>
             </CardLayout>

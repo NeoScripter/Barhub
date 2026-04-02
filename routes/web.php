@@ -41,7 +41,7 @@ Route::prefix('/exhibitions/{exhibition}')
     ->group(function (): void {
         Route::resource('events', UserEventController::class)->only(['index', 'show']);
         Route::resource('companies', UserCompanyController::class)->only(['index', 'show']);
-        Route::resource('people', UserPersonController::class)->only(['show']);
+        Route::resource('people', UserPersonController::class)->only(['index', 'show']);
     });
 
 Route::prefix('/exponent')

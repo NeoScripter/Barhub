@@ -25,6 +25,7 @@ import {
     CreditCard
 } from 'lucide-react';
 import CompanyController from '@/wayfinder/App/Http/Controllers/User/CompanyController';
+import PersonController from '@/wayfinder/App/Http/Controllers/User/PersonController';
 
 type NavLink = {
     id: string;
@@ -184,7 +185,7 @@ export const userNavItems: NavItemType[] = [
         id: 'people',
         type: 'link',
         label: 'Спикеры и организаторы',
-        url: '/',
+        url: PersonController.index.url({exhibition: 1}),
         icon: Users,
     },
     {

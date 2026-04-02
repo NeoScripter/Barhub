@@ -8,10 +8,10 @@ import { Calendar, MapPin } from 'lucide-react';
 import { FC } from 'react';
 import PersonCard from './partials/PersonCard';
 
-const Show: FC<{ event: App.Models.Event; exhibition: App.Models.Exhibition }> = ({
-    event,
-    exhibition,
-}) => {
+const Show: FC<{
+    event: App.Models.Event;
+    exhibition: App.Models.Exhibition;
+}> = ({ event, exhibition }) => {
     return (
         <div className="space-y-10 sm:space-y-14 xl:space-y-18">
             <CardLayout className="w-full items-start gap-5 px-7 py-9 lg:gap-8 lg:px-10 lg:py-11">
@@ -47,7 +47,7 @@ const Show: FC<{ event: App.Models.Event; exhibition: App.Models.Exhibition }> =
             </CardLayout>
 
             {event.people && (
-                <ul className="mx-auto grid max-w-90 gap-8 sm:max-w-full xl:grid-cols-2">
+                <ul className="mx-auto grid max-w-90 gap-8 sm:max-w-full sm:grid-cols-[repeat(auto-fit,minmax(28rem,1fr))]">
                     {event.people.map((person) => (
                         <PersonCard
                             key={person.id}

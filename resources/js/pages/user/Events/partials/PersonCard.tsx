@@ -1,5 +1,4 @@
 import CardLayout from '@/components/layout/CardLayout';
-import { Button } from '@/components/ui/Button';
 import Image from '@/components/ui/Image';
 import { cn } from '@/lib/utils';
 import { NodeProps } from '@/types/shared';
@@ -15,10 +14,14 @@ const PersonCard: FC<
         <li>
             <CardLayout
                 className={cn(
-                    'w-full gap-7 px-7 py-7! text-foreground sm:flex-row sm:justify-between lg:gap-8 lg:px-10 lg:py-11! xl:flex-col xl:items-end',
+                    'relative w-full gap-7 px-7 py-7! text-foreground transition-transform duration-150 ease-in-out hover:scale-103 hover:ring-2 hover:ring-primary sm:flex-row sm:justify-between lg:gap-8 lg:px-10 lg:py-11! xl:flex-col xl:items-end',
                     className,
                 )}
             >
+                <Link
+                    className="absolute inset-0"
+                    href={show({ exhibition, person })}
+                />
                 <div className="sm:flex sm:gap-5">
                     {person.avatar && (
                         <Image
@@ -43,13 +46,6 @@ const PersonCard: FC<
                         )}
                     </div>
                 </div>
-
-                <Button
-                    asChild
-                    variant="accent"
-                >
-                    <Link href={show({ exhibition, person })}>Подробнее</Link>
-                </Button>
             </CardLayout>
         </li>
     );
