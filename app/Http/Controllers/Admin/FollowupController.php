@@ -23,7 +23,7 @@ final class FollowupController extends Controller
         $followups = QueryBuilder::for(Followup::query()->select(['followups.comment', 'followups.status', 'followups.id'])
             ->forExhibition($exhibition->id))
             ->with('company')
-            ->where('status', '!=', FollowupStatus::COMPLETED)
+            ->where('status', FollowupStatus::INCOMPLETE)
             ->allowedSorts([
                 'name',
                 AllowedSort::custom('company.public_name', new RelationSort('companies', 'public_name', 'company_id')),
