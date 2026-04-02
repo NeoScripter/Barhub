@@ -5,8 +5,12 @@ import { FC } from 'react';
 
 import InfoItem from '@/pages/exponent/Companies/partials/InfoItem';
 import { App } from '@/wayfinder/types';
+import EventCard from './partials/EventCard';
 
-const Show: FC<{ person: App.Models.Person }> = ({ person }) => {
+const Show: FC<{
+    person: App.Models.Person;
+    exhibition: App.Models.Exhibition;
+}> = ({ person, exhibition }) => {
     return (
         <div className="space-y-12 md:space-y-14 2xl:space-y-16">
             <div className="flex flex-wrap items-start justify-between gap-4 sm:flex-row sm:gap-9 xl:items-center">
@@ -55,6 +59,16 @@ const Show: FC<{ person: App.Models.Person }> = ({ person }) => {
                     <h2>Лекции:</h2>
                 </AccentHeading>
             </div>
+
+            <ul className="grid items-stretch gap-5 sm:grid-cols-[repeat(auto-fit,minmax(20rem,1fr))]">
+                {person.events?.map((event) => (
+                    <EventCard
+                        key={event.id}
+                        event={event}
+                        exhibition={exhibition}
+                    />
+                ))}
+            </ul>
         </div>
     );
 };

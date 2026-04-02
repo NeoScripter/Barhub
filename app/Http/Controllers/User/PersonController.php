@@ -14,6 +14,13 @@ final class PersonController extends Controller
 {
     public function show(Exhibition $exhibition, Person $person)
     {
+        $person->load('events');
+
+        $person->events->transform(function ($event) {
+            $event->role_label =
+                PersonRole::from($event->pivot->role)->label();
+            return $event;
+        });
 
         return Inertia::render('user/People/Show', [
             'exhibition' => $exhibition,
