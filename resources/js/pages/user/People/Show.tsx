@@ -60,7 +60,7 @@ const Show: FC<{
                 </AccentHeading>
             </div>
 
-            <ul className="grid items-stretch gap-5 sm:grid-cols-[repeat(auto-fit,minmax(20rem,1fr))]">
+            <ul className="grid items-stretch gap-5 sm:grid-cols-[repeat(auto-fill,minmax(20rem,1fr))]">
                 {person.events?.map((event) => (
                     <EventCard
                         key={event.id}

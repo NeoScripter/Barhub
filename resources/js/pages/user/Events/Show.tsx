@@ -47,7 +47,7 @@ const Show: FC<{
             </CardLayout>
 
             {event.people && (
-                <ul className="mx-auto grid max-w-90 gap-8 sm:max-w-full sm:grid-cols-[repeat(auto-fit,minmax(28rem,1fr))]">
+                <ul className="mx-auto grid max-w-90 gap-8 sm:max-w-full sm:grid-cols-[repeat(auto-fill,minmax(28rem,1fr))]">
                     {event.people.map((person) => (
                         <PersonCard
                             key={person.id}
