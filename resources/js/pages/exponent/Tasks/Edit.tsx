@@ -72,7 +72,7 @@ const Edit: FC<Inertia.Pages.Admin.Tasks.Edit> = ({ task }) => {
                             {comment.file && (
                                 <DownloadFileLink
                                     className="my-4"
-                                    href={`/${comment.file?.url}`}
+                                    href={`/storage/${comment.file?.url}`}
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     filename={comment.file?.name}

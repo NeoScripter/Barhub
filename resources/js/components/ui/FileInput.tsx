@@ -72,7 +72,7 @@ export default function FileInput({
                 <div>
                     {currentFilename || src ? (
                         <DownloadFileLink
-                            href={isUpdated ? undefined : `/${src}`}
+                            href={isUpdated ? undefined : `/storage/${src}`}
                             target="_blank"
                             rel="noopener noreferrer"
                             filename={currentFilename}
