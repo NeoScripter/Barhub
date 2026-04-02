@@ -39,7 +39,7 @@ const Index: FC<{
                 <SearchInput placeholder="Поиск по партнерам" />
             </header>
 
-            <ul className="grid grid-cols-[repeat(auto-fill,minmax(14rem,1fr))] gap-8">
+            <ul className="grid grid-cols-[repeat(auto-fill,minmax(15rem,1fr))] gap-8">
                 {companies?.map((company, idx) => (
                     <li
                         key={company.id}
