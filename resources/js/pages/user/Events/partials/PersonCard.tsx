@@ -10,6 +10,7 @@ import { FC } from 'react';
 const PersonCard: FC<
     NodeProps<{ person: App.Models.Person; exhibition: App.Models.Exhibition }>
 > = ({ className, exhibition, person }) => {
+
     return (
         <li>
             <CardLayout

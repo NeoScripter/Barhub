@@ -8,29 +8,58 @@ use App\Enums\PersonRole;
 use App\Http\Controllers\Controller;
 use App\Models\Exhibition;
 use App\Models\Person;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 
 final class PersonController extends Controller
 {
-    public function index(Exhibition $exhibition)
+    public function index(Request $request, Exhibition $exhibition)
     {
-        $people = $exhibition->people()
-            ->with(['events' => function ($query) use ($exhibition) {
-                $query->withPivot('role')
-                    ->whereHas('exhibition', fn($q) => $q->where('exhibitions.id', $exhibition->id));
-            }])
-            ->get()
-            ->transform(function ($person) {
-                $firstRole = $person->events->first()?->pivot?->role;
-                $person->role_label = $firstRole
-                    ? PersonRole::from($firstRole)->label()
-                    : null;
-                return $person;
-            });
+        $roles = array_filter(
+            explode(',', $request->input('filter.roles', ''))
+        );
+
+        $query = empty($roles) ? '' :
+            "and pivot2.role in (" . implode(',', array_fill(0, count($roles), '?')) . ")";
+
+        $people = DB::select(
+            '
+            select p.id, p.name, p.regalia, p.bio, p.telegram,
+            group_concat(distinct pivot2.role) as roles from people as p
+            join exhibition_person as pivot1
+            on pivot1.person_id = p.id
+            join event_person as pivot2
+            on pivot2.person_id = p.id
+            where pivot1.exhibition_id = ?'
+                . $query . ' group by p.id',
+            array_merge([$exhibition->id],  $roles)
+        );
+
+        $roles = DB::select('select distinct role from event_person');
+
+        $roles = array_map(
+            fn($role) => [
+                'label' => PersonRole::from((int) $role->role)->label(),
+                'key' => (string) $role->role
+            ],
+            $roles
+        );
+
+        foreach ($people as $person) {
+            $person->role_label = implode(
+                ', ',
+                array_map(
+                    fn($role) => PersonRole::from((int) $role)->label(),
+                    explode(',', $person->roles)
+                )
+            );
+        }
 
         return Inertia::render('user/People/Index', [
             'exhibition' => $exhibition,
             'people' => $people,
+            'roles' => $roles,
         ]);
     }
 
