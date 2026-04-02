@@ -5,10 +5,12 @@ declare(strict_types=1);
 namespace App\Http\Controllers\User;
 
 use App\Actions\AttachRolesToPeople;
+use App\Enums\PersonRole;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\User\EventIndexRequest;
 use App\Models\Event;
 use App\Models\Exhibition;
+use App\Models\Person;
 use App\Models\Stage;
 use Inertia\Inertia;
 use Spatie\QueryBuilder\AllowedFilter;
@@ -64,6 +66,15 @@ final class EventController extends Controller
 
     public function show(Exhibition $exhibition, Event $event)
     {
+        $event->load(['stage', 'themes',
+            'people' => fn($query) => $query->withPivot('role')]);
+
+        $event->people->transform(function ($person) {
+            $person->role_label =
+                PersonRole::from($person->pivot->role)->label();
+            return $person;
+        });
+
         return Inertia::render('user/Events/Show', [
             'exhibition' => $exhibition,
             'event' => $event,

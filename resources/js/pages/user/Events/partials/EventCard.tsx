@@ -3,15 +3,22 @@ import ThemeBadge from '@/components/ui/ThemeBadge';
 import { paddingStyles } from '@/lib/consts/styles';
 import { cn, shortenDescription } from '@/lib/utils';
 import { NodeProps } from '@/types/shared';
+import { show } from '@/wayfinder/routes/events';
 import { App } from '@/wayfinder/types';
+import { Link } from '@inertiajs/react';
 import { ComponentProps, FC } from 'react';
 import EventDateInfo from './EventDateInto';
 import LogoAccordion from './LogoAccordion';
 import PersonCardAccordion from './PersonCardAccordion';
 
 const EventCard: FC<
-    NodeProps<{ event: App.Models.Event } & ComponentProps<'li'>>
-> = ({ className, event, ...props }) => {
+    NodeProps<
+        {
+            event: App.Models.Event;
+            exhibition: App.Models.Exhibition;
+        } & ComponentProps<'li'>
+    >
+> = ({ className, event, exhibition, ...props }) => {
     return (
         <li
             {...props}
@@ -21,9 +28,10 @@ const EventCard: FC<
                 className={cn(
                     className,
                     paddingStyles,
-                    'group slide-down-parent w-full items-start gap-6 text-foreground transition-transform duration-150 ease-in-out hover:scale-105 sm:items-center sm:gap-9 lg:flex-row',
+                    'group slide-down-parent relative w-full items-start gap-6 text-foreground transition-transform duration-150 ease-in-out hover:scale-105 sm:items-center sm:gap-9 lg:flex-row',
                 )}
             >
+                <Link className='absolute inset-0' href={show({ exhibition, event }).url} />
                 <div className="flex flex-col items-start gap-6 sm:w-full sm:flex-row sm:justify-between lg:gap-10">
                     <EventDateInfo
                         event={event}

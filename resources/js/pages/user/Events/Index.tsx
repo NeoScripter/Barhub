@@ -4,7 +4,7 @@ import { FC } from 'react';
 import EventCard from './partials/EventCard';
 import EventFilters from './partials/EventFilters';
 
-const Index: FC<Inertia.Pages.User.Events.Index> = ({ events }) => {
+const Index: FC<Inertia.Pages.User.Events.Index> = ({ events, exhibition }) => {
     return (
         <div className="spacing grid">
             <EventFilters />
@@ -20,6 +20,7 @@ const Index: FC<Inertia.Pages.User.Events.Index> = ({ events }) => {
                             <EventCard
                                 key={event.id}
                                 event={event}
+                                exhibition={exhibition}
                                 style={{ zIndex: events.length - index }}
                             />
                         ))}

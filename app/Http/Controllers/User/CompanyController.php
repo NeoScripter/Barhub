@@ -12,7 +12,6 @@ class CompanyController extends Controller
 {
     public function index(Request $request, Exhibition $exhibition)
     {
-        // TODO: find a general partner by tag
         return Inertia::render('user/Companies/Index', [
             'companies' => $exhibition->companies()
                 ->with('tags')
