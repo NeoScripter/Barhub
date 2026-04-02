@@ -28,7 +28,7 @@ const EventCard: FC<
                 className={cn(
                     className,
                     paddingStyles,
-                    'group slide-down-parent relative w-full items-start gap-6 text-foreground transition-transform duration-150 ease-in-out hover:scale-105 sm:items-center sm:gap-9 lg:flex-row',
+                    'group slide-down-parent relative w-full items-start gap-6 text-foreground transition-transform duration-150 ease-in-out hover:scale-105 sm:gap-9 lg:flex-row',
                 )}
             >
                 <Link className='absolute inset-0' href={show({ exhibition, event }).url} />

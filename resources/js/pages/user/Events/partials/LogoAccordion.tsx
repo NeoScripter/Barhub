@@ -3,7 +3,6 @@ import { cn } from '@/lib/utils';
 import { NodeProps } from '@/types/shared';
 import { App } from '@/wayfinder/types';
 import { FC } from 'react';
-import AccordionLayout from './AccordionLayout';
 
 const LogoAccordion: FC<NodeProps<{ event: App.Models.Event }>> = ({
     event,
@@ -12,19 +11,7 @@ const LogoAccordion: FC<NodeProps<{ event: App.Models.Event }>> = ({
 
     return (
         <div className="relative isolate max-w-31 shrink-0 bg-white md:mr-10 lg:mr-4 lg:max-w-20 2xl:mr-6 2xl:max-w-30">
-            {people &&
-                people.slice(0, 1).map(
-                    (person) =>
-                        person.logo && (
-                            <Image
-                                key={person.id}
-                                imgStyles="object-contain"
-                                wrapperStyles="w-31 bg-white lg:w-20 2xl:w-30"
-                                image={person.logo}
-                            />
-                        ),
-                )}
-            <AccordionLayout className="gap-4 lg:gap-6 2xl:gap-4">
+            <ul className="flex flex-col justify-between gap-4 sm:gap-6 lg:gap-10 2xl:gap-7">
                 {people &&
                     people.map((person, idx) => (
                         <li key={`${person.id} ${idx}`}>
@@ -32,7 +19,6 @@ const LogoAccordion: FC<NodeProps<{ event: App.Models.Event }>> = ({
                                 <Image
                                     wrapperStyles={cn(
                                         'w-31 bg-white lg:w-20 2xl:w-30',
-                                        idx === 0 && 'hidden sm:block',
                                     )}
                                     imgStyles="object-contain"
                                     image={person.logo}
@@ -40,7 +26,7 @@ const LogoAccordion: FC<NodeProps<{ event: App.Models.Event }>> = ({
                             )}
                         </li>
                     ))}
-            </AccordionLayout>
+            </ul>
         </div>
     );
 };
