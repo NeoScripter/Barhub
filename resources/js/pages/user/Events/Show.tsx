@@ -8,7 +8,10 @@ import { Calendar, MapPin } from 'lucide-react';
 import { FC } from 'react';
 import PersonCard from './partials/PersonCard';
 
-const Show: FC<{ event: App.Models.Event }> = ({ event }) => {
+const Show: FC<{ event: App.Models.Event; exhibition: App.Models.Exhibition }> = ({
+    event,
+    exhibition,
+}) => {
     return (
         <div className="space-y-10 sm:space-y-14 xl:space-y-18">
             <CardLayout className="w-full items-start gap-5 px-7 py-9 lg:gap-8 lg:px-10 lg:py-11">
@@ -49,6 +52,7 @@ const Show: FC<{ event: App.Models.Event }> = ({ event }) => {
                         <PersonCard
                             key={person.id}
                             person={person}
+                            exhibition={exhibition}
                             className="rounded-lg px-5 py-3 text-base"
                         />
                     ))}

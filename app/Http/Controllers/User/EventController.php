@@ -10,8 +10,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\User\EventIndexRequest;
 use App\Models\Event;
 use App\Models\Exhibition;
-use App\Models\Person;
-use App\Models\Stage;
 use Inertia\Inertia;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;

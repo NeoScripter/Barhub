@@ -27,6 +27,7 @@ use App\Http\Controllers\Exponent\TaskController as ExponentTaskControlller;
 use App\Http\Controllers\Exponent\InfoItemController as ExponentInfoItemController;
 use App\Http\Controllers\Exponent\CompanyController as ExponentCompanyController;
 use App\Http\Controllers\User\EventController as UserEventController;
+use App\Http\Controllers\User\PersonController as UserPersonController;
 use App\Http\Controllers\User\CompanyController as UserCompanyController;
 use App\Http\Controllers\User\ExhibitionController as UserExhibitionController;
 use App\Http\Controllers\User\HomeController;
@@ -40,6 +41,7 @@ Route::prefix('/exhibitions/{exhibition}')
     ->group(function (): void {
         Route::resource('events', UserEventController::class)->only(['index', 'show']);
         Route::resource('companies', UserCompanyController::class)->only(['index', 'show']);
+        Route::resource('people', UserPersonController::class)->only(['show']);
     });
 
 Route::prefix('/exponent')
