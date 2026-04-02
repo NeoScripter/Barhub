@@ -30,6 +30,7 @@ const CompanyTable: FC<
                             <Image
                                 image={company.logo}
                                 wrapperStyles="size-16"
+                                imgStyles='object-contain'
                             />
                         )}
                     </Table.Cell>

@@ -27,6 +27,7 @@ const PersonTable: FC<
                         {person.avatar && (
                             <Image
                                 image={person.avatar}
+                                imgStyles='object-contain'
                                 wrapperStyles="size-16"
                             />
                         )}

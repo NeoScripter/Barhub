@@ -13,22 +13,22 @@ const InfoItemCard: FC<NodeProps<{ item: App.Models.InfoItem }>> = ({
         <li>
             <CardLayout
                 className={cn(
-                    'relative mx-auto w-full hover:scale-104 transition-transform max-w-100 p-4',
+                    'relative mx-auto w-full max-w-100 p-4 transition-transform hover:scale-104',
                     className,
                 )}
             >
                 {item.image && (
                     <Image
                         image={item.image}
+                        imgStyles="object-contain"
                         wrapperStyles="size-15 my-2 2xl:size-20"
                     />
                 )}
                 <a
                     href={item.url}
                     target="_blank"
-                    className='absolute inset-0'
-                >
-                </a>
+                    className="absolute inset-0"
+                ></a>
                 <div className="flex-1">
                     <p className="mt-1 font-medium text-foreground transition-colors 2xl:text-lg">
                         {item.title}

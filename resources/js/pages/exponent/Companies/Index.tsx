@@ -17,7 +17,7 @@ const Index: FC<Inertia.Pages.Exponent.Companies.Index> = ({ company }) => {
                     asChild
                     className="mb-1 text-lg text-secondary"
                 >
-                    <h2>Информация о компании  для сайта и приложения</h2>
+                    <h2>Информация о компании для сайта и приложения</h2>
                 </AccentHeading>
             </div>
 
@@ -26,6 +26,7 @@ const Index: FC<Inertia.Pages.Exponent.Companies.Index> = ({ company }) => {
                     {company.logo && (
                         <Image
                             wrapperStyles="max-w-50 xl:max-w-62"
+                            imgStyles="object-contain"
                             image={company.logo}
                         />
                     )}

@@ -1,8 +1,11 @@
 import FormButtons from '@/components/form/FormButtons';
+import InputError from '@/components/form/InputError';
 import AccentHeading from '@/components/ui/AccentHeading';
 import DownloadFileLink from '@/components/ui/DownloadFileLink';
+import { Label } from '@/components/ui/Label';
 import LabeledContent from '@/components/ui/LabeledContent';
 import RadioLabeled from '@/components/ui/RadioLabeled';
+import { Textarea } from '@/components/ui/Textarea';
 import { formatDateAndTime } from '@/lib/utils';
 import PartnerController from '@/wayfinder/App/Http/Controllers/Admin/PartnerController';
 import { update } from '@/wayfinder/routes/admin/all-tasks';
@@ -12,8 +15,11 @@ import { FC } from 'react';
 import { toast } from 'sonner';
 
 const Edit: FC<Inertia.Pages.Admin.Tasks.Edit> = ({ task }) => {
-    const { data, setData, patch, processing } = useForm({
+    const comment = task.comments?.[0] ?? null;
+
+    const { data, errors, setData, patch, processing } = useForm({
         is_accepted: true,
+        comment: comment?.content ?? '',
     });
 
     const handleSubmit = (e: React.FormEvent) => {
@@ -100,9 +106,24 @@ const Edit: FC<Inertia.Pages.Admin.Tasks.Edit> = ({ task }) => {
                     onSubmit={handleSubmit}
                 >
                     <RadioLabeled
+                        label="Статус"
                         value={data.is_accepted}
+                        rejectLabel="Отправить на доработку"
                         onChange={(val) => setData('is_accepted', val)}
                     />
+                    <div className="grid gap-2">
+                        <Label htmlFor="comment">Добавить комментарий</Label>
+                        <Textarea
+                            id="comment"
+                            name="comment"
+                            value={data.comment}
+                            onChange={(e) => setData('comment', e.target.value)}
+                            className="max-w-full"
+                            placeholder="Введите комментарий"
+                        />
+                        <InputError message={errors.comment} />
+                    </div>
+
                     <FormButtons
                         label="Сохранить"
                         processing={processing}

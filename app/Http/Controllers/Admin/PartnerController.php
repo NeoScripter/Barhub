@@ -70,6 +70,17 @@ final class PartnerController extends Controller
         $newStatus = $request->boolean('is_accepted') === true ? TaskStatus::COMPLETED : TaskStatus::INCOMPLETE;
         $task->update(['status' => $newStatus]);
 
+        if ($request->filled('comment')) {
+            $comment = $request->validated('comment');
+
+            if (strlen(trim($comment)) !== 0) {
+                $task->comments()->create([
+                    'content' => $comment,
+                    'user_id' => $request->user()->id
+                ]);
+            }
+        }
+
         return to_route('admin.all-tasks.index');
     }
 }

@@ -18,6 +18,7 @@ const LogoAccordion: FC<NodeProps<{ event: App.Models.Event }>> = ({
                         person.logo && (
                             <Image
                                 key={person.id}
+                                imgStyles="object-contain"
                                 wrapperStyles="w-31 bg-white lg:w-20 2xl:w-30"
                                 image={person.logo}
                             />
@@ -33,6 +34,7 @@ const LogoAccordion: FC<NodeProps<{ event: App.Models.Event }>> = ({
                                         'w-31 bg-white lg:w-20 2xl:w-30',
                                         idx === 0 && 'hidden sm:block',
                                     )}
+                                    imgStyles="object-contain"
                                     image={person.logo}
                                 />
                             )}

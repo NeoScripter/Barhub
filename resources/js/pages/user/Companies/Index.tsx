@@ -39,7 +39,7 @@ const Index: FC<{
                 <SearchInput placeholder="Поиск по партнерам" />
             </header>
 
-            <ul className="grid gap-8 grid-cols-[repeat(auto-fill,minmax(14rem,1fr))]">
+            <ul className="grid grid-cols-[repeat(auto-fill,minmax(14rem,1fr))] gap-8">
                 {companies?.map((company, idx) => (
                     <li
                         key={company.id}
@@ -50,7 +50,11 @@ const Index: FC<{
                         <CardLayout className="relative w-full p-5 text-foreground ring-primary transition-transform hover:scale-103 hover:ring-2">
                             {company.logo && (
                                 <Image
-                                    wrapperStyles={cn("w-full mb-4", idx === 0 && 'mb-8')}
+                                    wrapperStyles={cn(
+                                        'mb-4 w-full',
+                                        idx === 0 && 'mb-8',
+                                    )}
+                                    imgStyles="object-contain"
                                     image={company.logo}
                                 />
                             )}
@@ -70,7 +74,12 @@ const Index: FC<{
                                 {company.public_name}
                             </h3>
 
-                            <p className={cn("min-h-[3.2em] text-center text-sm", idx === 0 && 'text-lg')}>
+                            <p
+                                className={cn(
+                                    'min-h-[3.2em] text-center text-sm',
+                                    idx === 0 && 'text-lg',
+                                )}
+                            >
                                 {company.tags
                                     ?.map((tag) => tag.name)
                                     .join(', ')}

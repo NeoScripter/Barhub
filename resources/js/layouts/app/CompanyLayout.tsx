@@ -35,6 +35,7 @@ const CompanyLayout: FC<NodeProps<{ createLink?: React.ComponentType }>> = ({
                         {company.logo && (
                             <Image
                                 wrapperStyles="max-w-27 md:max-w-40"
+                                imgStyles='object-contain'
                                 image={company.logo}
                             />
                         )}

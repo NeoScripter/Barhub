@@ -20,6 +20,7 @@ const EventPersonCard: FC<
             {person.avatar && (
                 <Image
                     image={person.avatar}
+                    imgStyles="object-contain"
                     wrapperStyles="size-18 shrink-0 lg:size-12 2xl:size-18"
                 />
             )}
@@ -35,4 +36,3 @@ const EventPersonCard: FC<
 };
 
 export default EventPersonCard;
-

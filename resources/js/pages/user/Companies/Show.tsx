@@ -15,6 +15,7 @@ const Show: FC<{ company: App.Models.Company }> = ({ company }) => {
                     {company.logo && (
                         <Image
                             wrapperStyles="max-w-50 xl:max-w-62"
+                            imgStyles="object-contain"
                             image={company.logo}
                         />
                     )}

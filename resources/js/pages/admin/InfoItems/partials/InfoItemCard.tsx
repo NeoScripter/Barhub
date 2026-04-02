@@ -35,6 +35,7 @@ const InfoItemCard: FC<NodeProps<{ item: App.Models.InfoItem }>> = ({
                 {item.image && (
                     <Image
                         image={item.image}
+                        imgStyles="object-contain"
                         wrapperStyles="size-15 my-2 2xl:size-20"
                     />
                 )}

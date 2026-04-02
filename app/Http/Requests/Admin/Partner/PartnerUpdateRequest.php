@@ -17,6 +17,7 @@ final class PartnerUpdateRequest extends FormRequest
     {
         return [
             'is_accepted' => ['required', 'boolean'],
+            'comment' => ['nullable', 'string', 'max:2000'],
         ];
     }
 
