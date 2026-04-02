@@ -37,7 +37,7 @@ const Index: FC<{
             </header>
 
             {companies && companies.length > 0 ? (
-                <ul className="grid gap-8 sm:grid-cols-[repeat(auto-fill,minmax(15rem,1fr))]">
+                <ul className="grid gap-8 sm:grid-cols-[repeat(auto-fit,minmax(12rem,1fr))]">
                     {companies?.map((company, idx) => (
                         <PartnerCard
                             key={company.id}

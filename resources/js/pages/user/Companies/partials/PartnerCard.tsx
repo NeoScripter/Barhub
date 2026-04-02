@@ -15,9 +15,7 @@ const PartnerCard: FC<
     }>
 > = ({ className, exhibition, company, highlighted = false }) => {
     return (
-        <li
-            className={cn(highlighted && 'sm:col-span-2 sm:row-span-2')}
-        >
+        <li className={cn(highlighted && 'sm:col-span-2 sm:row-span-2')}>
             <CardLayout
                 className={cn(
                     'relative w-full p-5 text-foreground ring-primary transition-transform hover:scale-103 hover:ring-2',
@@ -27,10 +25,9 @@ const PartnerCard: FC<
                 {company.logo && (
                     <Image
                         wrapperStyles={cn(
-                            'mb-4 w-full',
+                            'mb-4 aspect-video w-full',
                             highlighted ? 'w-full sm:mb-6' : 'max-w-3/5',
                         )}
-                        imgStyles="object-contain"
                         image={company.logo}
                     />
                 )}
