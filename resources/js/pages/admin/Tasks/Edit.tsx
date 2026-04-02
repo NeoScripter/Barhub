@@ -18,6 +18,8 @@ import { toast } from 'sonner';
 const Edit: FC<Inertia.Pages.Admin.Tasks.Edit> = ({ company, task }) => {
     const comment = task.comments?.[0] ?? null;
 
+    console.log(comment)
+
     const { data, setData, post, processing, errors } = useForm({
         _method: 'put',
         title: task.title,

@@ -62,7 +62,7 @@ final class TaskController extends Controller
         ]);
 
         if ($request->hasFile('file')) {
-            $path = $request->file('file')->store('task-files');
+            $path = $request->file('file')->store('task-files', 'public');
 
             $comment->file()->create([
                 'name' => $request->validated('file_name'),

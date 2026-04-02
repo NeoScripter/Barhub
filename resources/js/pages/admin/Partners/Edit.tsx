@@ -56,7 +56,7 @@ const Edit: FC<Inertia.Pages.Admin.Tasks.Edit> = ({ task }) => {
                     <p>{formatDateAndTime(new Date(task.deadline))}</p>
                 </LabeledContent>
                 <LabeledContent label="Описание задачи">
-                    <p className='whitespace-pre-line'>{task.description}</p>
+                    <p className="whitespace-pre-line">{task.description}</p>
                 </LabeledContent>
                 {task.comments && task.comments.length > 0 && (
                     <LabeledContent label="Комментарии">
@@ -77,7 +77,7 @@ const Edit: FC<Inertia.Pages.Admin.Tasks.Edit> = ({ task }) => {
                                     {comment.file && (
                                         <span className="block">
                                             <DownloadFileLink
-                                                href={comment.file?.url}
+                                                href={`/${comment.file?.url}`}
                                                 target="_blank"
                                                 rel="noopener noreferrer"
                                                 filename={comment.file?.name}
@@ -85,7 +85,9 @@ const Edit: FC<Inertia.Pages.Admin.Tasks.Edit> = ({ task }) => {
                                             />
                                         </span>
                                     )}
-                                    {comment.content && <p>{comment.content}</p>}
+                                    {comment.content && (
+                                        <p>{comment.content}</p>
+                                    )}
                                 </li>
                             ))}
                         </ul>

@@ -56,7 +56,7 @@ final class TaskTemplateController extends Controller
         ]);
 
         if ($request->hasFile('file_url')) {
-            $path = $request->file('file_url')->store('task-template-files');
+            $path = $request->file('file_url')->store('task-template-files', 'public');
             $template->update([
                 'file_url' => $path,
             ]);
@@ -74,7 +74,7 @@ final class TaskTemplateController extends Controller
             if ($taskTemplate->file_url) {
                 Storage::delete($taskTemplate->file_url);
             }
-            $path = $request->file('file_url')->store('task-template-files');
+            $path = $request->file('file_url')->store('task-template-files', 'public');
             $taskTemplate->update(['file_url' => $path]);
         }
 

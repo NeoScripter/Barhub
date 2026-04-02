@@ -75,11 +75,12 @@ final class TaskController extends Controller
 
         if ($request->filled('comment') || $request->hasFile('file')) {
             $comment = $task->comments()->create([
-                'content' => $request->validated('comment'),
+                'content' => $request->validated('comment') ?? '',
+                'user_id' => $request->user()->id
             ]);
 
             if ($request->hasFile('file')) {
-                $path = $request->file('file')->store('task-files');
+                $path = $request->file('file')->store('task-files', 'public');
                 $comment->file()->create([
                     'name' => $request->validated('file_name'),
                     'url' => $path,
@@ -106,17 +107,18 @@ final class TaskController extends Controller
 
             if ($comment) {
                 $comment->update([
-                    'content' => $request->validated('comment'),
+                    'content' => $request->validated('comment') ?? '',
                 ]);
             } else {
                 $comment = $task->comments()->create([
-                    'content' => $request->validated('comment'),
+                    'content' => $request->validated('comment') ?? '',
                     'user_id' => $user->id,
                 ]);
             }
 
             if ($request->hasFile('file')) {
-                $path = $request->file('file')->store('task-files');
+                $path = $request->file('file')->store('task-files', 'public');
+
                 $comment->file?->delete();
                 $comment->file()->create([
                     'name' => $request->validated('file_name'),

@@ -35,7 +35,7 @@ class CreateExponentNotification extends Notification // implements ShouldQueue
         return (new MailMessage)
             ->subject('Доступ к личному кабинету экпонента')
             ->greeting('Здравствуйте.')
-            ->line('Рады сообщить вам, что вам предоставлен доступ к личному кабинету экпонента.')
+            ->line('Рады сообщить вам, что вам предоставлен доступ к личному кабинету эскпонента.')
             ->action('Регистрация', url('/register'))
             ->line('Данное сообщение сгенерировано автоматически. Пожалуйста, не отвечайте на него')
             ->salutation(new HtmlString('<p>С уважением, <br>bar hub</p>'));

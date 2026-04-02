@@ -25,6 +25,7 @@ final class CreateTaskFromTemplate
             if ($template->comment) {
                 $comment = $task->comments()->create([
                     'content' => $template->comment,
+                    'user_id' => $template->user?->id ?? null
                 ]);
 
                 if ($template->file_url) {
