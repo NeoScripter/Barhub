@@ -6,7 +6,7 @@ import { DeleteAlertDialog } from '@/components/ui/DeleteAlertDialog';
 import { Input } from '@/components/ui/Input';
 import { Label } from '@/components/ui/Label';
 import RadioCheckbox from '@/components/ui/RadioCheckbox';
-import { convertDateToInputString } from '@/lib/utils';
+import { convertDateToInputString, convertDateToUTC } from '@/lib/utils';
 import { destroy, index, update } from '@/wayfinder/routes/admin/exhibitions';
 import { Inertia } from '@/wayfinder/types';
 import { router, useForm } from '@inertiajs/react';
@@ -28,6 +28,10 @@ const Edit: FC<Inertia.Pages.Admin.Exhibitions.Edit> = ({ exhibition }) => {
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
+
+        setData('starts_at', convertDateToUTC(data.starts_at));
+        setData('ends_at', convertDateToUTC(data.ends_at));
+
         put(update({ exhibition }).url, {
             onSuccess: () => toast.success('Выставка успешно обновлена'),
         });

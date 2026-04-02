@@ -8,7 +8,7 @@ import { Input } from '@/components/ui/Input';
 import { Label } from '@/components/ui/Label';
 import { SelectMenu } from '@/components/ui/SelectMenu';
 import { Textarea } from '@/components/ui/Textarea';
-import { convertDateToInputString } from '@/lib/utils';
+import { convertDateToInputString, convertDateToUTC } from '@/lib/utils';
 import {
     destroy,
     index,
@@ -20,8 +20,6 @@ import { Trash2 } from 'lucide-react';
 import { FC, useState } from 'react';
 import { toast } from 'sonner';
 import { PersonSelect, PersonWithRoles } from './partials/PersonSelect';
-import StageDialog from './partials/StageDialog';
-import ThemeDialog from './partials/ThemeDialog';
 import { ThemeSelect } from './partials/ThemeSelect';
 
 const Edit: FC<Inertia.Pages.Admin.Events.Edit> = ({
@@ -46,6 +44,10 @@ const Edit: FC<Inertia.Pages.Admin.Events.Edit> = ({
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
+
+        setData('starts_at', convertDateToUTC(data.starts_at));
+        setData('ends_at', convertDateToUTC(data.ends_at));
+
         put(update({ event }).url, {
             onSuccess: () => toast.success('Событие успешно обновлено'),
         });

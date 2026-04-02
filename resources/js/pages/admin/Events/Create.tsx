@@ -5,6 +5,7 @@ import { Input } from '@/components/ui/Input';
 import { Label } from '@/components/ui/Label';
 import { SelectMenu } from '@/components/ui/SelectMenu';
 import { Textarea } from '@/components/ui/Textarea';
+import { convertDateToInputString, convertDateToUTC } from '@/lib/utils';
 import { index, store } from '@/wayfinder/routes/admin/events';
 import { Inertia } from '@/wayfinder/types';
 import { useForm } from '@inertiajs/react';
@@ -12,7 +13,6 @@ import { FC } from 'react';
 import { toast } from 'sonner';
 import { PersonSelect, PersonWithRoles } from './partials/PersonSelect';
 import { ThemeSelect } from './partials/ThemeSelect';
-import { convertDateToInputString } from '@/lib/utils';
 
 const Create: FC<Inertia.Pages.Admin.Events.Create> = ({
     exhibition,
@@ -33,6 +33,10 @@ const Create: FC<Inertia.Pages.Admin.Events.Create> = ({
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
+
+        setData('starts_at', convertDateToUTC(data.starts_at));
+        setData('ends_at', convertDateToUTC(data.ends_at));
+
         post(store().url, {
             onSuccess: () => toast.success('Событие успешно создано'),
         });

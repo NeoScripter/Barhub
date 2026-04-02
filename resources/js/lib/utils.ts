@@ -18,7 +18,7 @@ export function formatDateShort(
         day: 'numeric',
         month: 'short',
         year: 'numeric',
-        timeZone: 'UTC',
+        // timeZone: 'UTC',
     }).format(date);
 }
 
@@ -37,13 +37,34 @@ export function formatDateAndTime(date: Date) {
         day: 'numeric',
         month: 'short',
         year: 'numeric',
-        timeZone: 'UTC',
+        // timeZone: 'UTC',
         hour12: false,
     }).format(date);
 }
 
+// export function convertDateToInputString(date: string | null) {
+//     return date ? new Date(date).toISOString().slice(0, 16) : '';
+// }
+//
+export function convertDateToUTC(date: string | null) {
+    if (!date) return '';
+
+    return new Date(date).toISOString().slice(0, 16);
+}
+
 export function convertDateToInputString(date: string | null) {
-    return date ? new Date(date).toISOString().slice(0, 16) : '';
+    if (!date) return '';
+
+    return new Date(date)
+        .toLocaleString('sv-SE', { // sv-SE gives YYYY-MM-DD HH:MM format
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: false,
+        })
+        .replace(' ', 'T'); // datetime-local input expects "YYYY-MM-DDTHH:MM"
 }
 
 export const getSortUrl = (field: string): string => {
