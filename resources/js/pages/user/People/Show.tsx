@@ -1,6 +1,6 @@
 import AccentHeading from '@/components/ui/AccentHeading';
 import Image from '@/components/ui/Image';
-import { Phone } from 'lucide-react';
+import { Send } from 'lucide-react';
 import { FC } from 'react';
 
 import InfoItem from '@/pages/exponent/Companies/partials/InfoItem';
@@ -44,21 +44,25 @@ const Show: FC<{
 
             <ul className="flex flex-col flex-wrap items-baseline gap-x-10 gap-y-6 md:flex-row">
                 {person.telegram && (
-                    <InfoItem>
-                        <Phone />
+                    <InfoItem
+                        href={`https://t.me/${person.telegram.replaceAll('@', '')}`}
+                    >
+                        <Send />
                         {person.telegram}
                     </InfoItem>
                 )}
             </ul>
 
-            <div>
-                <AccentHeading
-                    asChild
-                    className="mb-4 text-xl lg:mb-6 lg:text-2xl"
-                >
-                    <h2>Лекции:</h2>
-                </AccentHeading>
-            </div>
+            {person.events && person.events.length > 0 && (
+                <div>
+                    <AccentHeading
+                        asChild
+                        className="mb-4 text-xl lg:mb-6 lg:text-2xl"
+                    >
+                        <h2>Лекции:</h2>
+                    </AccentHeading>
+                </div>
+            )}
 
             <ul className="grid items-stretch gap-5 sm:grid-cols-[repeat(auto-fill,minmax(20rem,1fr))]">
                 {person.events?.map((event) => (

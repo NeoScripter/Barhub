@@ -18,7 +18,7 @@ const PartnerCard: FC<
         <li className={cn(highlighted && 'sm:col-span-2 sm:row-span-2')}>
             <CardLayout
                 className={cn(
-                    'relative w-full p-5 text-foreground ring-primary transition-transform hover:scale-103 hover:ring-2',
+                    'relative w-full p-5 text-foreground aspect-square ring-primary transition-transform hover:scale-103 hover:ring-2',
                     className,
                 )}
             >
@@ -28,6 +28,7 @@ const PartnerCard: FC<
                             'mb-4 aspect-video w-full',
                             highlighted ? 'w-full sm:mb-6' : 'max-w-3/5',
                         )}
+                        imgStyles='object-contain'
                         image={company.logo}
                     />
                 )}
@@ -39,7 +40,7 @@ const PartnerCard: FC<
 
                 <h3
                     className={cn(
-                        'mx-auto mb-8 min-h-[3.2em] max-w-4/5 text-center font-bold',
+                        'mx-auto mb-4 min-h-[1.6em] max-w-4/5 text-center font-bold',
                         highlighted && 'sm:text-2xl',
                     )}
                 >
@@ -49,7 +50,7 @@ const PartnerCard: FC<
 
                 <p
                     className={cn(
-                        'min-h-[3.2em] text-center text-sm',
+                        'min-h-[1.6em] text-center text-sm',
                         highlighted && 'text-lg',
                     )}
                 >

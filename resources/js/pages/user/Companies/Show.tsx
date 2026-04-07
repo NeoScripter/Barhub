@@ -37,31 +37,35 @@ const Show: FC<{ company: App.Models.Company }> = ({ company }) => {
 
             <ul className="flex flex-col flex-wrap items-baseline gap-x-10 gap-y-6 md:flex-row">
                 {company.phone && (
-                    <InfoItem>
+                    <InfoItem href={`tel:${company.phone}`}>
                         <Phone />
                         {company.phone}
                     </InfoItem>
                 )}
                 {company.email && (
-                    <InfoItem>
+                    <InfoItem href={`mailto:${company.email}`}>
                         <Mail />
                         {company.email}
                     </InfoItem>
                 )}
                 {company.site_url && (
-                    <InfoItem>
+                    <InfoItem href={company.site_url}>
                         <Globe />
                         {company.site_url.slice(0, 20)}
                     </InfoItem>
                 )}
                 {company.telegram && (
-                    <InfoItem>
+                    <InfoItem
+                        href={`https://t.me/${company.telegram.replaceAll('@', '')}`}
+                    >
                         <Send />
                         {company.telegram}
                     </InfoItem>
                 )}
                 {company.instagram && (
-                    <InfoItem>
+                    <InfoItem
+                        href={`https://www.instagram.com/${company.instagram}`}
+                    >
                         <Instagram />
                         {company.instagram}
                     </InfoItem>
@@ -76,7 +80,7 @@ const Show: FC<{ company: App.Models.Company }> = ({ company }) => {
                     <h2>Активности:</h2>
                 </AccentHeading>
 
-                {company.activities && (
+                {company.activities && company.activities.length !== 0 && (
                     <p className="lg:text-lg xl:text-xl">
                         {company.activities}
                     </p>
