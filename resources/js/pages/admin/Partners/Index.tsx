@@ -1,4 +1,5 @@
 import AccentHeading from '@/components/ui/AccentHeading';
+import { Button } from '@/components/ui/Button';
 import IndexToolbar from '@/components/ui/IndexToolbar';
 import Pagination from '@/components/ui/Pagination';
 import Table from '@/components/ui/Table';
@@ -8,9 +9,11 @@ import {
     getSingleFilterUrl,
     getTaskStatus,
     isActiveFilter,
+    makePDF,
 } from '@/lib/utils';
 import { Inertia } from '@/wayfinder/types';
 import { Link } from '@inertiajs/react';
+import { Download } from 'lucide-react';
 import { FC } from 'react';
 import TaskTable from './partials/TaskTable';
 import TaskTableHeader from './partials/TaskTableHeader';
@@ -18,14 +21,25 @@ import TaskTableHeader from './partials/TaskTableHeader';
 const Index: FC<Inertia.Pages.Admin.Tasks.Index> = ({ tasks, summary }) => {
     return (
         <div>
-            <IndexToolbar className="items-center md:flex-col md:items-start">
-                <AccentHeading className="text-xl">
-                    Работа с партнерами
-                </AccentHeading>
-                <AccentHeading className="text-lg text-secondary 2xl:text-xl">
-                    Задачи на проверке
-                </AccentHeading>
-            </IndexToolbar>
+            <div className="heading flex items-center justify-between gap-3">
+                <IndexToolbar className="items-center md:flex-col md:items-start">
+                    <AccentHeading className="text-xl">
+                        Работа с партнерами
+                    </AccentHeading>
+                    <AccentHeading className="text-lg text-secondary 2xl:text-xl">
+                        Задачи на проверке
+                    </AccentHeading>
+                </IndexToolbar>
+
+                <Button
+                    variant="ghost"
+                    size="lg"
+                    onClick={makePDF}
+                >
+                    <Download />
+                    Скачать pdf
+                </Button>
+            </div>
 
             <ul className="mb-12 grid w-full grid-cols-[repeat(auto-fill,minmax(10rem,1fr))] justify-items-center gap-3 sm:justify-items-start md:mb-14 xl:gap-6 2xl:mb-18 2xl:grid-cols-[repeat(auto-fill,minmax(13.5rem,1fr))]">
                 {summary.map((task) => (

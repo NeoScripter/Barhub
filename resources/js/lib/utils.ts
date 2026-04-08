@@ -1,5 +1,7 @@
 import type { InertiaLinkProps } from '@inertiajs/react';
 import { type ClassValue, clsx } from 'clsx';
+import html2canvas from 'html2canvas-pro';
+import jsPDF from 'jspdf';
 import { twMerge } from 'tailwind-merge';
 
 export function cn(...inputs: ClassValue[]) {
@@ -56,7 +58,8 @@ export function convertDateToInputString(date: string | null) {
     if (!date) return '';
 
     return new Date(date)
-        .toLocaleString('sv-SE', { // sv-SE gives YYYY-MM-DD HH:MM format
+        .toLocaleString('sv-SE', {
+            // sv-SE gives YYYY-MM-DD HH:MM format
             year: 'numeric',
             month: '2-digit',
             day: '2-digit',
@@ -171,4 +174,30 @@ export function getTaskStatus(status: string) {
         default:
             return 'warning';
     }
+}
+
+
+export async function makePDF() {
+    const element = document.body;
+
+    // Render the element to canvas using html2canvas-pro
+    const canvas = await html2canvas(element, {
+        scale: 2,
+        logging: false,
+        useCORS: true,
+        allowTaint: false
+    });
+
+    const imgData = canvas.toDataURL('image/png');
+    const pdf = new jsPDF({
+        unit: 'mm',
+        format: 'a4',
+        orientation: 'portrait'
+    });
+
+    const imgWidth = pdf.internal.pageSize.getWidth();
+    const imgHeight = (canvas.height * imgWidth) / canvas.width;
+
+    pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
+    pdf.save('myfile.pdf');
 }

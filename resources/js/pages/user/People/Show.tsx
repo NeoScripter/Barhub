@@ -36,11 +36,11 @@ const Show: FC<{
                         <h1>{person.name}</h1>
                     </AccentHeading>
 
-                    <p className="text-balance lg:text-lg">{`Регалии: ${person.regalia}`}</p>
+                    <p className="text-balance">{`Регалии: ${person.regalia}`}</p>
                 </div>
             </div>
 
-            <p className="lg:text-lg xl:text-xl">{person.bio}</p>
+            <p className="lg:text-lg">{person.bio}</p>
 
             <ul className="flex flex-col flex-wrap items-baseline gap-x-10 gap-y-6 md:flex-row">
                 {person.telegram && (

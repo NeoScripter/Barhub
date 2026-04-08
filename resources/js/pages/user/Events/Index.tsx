@@ -1,5 +1,8 @@
 import AccentHeading from '@/components/ui/AccentHeading';
+import { Button } from '@/components/ui/Button';
+import { makePDF } from '@/lib/utils';
 import { Inertia } from '@/wayfinder/types';
+import { Download } from 'lucide-react';
 import { FC } from 'react';
 import EventCard from './partials/EventCard';
 import EventFilters from './partials/EventFilters';
@@ -10,9 +13,20 @@ const Index: FC<Inertia.Pages.User.Events.Index> = ({ events, exhibition }) => {
             <EventFilters />
 
             <div>
-                <AccentHeading className="heading text-base">
-                    Расписание
-                </AccentHeading>
+                <div className="heading flex items-center justify-between gap-3">
+                    <AccentHeading className="text-base">
+                        Расписание
+                    </AccentHeading>
+
+                    <Button
+                        variant="ghost"
+                        size="lg"
+                        onClick={makePDF}
+                    >
+                        <Download />
+                        Скачать pdf
+                    </Button>
+                </div>
 
                 {events && events.length > 0 ? (
                     <ul className="grid gap-4 sm:gap-8">
