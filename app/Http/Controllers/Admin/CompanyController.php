@@ -28,7 +28,7 @@ final class CompanyController extends Controller
         $exhibition = Auth::user()->getActiveExhibition();
         /** @var LengthAwarePaginator<Company> $companies */
         $companies = QueryBuilder::for(
-            Company::query()->select(['id', 'public_name', 'legal_name', 'stand_code'])
+            Company::query()->select(['id', 'public_name', 'legal_name', 'stand_code', 'show_on_site'])
                 ->where('exhibition_id', $exhibition->id)
                 ->with(['tags', 'tasks:id,status,company_id'])
                 ->withCount('followups')

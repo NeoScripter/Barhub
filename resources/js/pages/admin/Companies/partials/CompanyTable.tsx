@@ -1,3 +1,4 @@
+import Badge from '@/components/ui/Badge';
 import Image from '@/components/ui/Image';
 import Table from '@/components/ui/Table';
 import { range } from '@/lib/utils';
@@ -30,7 +31,7 @@ const CompanyTable: FC<
                             <Image
                                 image={company.logo}
                                 wrapperStyles="size-16"
-                                imgStyles='object-contain'
+                                imgStyles="object-contain"
                             />
                         )}
                     </Table.Cell>
@@ -68,6 +69,20 @@ const CompanyTable: FC<
                         </ul>
                     </Table.Cell>
                     <Table.Cell
+                        width={0.5}
+                        key="status"
+                    >
+                        <Badge
+                            className="ml-0"
+                            variant={
+                                company.show_on_site ? 'success' : 'danger'
+                            }
+                        >
+                            {company.show_on_site ? 'ON' : 'OFF'}
+                        </Badge>
+                    </Table.Cell>
+
+                    <Table.Cell
                         key="tasks"
                         width={2}
                     >
@@ -83,7 +98,7 @@ const CompanyTable: FC<
                         key="services"
                         width={1.5}
                     >
-                        <span className='text-sm'>
+                        <span className="text-sm">
                             Услуги: <strong>{company.followups_count}</strong>
                         </span>
                     </Table.Cell>
