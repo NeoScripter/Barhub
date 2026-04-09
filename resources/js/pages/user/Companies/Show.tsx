@@ -72,20 +72,20 @@ const Show: FC<{ company: App.Models.Company }> = ({ company }) => {
                 )}
             </ul>
 
-            <div>
-                <AccentHeading
-                    asChild
-                    className="mb-4 text-xl lg:mb-6 lg:text-2xl"
-                >
-                    <h2>Активности:</h2>
-                </AccentHeading>
+            {company.activities && company.activities.trim().length !== 0 && (
+                <div>
+                    <AccentHeading
+                        asChild
+                        className="mb-4 text-xl lg:mb-6 lg:text-2xl"
+                    >
+                        <h2>Активности:</h2>
+                    </AccentHeading>
 
-                {company.activities && company.activities.length !== 0 && (
                     <p className="lg:text-lg xl:text-xl">
                         {company.activities}
                     </p>
-                )}
-            </div>
+                </div>
+            )}
         </div>
     );
 };
