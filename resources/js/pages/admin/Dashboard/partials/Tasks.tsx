@@ -1,8 +1,9 @@
 import TaskCard from '@/components/ui/TaskCard';
 import { cn, getTaskStatus } from '@/lib/utils';
 import { NodeProps } from '@/types/shared';
+import PartnerController from '@/wayfinder/App/Http/Controllers/Admin/PartnerController';
 import { App } from '@/wayfinder/types';
-import { usePage } from '@inertiajs/react';
+import { Link, usePage } from '@inertiajs/react';
 import { FC } from 'react';
 
 const listClass =
@@ -17,8 +18,12 @@ const Tasks: FC<NodeProps> = ({ className }) => {
             {tasks.map((task) => (
                 <TaskCard
                     key={task.id}
-                    className={cardClass}
+                    className={cn(cardClass, 'relative')}
                 >
+                    <Link
+                        href={PartnerController.index().url}
+                        className="absolute inset-0"
+                    />
                     <TaskCard.Badge variant={getTaskStatus(task.status)}>
                         {task.status}
                     </TaskCard.Badge>
