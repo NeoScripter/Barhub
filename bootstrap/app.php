@@ -7,7 +7,6 @@ use App\Http\Middleware\EnsureExhibitionAdminAccess;
 use App\Http\Middleware\EnsureUserHasRole;
 use App\Http\Middleware\HandleAppearance;
 use App\Http\Middleware\HandleInertiaRequests;
-use App\Models\Task;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -34,7 +33,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'admin' => EnsureExhibitionAdminAccess::class,
         ]);
     })
-    ->withSchedule(function (Schedule $schedule) {
+    ->withSchedule(function ($schedule) {
         $schedule->call(function () {
             DB::update(
                 'update tasks
