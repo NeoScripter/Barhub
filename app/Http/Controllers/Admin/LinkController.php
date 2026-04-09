@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Company;
 use App\Models\Person;
 use App\Models\Event;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
 class LinkController extends Controller
@@ -15,18 +16,25 @@ class LinkController extends Controller
      */
     public function __invoke()
     {
-        $people = Person::select(['id', 'name'])
+        $exhibition = Auth::user()->getActiveExhibition();
+        $people = $exhibition
+            ->people()
+            ->select(['id', 'name'])
             ->whereHas('events')
             ->get()
             ->map(fn($person) => ['id' => $person->id, 'value' => $person->name])
             ->values();
 
-        $events = Event::select(['id', 'title'])
+        $events = $exhibition
+            ->events()
+            ->select(['id', 'title'])
             ->get()
             ->map(fn($event) => ['id' => $event->id, 'value' => $event->title])
             ->values();
 
-        $companies = Company::select(['id', 'public_name'])
+        $companies = $exhibition
+            ->companies()
+            ->select(['id', 'public_name'])
             ->get()
             ->map(fn($company) => ['id' => $company->id, 'value' => $company->public_name])
             ->values();
@@ -35,6 +43,7 @@ class LinkController extends Controller
             'people' => $people,
             'events' => $events,
             'companies' => $companies,
+            'exhibition' => $exhibition,
         ]);
     }
 }

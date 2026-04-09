@@ -1,6 +1,7 @@
 import { Button } from '@/components/ui/Button';
 import { SelectMenu } from '@/components/ui/SelectMenu';
 import { useClipboard } from '@/hooks/useClipboard';
+import { App } from '@/wayfinder/types';
 import { FC, useState } from 'react';
 import { toast } from 'sonner';
 
@@ -11,9 +12,10 @@ export type LinkOptionType = {
 
 const LinkSelector: FC<{
     options: LinkOptionType[];
-    setter: (val: number) => string;
+    setter: (expo: number, val: number) => string;
+    exhibition: App.Models.Exhibition;
     label: string;
-}> = ({ options, setter, label }) => {
+}> = ({ options, setter, label, exhibition }) => {
     const [selected, setSelected] = useState<string | null>(null);
     const [, copy] = useClipboard();
 
@@ -23,7 +25,10 @@ const LinkSelector: FC<{
             return;
         }
 
-        const res = copy(window.location.hostname + setter(Number(selected)));
+        const url =
+            window.location.origin +
+            setter(Number(exhibition.id), Number(selected));
+        const res = copy(url);
 
         if (!res) {
             toast.error('Ошибка копирования ссылки');

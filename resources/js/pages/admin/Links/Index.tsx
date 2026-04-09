@@ -1,8 +1,8 @@
 import GridLayout from '@/components/layout/GridLayout';
 import ActionCard from '@/components/ui/ActionCard';
-import CompanyController from '@/wayfinder/App/Http/Controllers/Admin/CompanyController';
-import EventController from '@/wayfinder/App/Http/Controllers/Admin/EventController';
-import PersonController from '@/wayfinder/App/Http/Controllers/Admin/PersonController';
+import CompanyController from '@/wayfinder/App/Http/Controllers/User/CompanyController';
+import EventController from '@/wayfinder/App/Http/Controllers/User/EventController';
+import PersonController from '@/wayfinder/App/Http/Controllers/User/PersonController';
 import { App } from '@/wayfinder/types';
 import { BriefcaseBusiness, Calendar, LucideIcon, User } from 'lucide-react';
 import { FC } from 'react';
@@ -14,13 +14,14 @@ type CardLinkType = {
     options: LinkOptionType[];
     label: string;
     name: string;
-    url: (id: number) => string;
+    url: (ex: number, id: number) => string;
 };
 
 const Index: FC<App.Http.Controllers.Admin.LinkController> = ({
     people,
     companies,
     events,
+    exhibition,
 }) => {
     const cards: CardLinkType[] = [
         {
@@ -29,7 +30,8 @@ const Index: FC<App.Http.Controllers.Admin.LinkController> = ({
             options: events,
             label: 'События',
             name: 'событие',
-            url: (id) => EventController.index({ id }).url,
+            url: (expo, id) =>
+                EventController.show({ exhibition: expo, event: id }).url,
         },
         {
             id: crypto.randomUUID(),
@@ -37,7 +39,8 @@ const Index: FC<App.Http.Controllers.Admin.LinkController> = ({
             options: people,
             label: 'Спикеры',
             name: 'спикера',
-            url: (id) => PersonController.index({ id }).url,
+            url: (expo, id) =>
+                PersonController.show({ exhibition: expo, person: id }).url,
         },
         {
             id: crypto.randomUUID(),
@@ -45,7 +48,8 @@ const Index: FC<App.Http.Controllers.Admin.LinkController> = ({
             options: companies,
             label: 'Компании',
             name: 'компанию',
-            url: (id) => CompanyController.index({ id }).url,
+            url: (expo, id) =>
+                CompanyController.show({ exhibition: expo, company: id }).url,
         },
     ];
 
@@ -54,12 +58,13 @@ const Index: FC<App.Http.Controllers.Admin.LinkController> = ({
             {cards.map((card) => (
                 <li key={card.id}>
                     <ActionCard>
-                        <ActionCard.Icon icon={card.icon}/ >
+                        <ActionCard.Icon icon={card.icon} />
                         <ActionCard.Title>{card.label}</ActionCard.Title>
                         <LinkSelector
                             options={card.options}
                             setter={card.url}
                             label={card.name}
+                            exhibition={exhibition}
                         />
                     </ActionCard>
                 </li>
