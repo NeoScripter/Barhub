@@ -70,7 +70,7 @@ final class TaskController extends Controller
 
         $task = $company->tasks()->create([
             ...$request->only(['title', 'description', 'deadline']),
-            'status' => TaskStatus::TO_BE_COMPLETED,
+            'status' => $request->boolean('to_be_checked') ? TaskStatus::TO_BE_COMPLETED : TaskStatus::COMPLETED,
         ]);
 
         if ($request->filled('comment') || $request->hasFile('file')) {
