@@ -5,7 +5,6 @@ import { NodeProps } from '@/types/shared';
 import { edit } from '@/wayfinder/routes/admin/events';
 import { App } from '@/wayfinder/types';
 import { Link } from '@inertiajs/react';
-import { PencilLine } from 'lucide-react';
 import { FC } from 'react';
 
 const EventTable: FC<
@@ -25,6 +24,12 @@ const EventTable: FC<
                         key="name"
                         width={2}
                     >
+                        <Link
+                            href={edit({
+                                event: event.id,
+                            })}
+                            className="absolute inset-0"
+                        />
                         {event.title}
                     </Table.Cell>
                     <Table.Cell
@@ -54,18 +59,6 @@ const EventTable: FC<
                                 />
                             ))}
                         </ul>
-                    </Table.Cell>
-                    <Table.Cell
-                        key="edit-btn"
-                        width={0.5}
-                    >
-                        <Link
-                            href={edit({
-                                event: event.id,
-                            })}
-                        >
-                            <PencilLine />
-                        </Link>
                     </Table.Cell>
                 </Table.Row>
             ))}

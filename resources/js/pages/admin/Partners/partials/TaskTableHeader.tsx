@@ -10,13 +10,12 @@ const HEADER_COLS: Column[] = [
     { label: 'Задача', query: 'title' },
     { label: 'Дедлайн', query: 'deadline' },
     { label: 'Статус', query: 'status' },
-    { label: 'Действия' },
 ] as const;
 
 const TaskTableHeader = () => {
     return (
         <Table.Header>
-            <Table.Row>
+            <Table.Row className="hover:bg-transparent">
                 {HEADER_COLS.map((col, idx) => (
                     <Table.HeaderCell
                         key={idx}

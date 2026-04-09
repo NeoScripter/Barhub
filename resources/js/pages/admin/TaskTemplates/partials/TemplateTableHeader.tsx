@@ -8,13 +8,12 @@ type Column = { label: string; query?: string };
 const HEADER_COLS: Column[] = [
     { label: 'Заголовок', query: 'title' },
     { label: 'Дедлайн', query: 'deadline' },
-    { label: 'Действия' },
 ] as const;
 
 const TemplateTableHeader = () => {
     return (
         <Table.Header>
-            <Table.Row>
+            <Table.Row className='hover:bg-transparent'>
                 {HEADER_COLS.map((col, idx) => (
                     <Table.HeaderCell
                         key={idx}

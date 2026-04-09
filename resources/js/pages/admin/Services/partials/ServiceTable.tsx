@@ -27,6 +27,13 @@ const ServiceTable: FC<
                         key="name"
                         width={1}
                     >
+                        <Link
+                            data-test={`edit-service-${service.id}`}
+                            href={edit({
+                                service: service.id,
+                            })}
+                            className="absolute inset-0"
+                        />
                         {service.name}
                     </Table.Cell>
                     <Table.Cell
@@ -35,20 +42,6 @@ const ServiceTable: FC<
                         className='max-w-80'
                     >
                         <p>{service.description}</p>
-                    </Table.Cell>
-                    <Table.Cell
-                        key="edit-btn"
-                        width={0.5}
-                    >
-                        <Link
-                            data-test={`edit-service-${service.id}`}
-                            href={edit({
-                                service: service.id,
-                            })}
-                        >
-                            <VisuallyHidden>Принять услугу</VisuallyHidden>
-                            <PencilLine />
-                        </Link>
                     </Table.Cell>
                 </Table.Row>
             ))}

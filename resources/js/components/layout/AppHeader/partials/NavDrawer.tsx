@@ -5,7 +5,6 @@ import {
     DropdownMenuTrigger,
 } from '@/components/ui/DropdownMenu';
 import { useCurrentUrl } from '@/hooks/useCurrentUrl';
-import { useIsTablet } from '@/hooks/useMobile';
 import { NavDrawerType } from '@/lib/data/navItems';
 import { cn } from '@/lib/utils';
 import { Link } from '@inertiajs/react';
@@ -34,12 +33,12 @@ const NavDrawer: FC<NavDrawerProps> = ({ item, className }) => {
                         {item.label}
                     </span>
 
-                        <ChevronDown
-                            className={cn(
-                                'size-5 not-group-hover:hidden transition-transform duration-300',
-                                isOpen && 'rotate-180',
-                            )}
-                        />
+                    <ChevronDown
+                        className={cn(
+                            'size-5 transition-transform duration-300 not-group-hover:hidden',
+                            isOpen && 'rotate-180',
+                        )}
+                    />
                 </DropdownMenuTrigger>
                 <DropdownMenuContent
                     align="end"

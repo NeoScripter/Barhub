@@ -11,13 +11,12 @@ const HEADER_COLS: Column[] = [
     { label: 'Роли'},
     { label: 'Телеграм'},
     { label: 'Кол-во лекций' },
-    { label: 'Действия' },
 ] as const;
 
 const EventTableHeader = () => {
     return (
         <Table.Header>
-            <Table.Row>
+            <Table.Row className='hover:bg-transparent'>
                 {HEADER_COLS.map((col, idx) => (
                     <Table.HeaderCell
                         key={idx}

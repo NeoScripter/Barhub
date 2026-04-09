@@ -29,6 +29,13 @@ const TaskTable: FC<
                         key="company"
                         width={2}
                     >
+                        <Link
+                            data-test={`edit-task-${task.id}`}
+                            href={edit({
+                                all_task: task.id,
+                            })}
+                            className="absolute inset-0"
+                        />
                         {task?.company?.public_name}
                     </Table.Cell>
                     <Table.Cell
@@ -53,29 +60,6 @@ const TaskTable: FC<
                         >
                             {task.status}
                         </TaskCard.Badge>
-                    </Table.Cell>
-                    <Table.Cell
-                        key="edit-btn"
-                        width={0.5}
-                    >
-                        <Link
-                            data-test={`edit-task-${task.id}`}
-                            href={edit({
-                                all_task: task.id,
-                            })}
-                        >
-                            <VisuallyHidden>
-                                {task.status === 'На проверке'
-                                    ? 'Редактировать задачу'
-                                    : 'Посмотреть задачу'}{' '}
-                            </VisuallyHidden>
-                            {/* Status is to be verified */}
-                            {task.status === 'На проверке' ? (
-                                <PencilLine />
-                            ) : (
-                                <Eye />
-                            )}
-                        </Link>
                     </Table.Cell>
                 </Table.Row>
             ))}

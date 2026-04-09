@@ -9,13 +9,12 @@ const HEADER_COLS: Column[] = [
     { label: 'Компания', query: 'company.public_name' },
     { label: 'Название', query: 'name' },
     { label: 'Статус'},
-    { label: 'Действия' },
 ] as const;
 
 const FollowupTableHeader = () => {
     return (
         <Table.Header>
-            <Table.Row>
+            <Table.Row className='hover:bg-transparent'>
                 {HEADER_COLS.map((col, idx) => (
                     <Table.HeaderCell
                         key={idx}

@@ -1,5 +1,4 @@
 import { useCurrentUrl } from '@/hooks/useCurrentUrl';
-import { useIsTablet } from '@/hooks/useMobile';
 import { NavItemType } from '@/lib/data/navItems';
 import { cn } from '@/lib/utils';
 import { Link } from '@inertiajs/react';
@@ -8,7 +7,6 @@ import NavDrawer from './NavDrawer';
 
 const NavItem: FC<{ item: NavItemType }> = ({ item }) => {
     const { whenCurrentUrl } = useCurrentUrl();
-    const isTablet = useIsTablet();
 
     const handleClick = () => {
         document.dispatchEvent(new Event('closeNavMenu'));

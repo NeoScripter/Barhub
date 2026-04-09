@@ -28,6 +28,13 @@ const FollowupTable: FC<
                         key="company"
                         width={1}
                     >
+                        <Link
+                            data-test={`edit-followup-${followup.id}`}
+                            href={edit({
+                                followup: followup.id,
+                            })}
+                            className="absolute inset-0"
+                        />
                         {followup.company?.public_name}
                     </Table.Cell>
                     <Table.Cell
@@ -47,21 +54,6 @@ const FollowupTable: FC<
                         >
                             заявка на услуги
                         </TaskCard.Badge>
-                    </Table.Cell>
-
-                    <Table.Cell
-                        key="edit-btn"
-                        width={0.5}
-                    >
-                        <Link
-                            data-test={`edit-followup-${followup.id}`}
-                            href={edit({
-                                followup: followup.id,
-                            })}
-                        >
-                            <VisuallyHidden>Принять услугу</VisuallyHidden>
-                            <PencilLine />
-                        </Link>
                     </Table.Cell>
                 </Table.Row>
             ))}

@@ -6,7 +6,6 @@ import { NodeProps } from '@/types/shared';
 import { edit } from '@/wayfinder/routes/admin/companies';
 import { App } from '@/wayfinder/types';
 import { Link } from '@inertiajs/react';
-import { PencilLine } from 'lucide-react';
 import { FC } from 'react';
 import TaskStatusLine from './TaskStatusLine';
 
@@ -27,6 +26,13 @@ const CompanyTable: FC<
                         key="logo"
                         width={1.2}
                     >
+                        <Link
+                            href={edit({
+                                company: company.id,
+                            })}
+                            className="absolute inset-0"
+                        />
+
                         {company.logo && (
                             <Image
                                 image={company.logo}
@@ -101,18 +107,6 @@ const CompanyTable: FC<
                         <span className="text-sm">
                             Услуги: <strong>{company.followups_count}</strong>
                         </span>
-                    </Table.Cell>
-                    <Table.Cell
-                        key="edit-btn"
-                        width={1}
-                    >
-                        <Link
-                            href={edit({
-                                company: company.id,
-                            })}
-                        >
-                            <PencilLine />
-                        </Link>
                     </Table.Cell>
                 </Table.Row>
             ))}

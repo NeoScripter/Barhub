@@ -22,7 +22,7 @@ const ExpoTableHeader = () => {
 
     return (
         <Table.Header>
-            <Table.Row>
+            <Table.Row className='hover:bg-transparent'>
                 {columns.map((col, idx) => (
                     <Table.HeaderCell
                         key={idx}

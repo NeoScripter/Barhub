@@ -73,7 +73,7 @@ const TableRow: FC<TableRowProps> = ({ className, children, ...props }) => {
     return (
         <tr
             className={cn(
-                'border-b border-gray-200 hover:bg-gray-50',
+                'border-b relative border-gray-200 hover:bg-gray-50',
                 className,
             )}
             {...props}

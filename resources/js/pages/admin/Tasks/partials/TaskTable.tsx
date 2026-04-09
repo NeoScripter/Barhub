@@ -33,6 +33,20 @@ const TaskTable: FC<
                         key="title"
                         width={2}
                     >
+                        <Link
+                            data-test={`edit-task-${task.id}`}
+                            href={
+                                task.status === 'Ожидает выполнения'
+                                    ? TaskController.edit({
+                                          task: task.id,
+                                          company: company,
+                                      })
+                                    : PartnerController.edit({
+                                          all_task: task.id,
+                                      })
+                            }
+                            className="absolute inset-0"
+                        />
                         {task.title}
                     </Table.Cell>
                     <Table.Cell
@@ -51,36 +65,6 @@ const TaskTable: FC<
                         >
                             {task.status}
                         </TaskCard.Badge>
-                    </Table.Cell>
-                    <Table.Cell
-                        key="edit-btn"
-                        width={0.5}
-                    >
-                        <Link
-                            data-test={`edit-task-${task.id}`}
-                            href={
-                                task.status === 'Ожидает выполнения'
-                                    ? TaskController.edit({
-                                          task: task.id,
-                                          company: company,
-                                      })
-                                    : PartnerController.edit({
-                                          all_task: task.id,
-                                      })
-                            }
-                        >
-                            <VisuallyHidden>
-                                {task.status === 'Ожидает выполнения'
-                                    ? 'Редактировать задачу'
-                                    : 'Посмотреть задачу'}{' '}
-                            </VisuallyHidden>
-                            {/* Status is to be verified */}
-                            {task.status === 'Ожидает выполнения' ? (
-                                <PencilLine />
-                            ) : (
-                                <Eye />
-                            )}
-                        </Link>
                     </Table.Cell>
                 </Table.Row>
             ))}

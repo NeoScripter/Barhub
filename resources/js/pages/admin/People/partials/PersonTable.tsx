@@ -24,6 +24,12 @@ const PersonTable: FC<
                         key="avatar"
                         width={1.2}
                     >
+                        <Link
+                            href={edit({
+                                person: person.id,
+                            })}
+                            className="absolute inset-0"
+                        />
                         {person.avatar && (
                             <Image
                                 image={person.avatar}
@@ -61,18 +67,6 @@ const PersonTable: FC<
                         {person.telegram}
                     </Table.Cell>
                     <Table.Cell key="stage">{person.events_count}</Table.Cell>
-                    <Table.Cell
-                        key="edit-btn"
-                        width={1}
-                    >
-                        <Link
-                            href={edit({
-                                person: person.id,
-                            })}
-                        >
-                            <PencilLine />
-                        </Link>
-                    </Table.Cell>
                 </Table.Row>
             ))}
         </Table.Body>

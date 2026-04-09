@@ -14,13 +14,12 @@ const HEADER_COLS: Column[] = [
     { label: 'Статус публикации'},
     { label: 'Статусы задач'},
     { label: 'Услуги' },
-    { label: 'Действия' },
 ] as const;
 
 const CompanyTableHeader = () => {
     return (
         <Table.Header>
-            <Table.Row>
+            <Table.Row className='hover:bg-transparent'>
                 {HEADER_COLS.map((col, idx) => (
                     <Table.HeaderCell
                         key={idx}
