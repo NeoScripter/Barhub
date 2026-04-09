@@ -10,18 +10,11 @@ final class StageDestroyRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        $stage = $this->route('stage');
-
-        return ! $stage->events()->exists();
+        return true;
     }
 
     public function rules(): array
     {
         return [];
-    }
-
-    protected function failedAuthorization(): void
-    {
-        abort(403, 'Невозможно удалить площадку, так как она используется в событиях');
     }
 }

@@ -23,11 +23,7 @@ const DeleteTheme = () => {
                     style={{ backgroundColor: theme.color_hex }}
                 >
                     <span>{theme.name}</span>
-                    {theme.events_count > 0 ? (
-                        <DisabledDeleteBtn />
-                    ) : (
-                        <ActiveDeleteBtn theme={theme} />
-                    )}
+                    <ActiveDeleteBtn theme={theme} />
                 </li>
             ))}
         </ul>

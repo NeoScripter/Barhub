@@ -10,18 +10,11 @@ final class ThemeDestroyRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        $theme = $this->route('theme');
-
-        return ! $theme->events()->exists();
+        return true;
     }
 
     public function rules(): array
     {
         return [];
-    }
-
-    protected function failedAuthorization(): void
-    {
-        abort(403, 'Невозможно удалить направление, так как оно используется в событиях');
     }
 }

@@ -21,11 +21,7 @@ const DeleteStage = () => {
                     className="flex items-center gap-2 rounded-md bg-gray-300 px-3 py-1.5 text-sm text-foreground"
                 >
                     <span>{stage.name}</span>
-                    {stage.events_count > 0 ? (
-                        <DisabledDeleteBtn />
-                    ) : (
-                        <ActiveDeleteBtn stage={stage} />
-                    )}
+                    <ActiveDeleteBtn stage={stage} />
                 </li>
             ))}
         </ul>

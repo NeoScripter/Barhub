@@ -52,11 +52,9 @@ final class EventController extends Controller
             'events' => $events,
             'stages' => $exhibition
                 ->stages()
-                ->withCount('events')
                 ->get(),
             'themes' => $exhibition
                 ->themes()
-                ->withCount('events')
                 ->get(),
         ]);
     }

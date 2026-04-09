@@ -25,11 +25,7 @@ const DeleteTag = () => {
                     className="flex items-center gap-2 rounded-md bg-gray-300 px-3 py-1.5 text-sm text-foreground"
                 >
                     <span>{tag.name}</span>
-                    {tag.companies_count > 0 ? (
-                        <DisabledDeleteBtn />
-                    ) : (
-                        <ActiveDeleteBtn tag={tag} />
-                    )}
+                    <ActiveDeleteBtn tag={tag} />
                 </li>
             ))}
         </ul>

@@ -10,18 +10,11 @@ final class TagDestroyRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        $tag = $this->route('tag');
-
-        return ! $tag->companies()->exists();
+        return true;
     }
 
     public function rules(): array
     {
         return [];
-    }
-
-    protected function failedAuthorization(): void
-    {
-        abort(403, 'Невозможно удалить тег, так как он используется в компаниях');
     }
 }
