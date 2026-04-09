@@ -14,6 +14,7 @@ class CompanyController extends Controller
     {
         return Inertia::render('user/Companies/Index', [
             'companies' => $exhibition->companies()
+                ->where('show_on_site', true)
                 ->with('tags')
                 ->withSearch(
                     'public_name',

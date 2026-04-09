@@ -2,19 +2,22 @@
 
 declare(strict_types=1);
 
+use App\Enums\TaskStatus;
 use App\Http\Middleware\EnsureExhibitionAdminAccess;
 use App\Http\Middleware\EnsureUserHasRole;
 use App\Http\Middleware\HandleAppearance;
 use App\Http\Middleware\HandleInertiaRequests;
+use App\Models\Task;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Http\Middleware\AddLinkHeadersForPreloadedAssets;
+use Illuminate\Support\Facades\DB;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
-        web: __DIR__.'/../routes/web.php',
-        commands: __DIR__.'/../routes/console.php',
+        web: __DIR__ . '/../routes/web.php',
+        commands: __DIR__ . '/../routes/console.php',
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
@@ -30,6 +33,16 @@ return Application::configure(basePath: dirname(__DIR__))
             'role' => EnsureUserHasRole::class,
             'admin' => EnsureExhibitionAdminAccess::class,
         ]);
+    })
+    ->withSchedule(function (Schedule $schedule) {
+        $schedule->call(function () {
+            DB::update(
+                'update tasks
+                 set status = ?
+                 where status != ? and deadline < ?',
+                [TaskStatus::DELAYED->value, TaskStatus::DELAYED->value, now()]
+            );
+        })->dailyAt('00:00');
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //

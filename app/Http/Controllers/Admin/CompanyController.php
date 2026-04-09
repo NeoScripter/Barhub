@@ -30,7 +30,6 @@ final class CompanyController extends Controller
         $companies = QueryBuilder::for(
             Company::query()->select(['id', 'public_name', 'legal_name', 'stand_code', 'show_on_site'])
                 ->where('exhibition_id', $exhibition->id)
-                ->where('show_on_site', true)
                 ->with(['tags', 'tasks:id,status,company_id'])
                 ->withCount('followups')
         )

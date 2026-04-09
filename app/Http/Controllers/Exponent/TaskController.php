@@ -22,7 +22,7 @@ final class TaskController extends Controller
         abort_unless($user->company, 403, 'Попросите администратора назначить компанию на ваш аккаунт');
         $tasks = $user->company
             ->tasks()
-            ->whereIn('status', [TaskStatus::TO_BE_COMPLETED, TaskStatus::DELAYED, TaskStatus::INCOMPLETE])
+            ->whereIn('status', [TaskStatus::TO_BE_COMPLETED, TaskStatus::DELAYED, TaskStatus::INCOMPLETE, TaskStatus::COMPLETED])
             ->orderBy('deadline')
             ->get()
             ->map(fn($task): array => [
