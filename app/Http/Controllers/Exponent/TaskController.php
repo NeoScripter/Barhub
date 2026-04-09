@@ -56,14 +56,20 @@ final class TaskController extends Controller
     {
         $user = Auth::user();
 
-        $comment = $task->comments()->create([
-            'content' => $request->validated('comment'),
-            'user_id' => $user->id,
-        ]);
+        if ($request->filled('comment')) {
+            $comment = $task->comments()->create([
+                'content' => $request->validated('comment'),
+                'user_id' => $user->id,
+            ]);
+        }
 
         if ($request->hasFile('file')) {
             $path = $request->file('file')->store('task-files', 'public');
 
+            $comment = $comment ?? $task->comments()->create([
+                'content' => null,
+                'user_id' => $user->id,
+            ]);
             $comment->file()->create([
                 'name' => $request->validated('file_name'),
                 'url' => $path,

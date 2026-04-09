@@ -24,7 +24,7 @@ final class TaskUpdateRequest extends FormRequest
                 'mimes:jpg,jpeg,png,gif,webp,svg,pdf,doc,docx,xls,xlsx,ppt,pptx,txt,csv,zip,rar',
             ],
             'file_name' => ['required_with:file', 'nullable', 'string', 'max:255'],
-            'comment' => ['required', 'string', 'max:2000'],
+            'comment' => ['nullable', 'string', 'max:2000'],
         ];
     }
 
@@ -38,7 +38,6 @@ final class TaskUpdateRequest extends FormRequest
             'file_name.required_with' => 'Укажите название файла',
             'file_name.max' => 'Название файла не должно превышать 255 символов',
 
-            'comment.required' => 'Введите комментарий',
             'comment.max' => 'Комментарий не должен превышать 2000 символов',
         ];
     }
