@@ -6,10 +6,7 @@ import { Link } from '@inertiajs/react';
 import { FC } from 'react';
 import NavDrawer from './NavDrawer';
 
-const NavItem: FC<{ item: NavItemType; expanded: boolean }> = ({
-    item,
-    expanded,
-}) => {
+const NavItem: FC<{ item: NavItemType }> = ({ item }) => {
     const { whenCurrentUrl } = useCurrentUrl();
     const isTablet = useIsTablet();
 
@@ -33,7 +30,9 @@ const NavItem: FC<{ item: NavItemType; expanded: boolean }> = ({
                     href={item.url}
                 >
                     <item.icon className="size-4.5 shrink-0 xl:size-5.5" />
-                    {(expanded || isTablet) && item.label}
+                    <span className="not-group-hover:lg:hidden">
+                        {item.label}
+                    </span>
                 </Link>
             </li>
         );
@@ -41,7 +40,6 @@ const NavItem: FC<{ item: NavItemType; expanded: boolean }> = ({
 
     return (
         <NavDrawer
-            expanded={expanded}
             item={item}
             className={baseClass}
         />

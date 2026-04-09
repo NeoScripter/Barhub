@@ -14,14 +14,12 @@ import { FC, useState } from 'react';
 
 interface NavDrawerProps {
     item: NavDrawerType;
-    expanded: boolean;
     className?: string;
 }
 
-const NavDrawer: FC<NavDrawerProps> = ({ item, className, expanded }) => {
+const NavDrawer: FC<NavDrawerProps> = ({ item, className }) => {
     const [isOpen, setIsOpen] = useState(false);
     const { whenCurrentUrl } = useCurrentUrl();
-    const isTablet = useIsTablet();
 
     const handleClick = () => {
         document.dispatchEvent(new Event('closeNavMenu'));
@@ -32,15 +30,16 @@ const NavDrawer: FC<NavDrawerProps> = ({ item, className, expanded }) => {
             <DropdownMenu onOpenChange={setIsOpen}>
                 <DropdownMenuTrigger className="flex cursor-pointer items-center gap-2 whitespace-nowrap xl:gap-3">
                     <item.icon className="size-4.5 shrink-0 xl:size-5.5" />
-                    {(expanded || isTablet) && item.label}
-                    {expanded && (
+                    <span className="not-group-hover:lg:hidden">
+                        {item.label}
+                    </span>
+
                         <ChevronDown
                             className={cn(
-                                'size-5 transition-transform duration-300',
+                                'size-5 not-group-hover:hidden transition-transform duration-300',
                                 isOpen && 'rotate-180',
                             )}
                         />
-                    )}
                 </DropdownMenuTrigger>
                 <DropdownMenuContent
                     align="end"

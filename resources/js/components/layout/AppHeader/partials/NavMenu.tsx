@@ -24,32 +24,20 @@ const NavMenu: FC<NodeProps> = ({ className }) => {
     return (
         <div
             className={cn(
-                'w-full px-7.5 duration-300 ease-in-out sm:pb-8 sm:transition-all lg:fixed lg:top-10 lg:left-10 lg:z-10 lg:rounded-xl lg:border lg:border-gray-200/40 lg:bg-white lg:pt-5 lg:shadow-xl 2xl:left-31',
-                {
-                    'lg:max-w-81 lg:pr-12 lg:pb-9 lg:pl-7.5': expanded,
-                    'lg:max-w-12.5 lg:px-4.5 lg:pb-7': !expanded,
-                },
+                'group w-full px-7.5 duration-300 ease-in-out sm:py-8 sm:transition-all lg:fixed lg:top-10 lg:left-10 lg:z-10 lg:max-w-12.5 lg:rounded-xl lg:border lg:border-gray-200/40 lg:bg-white lg:px-4.5 lg:py-7 lg:shadow-xl hover:lg:max-w-81 hover:lg:py-9 hover:lg:pr-12 hover:lg:pl-7.5 2xl:left-31',
                 className,
             )}
         >
             <Header className="lg:hidden" />
 
-            <CollapseBtn
-                expanded={expanded}
-                handleClick={() => setExpanded((p) => !p)}
-            />
-
             <nav>
                 <ul
                     className={cn(
-                        'grid gap-6',
-                        !expanded &&
-                            'lg:place-content-center lg:place-items-center',
+                        'grid gap-6 not-group-hover:lg:place-content-center not-group-hover:lg:place-items-center',
                     )}
                 >
                     {renderNavItems(currentUrl).map((item) => (
                         <NavItem
-                            expanded={expanded}
                             key={item.id}
                             item={item}
                         />
