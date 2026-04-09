@@ -74,7 +74,6 @@ const Create: FC<Inertia.Pages.Admin.Companies.Create> = ({ tags }) => {
                         <Input
                             id="legal_name"
                             type="text"
-                            required
                             value={data.legal_name}
                             onChange={(e) =>
                                 setData('legal_name', e.target.value)

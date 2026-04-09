@@ -95,7 +95,7 @@ const Create: FC<Inertia.Pages.Admin.Tasks.Create> = ({
                     </div>
 
                     <div className="grid gap-2">
-                        <Label htmlFor="file">Прикрепить новый файл</Label>
+                        <Label htmlFor="file">Прикрепить новый файл (Не обязательно)</Label>
                         <FileInput
                             isEdited={true}
                             id="file"
@@ -108,7 +108,7 @@ const Create: FC<Inertia.Pages.Admin.Tasks.Create> = ({
                         <InputError message={errors.file} />
                     </div>
                     <div className="grid gap-2">
-                        <Label htmlFor="file_name">Название файла</Label>
+                        <Label htmlFor="file_name">Название файла (При наличии файла)</Label>
                         <Input
                             id="file_name"
                             type="text"
@@ -123,7 +123,7 @@ const Create: FC<Inertia.Pages.Admin.Tasks.Create> = ({
                     </div>
 
                     <div className="grid gap-2">
-                        <Label htmlFor="comment">Комментарий</Label>
+                        <Label htmlFor="comment">Комментарий (Не обязательно)</Label>
                         <Textarea
                             id="comment"
                             name="comment"
