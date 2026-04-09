@@ -15,6 +15,9 @@ return new class extends Migration
             $table->id();
             $table->foreignId('exhibition_id')->constrained()->cascadeOnDelete();
             $table->string('title');
+            $table->string('description')->nullable();
+            $table->string('file_url')->nullable();
+            $table->string('file_name')->nullable();
             $table->string('url');
             $table->timestamps();
         });

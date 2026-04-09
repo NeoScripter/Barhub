@@ -1,25 +1,30 @@
 import FormButtons from '@/components/form/FormButtons';
 import InputError from '@/components/form/InputError';
 import AccentHeading from '@/components/ui/AccentHeading';
+import FileInput from '@/components/ui/FileInput';
 import ImgInput from '@/components/ui/ImgInput';
 import { Input } from '@/components/ui/Input';
 import { Label } from '@/components/ui/Label';
+import { Textarea } from '@/components/ui/Textarea';
 import { index, store } from '@/wayfinder/routes/admin/info-items';
 import { Inertia } from '@/wayfinder/types';
 import { useForm } from '@inertiajs/react';
 import { FC } from 'react';
 import { toast } from 'sonner';
 
-const Create: FC<Inertia.Pages.Admin.InfoItems.Create> = ({ exhibition }) => {
+const Create: FC<Inertia.Pages.Admin.InfoItems.Create> = () => {
     const { data, setData, post, processing, errors } = useForm({
         title: '',
         url: '',
         image: null as File | null,
+        description: '',
+        file_url: null as File | null,
+        file_name: '',
     });
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        post(store({ exhibition }).url, {
+        post(store().url, {
             onSuccess: () => toast.success('Элемент успешно создан'),
         });
     };
@@ -65,6 +70,33 @@ const Create: FC<Inertia.Pages.Admin.InfoItems.Create> = ({ exhibition }) => {
                         />
                         <InputError message={errors.url} />
                     </div>
+                    <div className="grid gap-2">
+                        <Label htmlFor="description">Описание</Label>
+                        <Textarea
+                            id="description"
+                            name="description"
+                            value={data.description}
+                            onChange={(e) =>
+                                setData('description', e.target.value)
+                            }
+                            className="max-w-full"
+                        />
+                        <InputError message={errors.description} />
+                    </div>
+
+                    <div className="grid gap-2">
+                        <Label htmlFor="file_url">Прикрепить файл</Label>
+                        <FileInput
+                            isEdited={true}
+                            id="file_url"
+                            error={errors.file_url}
+                            onChange={(file) => {
+                                setData('file_url', file);
+                                if (file) setData('file_name', file.name);
+                            }}
+                        />
+                        <InputError message={errors.file_url} />
+                    </div>
 
                     <div className="grid gap-2">
                         <ImgInput
@@ -81,7 +113,7 @@ const Create: FC<Inertia.Pages.Admin.InfoItems.Create> = ({ exhibition }) => {
                 <FormButtons
                     label="Создать"
                     processing={processing}
-                    backUrl={index({ exhibition }).url}
+                    backUrl={index().url}
                 />
             </form>
         </div>

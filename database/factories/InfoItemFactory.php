@@ -18,6 +18,7 @@ class InfoItemFactory extends Factory
     {
         return [
             'title' => fake()->words(random_int(2, 4), true),
+            'description' => fake()->words(random_int(20, 30), true),
             'url' => fake()->filePath(),
         ];
     }

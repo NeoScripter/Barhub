@@ -11,6 +11,7 @@ use App\Models\Image;
 use App\Models\InfoItem;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 
 final class InfoItemController extends Controller
@@ -44,8 +45,15 @@ final class InfoItemController extends Controller
         DB::transaction(function () use ($request) {
             $exhibition = Auth::user()->getActiveExhibition();
             $infoItem = $exhibition->infoItems()->create(
-                $request->only(['title', 'url']),
+                $request->only(['title', 'description', 'file_name', 'url']),
             );
+
+            if ($request->hasFile('file_url')) {
+                $path = $request->file('file_url')->store('info-items-files', 'public');
+                $infoItem->update([
+                    'file_url' => $path,
+                ]);
+            }
 
             if ($request->hasFile('image')) {
                 Image::attachToModel(
@@ -66,7 +74,15 @@ final class InfoItemController extends Controller
     {
 
         DB::transaction(function () use ($request, $infoItem): void {
-            $infoItem->update($request->only(['title', 'url']));
+            $infoItem->update($request->only(['title', 'description',  'url', 'file_name']));
+
+            if ($request->hasFile('file_url')) {
+                if ($infoItem->file_url) {
+                    Storage::delete($infoItem->file_url);
+                }
+                $path = $request->file('file_url')->store('info-items-files', 'public');
+                $infoItem->update(['file_url' => $path]);
+            }
 
             if ($request->hasFile('image')) {
                 if ($infoItem->image) {
