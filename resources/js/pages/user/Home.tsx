@@ -17,9 +17,9 @@ const Home = () => {
                     <ul className={cn('grid place-content-center gap-6')}>
                         {renderNavItems(currentUrl).map((item) => (
                             <NavItem
-                                expanded={true}
                                 key={item.id}
                                 item={item}
+                                className="[&>span]:flex!"
                             />
                         ))}
                     </ul>

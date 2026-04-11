@@ -5,7 +5,7 @@ import { Link } from '@inertiajs/react';
 import { FC } from 'react';
 import NavDrawer from './NavDrawer';
 
-const NavItem: FC<{ item: NavItemType }> = ({ item }) => {
+const NavItem: FC<{ item: NavItemType, className?: string }> = ({ item, className }) => {
     const { whenCurrentUrl } = useCurrentUrl();
 
     const handleClick = () => {
@@ -22,6 +22,7 @@ const NavItem: FC<{ item: NavItemType }> = ({ item }) => {
                         baseClass,
                         'link-hover w-fit whitespace-nowrap',
                         whenCurrentUrl(item.url, 'text-primary'),
+                        className
                     )}
                     preserveState
                     onSuccess={handleClick}
