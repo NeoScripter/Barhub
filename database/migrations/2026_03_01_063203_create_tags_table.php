@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Models\Tag;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -18,6 +19,16 @@ return new class extends Migration
             $table->string('name');
             $table->timestamps();
         });
+
+
+        $data = [
+            ['name' => 'Экпонент'],
+            ['name' => 'Генеральный партнер'],
+        ];
+
+        foreach ($data as $tag) {
+            Tag::factory($tag)->create();
+        }
     }
 
     /**

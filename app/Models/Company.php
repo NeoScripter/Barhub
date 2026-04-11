@@ -65,4 +65,12 @@ final class Company extends Model
     {
         return $this->hasMany(Followup::class);
     }
+
+    protected static function booted(): void
+    {
+        self::created(function (Company $company): void {
+            $tag = Tag::where('name', 'Экпонент')->firstOrCreate();
+            $company->tags()->attach($tag->id);
+        });
+    }
 }

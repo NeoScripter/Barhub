@@ -46,7 +46,6 @@ final class CompanySeeder extends Seeder
                     ->count(rand(2, 4)))
                 ->count(3)
                 ->for($exhibition)
-                ->hasAttached($tags->random(random_int(1, 3)))
                 ->afterCreating(function (Company $company): void {
 
                     $company->logo()->create([
