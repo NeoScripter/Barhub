@@ -17,6 +17,7 @@ final class CompanyUpdateRequest extends FormRequest
     {
         return [
             'public_name' => ['sometimes', 'string', 'min:1', 'max:255'],
+            'legal_name' => ['sometimes', 'string', 'min:1', 'max:255'],
             'description' => ['sometimes', 'string', 'min:10', 'max:5000'],
             'phone' => ['sometimes', 'string', 'max:50'],
             'email' => ['sometimes', 'email', 'max:255', 'unique:companies,email,' . $this->company?->id],

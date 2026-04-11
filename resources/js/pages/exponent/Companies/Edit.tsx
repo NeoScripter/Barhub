@@ -16,6 +16,7 @@ const Edit: FC<Inertia.Pages.Admin.Companies.Edit> = ({ company }) => {
     const { data, setData, post, processing, errors, progress } = useForm({
         _method: 'PUT',
         public_name: company.public_name ?? '',
+        legal_name: company.legal_name ?? '',
         description: company.description ?? '',
         phone: company.phone ?? '',
         email: company.email ?? '',
@@ -74,6 +75,21 @@ const Edit: FC<Inertia.Pages.Admin.Companies.Edit> = ({ company }) => {
                         />
                         <InputError message={errors.public_name} />
                     </div>
+
+                    <div className="grid gap-2">
+                        <Label htmlFor="legal_name">Юридическое название</Label>
+                        <Input
+                            id="legal_name"
+                            type="text"
+                            required
+                            value={data.legal_name}
+                            onChange={(e) =>
+                                setData('legal_name', e.target.value)
+                            }
+                        />
+                        <InputError message={errors.legal_name} />
+                    </div>
+
                     <div className="grid gap-2 md:col-span-2">
                         <Label htmlFor="description">Описание</Label>
                         <Textarea
