@@ -8,7 +8,9 @@ use App\Enums\UserRole;
 use App\Http\Controllers\Controller;
 use App\Models\Exhibition;
 use App\Models\User;
+use App\Notifications\CreateAdminNotification;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Notification;
 use Inertia\Inertia;
 
 final class AdminController extends Controller
@@ -34,6 +36,9 @@ final class AdminController extends Controller
         $exhibition->users()->syncWithoutDetaching($user->id);
         $user->update(['role' => UserRole::ADMIN]);
         $user->save();
+
+        Notification::route('mail', $user->email)
+            ->notify(new CreateAdminNotification($user->email));
 
         return back();
     }

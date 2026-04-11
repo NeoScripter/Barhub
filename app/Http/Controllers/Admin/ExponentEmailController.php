@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Company;
 use App\Models\ExponentEmail;
 use App\Notifications\CreateExponentNotification;
+use App\Notifications\RegisterExponentNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Notification;
 
@@ -23,7 +24,7 @@ class ExponentEmailController extends Controller
         ]);
 
         Notification::route('mail', $email->email)
-            ->notify(new CreateExponentNotification($email->email));
+            ->notify(new RegisterExponentNotification($email->email, $company->public_name, $company->exhibition->name));
 
         return to_route('admin.exponents.index', ['company' => $company]);
     }

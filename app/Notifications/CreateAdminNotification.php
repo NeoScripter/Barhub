@@ -8,14 +8,14 @@ use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 use Illuminate\Support\HtmlString;
 
-class CreateExponentNotification extends Notification // implements ShouldQueue
+class CreateAdminNotification extends Notification // implements ShouldQueue
 {
     use Queueable;
 
     /**
      * Create a new notification instance.
      */
-    public function __construct(protected string $email, protected string $exhibition, protected string $company) {}
+    public function __construct(protected string $email) {}
 
     /**
      * Get the notification's delivery channels.
@@ -33,12 +33,12 @@ class CreateExponentNotification extends Notification // implements ShouldQueue
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-            ->subject('Доступ к личному кабинету экпонента')
+            ->subject('Доступ к личному кабинету администратора')
             ->greeting('Добрый день!')
             ->line('Вас приветствует команда bar hub 👋')
-            ->line("Рады подтвердить участие компании {$this->company} в выставке {$this->exhibition}.")
-            ->line('Для продолжения работы и заполнения информации о вашем стенде, пожалуйста, перейдите по ссылке и зарегистрируйтесь в личном кабинете экспонента:')
-            ->action('Регистрация', url('/register'))
+            ->line("Рады сообщить, что вам предоставлен доступ к личному кабинету администратора")
+            ->line('Для продолжения работы, пожалуйста, перейдите по указанной ссылке:')
+            ->action('Вход', url('/login'))
             ->line('Если у вас возникнут вопросы по работе с кабинетом — мы всегда на связи и готовы помочь.')
             ->salutation(new HtmlString('<p>С уважением, <br>команда bar hub</p>'));
     }

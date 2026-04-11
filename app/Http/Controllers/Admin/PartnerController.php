@@ -10,11 +10,13 @@ use App\Http\Requests\Admin\Partner\PartnerUpdateRequest;
 use App\Http\Requests\Admin\Task\TaskIndexRequest;
 use App\Models\Task;
 use App\Sorts\RelationSort;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\AllowedSort;
 use Spatie\QueryBuilder\QueryBuilder;
+use Spatie\SimpleExcel\SimpleExcelWriter;
 
 final class PartnerController extends Controller
 {
@@ -82,5 +84,38 @@ final class PartnerController extends Controller
         }
 
         return to_route('admin.all-tasks.index');
+    }
+
+    public function export()
+    {
+        $exhibition = Auth::user()->getActiveExhibition();
+
+        $tasks = QueryBuilder::for(Task::query()->select(['tasks.title', 'tasks.id', 'tasks.deadline', 'tasks.status', 'tasks.company_id'])
+            ->forExhibition($exhibition->id))
+            ->with('company:public_name,id')
+            ->where('status', '!=', TaskStatus::COMPLETED)
+            ->allowedSorts([
+                'title',
+                'deadline',
+                'status',
+                AllowedSort::custom('company.public_name', new RelationSort('companies', 'public_name', 'company_id')),
+            ])
+            ->allowedFilters([
+                AllowedFilter::exact('status'),
+            ])
+            ->get();
+
+        return SimpleExcelWriter::streamDownload('tasks.xlsx')
+            ->addRows(
+                $tasks->map(fn($task) => [
+                    'Компания'  => $task->company?->public_name,
+                    'Задача'    => $task->title,
+                    'Дедлайн' => $task->deadline
+                        ? Carbon::parse($task->deadline)->format('d.m.Y H:i')
+                        : null,
+                    'Статус'    => $task->status->label(),
+                ])->toArray()
+            )
+            ->toBrowser();
     }
 }

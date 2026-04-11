@@ -9,7 +9,6 @@ import {
     getSingleFilterUrl,
     getTaskStatus,
     isActiveFilter,
-    makePDF,
 } from '@/lib/utils';
 import { Inertia } from '@/wayfinder/types';
 import { Link } from '@inertiajs/react';
@@ -19,6 +18,10 @@ import TaskTable from './partials/TaskTable';
 import TaskTableHeader from './partials/TaskTableHeader';
 
 const Index: FC<Inertia.Pages.Admin.Tasks.Index> = ({ tasks, summary }) => {
+
+    const params = new URLSearchParams(window.location.search);
+    const exportUrl = `/admin/tasks/export?${params.toString()}`;
+
     return (
         <div>
             <div className="heading flex items-center justify-between gap-3">
@@ -33,11 +36,13 @@ const Index: FC<Inertia.Pages.Admin.Tasks.Index> = ({ tasks, summary }) => {
 
                 <Button
                     variant="ghost"
+                    asChild
                     size="lg"
-                    onClick={makePDF}
                 >
-                    <Download />
-                    Скачать pdf
+                    <a href={exportUrl}>
+                        <Download />
+                        Скачать список
+                    </a>
                 </Button>
             </div>
 

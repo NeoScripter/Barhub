@@ -42,6 +42,8 @@ Route::prefix('/exhibitions/{exhibition}')
         Route::resource('events', UserEventController::class)->only(['index', 'show']);
         Route::resource('companies', UserCompanyController::class)->only(['index', 'show']);
         Route::resource('people', UserPersonController::class)->only(['index', 'show']);
+        Route::get('/export', [UserEventController::class, 'export'])
+            ->name('export');
     });
 
 Route::prefix('/exponent')
@@ -82,6 +84,7 @@ Route::prefix('/admin')
         Route::resource('companies', AdminCompanyController::class)->except(['show']);
         Route::resource('all-tasks', AdminPartnerController::class)
             ->only(['index', 'edit', 'update']);
+        Route::get('/tasks/export', [AdminPartnerController::class, 'export']);
         Route::resource('followups', AdminFollowupController::class)
             ->only(['index', 'edit', 'update', 'destroy']);
         Route::resource('services', AdminServiceController::class);
@@ -98,10 +101,9 @@ Route::prefix('/admin')
 
 
 // Route::get('/preview-email', function () {
-//     $notification = new \App\Notifications\CreateExponentNotification('test@example.com');
+//     $notification = new \App\Notifications\CreateExponentNotification('test@example.com', 'Example company', 'Example exhibition');
 
 //     $mailMessage = $notification->toMail(new \Illuminate\Notifications\AnonymousNotifiable());
 
 //     return $mailMessage->render();
 // });
-//

@@ -11,11 +11,12 @@ use Carbon\CarbonImmutable;
 use Illuminate\Auth\Events\Login;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
-use Illuminate\Foundation\Http\Middleware\TrimStrings;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Validation\Rules\Password;
+use Illuminate\Auth\Notifications\ResetPassword;
+use App\Notifications\Auth\ResetPasswordNotification;
 
 final class AppServiceProvider extends ServiceProvider
 {
@@ -34,6 +35,7 @@ final class AppServiceProvider extends ServiceProvider
     {
         $this->configureDefaults();
         $this->configureEvents();
+        $this->configureEmails();
     }
 
     private function configureDefaults(): void
@@ -45,13 +47,13 @@ final class AppServiceProvider extends ServiceProvider
         // );
 
         Password::defaults(
-            fn (): ?Password => app()->isProduction()
+            fn(): ?Password => app()->isProduction()
                 ? Password::min(12)
-                    ->mixedCase()
-                    ->letters()
-                    ->numbers()
-                    ->symbols()
-                    ->uncompromised()
+                ->mixedCase()
+                ->letters()
+                ->numbers()
+                ->symbols()
+                ->uncompromised()
                 : null
         );
 
@@ -70,6 +72,21 @@ final class AppServiceProvider extends ServiceProvider
     {
         Event::listen(Login::class, function ($event): void {
             $event->user->update(['last_login_at' => now()]);
+        });
+    }
+
+    private function configureEmails(): void
+    {
+        ResetPassword::createUrlUsing(function ($notifiable, $token) {
+            return url(route('password.reset', [
+                'token' => $token,
+                'email' => $notifiable->getEmailForPasswordReset(),
+            ], false));
+        });
+
+        // Tell the User model to use your custom notification
+        ResetPassword::toMailUsing(function ($notifiable, $token) {
+            return (new ResetPasswordNotification($token))->toMail($notifiable);
         });
     }
 }

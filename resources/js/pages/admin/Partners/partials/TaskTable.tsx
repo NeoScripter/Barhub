@@ -5,8 +5,6 @@ import { NodeProps } from '@/types/shared';
 import { edit } from '@/wayfinder/routes/admin/all-tasks';
 import { App } from '@/wayfinder/types';
 import { Link } from '@inertiajs/react';
-import { VisuallyHidden } from '@radix-ui/react-visually-hidden';
-import { Eye, PencilLine } from 'lucide-react';
 import { FC } from 'react';
 
 const TaskTable: FC<

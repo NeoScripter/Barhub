@@ -1,6 +1,5 @@
 import AccentHeading from '@/components/ui/AccentHeading';
 import { Button } from '@/components/ui/Button';
-import { makePDF } from '@/lib/utils';
 import { Inertia } from '@/wayfinder/types';
 import { Download } from 'lucide-react';
 import { FC } from 'react';
@@ -8,6 +7,10 @@ import EventCard from './partials/EventCard';
 import EventFilters from './partials/EventFilters';
 
 const Index: FC<Inertia.Pages.User.Events.Index> = ({ events, exhibition }) => {
+
+    const params = new URLSearchParams(window.location.search);
+    const exportUrl = `/exhibitions/${exhibition.id}/export?${params.toString()}`;
+
     return (
         <div className="spacing grid">
             <EventFilters />
@@ -20,11 +23,13 @@ const Index: FC<Inertia.Pages.User.Events.Index> = ({ events, exhibition }) => {
 
                     <Button
                         variant="ghost"
+                        asChild
                         size="lg"
-                        onClick={makePDF}
                     >
-                        <Download />
-                        Скачать pdf
+                        <a href={exportUrl}>
+                            <Download />
+                            Скачать список
+                        </a>
                     </Button>
                 </div>
 

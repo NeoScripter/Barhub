@@ -13,6 +13,7 @@ use App\Models\Exhibition;
 use Inertia\Inertia;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
+use Spatie\SimpleExcel\SimpleExcelWriter;
 
 final class EventController extends Controller
 {
@@ -64,8 +65,11 @@ final class EventController extends Controller
 
     public function show(Exhibition $exhibition, Event $event)
     {
-        $event->load(['stage', 'themes',
-            'people' => fn($query) => $query->withPivot('role')]);
+        $event->load([
+            'stage',
+            'themes',
+            'people' => fn($query) => $query->withPivot('role')
+        ]);
 
         $event->people->transform(function ($person) {
             $person->role_label =
@@ -77,5 +81,32 @@ final class EventController extends Controller
             'exhibition' => $exhibition,
             'event' => $event,
         ]);
+    }
+
+    public function export(EventIndexRequest $request, AttachRolesToPeople $action, Exhibition $exhibition)
+    {
+        unset($request);
+        $events = $action->execute(
+            QueryBuilder::for($exhibition->events())
+                ->with(['stage', 'themes', 'people'])
+                ->allowedFilters([
+                    AllowedFilter::exact('stage.name'),
+                    AllowedFilter::exact('themes.name'),
+                    'starts_at',
+                ])
+                ->get()
+        );
+
+        return SimpleExcelWriter::streamDownload('events.xlsx')
+            ->addRows(
+                collect($events)->map(fn($event) => [
+                    'Название'   => $event->title,
+                    'Дата'       => $event->starts_at->format('d.m.Y H:i'),
+                    'Площадка'      => $event->stage?->name,
+                    'Темы'       => $event->themes->pluck('name')->join(', '),
+                    'Участники'   => $event->people->pluck('name')->join(', '),
+                ])->toArray()
+            )
+            ->toBrowser();
     }
 }
