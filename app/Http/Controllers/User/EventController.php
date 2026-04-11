@@ -49,8 +49,8 @@ final class EventController extends Controller
         $days = $allEvents
             ->pluck('starts_at')
             ->sort()
-            ->unique()
             ->map(fn($date) => $date->format('Y-m-d'))
+            ->unique()
             ->values();
 
         return Inertia::render('user/Events/Index', [
