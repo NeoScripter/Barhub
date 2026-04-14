@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Enums\TaskStatus;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -18,6 +19,7 @@ return new class extends Migration
             $table->foreignId('user_id')->nullable()->constrained()->nullOnDelete();
             $table->foreignId('exhibition_id')->constrained()->cascadeOnDelete();
             $table->string('title');
+            $table->unsignedInteger('status')->default(TaskStatus::TO_BE_COMPLETED->value);
             $table->text('description');
             $table->dateTime('deadline');
             $table->text('comment')->nullable();

@@ -4,11 +4,9 @@ import AccentHeading from '@/components/ui/AccentHeading';
 import FileInput from '@/components/ui/FileInput';
 import { Input } from '@/components/ui/Input';
 import { Label } from '@/components/ui/Label';
+import RadioCheckbox from '@/components/ui/RadioCheckbox';
 import { Textarea } from '@/components/ui/Textarea';
-import {
-    index,
-    store,
-} from '@/wayfinder/routes/admin/task-templates';
+import { index, store } from '@/wayfinder/routes/admin/task-templates';
 import { Inertia } from '@/wayfinder/types';
 import { router, useForm } from '@inertiajs/react';
 import { FC } from 'react';
@@ -22,6 +20,7 @@ const Create: FC<Inertia.Pages.Admin.Tasks.Create> = () => {
         file_url: null as File | null,
         file_name: '',
         comment: '',
+        to_be_checked: true,
     });
 
     const handleSubmit = (e: React.FormEvent) => {
@@ -134,6 +133,14 @@ const Create: FC<Inertia.Pages.Admin.Tasks.Create> = () => {
                             placeholder="Введите комментарий"
                         />
                         <InputError message={errors.comment} />
+                    </div>
+                    <div>
+                        <RadioCheckbox
+                            label="На проверку"
+                            value={data.to_be_checked}
+                            onChange={(val) => setData('to_be_checked', val)}
+                        />
+                        <InputError message={errors.to_be_checked} />
                     </div>
                 </div>
 

@@ -25,6 +25,7 @@ final class TaskTemplateStoreRequest extends FormRequest
                 'max:51200',
                 'mimes:jpg,jpeg,png,gif,webp,svg,pdf,doc,docx,xls,xlsx,ppt,pptx,txt,csv,zip,rar',
             ],
+            'to_be_checked' => ['required', 'boolean'],
             'file_name' => ['required_with:file', 'nullable', 'string', 'max:255'],
             'comment' => ['nullable', 'string', 'max:2000'],
         ];

@@ -19,7 +19,7 @@ final class CreateTaskFromTemplate
                 'title'       => $template->title,
                 'description' => $template->description,
                 'deadline'    => $template->deadline,
-                'status'      => TaskStatus::TO_BE_COMPLETED,
+                'status'      => $template->status,
             ]);
 
             if ($template->comment) {

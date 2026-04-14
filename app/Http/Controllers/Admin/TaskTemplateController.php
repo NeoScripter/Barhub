@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Admin;
 
+use App\Enums\TaskStatus;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\TaskTemplate\TaskTemplateIndexRequest;
 use App\Http\Requests\Admin\TaskTemplate\TaskTemplateStoreRequest;
@@ -53,7 +54,9 @@ final class TaskTemplateController extends Controller
         $template = $exhibition->taskTemplates()->create([
             ...$request->only(['title', 'description', 'deadline', 'comment', 'file_name']),
             'user_id' => $user->id,
+            'status' => $request->boolean('to_be_checked') ? TaskStatus::TO_BE_COMPLETED : TaskStatus::COMPLETED,
         ]);
+
 
         if ($request->hasFile('file_url')) {
             $path = $request->file('file_url')->store('task-template-files', 'public');
