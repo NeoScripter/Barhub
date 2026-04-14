@@ -32,6 +32,8 @@ const Edit: FC<Inertia.Pages.Admin.Tasks.Edit> = ({ task }) => {
         });
     };
 
+    const isCompleted = task.status === 1;
+
     return (
         <div className="mx-auto w-full max-w-250">
             <div className="mb-8 text-center md:mb-12">
@@ -81,56 +83,60 @@ const Edit: FC<Inertia.Pages.Admin.Tasks.Edit> = ({ task }) => {
                 </LabeledContent>
             </div>
 
-            <form
-                className="flex flex-col gap-6"
-                onSubmit={handleSubmit}
-            >
-                <div className="grid gap-2">
-                    <Label htmlFor="comment">Добавить комментарий</Label>
-                    <Textarea
-                        id="comment"
-                        name="comment"
-                        value={data.comment}
-                        onChange={(e) => setData('comment', e.target.value)}
-                        className="max-w-2xl"
-                        placeholder="Введите комментарий"
-                    />
-                    <InputError message={errors.comment} />
-                </div>
+            {!isCompleted && (
+                <form
+                    className="flex flex-col gap-6"
+                    onSubmit={handleSubmit}
+                >
+                    <div className="grid gap-2">
+                        <Label htmlFor="comment">Добавить комментарий</Label>
+                        <Textarea
+                            id="comment"
+                            name="comment"
+                            value={data.comment}
+                            onChange={(e) => setData('comment', e.target.value)}
+                            className="max-w-2xl"
+                            placeholder="Введите комментарий"
+                        />
+                        <InputError message={errors.comment} />
+                    </div>
 
-                <div className="grid gap-2">
-                    <Label htmlFor="file">Прикрепить новый файл</Label>
-                    <FileInput
-                        isEdited={true}
-                        id="file"
-                        filename={data.file_name}
-                        error={errors.file}
-                        onChange={(file) => {
-                            setData('file', file);
-                            if (file) setData('file_name', file.name);
-                        }}
-                    />
-                    <InputError message={errors.file} />
-                </div>
-                <div className="grid gap-2">
-                    <Label htmlFor="file_name">Название файла</Label>
-                    <Input
-                        id="file_name"
-                        type="text"
-                        name="file_name"
-                        value={data.file_name}
-                        onChange={(e) => setData('file_name', e.target.value)}
-                        placeholder="Введите название файла"
-                    />
-                    <InputError message={errors.file_name} />
-                </div>
+                    <div className="grid gap-2">
+                        <Label htmlFor="file">Прикрепить новый файл</Label>
+                        <FileInput
+                            isEdited={true}
+                            id="file"
+                            filename={data.file_name}
+                            error={errors.file}
+                            onChange={(file) => {
+                                setData('file', file);
+                                if (file) setData('file_name', file.name);
+                            }}
+                        />
+                        <InputError message={errors.file} />
+                    </div>
+                    <div className="grid gap-2">
+                        <Label htmlFor="file_name">Название файла</Label>
+                        <Input
+                            id="file_name"
+                            type="text"
+                            name="file_name"
+                            value={data.file_name}
+                            onChange={(e) =>
+                                setData('file_name', e.target.value)
+                            }
+                            placeholder="Введите название файла"
+                        />
+                        <InputError message={errors.file_name} />
+                    </div>
 
-                <FormButtons
-                    label="Отправить на проверку"
-                    processing={processing}
-                    backUrl={index().url}
-                />
-            </form>
+                    <FormButtons
+                        label="Отправить на проверку"
+                        processing={processing}
+                        backUrl={index().url}
+                    />
+                </form>
+            )}
         </div>
     );
 };

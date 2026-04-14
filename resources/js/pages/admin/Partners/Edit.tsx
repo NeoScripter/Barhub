@@ -15,11 +15,10 @@ import { FC } from 'react';
 import { toast } from 'sonner';
 
 const Edit: FC<Inertia.Pages.Admin.Tasks.Edit> = ({ task }) => {
-    const comment = task.comments?.[0] ?? null;
 
     const { data, errors, setData, patch, processing } = useForm({
         is_accepted: true,
-        comment: comment?.content ?? '',
+        comment: '',
     });
 
     const handleSubmit = (e: React.FormEvent) => {
