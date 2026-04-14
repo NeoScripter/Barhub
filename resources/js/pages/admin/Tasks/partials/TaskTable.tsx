@@ -20,8 +20,6 @@ const TaskTable: FC<
         return null;
     }
 
-    console.log(tasks)
-
     return (
         <Table.Body
             id="tasks-table"

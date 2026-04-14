@@ -25,12 +25,16 @@ final class PersonController extends Controller
 
         $people = DB::select(
             '
-            select p.id, p.name, p.regalia, p.bio, p.telegram,
+            select p.id, p.name, p.regalia, p.bio, p.telegram, img.*,
             group_concat(distinct pivot2.role) as roles from people as p
             join exhibition_person as pivot1
             on pivot1.person_id = p.id
             join event_person as pivot2
             on pivot2.person_id = p.id
+            join images as img
+            on img.imageable_id = p.id
+            and img.imageable_type = "person"
+            and img.type = "avatar"
             where pivot1.exhibition_id = ?'
                 . $query . ' group by p.id',
             array_merge([$exhibition->id],  $roles)
@@ -55,6 +59,28 @@ final class PersonController extends Controller
                 )
             );
         }
+
+        $people = array_map(
+            fn($person) => [
+                'id' => $person->id,
+                'role_label' => $person->role_label,
+                'avatar' => [
+                    'webp3x' => $person->webp3x,
+                    'webp2x' => $person->webp2x,
+                    'webp' => $person->webp,
+                    'avif3x' => $person->avif3x,
+                    'avif2x' => $person->avif2x,
+                    'avif' => $person->avif,
+                    'tiny' => $person->tiny,
+                    'alt' => $person->alt,
+                ],
+               'name' => $person->name,
+                'regalia' => $person->regalia,
+                'telegram' => $person->telegram,
+                'bio' => $person->bio,
+            ],
+            $people
+        );
 
         return Inertia::render('user/People/Index', [
             'exhibition' => $exhibition,

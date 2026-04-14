@@ -27,8 +27,6 @@ const Edit: FC<Inertia.Pages.Admin.Companies.Edit> = ({ company }) => {
         logo: null as File | null,
     });
 
-    console.log(company);
-
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         post(update({ company: company.id }).url, {

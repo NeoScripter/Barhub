@@ -10,12 +10,11 @@ import { FC } from 'react';
 const PersonCard: FC<
     NodeProps<{ person: App.Models.Person; exhibition: App.Models.Exhibition }>
 > = ({ className, exhibition, person }) => {
-
     return (
         <li>
             <CardLayout
                 className={cn(
-                    'relative w-full gap-7 px-7 py-7! text-foreground transition-transform duration-150 ease-in-out hover:scale-103 hover:ring-2 hover:ring-primary sm:flex-row sm:justify-between lg:gap-8 lg:px-10 lg:py-11! xl:flex-col xl:items-end',
+                    'relative h-full w-full gap-7 px-7 py-7! text-foreground transition-transform duration-150 ease-in-out hover:scale-103 hover:ring-2 hover:ring-primary sm:flex-row sm:justify-between lg:gap-8 xl:flex-col xl:items-end',
                     className,
                 )}
             >
@@ -23,25 +22,25 @@ const PersonCard: FC<
                     className="absolute inset-0"
                     href={show({ exhibition, person })}
                 />
-                <div className="sm:flex sm:gap-5">
+                <div className="sm:flex sm:gap-5 h-full">
                     {person.avatar && (
                         <Image
                             image={person.avatar}
-                            wrapperStyles="size-30 shrink-0 mb-7.5 sm:mb-0 mx-auto"
+                            wrapperStyles="size-25 shrink-0 mb-7.5 sm:mb-0 mx-auto"
                         />
                     )}
 
-                    <div className="text-center sm:text-left">
+                    <div className="flex h-full flex-col justify-between text-center sm:text-left">
                         {person.name && (
-                            <h3 className="mb-2 text-xl font-bold">
+                            <h3 className="mb-2 text-lg font-bold">
                                 {person.name}
                             </h3>
                         )}
                         {person.regalia && (
-                            <h3>{`Регалии: ${person.regalia}`}</h3>
+                            <h3 className="text-sm h-full">{`Регалии: ${person.regalia}`}</h3>
                         )}
                         {person.role_label && (
-                            <p className="mt-3 text-lg font-semibold">
+                            <p className="mt-3 text-base font-semibold">
                                 {person.role_label}
                             </p>
                         )}

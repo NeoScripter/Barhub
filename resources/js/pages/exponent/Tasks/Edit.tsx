@@ -32,8 +32,6 @@ const Edit: FC<Inertia.Pages.Admin.Tasks.Edit> = ({ task }) => {
         });
     };
 
-    console.log(task.comments);
-
     return (
         <div className="mx-auto w-full max-w-250">
             <div className="mb-8 text-center md:mb-12">
