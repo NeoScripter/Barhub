@@ -64,7 +64,7 @@ final class EventController extends Controller
         ]);
     }
 
-    public function show(Exhibition $exhibition, Event $event)
+    public function show(Exhibition $exhibition, Event $event, AttachRolesToPeople $action)
     {
         $event->load([
             'stage',
@@ -72,11 +72,7 @@ final class EventController extends Controller
             'people' => fn($query) => $query->withPivot('role')
         ]);
 
-        $event->people->transform(function ($person) {
-            $person->role_label =
-                PersonRole::from($person->pivot->role)->label();
-            return $person;
-        });
+        $event = $action->execute($event);
 
         return Inertia::render('user/Events/Show', [
             'exhibition' => $exhibition,

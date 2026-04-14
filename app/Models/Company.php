@@ -69,7 +69,7 @@ final class Company extends Model
     protected static function booted(): void
     {
         self::created(function (Company $company): void {
-            $tag = Tag::where('name', 'Экпонент')->firstOrCreate();
+            $tag = Tag::firstOrCreate(['name' => 'Экспонент']);
             $company->tags()->attach($tag->id);
         });
     }

@@ -22,7 +22,7 @@ return new class extends Migration
 
 
         $data = [
-            ['name' => 'Экпонент'],
+            ['name' => 'Экспонент'],
             ['name' => 'Генеральный партнер'],
         ];
 
