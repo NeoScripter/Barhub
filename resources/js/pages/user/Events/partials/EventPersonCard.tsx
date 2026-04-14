@@ -21,7 +21,7 @@ const EventPersonCard: FC<
                 <Image
                     image={person.avatar}
                     imgStyles="object-contain"
-                    wrapperStyles="size-18 shrink-0 lg:size-12 2xl:size-18"
+                    wrapperStyles="size-31 shrink-0 lg:size-20 2xl:size-30"
                 />
             )}
 
