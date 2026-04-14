@@ -10,26 +10,46 @@ use Illuminate\Support\Collection;
 
 final class AttachRolesToPeople
 {
-    public function execute(Event|Collection $events): Collection
+    public function execute(Event|Collection $events): array
     {
         if ($events instanceof Event) {
             return $this->modifyEvent($events);
         }
 
-        return $events->map(function (Event $event): Event {
-            $event->setRelation('people', $this->modifyEvent($event));
-
-            return $event;
-        });
+        return $events->map(
+            fn(Event $event) =>
+            $this->modifyEvent($event)
+        )->toArray();
     }
 
-    private function modifyEvent(Event $event): Collection
+    private function modifyEvent(Event $event): array
     {
-        return $event->people->map(function ($person) {
-            $person->role = PersonRole::from($person->pivot->role)->label();
-            unset($person->pivot);
+        $people = $event
+            ->people
+            ->groupBy('name')
+            ->map(
+                fn($group) =>
+                [
+                    'name' => $group[0]->name,
+                    'role' => mb_strtolower(
+                        implode(
+                            ', ',
+                            $group->map(
+                                fn($person) =>
+                                PersonRole::from($person->pivot->role)
+                                    ->label()
+                            )->toArray()
+                        )
+                    ),
+                    'avatar' => $group[0]->avatar->toArray(),
+                    'logo' => $group[0]->logo->toArray(),
+                    'regalia' => $group[0]->regalia,
+                    'bio' => $group[0]->bio,
+                ]
+            )->values()->toArray();
 
-            return $person;
-        });
+        $event = $event->toArray();
+        $event['people'] = $people;
+        return $event;
     }
 }
