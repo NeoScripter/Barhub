@@ -30,6 +30,7 @@ final class AttachRolesToPeople
             ->map(
                 fn($group) =>
                 [
+                    'id' => $group[0]->id,
                     'name' => $group[0]->name,
                     'role' => mb_strtolower(
                         implode(

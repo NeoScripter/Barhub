@@ -12,6 +12,8 @@ const Show: FC<{
     event: App.Models.Event;
     exhibition: App.Models.Exhibition;
 }> = ({ event, exhibition }) => {
+
+    console.log(event)
     return (
         <div className="space-y-10 sm:space-y-14 xl:space-y-18">
             <CardLayout className="w-full items-start gap-5 px-7 py-9 lg:gap-8 lg:px-10 lg:py-11">

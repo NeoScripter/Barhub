@@ -10,6 +10,8 @@ import { FC } from 'react';
 const PersonCard: FC<
     NodeProps<{ person: App.Models.Person; exhibition: App.Models.Exhibition }>
 > = ({ className, exhibition, person }) => {
+
+    console.log(person)
     return (
         <li>
             <CardLayout
@@ -39,9 +41,9 @@ const PersonCard: FC<
                         {person.regalia && (
                             <h3 className="text-sm h-full">{`Регалии: ${person.regalia}`}</h3>
                         )}
-                        {person.role_label && (
+                        {person.role && (
                             <p className="mt-3 text-base font-semibold">
-                                {person.role_label}
+                                {person.role}
                             </p>
                         )}
                     </div>
