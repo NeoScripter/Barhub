@@ -15,7 +15,7 @@ class RegisterExponentNotification extends Notification // implements ShouldQueu
     /**
      * Create a new notification instance.
      */
-    public function __construct(protected string $email, protected string $exhibition, protected string $company) {}
+    public function __construct(protected string $email, protected string $company, protected string $exhibition) {}
 
     /**
      * Get the notification's delivery channels.

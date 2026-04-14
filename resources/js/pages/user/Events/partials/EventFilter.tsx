@@ -57,7 +57,6 @@ const FilterBtn: FC<{ filter: string; isActive?: boolean; url: string }> = ({
             <Link
                 href={url}
                 preserveScroll
-                preserveState
             >
                 {filter}
             </Link>

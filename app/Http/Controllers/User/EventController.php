@@ -10,6 +10,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\User\EventIndexRequest;
 use App\Models\Event;
 use App\Models\Exhibition;
+use Carbon\Carbon;
 use Inertia\Inertia;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
@@ -85,7 +86,7 @@ final class EventController extends Controller
 
     public function export(EventIndexRequest $request, AttachRolesToPeople $action, Exhibition $exhibition)
     {
-        unset($request);
+        // unset($request);
         $events = $action->execute(
             QueryBuilder::for($exhibition->events())
                 ->with(['stage', 'themes', 'people'])
@@ -100,11 +101,23 @@ final class EventController extends Controller
         return SimpleExcelWriter::streamDownload('events.xlsx')
             ->addRows(
                 collect($events)->map(fn($event) => [
-                    'Название'   => $event->title,
-                    'Дата'       => $event->starts_at->format('d.m.Y H:i'),
-                    'Площадка'      => $event->stage?->name,
-                    'Темы'       => $event->themes->pluck('name')->join(', '),
-                    'Участники'   => $event->people->pluck('name')->join(', '),
+                    'Название'   => $event['title'],
+                    'Дата'       => Carbon::parse($event['starts_at'])->format('d.m.Y H:i'),
+                    'Площадка'      => $event['stage']['name'] ?? '',
+                    'Темы'       => implode(
+                        ', ',
+                        array_map(
+                            fn($theme) => $theme['name'],
+                            $event['themes']
+                        )
+                    ),
+                    'Участники'       => implode(
+                        ', ',
+                        array_map(
+                            fn($person) => $person['name'],
+                            $event['people']
+                        )
+                    ),
                 ])->toArray()
             )
             ->toBrowser();
