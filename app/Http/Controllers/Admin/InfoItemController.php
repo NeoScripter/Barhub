@@ -20,7 +20,7 @@ final class InfoItemController extends Controller
     {
         $exhibition = Auth::user()->getActiveExhibition();
         if (!$exhibition) {
-            return redirect()->route('admin.dashboard');
+            return redirect()->route('admin.dashboard.index');
         }
         $infoItems = $exhibition->infoItems()
             ->select(['title',  'id'])
@@ -48,7 +48,7 @@ final class InfoItemController extends Controller
         $exhibition = Auth::user()->getActiveExhibition();
 
         if (!$exhibition) {
-            return redirect()->route('admin.dashboard');
+            return redirect()->route('admin.dashboard.index');
         }
 
         $infoItem = $exhibition->infoItems()->create(

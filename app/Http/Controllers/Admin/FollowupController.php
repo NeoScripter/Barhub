@@ -21,7 +21,7 @@ final class FollowupController extends Controller
         $exhibition = Auth::user()->getActiveExhibition();
 
         if (!$exhibition) {
-            return redirect()->route('admin.dashboard');
+            return redirect()->route('admin.dashboard.index');
         }
 
         $followups = QueryBuilder::for(Followup::query()->select(['followups.comment', 'followups.status', 'followups.id'])

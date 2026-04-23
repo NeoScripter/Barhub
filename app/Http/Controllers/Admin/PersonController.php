@@ -24,7 +24,7 @@ final class PersonController extends Controller
         $exhibition = Auth::user()->getActiveExhibition();
 
         if (!$exhibition) {
-            return redirect()->route('admin.dashboard');
+            return redirect()->route('admin.dashboard.index');
         }
         $eventIds = $exhibition->events()->pluck('id');
 
@@ -63,7 +63,7 @@ final class PersonController extends Controller
 
         $exhibition = Auth::user()->getActiveExhibition();
         if (!$exhibition) {
-            return redirect()->route('admin.dashboard');
+            return redirect()->route('admin.dashboard.index');
         }
         $exhibition->people()->syncWithoutDetaching($person->id);
 

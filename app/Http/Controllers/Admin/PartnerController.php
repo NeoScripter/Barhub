@@ -25,7 +25,7 @@ final class PartnerController extends Controller
         $exhibition = Auth::user()->getActiveExhibition();
 
         if (!$exhibition) {
-            return redirect()->route('admin.dashboard');
+            return redirect()->route('admin.dashboard.index');
         }
 
         $tasks = QueryBuilder::for(Task::query()->select(['tasks.title', 'tasks.id', 'tasks.deadline', 'tasks.status', 'tasks.company_id'])
@@ -95,7 +95,7 @@ final class PartnerController extends Controller
         $exhibition = Auth::user()->getActiveExhibition();
 
         if (!$exhibition) {
-            return redirect()->route('admin.dashboard');
+            return redirect()->route('admin.dashboard.index');
         }
 
         $tasks = QueryBuilder::for(Task::query()->select(['tasks.title', 'tasks.id', 'tasks.deadline', 'tasks.status', 'tasks.company_id'])

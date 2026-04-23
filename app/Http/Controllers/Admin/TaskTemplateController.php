@@ -23,7 +23,7 @@ final class TaskTemplateController extends Controller
         $exhibition = Auth::user()->getActiveExhibition();
 
         if (!$exhibition) {
-            return redirect()->route('admin.dashboard');
+            return redirect()->route('admin.dashboard.index');
         }
         $templates = QueryBuilder::for($exhibition->taskTemplates()->select(['title', 'id', 'deadline']))
             ->allowedSorts(['title', 'deadline'])
@@ -54,7 +54,7 @@ final class TaskTemplateController extends Controller
         $exhibition = Auth::user()->getActiveExhibition();
 
         if (!$exhibition) {
-            return redirect()->route('admin.dashboard');
+            return redirect()->route('admin.dashboard.index');
         }
         $user = Auth::user();
         $template = $exhibition->taskTemplates()->create([

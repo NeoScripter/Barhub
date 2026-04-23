@@ -28,7 +28,7 @@ final class CompanyController extends Controller
         $exhibition = Auth::user()->getActiveExhibition();
 
         if (!$exhibition) {
-            return redirect()->route('admin.dashboard');
+            return redirect()->route('admin.dashboard.index');
         }
         /** @var LengthAwarePaginator<Company> $companies */
         $companies = QueryBuilder::for(
@@ -72,7 +72,7 @@ final class CompanyController extends Controller
         $exhibition = Auth::user()->getActiveExhibition();
 
         if (!$exhibition) {
-            return redirect()->route('admin.dashboard');
+            return redirect()->route('admin.dashboard.index');
         }
 
         $validated = $request->validated();

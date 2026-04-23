@@ -21,7 +21,7 @@ final class ServiceController extends Controller
         $exhibition = Auth::user()->getActiveExhibition();
 
         if (!$exhibition) {
-            return redirect()->route('admin.dashboard');
+            return redirect()->route('admin.dashboard.index');
         }
 
         $services = QueryBuilder::for($exhibition->services()->select(['name', 'description', 'id']))
@@ -54,7 +54,7 @@ final class ServiceController extends Controller
         $exhibition = Auth::user()->getActiveExhibition();
 
         if (!$exhibition) {
-            return redirect()->route('admin.dashboard');
+            return redirect()->route('admin.dashboard.index');
         }
 
         $exhibition->services()->create(

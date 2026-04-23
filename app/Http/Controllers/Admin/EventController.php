@@ -28,7 +28,7 @@ final class EventController extends Controller
         $exhibition = Auth::user()->getActiveExhibition();
 
         if (!$exhibition) {
-            return redirect()->route('admin.dashboard');
+            return redirect()->route('admin.dashboard.index');
         }
         /** @var LengthAwarePaginator<Event> $events */
         $events = QueryBuilder::for($exhibition->events())
@@ -65,7 +65,7 @@ final class EventController extends Controller
         $exhibition = Auth::user()->getActiveExhibition();
 
         if (!$exhibition) {
-            return redirect()->route('admin.dashboard');
+            return redirect()->route('admin.dashboard.index');
         }
 
         return Inertia::render('admin/Events/Create', [
