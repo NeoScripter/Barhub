@@ -15,27 +15,27 @@ final class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        User::factory()->create([
-            'name' => 'User',
-            'email' => 'user@gmail.com',
-            'role' => UserRole::USER->value,
-        ]);
+        // User::factory()->create([
+        //     'name' => 'User',
+        //     'email' => 'user@gmail.com',
+        //     'role' => UserRole::USER->value,
+        // ]);
+
+        // User::factory()->create([
+        //     'name' => 'exponent',
+        //     'email' => 'exponent@gmail.com',
+        //     'role' => UserRole::EXPONENT->value,
+        // ]);
+
+        // User::factory()->create([
+        //     'name' => 'Admin',
+        //     'email' => 'admin@gmail.com',
+        //     'role' => UserRole::ADMIN->value,
+        // ]);
 
         User::factory()->create([
-            'name' => 'exponent',
-            'email' => 'exponent@gmail.com',
-            'role' => UserRole::EXPONENT->value,
-        ]);
-
-        User::factory()->create([
-            'name' => 'Admin',
-            'email' => 'admin@gmail.com',
-            'role' => UserRole::ADMIN->value,
-        ]);
-
-        User::factory()->create([
-            'name' => 'Super Admin',
-            'email' => 'super-admin@gmail.com',
+            'name' => 'Геннадий',
+            'email' => 'gena-bar@mail.ru',
             'role' => UserRole::SUPER_ADMIN->value,
         ]);
 

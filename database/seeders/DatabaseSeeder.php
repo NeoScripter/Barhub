@@ -15,14 +15,14 @@ final class DatabaseSeeder extends Seeder
     {
         $this->call([
             UserSeeder::class,
-            ExhibitionSeeder::class,
+            // ExhibitionSeeder::class,
             // TagSeeder::class,
-            EventSeeder::class,
-            ThemeSeeder::class,
-            StageSeeder::class,
-            CompanySeeder::class,
-            TaskTemplateSeeder::class,
-            InfoItemSeeder::class,
+            // EventSeeder::class,
+            // ThemeSeeder::class,
+            // StageSeeder::class,
+            // CompanySeeder::class,
+            // TaskTemplateSeeder::class,
+            // InfoItemSeeder::class,
         ]);
     }
 }
