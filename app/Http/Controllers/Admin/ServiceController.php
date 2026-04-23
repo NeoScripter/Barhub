@@ -20,6 +20,10 @@ final class ServiceController extends Controller
     {
         $exhibition = Auth::user()->getActiveExhibition();
 
+        if (!$exhibition) {
+            return redirect()->route('admin.dashboard');
+        }
+
         $services = QueryBuilder::for($exhibition->services()->select(['name', 'description', 'id']))
             ->allowedSorts(['name'])
             ->paginate()
@@ -48,6 +52,10 @@ final class ServiceController extends Controller
     public function store(ServiceStoreRequest $request)
     {
         $exhibition = Auth::user()->getActiveExhibition();
+
+        if (!$exhibition) {
+            return redirect()->route('admin.dashboard');
+        }
 
         $exhibition->services()->create(
             $request->only(['name', 'id', 'description', 'is_active'])

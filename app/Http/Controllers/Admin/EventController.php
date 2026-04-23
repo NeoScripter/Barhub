@@ -12,8 +12,6 @@ use App\Http\Requests\Admin\Event\EventIndexRequest;
 use App\Http\Requests\Admin\Event\EventStoreRequest;
 use App\Http\Requests\Admin\Event\EventUpdateRequest;
 use App\Models\Event;
-use App\Models\Stage;
-use App\Models\Theme;
 use App\Sorts\RelationSort;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Auth;
@@ -28,6 +26,10 @@ final class EventController extends Controller
     public function index(EventIndexRequest $request)
     {
         $exhibition = Auth::user()->getActiveExhibition();
+
+        if (!$exhibition) {
+            return redirect()->route('admin.dashboard');
+        }
         /** @var LengthAwarePaginator<Event> $events */
         $events = QueryBuilder::for($exhibition->events())
             ->with([
@@ -61,6 +63,10 @@ final class EventController extends Controller
     public function create()
     {
         $exhibition = Auth::user()->getActiveExhibition();
+
+        if (!$exhibition) {
+            return redirect()->route('admin.dashboard');
+        }
 
         return Inertia::render('admin/Events/Create', [
             'stages' => $exhibition->stages()->get(),

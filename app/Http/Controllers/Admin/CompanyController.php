@@ -26,6 +26,10 @@ final class CompanyController extends Controller
     public function index(CompanyIndexRequest $request)
     {
         $exhibition = Auth::user()->getActiveExhibition();
+
+        if (!$exhibition) {
+            return redirect()->route('admin.dashboard');
+        }
         /** @var LengthAwarePaginator<Company> $companies */
         $companies = QueryBuilder::for(
             Company::query()->select(['id', 'public_name', 'legal_name', 'stand_code', 'show_on_site'])
@@ -65,30 +69,33 @@ final class CompanyController extends Controller
 
     public function store(CompanyStoreRequest $request)
     {
-        DB::transaction(function () use ($request): void {
-            $exhibition = Auth::user()->getActiveExhibition();
-            $validated = $request->validated();
+        $exhibition = Auth::user()->getActiveExhibition();
 
-            $company = Company::query()->create([
-                ...Arr::except($validated, ['tags', 'logo']),
-                'exhibition_id' => $exhibition->id,
-            ]);
+        if (!$exhibition) {
+            return redirect()->route('admin.dashboard');
+        }
 
-            if ($request->filled('tags')) {
-                $company->tags()->sync($request->input('tags'));
-            }
+        $validated = $request->validated();
 
-            if ($request->hasFile('logo')) {
-                Image::attachToModel(
-                    $company,
-                    $request->file('logo'),
-                    'logo',
-                    'companies/logos',
-                    400,
-                    $company->public_name,
-                );
-            }
-        });
+        $company = Company::query()->create([
+            ...Arr::except($validated, ['tags', 'logo']),
+            'exhibition_id' => $exhibition->id,
+        ]);
+
+        if ($request->filled('tags')) {
+            $company->tags()->sync($request->input('tags'));
+        }
+
+        if ($request->hasFile('logo')) {
+            Image::attachToModel(
+                $company,
+                $request->file('logo'),
+                'logo',
+                'companies/logos',
+                400,
+                $company->public_name,
+            );
+        }
 
         return to_route('admin.companies.index')
             ->with('success', 'Компания успешно создана');

@@ -17,6 +17,9 @@ class LinkController extends Controller
     public function __invoke()
     {
         $exhibition = Auth::user()->getActiveExhibition();
+        if (!$exhibition) {
+            return redirect()->route('admin.dashboard');
+        }
         $people = $exhibition
             ->people()
             ->select(['id', 'name'])

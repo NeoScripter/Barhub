@@ -23,6 +23,9 @@ final class PersonController extends Controller
     {
         $exhibition = Auth::user()->getActiveExhibition();
 
+        if (!$exhibition) {
+            return redirect()->route('admin.dashboard');
+        }
         $eventIds = $exhibition->events()->pluck('id');
 
         /** @var LengthAwarePaginator<Person> $people */
@@ -51,43 +54,44 @@ final class PersonController extends Controller
 
     public function store(PersonStoreRequest $request)
     {
-        DB::transaction(function () use ($request) {
-            $person = Person::query()->create($request->only([
-                'name',
-                'regalia',
-                'bio',
-                'telegram',
-            ]));
+        $person = Person::query()->create($request->only([
+            'name',
+            'regalia',
+            'bio',
+            'telegram',
+        ]));
 
-            $exhibition = Auth::user()->getActiveExhibition();
-            $exhibition->people()->syncWithoutDetaching($person->id);
+        $exhibition = Auth::user()->getActiveExhibition();
+        if (!$exhibition) {
+            return redirect()->route('admin.dashboard');
+        }
+        $exhibition->people()->syncWithoutDetaching($person->id);
 
-            // Handle avatar
-            if ($request->hasFile('avatar')) {
-                Image::attachToModel(
-                    $person,
-                    $request->file('avatar'),
-                    'avatar',
-                    'people/avatars',
-                    800,
-                    $person->name,
-                );
-            }
+        // Handle avatar
+        if ($request->hasFile('avatar')) {
+            Image::attachToModel(
+                $person,
+                $request->file('avatar'),
+                'avatar',
+                'people/avatars',
+                800,
+                $person->name,
+            );
+        }
 
-            // Handle logo
-            if ($request->hasFile('logo')) {
-                Image::attachToModel(
-                    $person,
-                    $request->file('logo'),
-                    'logo',
-                    'people/logos',
-                    400,
-                    $person->name
-                );
-            }
+        // Handle logo
+        if ($request->hasFile('logo')) {
+            Image::attachToModel(
+                $person,
+                $request->file('logo'),
+                'logo',
+                'people/logos',
+                400,
+                $person->name
+            );
+        }
 
-            return $person;
-        });
+        return $person;
 
         return to_route('admin.people.index')
             ->with('success', 'Участник успешно создан');

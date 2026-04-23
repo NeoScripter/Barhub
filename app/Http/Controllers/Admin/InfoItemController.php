@@ -19,6 +19,9 @@ final class InfoItemController extends Controller
     public function index()
     {
         $exhibition = Auth::user()->getActiveExhibition();
+        if (!$exhibition) {
+            return redirect()->route('admin.dashboard');
+        }
         $infoItems = $exhibition->infoItems()
             ->select(['title',  'id'])
             ->paginate();
@@ -42,30 +45,33 @@ final class InfoItemController extends Controller
 
     public function store(InfoItemStoreRequest $request)
     {
-        DB::transaction(function () use ($request) {
-            $exhibition = Auth::user()->getActiveExhibition();
-            $infoItem = $exhibition->infoItems()->create(
-                $request->only(['title', 'description', 'file_name', 'url']),
+        $exhibition = Auth::user()->getActiveExhibition();
+
+        if (!$exhibition) {
+            return redirect()->route('admin.dashboard');
+        }
+
+        $infoItem = $exhibition->infoItems()->create(
+            $request->only(['title', 'description', 'file_name', 'url']),
+        );
+
+        if ($request->hasFile('file_url')) {
+            $path = $request->file('file_url')->store('info-items-files', 'public');
+            $infoItem->update([
+                'file_url' => $path,
+            ]);
+        }
+
+        if ($request->hasFile('image')) {
+            Image::attachToModel(
+                $infoItem,
+                $request->file('image'),
+                'image',
+                'info-items/images',
+                80,
+                $infoItem->title,
             );
-
-            if ($request->hasFile('file_url')) {
-                $path = $request->file('file_url')->store('info-items-files', 'public');
-                $infoItem->update([
-                    'file_url' => $path,
-                ]);
-            }
-
-            if ($request->hasFile('image')) {
-                Image::attachToModel(
-                    $infoItem,
-                    $request->file('image'),
-                    'image',
-                    'info-items/images',
-                    80,
-                    $infoItem->title,
-                );
-            }
-        });
+        }
 
         return to_route('admin.info-items.index');
     }

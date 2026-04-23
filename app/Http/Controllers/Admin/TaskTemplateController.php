@@ -22,6 +22,9 @@ final class TaskTemplateController extends Controller
     {
         $exhibition = Auth::user()->getActiveExhibition();
 
+        if (!$exhibition) {
+            return redirect()->route('admin.dashboard');
+        }
         $templates = QueryBuilder::for($exhibition->taskTemplates()->select(['title', 'id', 'deadline']))
             ->allowedSorts(['title', 'deadline'])
             ->paginate()
@@ -50,6 +53,9 @@ final class TaskTemplateController extends Controller
     {
         $exhibition = Auth::user()->getActiveExhibition();
 
+        if (!$exhibition) {
+            return redirect()->route('admin.dashboard');
+        }
         $user = Auth::user();
         $template = $exhibition->taskTemplates()->create([
             ...$request->only(['title', 'description', 'deadline', 'comment', 'file_name']),
