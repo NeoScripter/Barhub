@@ -22,7 +22,7 @@ jobs:
           script_stop: true
           script: |
             zsh -c "
-            cd www/lab1 && \
+            cd www/lk.barhub.ru && \
             git pull origin main && \
             composer install && \
             rm -rf storage/wayfinder-cache && \
