@@ -31,6 +31,7 @@ const Edit: FC<Inertia.Pages.Admin.Companies.Edit> = ({ company, tags }) => {
         telegram: company.telegram ?? '',
         stand_code: String(company.stand_code) ?? '',
         stand_area: company.stand_area ?? '',
+        power_kw: company.power_kw ?? '',
         show_on_site: !!company.show_on_site,
         storage_enabled: !!company.storage_enabled,
         activities: company.activities ?? '',
@@ -65,7 +66,8 @@ const Edit: FC<Inertia.Pages.Admin.Companies.Edit> = ({ company, tags }) => {
                 <div className="mb-8 flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
                     <CopyLinkBtn
                         url={
-                            window.origin + CompanyController.show({
+                            window.origin +
+                            CompanyController.show({
                                 exhibition: company.exhibition!,
                                 company: company.id,
                             }).url
@@ -247,6 +249,24 @@ const Edit: FC<Inertia.Pages.Admin.Companies.Edit> = ({ company, tags }) => {
                                 }
                             />
                             <InputError message={errors.stand_code} />
+                        </div>
+
+                        <div className="grid gap-2">
+                            <Label htmlFor="power_kw">
+                                Электричество (кВт)
+                            </Label>
+                            <Input
+                                id="power_kw"
+                                type="number"
+                                required
+                                min={0.01}
+                                step={0.01}
+                                value={data.power_kw}
+                                onChange={(e) =>
+                                    setData('power_kw', e.target.value)
+                                }
+                            />
+                            <InputError message={errors.power_kw} />
                         </div>
 
                         <div className="grid gap-2">

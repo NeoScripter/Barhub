@@ -25,6 +25,8 @@ const Create: FC<Inertia.Pages.Admin.Companies.Create> = ({ tags }) => {
         instagram: '',
         telegram: '',
         stand_code: '',
+        stand_area: '',
+        power_kw: '',
         show_on_site: false,
         storage_enabled: false,
         activities: '',
@@ -197,8 +199,10 @@ const Create: FC<Inertia.Pages.Admin.Companies.Create> = ({ tags }) => {
                         <Label htmlFor="power_kw">Электричество (кВт)</Label>
                         <Input
                             id="power_kw"
-                            type="text"
+                            type="number"
                             required
+                            min={0.01}
+                            step={0.01}
                             value={data.power_kw}
                             onChange={(e) =>
                                 setData('power_kw', e.target.value)
@@ -213,6 +217,7 @@ const Create: FC<Inertia.Pages.Admin.Companies.Create> = ({ tags }) => {
                             id="stand_area"
                             type="number"
                             required
+                            min={1}
                             value={data.stand_area}
                             onChange={(e) =>
                                 setData('stand_area', e.target.value)
