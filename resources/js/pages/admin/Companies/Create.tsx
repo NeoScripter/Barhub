@@ -199,7 +199,6 @@ const Create: FC<Inertia.Pages.Admin.Companies.Create> = ({ tags }) => {
                             id="power_kw"
                             type="text"
                             required
-                            min={1}
                             value={data.power_kw}
                             onChange={(e) =>
                                 setData('power_kw', e.target.value)

@@ -26,7 +26,7 @@ final class CompanyStoreRequest extends FormRequest
             'telegram' => ['nullable', 'string', 'max:255'],
             'stand_code' => ['required', 'string', 'min:1'],
             'stand_area' => ['required', 'integer', 'min:1'],
-            'power_kw' => ['required', 'integer', 'min:1'],
+            'power_kw' => ['required', 'numeric', 'min:0.01', 'max:999999.99'],
             'storage_enabled' => ['required', 'boolean'],
             'show_on_site' => ['required', 'boolean'],
             'activities' => ['nullable', 'string', 'max:5000'],
@@ -81,7 +81,7 @@ final class CompanyStoreRequest extends FormRequest
             'stand_area.min'       => 'Площадь стенда должна быть не менее 1',
 
             'power_kw.required'    => 'Введите мощность в кВт',
-            'power_kw.integer'     => 'Мощность должна быть числом',
+            'power_kw.numeric'     => 'Мощность должна быть числом',
             'power_kw.min'         => 'Мощность должна быть не менее 1',
 
             'storage_enabled.required' => 'Укажите наличие склада',
