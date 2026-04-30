@@ -8,14 +8,14 @@ use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 use Illuminate\Support\HtmlString;
 
-class CreateExponentNotification extends Notification // implements ShouldQueue
+class CreateExponentNotification extends Notification implements ShouldQueue
 {
     use Queueable;
 
     /**
      * Create a new notification instance.
      */
-    public function __construct(protected string $email, protected string $exhibition, protected string $company) {}
+    public function __construct(protected string $email, protected string $company, protected string $exhibition) {}
 
     /**
      * Get the notification's delivery channels.

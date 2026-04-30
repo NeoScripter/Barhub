@@ -11,6 +11,7 @@ use App\Models\Company;
 use App\Models\ExponentEmail;
 use App\Models\User;
 use App\Notifications\CreateExponentNotification;
+use App\Notifications\RegisterExponentNotification;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Validator;
 use Laravel\Fortify\Contracts\CreatesNewUsers;
@@ -48,7 +49,7 @@ final class CreateNewUser implements CreatesNewUsers
         $user->update(['role' => UserRole::EXPONENT->value, 'company_id' => $company->id]);
 
         Notification::route('mail', $user->email)
-            ->notify(new CreateExponentNotification($user->email, $company->public_name, $company->exhibition->name));
+            ->notify(new RegisterExponentNotification($user->email, $company->public_name, $company->exhibition->name));
 
         $exponentRecord->delete();
 
