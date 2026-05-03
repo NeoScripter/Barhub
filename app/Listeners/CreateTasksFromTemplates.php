@@ -20,7 +20,7 @@ final class CreateTasksFromTemplates
                     'title'       => $template->title,
                     'description' => $template->description,
                     'deadline'    => $template->deadline,
-                    'status'      => $template->status,
+                    'status'      => $template->status ?? TaskStatus::TO_BE_COMPLETED->value,
                 ]);
 
                 if ($template->comment || $template->file_url) {

@@ -13,16 +13,25 @@ final class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        $this->call([
-            UserSeeder::class,
-            // ExhibitionSeeder::class,
-            // TagSeeder::class,
-            // EventSeeder::class,
-            // ThemeSeeder::class,
-            // StageSeeder::class,
-            // CompanySeeder::class,
-            // TaskTemplateSeeder::class,
-            // InfoItemSeeder::class,
-        ]);
+        $seeders = [UserSeeder::class];
+
+        if (app()->environment() === 'local') {
+            $seeders = array_merge(
+                $seeders,
+                [
+                    ExhibitionSeeder::class,
+                    TagSeeder::class,
+                    EventSeeder::class,
+                    ThemeSeeder::class,
+                    StageSeeder::class,
+                    CompanySeeder::class,
+                    TaskTemplateSeeder::class,
+                    InfoItemSeeder::class,
+
+                ]
+            );
+        }
+
+        $this->call($seeders);
     }
 }

@@ -30,8 +30,14 @@ const Index: FC<App.Http.Controllers.Admin.LinkController> = ({
             options: events,
             label: 'События',
             name: 'событие',
-            url: (expo, id) =>
-                EventController.show({ exhibition: expo, event: id }).url,
+            url: (expo, id) => {
+                if (id === -1) {
+                    return EventController.index({ exhibition: expo }).url;
+                }
+
+                return EventController.show({ exhibition: expo, event: id })
+                    .url;
+            },
         },
         {
             id: crypto.randomUUID(),
@@ -39,8 +45,14 @@ const Index: FC<App.Http.Controllers.Admin.LinkController> = ({
             options: people,
             label: 'Спикеры',
             name: 'спикера',
-            url: (expo, id) =>
-                PersonController.show({ exhibition: expo, person: id }).url,
+            url: (expo, id) => {
+                if (id === -1) {
+                    return PersonController.index({ exhibition: expo }).url;
+                }
+
+                return PersonController.show({ exhibition: expo, person: id })
+                    .url;
+            },
         },
         {
             id: crypto.randomUUID(),
@@ -48,8 +60,14 @@ const Index: FC<App.Http.Controllers.Admin.LinkController> = ({
             options: companies,
             label: 'Компании',
             name: 'компанию',
-            url: (expo, id) =>
-                CompanyController.show({ exhibition: expo, company: id }).url,
+            url: (expo, id) => {
+                if (id === -1) {
+                    return CompanyController.index({ exhibition: expo }).url;
+                }
+
+                return CompanyController.show({ exhibition: expo, company: id })
+                    .url;
+            },
         },
     ];
 

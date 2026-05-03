@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Listeners;
 
+use App\Enums\TaskStatus;
 use App\Events\ExhibitionCreated;
 
 final class CreateDefaultTaskTemplate
@@ -14,6 +15,7 @@ final class CreateDefaultTaskTemplate
             'title'       => 'Заполнить информацию о компании',
             'description' => 'Пожалуйста, заполните всю необходимую информацию о вашей компании.',
             'deadline'    => $event->exhibition->starts_at,
+            'status'      => TaskStatus::TO_BE_COMPLETED->value,
         ]);
     }
 }

@@ -3,9 +3,6 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Company;
-use App\Models\Person;
-use App\Models\Event;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
@@ -41,6 +38,10 @@ class LinkController extends Controller
             ->get()
             ->map(fn($company) => ['id' => $company->id, 'value' => $company->public_name])
             ->values();
+
+        foreach ([$people, $events, $companies] as $models) {
+            $models->prepend(['id' => -1, 'value' => 'Все']);
+        }
 
         return Inertia::render('admin/Links/Index', [
             'people' => $people,
