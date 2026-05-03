@@ -32,7 +32,7 @@ jobs:
             mkdir -p bootstrap/cache && \
             mkdir -p storage/framework/cache && \
             php8.5 artisan optimize:clear && \
-            composer dump-autoload && \
+            composer dump-autoload -a && \
             pnpm install && \
             pnpm run build && \
             php8.5 artisan config:clear && \
@@ -41,6 +41,6 @@ jobs:
             php8.5 artisan config:cache && \
             php8.5 artisan route:cache && \
             php8.5 artisan view:cache && \
-            sudo service php8.5-fpm restart
+            sudo service php8.5-fpm reload
             "
 
