@@ -36,7 +36,7 @@ class RegisterExponentNotification extends Notification implements ShouldQueue
             ->subject('Доступ к личному кабинету экпонента')
             ->greeting('Добрый день!')
             ->line("Рады сообщить вам, что вам предоставлен доступ к личному кабинету эскпонента {$this->company} на выставке {$this->exhibition}.")
-            ->action('Регистрация', url('/register'))
+            ->action('Вход', url('/login'))
             ->line('В личном кабинете вы можете:')
             ->line(new HtmlString('<ul style="margin:15; padding-left:20px;">
                 <li>отслеживать и выполнять задачи по подготовке к выставке</li>
