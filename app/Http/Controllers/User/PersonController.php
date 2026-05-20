@@ -20,25 +20,27 @@ final class PersonController extends Controller
             explode(',', $request->input('filter.roles', ''))
         );
 
-        $query = empty($roles) ? '' :
+        $roleFilter = empty($roles) ? '' :
             "and pivot2.role in (" . implode(',', array_fill(0, count($roles), '?')) . ")";
 
         $people = DB::select(
-            '
-            select p.id, p.name, p.regalia, p.bio, p.telegram, img.*,
-            group_concat(distinct pivot2.role) as roles from people as p
-            join exhibition_person as pivot1
-            on pivot1.person_id = p.id
-            join event_person as pivot2
-            on pivot2.person_id = p.id
+            "select p.*, img.*
+            from (
+                select p.id, p.name, p.regalia, p.bio, p.telegram,
+                       group_concat(distinct pivot2.role) as roles
+                from people as p
+                join exhibition_person as pivot1 on pivot1.person_id = p.id
+                join event_person as pivot2 on pivot2.person_id = p.id
+                where pivot1.exhibition_id = ?
+                $roleFilter
+                group by p.id, p.name, p.regalia, p.bio, p.telegram
+            ) as p
             join images as img
-            on img.imageable_id = p.id
-            and img.imageable_type = "person"
-            and img.type = "avatar"
-            where pivot1.exhibition_id = ?'
-                . $query . ' group by p.id',
-            array_merge([$exhibition->id],  $roles)
-        );
+                on img.imageable_id = p.id
+                and img.imageable_type = 'person'
+                and img.type = 'avatar'",
+                array_merge([$exhibition->id], $roles)
+            );
 
         $roles = DB::select('select distinct role from event_person');
 
@@ -74,7 +76,7 @@ final class PersonController extends Controller
                     'tiny' => $person->tiny,
                     'alt' => $person->alt,
                 ],
-               'name' => $person->name,
+                'name' => $person->name,
                 'regalia' => $person->regalia,
                 'telegram' => $person->telegram,
                 'bio' => $person->bio,

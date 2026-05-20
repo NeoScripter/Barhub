@@ -15,22 +15,22 @@ final class DatabaseSeeder extends Seeder
     {
         $seeders = [UserSeeder::class];
 
-        if (app()->environment() === 'local') {
-            $seeders = array_merge(
-                $seeders,
-                [
-                    ExhibitionSeeder::class,
-                    TagSeeder::class,
-                    EventSeeder::class,
-                    ThemeSeeder::class,
-                    StageSeeder::class,
-                    CompanySeeder::class,
-                    TaskTemplateSeeder::class,
-                    InfoItemSeeder::class,
+        // if (app()->environment() === 'local') {
+        //     $seeders = array_merge(
+        //         $seeders,
+        //         [
+        //             ExhibitionSeeder::class,
+        //             TagSeeder::class,
+        //             EventSeeder::class,
+        //             ThemeSeeder::class,
+        //             StageSeeder::class,
+        //             CompanySeeder::class,
+        //             TaskTemplateSeeder::class,
+        //             InfoItemSeeder::class,
 
-                ]
-            );
-        }
+        //         ]
+        //     );
+        // }
 
         $this->call($seeders);
     }
