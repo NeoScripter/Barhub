@@ -22,6 +22,7 @@ final class ExponentController extends Controller
             ->whereNotIn('id', $exponents->pluck('id'))
             ->get();
         $pending = ExponentEmail::select(['id', 'email'])
+            ->where('company_id', $company->id)
             ->get();
 
         return Inertia::render('admin/Exponents/Index', [
