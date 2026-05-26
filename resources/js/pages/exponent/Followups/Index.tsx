@@ -16,7 +16,7 @@ const Index: FC<Inertia.Pages.Exponent.Followups.Index> = ({
                     Услуги
                 </AccentHeading>
                 <AccentHeading className="text-center text-xl text-secondary lg:text-2xl">
-                    Согласованние параметры размещения
+                    Согласованные параметры размещения
                 </AccentHeading>
 
                 <ul className="flex flex-col flex-wrap items-baseline justify-between gap-x-10 gap-y-6 pt-4 md:flex-row">
