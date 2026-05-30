@@ -20,5 +20,9 @@ Artisan::command('backup_database', function (): void {
     $gzdata = gzencode(file_get_contents($path));
     file_put_contents("{$path}.gz", $gzdata);
 
+    if (file_exists($path)) {
+        unlink($path);
+    }
+
     $this->comment('db successfully backed up');
 })->purpose('Backup mysql database');
