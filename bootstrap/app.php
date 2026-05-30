@@ -42,6 +42,9 @@ return Application::configure(basePath: dirname(__DIR__))
                 [TaskStatus::DELAYED->value, TaskStatus::DELAYED->value, now()]
             );
         })->dailyAt('00:00');
+
+        $schedule->command('backup_database')
+            ->dailyAt('01:00');
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //
