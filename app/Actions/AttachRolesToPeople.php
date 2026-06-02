@@ -38,8 +38,8 @@ final class AttachRolesToPeople
                             ', ',
                             $group->map(
                                 fn($person) =>
-                                PersonRole::tryFrom($person->pivot->role) // ← tryFrom instead of from
-                                    ?->label() ?? $person->pivot->role    // ← fallback if null/invalid
+                                PersonRole::tryFrom($person->pivot->role)
+                                    ?->label() ?? $person->pivot->role
                             )->filter()->toArray()
                         )
                     ),

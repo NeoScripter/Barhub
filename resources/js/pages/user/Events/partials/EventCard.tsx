@@ -41,7 +41,7 @@ const EventCard: FC<
                         className="sm:w-53 lg:w-30 2xl:w-40"
                     />
 
-                    <div className="text-sm sm:shrink-100 sm:text-base lg:text-sm 2xl:text-base">
+                    <div className="text-sm mr-auto sm:shrink-100 sm:text-base lg:text-sm 2xl:text-base">
                         <p className="mb-2 font-bold text-lg 2xl:text-xl">{event.title}</p>
                         <p>
                             {shortenDescription(event.description)}
