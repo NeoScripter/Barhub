@@ -42,8 +42,8 @@ final class AttachRolesToPeople
                             )->toArray()
                         )
                     ),
-                    'avatar' => $group[0]->avatar->toArray(),
-                    'logo' => $group[0]->logo->toArray(),
+                    'avatar' => $group[0]->avatar?->toArray(),
+                    'logo' => $group[0]->logo?->toArray(),
                     'regalia' => $group[0]->regalia,
                     'bio' => $group[0]->bio,
                 ]
