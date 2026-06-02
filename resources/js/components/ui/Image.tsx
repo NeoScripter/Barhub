@@ -1,6 +1,6 @@
 import { cn } from '@/lib/utils';
 import { ImageType } from '@/types/shared';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 
 type ImageProps = {
     image: ImageType;
@@ -16,6 +16,10 @@ export default function Image({
     isLazy = true,
 }: ImageProps) {
     const [isLoading, setIsLoading] = useState(true);
+
+    const imgRef = useCallback((img: HTMLImageElement | null) => {
+        if (img?.complete) setIsLoading(false);
+    }, []);
 
     const { webp, avif, tiny, alt, webp3x, webp2x, avif3x, avif2x } = image;
 
@@ -70,6 +74,7 @@ export default function Image({
                     ></div>
 
                     <img
+                        ref={imgRef}
                         aria-hidden={!isLoading}
                         src={tiny}
                         alt={alt}
