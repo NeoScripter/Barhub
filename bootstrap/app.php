@@ -44,7 +44,7 @@ return Application::configure(basePath: dirname(__DIR__))
         })->dailyAt('00:00');
 
         $schedule->command('backup_database')
-            ->dailyAt('01:00');
+            ->weeklyOn(1, '01:00');
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //
