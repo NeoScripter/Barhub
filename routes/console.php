@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+use App\Models\User;
+use App\Notifications\SendBackupNotification;
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Support\Facades\Artisan;
 
@@ -22,6 +24,12 @@ Artisan::command('backup_database', function (): void {
 
     if (file_exists($path)) {
         unlink($path);
+    }
+
+    $user = User::where('email', 'gena-bar@mail.ru')->first();
+
+    if ($user) {
+        $user->notify(new SendBackupNotification("{$path}.gz"));
     }
 
     $this->comment('db successfully backed up');
