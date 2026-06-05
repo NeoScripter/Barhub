@@ -5,13 +5,18 @@ declare(strict_types=1);
 namespace App\Http\Responses;
 
 use App\Enums\UserRole;
+use Illuminate\Support\Facades\Auth;
 use Laravel\Fortify\Contracts\LoginResponse as LoginResponseContract;
 
 final class LoginResponse implements LoginResponseContract
 {
     public function toResponse($request)
     {
-        $user = auth()->user();
+        if (! Auth::check()) {
+            return redirect()->route('login');
+        }
+
+        $user = Auth::user();
 
         if ($user->hasRole(UserRole::SUPER_ADMIN) || $user->hasRole(UserRole::ADMIN)) {
             return redirect()->intended(route('admin.dashboard.index'));
@@ -21,6 +26,6 @@ final class LoginResponse implements LoginResponseContract
             return redirect()->intended(route('exponent.tasks.index'));
         }
 
-        return redirect()->intended(route('exhibitions.index'));
+        return redirect()->intended('/exhibitions/1/events');
     }
 }

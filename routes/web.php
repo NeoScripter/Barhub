@@ -33,9 +33,9 @@ use App\Http\Controllers\User\ExhibitionController as UserExhibitionController;
 use App\Http\Controllers\User\HomeController;
 use Illuminate\Support\Facades\Route;
 
-// Route::get('/', HomeController::class)->name('home');
+Route::get('/', HomeController::class)->name('home');
 
-// Route::get('/exhibitions', UserExhibitionController::class)->name('exhibitions.index');
+Route::get('/exhibitions', UserExhibitionController::class)->name('exhibitions.index');
 
 Route::prefix('/exhibitions/{exhibition}')
     ->group(function (): void {

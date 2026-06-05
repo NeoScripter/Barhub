@@ -6,10 +6,12 @@ namespace App\Providers;
 
 use App\Actions\Fortify\CreateNewUser;
 use App\Actions\Fortify\ResetUserPassword;
+use App\Enums\UserRole;
 use App\Http\Responses\LoginResponse;
 use App\Http\Responses\RegisterResponse;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
@@ -49,16 +51,49 @@ final class FortifyServiceProvider extends ServiceProvider
         Fortify::createUsersUsing(CreateNewUser::class);
     }
 
+    // public function toResponse($request)
+    // {
+    //     if (! Auth::check()) {
+    //         return redirect()->route('login');
+    //     }
+
+    //     $user = Auth::user();
+
+    //     if ($user->hasRole(UserRole::SUPER_ADMIN) || $user->hasRole(UserRole::ADMIN)) {
+    //         return redirect()->intended(route('admin.dashboard.index'));
+    //     }
+
+    //     if ($user->hasRole(UserRole::EXPONENT)) {
+    //         return redirect()->intended(route('exponent.tasks.index'));
+    //     }
+
+    //     return redirect()->intended(route('exhibitions.index'));
+    // }
     /**
      * Configure Fortify views.
      */
     private function configureViews(): void
     {
-        Fortify::loginView(fn(Request $request) => Inertia::render('auth/Login', [
-            'canResetPassword' => Features::enabled(Features::resetPasswords()),
-            'canRegister' => Features::enabled(Features::registration()),
-            'status' => $request->session()->get('status'),
-        ]));
+        Fortify::loginView(function (Request $request) {
+
+            if (Auth::check()) {
+                $user = Auth::user();
+
+                if ($user->hasRole(UserRole::SUPER_ADMIN) || $user->hasRole(UserRole::ADMIN)) {
+                    return redirect()->route('admin.dashboard.index');
+                }
+
+                if ($user->hasRole(UserRole::EXPONENT)) {
+                    return redirect()->intended('exponent.tasks.index');
+                }
+            }
+
+            return Inertia::render('auth/Login', [
+                'canResetPassword' => Features::enabled(Features::resetPasswords()),
+                'canRegister' => Features::enabled(Features::registration()),
+                'status' => $request->session()->get('status'),
+            ]);
+        });
 
         Fortify::resetPasswordView(fn(Request $request) => Inertia::render('auth/ResetPassword', [
             'email' => $request->email,
