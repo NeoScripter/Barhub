@@ -11,7 +11,6 @@ const PersonCard: FC<
     NodeProps<{ person: App.Models.Person; exhibition: App.Models.Exhibition }>
 > = ({ className, exhibition, person }) => {
 
-    console.log(person)
     return (
         <li>
             <CardLayout

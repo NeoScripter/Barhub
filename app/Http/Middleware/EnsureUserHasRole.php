@@ -20,15 +20,17 @@ final class EnsureUserHasRole
     {
         $user = $request->user();
 
-        abort_unless($user !== null, 403, 'Unauthorized');
+        if ($user === null) {
+            return redirect()->route('login');
+        }
 
         // Convert string role names to UserRole enums if needed
         $allowedRoles = array_map(
-            fn (UserRole|string $role) => $role instanceof UserRole ? $role : UserRole::from((int) $role),
+            fn(UserRole|string $role) => $role instanceof UserRole ? $role : UserRole::from((int) $role),
             $roles
         );
 
-        abort_unless($user->hasAnyRole($allowedRoles), 403, 'Unauthorized');
+        abort_unless($user->hasAnyRole($allowedRoles), 403, 'У вас нет доступа к данной странице');
 
         return $next($request);
     }

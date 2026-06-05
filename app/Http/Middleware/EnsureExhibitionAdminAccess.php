@@ -20,11 +20,17 @@ final class EnsureExhibitionAdminAccess
     {
         $user = $request->user();
 
-        abort_if($user == null ||
-            !$user->hasAnyRole([UserRole::SUPER_ADMIN, UserRole::ADMIN]), 403, 'Unauthorized');
+        if ($user === null) {
+            return redirect()->route('login');
+        }
+        abort_if(
+            !$user->hasAnyRole([UserRole::SUPER_ADMIN, UserRole::ADMIN]),
+            403,
+            'У вас нет доступа к данной странице'
+        );
 
         if ($user->role === UserRole::ADMIN) {
-            abort_unless($user->exhibitions()->exists(), 403, 'Unauthorized');
+            abort_unless($user->exhibitions()->exists(), 403, 'У вас нет доступа к данной странице');
         }
 
         return $next($request);
