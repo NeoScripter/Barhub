@@ -13,15 +13,10 @@ final class PersonDeleteRequest extends FormRequest
     {
         $user = $this->user();
 
-        if ($user->role === UserRole::SUPER_ADMIN) {
+        if ($user->role === UserRole::SUPER_ADMIN || $user->role === UserRole::ADMIN) {
             return true;
         }
 
-        $userExhibitionIds = $user->exhibitions()->pluck('exhibitions.id');
-
-        return $this->person
-            ->events()
-            ->whereHas('exhibition', fn($q) => $q->whereKey($userExhibitionIds))
-            ->exists();
+        return false;
     }
 }
