@@ -52,12 +52,14 @@ export function convertDateToUTC(date: string | null) {
     return new Date(date).toISOString().slice(0, 16);
 }
 
-export function convertDateToInputString(date: string | null) {
+
+export function convertDateToInputString(date: string | null): string {
     if (!date) return '';
 
-    return new Date(date)
+    const normalized = /Z|[+-]\d{2}:\d{2}$/.test(date) ? date : `${date}Z`;
+
+    return new Date(normalized)
         .toLocaleString('sv-SE', {
-            // sv-SE gives YYYY-MM-DD HH:MM format
             year: 'numeric',
             month: '2-digit',
             day: '2-digit',
@@ -65,7 +67,7 @@ export function convertDateToInputString(date: string | null) {
             minute: '2-digit',
             hour12: false,
         })
-        .replace(' ', 'T'); // datetime-local input expects "YYYY-MM-DDTHH:MM"
+        .replace(' ', 'T');
 }
 
 export const getSortUrl = (field: string): string => {

@@ -27,7 +27,7 @@ const Edit: FC<Inertia.Pages.Admin.Events.Edit> = ({
     availablePeople,
     roles,
 }) => {
-    const { data, setData, put, processing, errors } = useForm({
+    const { data, setData, put, processing, errors, transform } = useForm({
         title: event.title,
         description: event.description,
         stage_id: event.stage_id,
@@ -42,15 +42,15 @@ const Edit: FC<Inertia.Pages.Admin.Events.Edit> = ({
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
 
-        setData('starts_at', convertDateToUTC(data.starts_at));
-        setData('ends_at', convertDateToUTC(data.ends_at));
+        transform((data) => ({
+            ...data,
+            starts_at: convertDateToUTC(data.starts_at),
+            ends_at: convertDateToUTC(data.ends_at),
+        }));
 
         put(update({ event }).url, {
             onSuccess: () => {
                 toast.success('Событие успешно обновлено');
-
-                setData('starts_at', convertDateToInputString(event.starts_at));
-                setData('ends_at', convertDateToInputString(event.ends_at));
             },
         });
     };
