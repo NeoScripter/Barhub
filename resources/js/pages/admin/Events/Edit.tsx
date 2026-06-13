@@ -9,11 +9,8 @@ import { Label } from '@/components/ui/Label';
 import { SelectMenu } from '@/components/ui/SelectMenu';
 import { Textarea } from '@/components/ui/Textarea';
 import { convertDateToInputString, convertDateToUTC } from '@/lib/utils';
-import {
-    destroy,
-    index,
-    update,
-} from '@/wayfinder/routes/admin/events';
+import EventController from '@/wayfinder/App/Http/Controllers/User/EventController';
+import { destroy, index, update } from '@/wayfinder/routes/admin/events';
 import { Inertia } from '@/wayfinder/types';
 import { router, useForm } from '@inertiajs/react';
 import { Trash2 } from 'lucide-react';
@@ -21,7 +18,6 @@ import { FC, useState } from 'react';
 import { toast } from 'sonner';
 import { PersonSelect, PersonWithRoles } from './partials/PersonSelect';
 import { ThemeSelect } from './partials/ThemeSelect';
-import EventController from '@/wayfinder/App/Http/Controllers/User/EventController';
 
 const Edit: FC<Inertia.Pages.Admin.Events.Edit> = ({
     event,
@@ -50,7 +46,12 @@ const Edit: FC<Inertia.Pages.Admin.Events.Edit> = ({
         setData('ends_at', convertDateToUTC(data.ends_at));
 
         put(update({ event }).url, {
-            onSuccess: () => toast.success('Событие успешно обновлено'),
+            onSuccess: () => {
+                toast.success('Событие успешно обновлено');
+
+                setData('starts_at', convertDateToInputString(event.starts_at));
+                setData('ends_at', convertDateToInputString(event.ends_at));
+            },
         });
     };
 
@@ -69,7 +70,7 @@ const Edit: FC<Inertia.Pages.Admin.Events.Edit> = ({
 
     return (
         <div className="mx-auto w-full max-w-250">
-            <div className="mb-8 md:mb-12 text-center">
+            <div className="mb-8 text-center md:mb-12">
                 <AccentHeading
                     asChild
                     className="mb-1 text-lg text-secondary"
@@ -80,7 +81,13 @@ const Edit: FC<Inertia.Pages.Admin.Events.Edit> = ({
 
             <div className="mb-8 flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
                 <CopyLinkBtn
-                    url={window.origin + EventController.show({exhibition: event.exhibition!, event: event.id}).url}
+                    url={
+                        window.origin +
+                        EventController.show({
+                            exhibition: event.exhibition!,
+                            event: event.id,
+                        }).url
+                    }
                 />
 
                 <DeleteAlertDialog
