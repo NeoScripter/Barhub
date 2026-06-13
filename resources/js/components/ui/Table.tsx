@@ -112,7 +112,7 @@ const TableCell: FC<TableCellProps> = ({
     return (
         <td
             className={cn(
-                'min-w-30 relative px-4 py-3 text-sm text-gray-600 2xl:text-base',
+                'min-w-30 px-4 py-3 text-sm text-gray-600 2xl:text-base',
                 className,
             )}
             style={{ minWidth: `${width * 120}px` }}

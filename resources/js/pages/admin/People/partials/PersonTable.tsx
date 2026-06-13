@@ -4,7 +4,6 @@ import { NodeProps } from '@/types/shared';
 import { edit } from '@/wayfinder/routes/admin/people';
 import { App } from '@/wayfinder/types';
 import { Link } from '@inertiajs/react';
-import { PencilLine } from 'lucide-react';
 import { FC } from 'react';
 
 const PersonTable: FC<
@@ -19,7 +18,10 @@ const PersonTable: FC<
     return (
         <Table.Body className={className}>
             {people.map((person) => (
-                <Table.Row key={person.id}>
+                <Table.Row
+                    key={person.id}
+                    className="relative"
+                >
                     <Table.Cell
                         key="avatar"
                         width={1.2}
@@ -28,12 +30,12 @@ const PersonTable: FC<
                             href={edit({
                                 person: person.id,
                             })}
-                            className="absolute inset-0"
+                            className="absolute inset-0 z-20"
                         />
                         {person.avatar && (
                             <Image
                                 image={person.avatar}
-                                imgStyles='object-contain'
+                                imgStyles="object-contain"
                                 wrapperStyles="size-16"
                             />
                         )}

@@ -91,8 +91,6 @@ final class PersonController extends Controller
             );
         }
 
-        return $person;
-
         return to_route('admin.people.index')
             ->with('success', 'Участник успешно создан');
     }
