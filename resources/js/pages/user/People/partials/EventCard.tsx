@@ -22,17 +22,15 @@ const EventCard: FC<
                     href={show({ exhibition, event })}
                     className="absolute inset-0"
                 />
-                <p className="font-bold">
-                    {shortenDescription(event.description, 20)}
-                </p>
+                <p className="text-lg font-bold text-primary">{event.title}</p>
                 <p className="">{event?.role_label}</p>
                 <div>
                     <EventDateInfo
                         event={event}
                         className="sm:w-53 lg:w-30 2xl:w-40"
                     />
-                    <h4 className="text-lg font-bold text-primary">
-                        {event.title}
+                    <h4 className="font-bold">
+                        {shortenDescription(event.description, 20)}
                     </h4>
                 </div>
             </CardLayout>
