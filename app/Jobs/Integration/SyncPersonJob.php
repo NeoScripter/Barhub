@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Jobs\Integration;
 
+use App\Models\Integration;
 use App\Models\Person;
 use App\Services\Integration\PersonIntegrationService;
 use Illuminate\Bus\Queueable;
@@ -26,11 +27,15 @@ class SyncPersonJob implements ShouldQueue
 
     public function handle(PersonIntegrationService $service): void
     {
-        match ($this->action) {
-            'create' => $service->create($this->person),
-            'update' => $service->update($this->person),
-            'delete' => $service->destroy($this->person),
-            default  => throw new \InvalidArgumentException("Unknown action: {$this->action}"),
-        };
+        $integration = Integration::firstOrCreate();
+
+        if ((bool) $integration->status === true) {
+            match ($this->action) {
+                'create' => $service->create($this->person),
+                'update' => $service->update($this->person),
+                'delete' => $service->destroy($this->person),
+                default  => throw new \InvalidArgumentException("Unknown action: {$this->action}"),
+            };
+        }
     }
 }

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Jobs\Integration;
 
 use App\Models\Company;
+use App\Models\Integration;
 use App\Services\Integration\CompanyIntegrationService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -26,11 +27,15 @@ class SyncCompanyJob implements ShouldQueue
 
     public function handle(CompanyIntegrationService $service): void
     {
-        match ($this->action) {
-            'create' => $service->create($this->company),
-            'update' => $service->update($this->company),
-            'delete' => $service->destroy($this->company),
-            default  => throw new \InvalidArgumentException("Unknown action: {$this->action}"),
-        };
+        $integration = Integration::firstOrCreate();
+
+        if ((bool) $integration->status === true) {
+            match ($this->action) {
+                'create' => $service->create($this->company),
+                'update' => $service->update($this->company),
+                'delete' => $service->destroy($this->company),
+                default  => throw new \InvalidArgumentException("Unknown action: {$this->action}"),
+            };
+        }
     }
 }

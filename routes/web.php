@@ -41,12 +41,12 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', HomeController::class)->name('home');
 
-Route::get('/integration', function () {
+// Route::get('/integration', function () {
 
-    $event = Event::find(11);
-    // (new EventIntegrationService)->destroy($event);
-    echo 'hello world';
-});
+//     $event = Event::find(11);
+//     // (new EventIntegrationService)->destroy($event);
+//     echo 'hello world';
+// });
 
 Route::get('/exhibitions', UserExhibitionController::class)->name('exhibitions.index');
 
@@ -94,9 +94,9 @@ Route::prefix('/admin')
             ->middleware(['role:' . UserRole::SUPER_ADMIN->value])
             ->only(['index', 'destroy', 'update']);
 
-        Route::get('integration', [IntergrationController::class, 'index'])
+        Route::resource('integration', IntergrationController::class)
             ->middleware(['role:' . UserRole::SUPER_ADMIN->value])
-            ->name('integration.index');
+            ->only(['index', 'update']);
 
         Route::resource('companies', AdminCompanyController::class)->except(['show']);
         Route::resource('all-tasks', AdminPartnerController::class)
