@@ -1,5 +1,7 @@
 import AccentHeading from '@/components/ui/AccentHeading';
 import { Button } from '@/components/ui/Button';
+import IntergrationController from '@/wayfinder/App/Http/Controllers/Admin/IntergrationController';
+import { Link } from '@inertiajs/react';
 
 const Footer = () => {
     return (
@@ -11,8 +13,11 @@ const Footer = () => {
             <Button
                 variant="tertiary"
                 size="sm"
+                asChild
             >
-                статус интеграции
+                <Link href={IntergrationController.index()}>
+                    статус интеграции
+                </Link>
             </Button>
         </>
     );

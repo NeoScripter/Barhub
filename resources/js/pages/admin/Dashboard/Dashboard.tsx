@@ -2,12 +2,14 @@ import CardLayout from '@/components/layout/CardLayout';
 import AccentHeading from '@/components/ui/AccentHeading';
 import Filler from '@/components/ui/Filler';
 import { cn } from '@/lib/utils';
+import { usePage } from '@inertiajs/react';
 import Actions from './partials/Actions';
 import ExpoSelector from './partials/ExpoSelector';
 import Footer from './partials/Footer';
 import Tasks from './partials/Tasks';
 
 const Dashboard = () => {
+    const { auth } = usePage<{ auth: { user: { role: number } } }>().props;
     return (
         <>
             <div className="spacing flex flex-col">
@@ -53,12 +55,13 @@ const Dashboard = () => {
                         <Actions />
                     </article>
                 </div>
-
-                <footer>
-                    <CardLayout className="padding mx-auto w-full max-w-177.5 items-center justify-evenly sm:flex-row sm:items-baseline">
-                        <Footer />
-                    </CardLayout>
-                </footer>
+                {auth?.user?.role === 1 && (
+                    <footer>
+                        <CardLayout className="padding mx-auto w-full max-w-177.5 items-center justify-evenly sm:flex-row sm:items-baseline">
+                            <Footer />
+                        </CardLayout>
+                    </footer>
+                )}
             </div>
         </>
     );

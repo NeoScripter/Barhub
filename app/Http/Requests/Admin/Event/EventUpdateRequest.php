@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Requests\Admin\Event;
 
 use App\Enums\PersonRole;
+use App\Rules\SameDay;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
@@ -42,7 +43,7 @@ final class EventUpdateRequest extends FormRequest
                 Rule::in(collect(PersonRole::cases())->pluck('value')->toArray()),
             ],
             'starts_at' => ['sometimes', 'date'],
-            'ends_at' => ['sometimes', 'date', 'after:starts_at'],
+            'ends_at' => ['sometimes', 'date', 'after:starts_at', new SameDay($this->starts_at)],
         ];
     }
 

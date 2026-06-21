@@ -11,7 +11,9 @@ use App\Http\Requests\Admin\Event\EventDestroyRequest;
 use App\Http\Requests\Admin\Event\EventIndexRequest;
 use App\Http\Requests\Admin\Event\EventStoreRequest;
 use App\Http\Requests\Admin\Event\EventUpdateRequest;
+use App\Jobs\Integration\SyncEventJob;
 use App\Models\Event;
+use App\Services\Integration\EventIntegrationService;
 use App\Sorts\RelationSort;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Auth;
@@ -102,6 +104,7 @@ final class EventController extends Controller
                     }
                 }
             }
+            SyncEventJob::dispatch($event, 'create');
 
             return $event;
         });
@@ -154,6 +157,8 @@ final class EventController extends Controller
                     }
                 }
             }
+
+            SyncEventJob::dispatch($event, 'update');
         });
 
         return to_route('admin.events.index')
@@ -164,6 +169,8 @@ final class EventController extends Controller
     public function destroy(EventDestroyRequest $request, Event $event)
     {
         $event->delete();
+
+        SyncEventJob::dispatch($event, 'delete');
 
         return to_route('admin.events.index')
             ->with('success', 'Событие успешно удалено');

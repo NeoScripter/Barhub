@@ -21,7 +21,7 @@ const Create: FC<Inertia.Pages.Admin.Events.Create> = ({
     availablePeople,
     roles,
 }) => {
-    const { data, setData, post, processing, errors } = useForm({
+    const { data, setData, post, processing, errors, transform } = useForm({
         title: '',
         description: '',
         stage_id: null as number | null,
@@ -34,9 +34,11 @@ const Create: FC<Inertia.Pages.Admin.Events.Create> = ({
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
 
-        setData('starts_at', convertDateToUTC(data.starts_at));
-        setData('ends_at', convertDateToUTC(data.ends_at));
-
+        transform((data) => ({
+            ...data,
+            starts_at: convertDateToUTC(data.starts_at),
+            ends_at: convertDateToUTC(data.ends_at),
+        }));
         post(store().url, {
             onSuccess: () => toast.success('Событие успешно создано'),
         });

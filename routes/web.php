@@ -17,6 +17,7 @@ use App\Http\Controllers\Admin\PartnerController as AdminPartnerController;
 use App\Http\Controllers\Admin\PersonController as AdminPersonController;
 use App\Http\Controllers\Admin\ServiceController as AdminServiceController;
 use App\Http\Controllers\Admin\FollowupController as AdminFollowupController;
+use App\Http\Controllers\Admin\IntergrationController;
 use App\Http\Controllers\Admin\StageController;
 use App\Http\Controllers\Admin\TagController;
 use App\Http\Controllers\Admin\TaskController as AdminTaskController;
@@ -31,9 +32,21 @@ use App\Http\Controllers\User\PersonController as UserPersonController;
 use App\Http\Controllers\User\CompanyController as UserCompanyController;
 use App\Http\Controllers\User\ExhibitionController as UserExhibitionController;
 use App\Http\Controllers\User\HomeController;
+use App\Http\Resources\Integration\EventResource;
+use App\Models\Event;
+use App\Services\Integration\BaseIntegrationService;
+use App\Services\Integration\EventIntegrationService;
+use App\Services\IntegrationHandler;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', HomeController::class)->name('home');
+
+Route::get('/integration', function () {
+
+    $event = Event::find(11);
+    // (new EventIntegrationService)->destroy($event);
+    echo 'hello world';
+});
 
 Route::get('/exhibitions', UserExhibitionController::class)->name('exhibitions.index');
 
@@ -80,6 +93,10 @@ Route::prefix('/admin')
         Route::resource('exhibitions/{exhibition}/admins', AdminController::class)
             ->middleware(['role:' . UserRole::SUPER_ADMIN->value])
             ->only(['index', 'destroy', 'update']);
+
+        Route::get('integration', [IntergrationController::class, 'index'])
+            ->middleware(['role:' . UserRole::SUPER_ADMIN->value])
+            ->name('integration.index');
 
         Route::resource('companies', AdminCompanyController::class)->except(['show']);
         Route::resource('all-tasks', AdminPartnerController::class)

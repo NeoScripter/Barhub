@@ -37,4 +37,9 @@ return [
         ],
     ],
 
+    'eventicious' => [
+        'client_id'     => env('EVENTICIOUS_CLIENT_ID'),
+        'client_secret' => env('EVENTICIOUS_CLIENT_SECRET'),
+    ],
+
 ];

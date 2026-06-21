@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace App\Http\Requests\Admin\Event;
 
 use App\Enums\PersonRole;
+use App\Rules\SameDay;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
 final class EventStoreRequest extends FormRequest
@@ -32,7 +34,7 @@ final class EventStoreRequest extends FormRequest
                 Rule::in(collect(PersonRole::cases())->pluck('value')->toArray()),
             ],
             'starts_at' => ['required', 'date'],
-            'ends_at' => ['required', 'date', 'after:starts_at'],
+            'ends_at' => ['required', 'date', 'after:starts_at', new SameDay($this->starts_at)],
         ];
     }
 
