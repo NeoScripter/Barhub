@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Company;
 use App\Models\ExponentEmail;
+use App\Models\User;
 use App\Notifications\CreateExponentNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Notification;
@@ -31,6 +32,11 @@ class ExponentEmailController extends Controller
     public function destroy(Company $company, ExponentEmail $email)
     {
         $email->delete();
+        $user = User::where('email', $email->email)->first();
+
+        if ($user) {
+            $user->delete();
+        }
 
         return to_route('admin.exponents.index', ['company' => $company]);
     }

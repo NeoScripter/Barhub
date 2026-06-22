@@ -38,7 +38,7 @@ final class CreateNewUser implements CreatesNewUsers
             'password' => $input['password'],
         ]);
 
-        $exponentRecord = ExponentEmail::where('email', $user->email)->first();
+        $exponentRecord = ExponentEmail::where('email', $input['email'])->first();
 
         if (! $exponentRecord) {
             return $user;
