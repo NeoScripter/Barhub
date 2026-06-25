@@ -28,7 +28,7 @@ const EventCard: FC<
                 className={cn(
                     className,
                     paddingStyles,
-                    'group hover:ring-primary hover:ring-2 relative w-full items-start gap-6 text-foreground transition-transform duration-150 ease-in-out hover:scale-103 sm:gap-9 lg:flex-row',
+                    'group relative w-full items-start gap-6 text-foreground transition-transform duration-150 ease-in-out hover:scale-103 hover:ring-2 hover:ring-primary sm:gap-9 lg:flex-row',
                 )}
             >
                 <Link
@@ -41,11 +41,11 @@ const EventCard: FC<
                         className="sm:w-53 lg:w-30 2xl:w-40"
                     />
 
-                    <div className="text-sm mr-auto sm:shrink-100 sm:text-base lg:text-sm 2xl:text-base">
-                        <p className="mb-2 font-bold text-lg 2xl:text-xl">{event.title}</p>
-                        <p>
-                            {shortenDescription(event.description)}
+                    <div className="mr-auto text-sm sm:shrink-100 sm:text-base lg:text-sm 2xl:text-base">
+                        <p className="mb-2 text-lg font-bold 2xl:text-xl">
+                            {event.title}
                         </p>
+                        <p>{shortenDescription(event.description)}</p>
                     </div>
                 </div>
 
@@ -54,14 +54,14 @@ const EventCard: FC<
 
                     <LogoAccordion event={event} />
 
-                    <ul className="flex flex-wrap items-baseline gap-2 md:ml-auto">
-                        {event.themes?.map((theme) => (
+                    {event.themes && <ul className="flex flex-wrap items-baseline gap-2 md:ml-auto">
+                        {event.themes.map((theme) => (
                             <ThemeBadge
                                 key={theme.name}
                                 theme={theme}
                             />
                         ))}
-                    </ul>
+                    </ul>}
                 </div>
             </CardLayout>
         </li>
