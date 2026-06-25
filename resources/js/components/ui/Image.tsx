@@ -52,6 +52,7 @@ export default function Image({
                     onLoad={() => setIsLoading(false)}
                     src={webp}
                     alt={alt ?? ''}
+                    ref={imgRef}
                     loading={isLazy ? 'lazy' : undefined}
                     className={cn(
                         'size-full object-cover object-center transition-all duration-500 ease-in-out',
@@ -74,7 +75,6 @@ export default function Image({
                     ></div>
 
                     <img
-                        ref={imgRef}
                         aria-hidden={!isLoading}
                         src={tiny}
                         alt={alt}
