@@ -54,7 +54,7 @@ const EventCard: FC<
 
                     <LogoAccordion event={event} />
 
-                    <ul className="flex flex-wrap items-baseline gap-2">
+                    <ul className="flex flex-wrap items-baseline gap-2 md:ml-auto">
                         {event.themes?.map((theme) => (
                             <ThemeBadge
                                 key={theme.name}
