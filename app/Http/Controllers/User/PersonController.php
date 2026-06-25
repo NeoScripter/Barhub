@@ -24,7 +24,7 @@ final class PersonController extends Controller
             "and pivot2.role in (" . implode(',', array_fill(0, count($roles), '?')) . ")";
 
         $people = DB::select(
-            "select p.*, img.alt, img.avif, img.tiny, img.avif2x, img.avif3x, img.webp, img.webp2x, img.webp3x
+            "select p.*, img.alt, img.avif, img.tiny, img.avif2x, img.avif3x, img.webp, img.webp2x, img.webp3x, img.imageable_id, img.type, img.imageable_type
             from (
                 select p.id, p.name, p.regalia, p.bio, p.telegram,
                        group_concat(distinct pivot2.role) as roles
