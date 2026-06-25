@@ -24,7 +24,7 @@ final class PersonController extends Controller
             "and pivot2.role in (" . implode(',', array_fill(0, count($roles), '?')) . ")";
 
         $people = DB::select(
-            "select p.*, img.*
+            "select p.*, img.alt, img.avif, img.tiny, img.avif2x, img.avif3x, img.webp, img.webp2x, img.webp3x
             from (
                 select p.id, p.name, p.regalia, p.bio, p.telegram,
                        group_concat(distinct pivot2.role) as roles
@@ -39,8 +39,8 @@ final class PersonController extends Controller
                 on img.imageable_id = p.id
                 and img.imageable_type = 'person'
                 and img.type = 'avatar'",
-                array_merge([$exhibition->id], $roles)
-            );
+            array_merge([$exhibition->id], $roles)
+        );
 
         $roles = DB::select('select distinct role from event_person');
 
