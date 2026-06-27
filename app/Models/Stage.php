@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Jobs\Integration\SyncStageJob;
 use Database\Factories\StageFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -23,5 +24,20 @@ final class Stage extends Model
     public function exhibition(): BelongsTo
     {
         return $this->belongsTo(Exhibition::class);
+    }
+
+    protected static function booted()
+    {
+        static::created(function (Stage $stage) {
+            SyncStageJob::dispatch($stage, 'create');
+        });
+
+        static::updated(function (Stage $stage) {
+            SyncStageJob::dispatch($stage, 'update');
+        });
+
+        static::deleted(function (Stage $stage) {
+            SyncStageJob::dispatch($stage, 'delete');
+        });
     }
 }

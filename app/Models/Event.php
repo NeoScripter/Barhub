@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Jobs\Integration\SyncEventJob;
 use Database\Factories\EventFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -42,5 +43,20 @@ final class Event extends Model
             'starts_at' => 'datetime',
             'ends_at' => 'datetime',
         ];
+    }
+
+    protected static function booted()
+    {
+        static::created(function ($event) {
+            SyncEventJob::dispatch($event, 'create');
+        });
+
+        static::updated(function ($event) {
+            SyncEventJob::dispatch($event, 'update');
+        });
+
+        static::deleted(function ($event) {
+            SyncEventJob::dispatch($event, 'delete');
+        });
     }
 }

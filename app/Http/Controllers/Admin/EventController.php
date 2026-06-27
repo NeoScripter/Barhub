@@ -104,7 +104,6 @@ final class EventController extends Controller
                     }
                 }
             }
-            SyncEventJob::dispatch($event, 'create');
 
             return $event;
         });
@@ -157,8 +156,6 @@ final class EventController extends Controller
                     }
                 }
             }
-
-            SyncEventJob::dispatch($event, 'update');
         });
 
         return to_route('admin.events.index')
@@ -169,8 +166,6 @@ final class EventController extends Controller
     public function destroy(EventDestroyRequest $request, Event $event)
     {
         $event->delete();
-
-        SyncEventJob::dispatch($event, 'delete');
 
         return to_route('admin.events.index')
             ->with('success', 'Событие успешно удалено');

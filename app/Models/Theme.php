@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Jobs\Integration\SyncThemeJob;
 use Database\Factories\ThemeFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -23,5 +24,20 @@ final class Theme extends Model
     public function exhibition(): BelongsTo
     {
         return $this->belongsTo(Exhibition::class);
+    }
+
+    protected static function booted()
+    {
+        static::created(function (Theme $theme) {
+            SyncThemeJob::dispatch($theme, 'create');
+        });
+
+        static::updated(function (Theme $theme) {
+            SyncThemeJob::dispatch($theme, 'update');
+        });
+
+        static::deleted(function (Theme $theme) {
+            SyncThemeJob::dispatch($theme, 'delete');
+        });
     }
 }

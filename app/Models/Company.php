@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Models;
 
 use App\Events\CompanyCreated;
+use App\Jobs\Integration\SyncCompanyJob;
 use App\Traits\HasFilterSearch;
 use Database\Factories\CompanyFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -71,6 +72,16 @@ final class Company extends Model
         self::created(function (Company $company): void {
             $tag = Tag::firstOrCreate(['name' => 'Экспонент']);
             $company->tags()->attach($tag->id);
+
+            SyncCompanyJob::dispatch($company, 'create');
+        });
+
+        static::updated(function (Company $company) {
+            SyncCompanyJob::dispatch($company, 'update');
+        });
+
+        static::deleted(function (Company $company) {
+            SyncCompanyJob::dispatch($company, 'delete');
         });
     }
 }

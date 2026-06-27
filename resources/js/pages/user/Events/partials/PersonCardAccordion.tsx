@@ -10,10 +10,10 @@ const PersonCardAccordion: FC<NodeProps<{ event: App.Models.Event }>> = ({
     const people = event.people;
 
     return (
-        people && <div className="relative isolate bg-white">
-            <ul className="space-y-5">
-                {
-                    people.map((person, idx) => (
+        people && (
+            <div className="relative isolate bg-white">
+                <ul className="space-y-5">
+                    {people.map((person, idx) => (
                         <li key={`${person.id} ${idx}`}>
                             <EventPersonCard
                                 role={person.role}
@@ -24,8 +24,9 @@ const PersonCardAccordion: FC<NodeProps<{ event: App.Models.Event }>> = ({
                             />
                         </li>
                     ))}
-            </ul>
-        </div>
+                </ul>
+            </div>
+        )
     );
 };
 

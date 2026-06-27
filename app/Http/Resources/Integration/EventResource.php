@@ -24,6 +24,8 @@ class EventResource
             $speaker_ids
         );
 
+        $tag_ids = $event->themes()->pluck('id')->toArray();
+
         return [
             'id'                => $event->id,
             'language'          => 'ru-RU',
@@ -35,7 +37,7 @@ class EventResource
             'aclGroupsIds'      => [],
             'externalImagePath' => url('placeholder.webp'),
             'speakerIds'        => $speaker_ids,
-            'tagIds'            => [],
+            'tagIds'            => $tag_ids,
         ];
     }
 }

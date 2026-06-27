@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Models;
 
 use App\Enums\PersonRole;
+use App\Jobs\Integration\SyncPersonJob;
 use App\Traits\HasFilterSearch;
 use Database\Factories\PersonFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -60,5 +61,20 @@ final class Person extends Model
         return $query->pluck('role')
             ->map(fn($role) => PersonRole::from($role)->label())
             ->values();
+    }
+
+    protected static function booted(): void
+    {
+        self::created(function (Company $person): void {
+            SyncPersonJob::dispatch($person, 'create');
+        });
+
+        static::updated(function ($person) {
+            SyncPersonJob::dispatch($person, 'update');
+        });
+
+        static::deleted(function ($person) {
+            SyncPersonJob::dispatch($person, 'delete');
+        });
     }
 }

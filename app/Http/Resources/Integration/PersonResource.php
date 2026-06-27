@@ -24,10 +24,18 @@ class PersonResource
             $speaker_ids
         );
 
+        $full_name = trim($person->name);
+        $full_name = preg_replace('/\s+/', ' ', $full_name);
+        [$first_name, $last_name] = explode(' ', $full_name);
+
         return [
             'id'                => $person->id,
-            'language'          => 'ru-RU',
-            'title'             => $person->title,
+            'firstName'          => $first_name,
+            'lastName'          => $last_name,
+            'description'          => $person->relalia,
+            'isSpeaker'          => true,
+            'position'          => 'Неизвестно',
+            'company'             =>  'Неизвестно',
             'externalImagePath' => $person?->avatar->webp ?? url('placeholder.webp'),
         ];
     }
