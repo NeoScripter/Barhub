@@ -96,7 +96,7 @@ Route::prefix('/admin')
 
         Route::resource('integration', IntergrationController::class)
             ->middleware(['role:' . UserRole::SUPER_ADMIN->value])
-            ->only(['index', 'update']);
+            ->only(['index', 'store', 'update']);
 
         Route::resource('companies', AdminCompanyController::class)->except(['show']);
         Route::resource('all-tasks', AdminPartnerController::class)
