@@ -65,7 +65,7 @@ final class Person extends Model
 
     protected static function booted(): void
     {
-        self::created(function (Company $person): void {
+        self::created(function ($person): void {
             SyncPersonJob::dispatch($person, 'create');
         });
 
