@@ -13,7 +13,7 @@ use RuntimeException;
 abstract class BaseIntegrationService
 {
     private const TOKEN_CACHE_KEY = 'eventicious_api_token';
-    private const TOKEN_TTL       = 3600;
+    private const TOKEN_TTL       = 60;
     private const BASE_URL        = 'https://api-integration.eventicious.ru';
 
     protected function get(string $endpoint): Response
