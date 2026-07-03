@@ -25,6 +25,7 @@ class EventResource
         );
 
         $tag_ids = $event->themes()->pluck('id')->toArray();
+        $stages = $event->stage ? [$event->stage->id] : [];
 
         return [
             'id'                => $event->id,
@@ -34,9 +35,7 @@ class EventResource
             'startTime'         => $event->starts_at,
             'endTime'           => $event->ends_at,
             'type'              => 0,
-            "locationsIds" => [
-                5
-            ],
+            "locationsIds" => $stages,
             'aclGroupsIds'      => [],
             'externalImagePath' => url('placeholder.webp'),
             'speakerIds'        => $speaker_ids,
