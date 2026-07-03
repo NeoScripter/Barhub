@@ -13,12 +13,16 @@ class PersonResource
     {
         $full_name = trim($person->name);
         $full_name = preg_replace('/\s+/', ' ', $full_name);
-        [$first_name, $last_name] = explode(' ', $full_name);
+        $name = explode(' ', $full_name);
+
+        if (count($name) < 2) {
+            $name[] = 'Неизвестно';
+        }
 
         return [
             'id'                => $person->id,
-            'firstName'          => $first_name,
-            'lastName'          => $last_name,
+            'firstName'          => $name[0],
+            'lastName'          => $name[1],
             'description'          => $person->relalia,
             'isSpeaker'          => true,
             'position'          => 'Неизвестно',
