@@ -35,7 +35,7 @@ class EventResource
             'startTime'         => $event->starts_at,
             'endTime'           => $event->ends_at,
             'type'              => 0,
-            "locationsIds" => $stages,
+            "locationIds" => $stages,
             'aclGroupsIds'      => [],
             'externalImagePath' => url('placeholder.webp'),
             'speakerIds'        => $speaker_ids,
