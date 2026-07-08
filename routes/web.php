@@ -32,25 +32,17 @@ use App\Http\Controllers\User\PersonController as UserPersonController;
 use App\Http\Controllers\User\CompanyController as UserCompanyController;
 use App\Http\Controllers\User\ExhibitionController as UserExhibitionController;
 use App\Http\Controllers\User\HomeController;
-use App\Http\Resources\Integration\EventResource;
-use App\Models\Company;
-use App\Models\Event;
-use App\Models\Person;
-use App\Services\Integration\BaseIntegrationService;
-use App\Services\Integration\CompanyIntegrationService;
-use App\Services\Integration\EventIntegrationService;
-use App\Services\Integration\PersonIntegrationService;
-use App\Services\IntegrationHandler;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', HomeController::class)->name('home');
 
-Route::get('/integration', function () {
+// Route::get('/integration', function () {
 
-    $event = Company::first();
-    (new CompanyIntegrationService)->create($event);
-    echo 'hello world';
-});
+//     $model = Event::where('title', 'Test 200')->first();
+//     // (new PersonIntegrationService)->destroy($model);
+//     (new EventIntegrationService)->create($model);
+//     echo 'hello world';
+// });
 
 Route::get('/exhibitions', UserExhibitionController::class)->name('exhibitions.index');
 

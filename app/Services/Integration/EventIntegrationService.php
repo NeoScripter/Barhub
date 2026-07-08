@@ -42,7 +42,7 @@ class EventIntegrationService extends BaseIntegrationService
 
     public function destroy(Event $event): void
     {
-        $response = $this->delete('/api/external/v2/sessions/delete/' . $event->id);
+        $response = $this->delete('/api/external/v2/sessions/delete/' . $event->id, []);
 
         if (!$response->successful()) {
             $this->log_error('Не удалось удалить мероприятие', [

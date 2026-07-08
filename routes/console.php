@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Enums\TaskStatus;
 use App\Models\User;
 use App\Notifications\SendBackupNotification;
 use Illuminate\Foundation\Inspiring;
@@ -10,6 +11,15 @@ use Illuminate\Support\Facades\Artisan;
 Artisan::command('inspire', function (): void {
     $this->comment(Inspiring::quote());
 })->purpose('Display an inspiring quote');
+
+Artisan::command('update_task_status', function (): void {
+    DB::update(
+        'update tasks
+                 set status = ?
+                 where status != ? and deadline < ?',
+        [TaskStatus::DELAYED->value, TaskStatus::DELAYED->value, now()]
+    );
+});
 
 Artisan::command('backup_database', function (): void {
     $username = config('database.connections.mysql.username');

@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use App\Enums\TaskStatus;
 use App\Http\Middleware\EnsureExhibitionAdminAccess;
 use App\Http\Middleware\EnsureUserHasRole;
 use App\Http\Middleware\HandleAppearance;
@@ -12,7 +11,6 @@ use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Http\Middleware\AddLinkHeadersForPreloadedAssets;
-use Illuminate\Support\Facades\DB;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -36,14 +34,9 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
     })
     ->withSchedule(function ($schedule) {
-        $schedule->call(function () {
-            DB::update(
-                'update tasks
-                 set status = ?
-                 where status != ? and deadline < ?',
-                [TaskStatus::DELAYED->value, TaskStatus::DELAYED->value, now()]
-            );
-        })->dailyAt('00:00');
+
+        $schedule->command('update_task_status')
+            ->dailyAt('01:00');
 
         $schedule->command('backup_database')
             ->weeklyOn(1, '01:00');

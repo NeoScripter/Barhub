@@ -34,10 +34,10 @@ abstract class BaseIntegrationService
             ->put(self::BASE_URL . $endpoint, $data);
     }
 
-    protected function delete(string $endpoint): Response
+    protected function delete(string $endpoint, ?array $data = []): Response
     {
         return Http::withToken($this->token())
-            ->delete(self::BASE_URL . $endpoint);
+            ->delete(self::BASE_URL . $endpoint, $data);
     }
 
     protected function parse_error(Response $response): string

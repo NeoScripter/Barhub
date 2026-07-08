@@ -12,7 +12,7 @@ class PersonIntegrationService extends BaseIntegrationService
 {
     public function create(Person $person): void
     {
-        $response = $this->post('/api/external/v2/speakers/create', PersonResource::make($person));
+        $response = $this->post('/api/external/v2/users/create', PersonResource::make($person));
 
         if (!$response->successful()) {
             $this->log_error('Не удалось создать докладчика', [
@@ -27,7 +27,7 @@ class PersonIntegrationService extends BaseIntegrationService
 
     public function update(Person $person): void
     {
-        $response = $this->put('/api/external/v2/speakers/update/' . $person->id, PersonResource::make($person));
+        $response = $this->put('/api/external/v2/users/update/' . $person->id, PersonResource::make($person));
 
         if (!$response->successful()) {
             $this->log_error('Не удалось отредактировать докладчика', [
@@ -42,7 +42,7 @@ class PersonIntegrationService extends BaseIntegrationService
 
     public function destroy(Person $person): void
     {
-        $response = $this->delete('/api/external/v2/speakers/delete/' . $person->id);
+        $response = $this->delete('/api/external/v2/users/delete/',  ['userIds' => [$person->id]]);
 
         if (!$response->successful()) {
             $this->log_error('Не удалось удалить докладчика', [

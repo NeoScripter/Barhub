@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Resources\Integration;
 
 use App\Models\Event;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
 class EventResource
@@ -27,18 +28,21 @@ class EventResource
         $tag_ids = $event->themes()->pluck('id')->toArray();
         $stages = $event->stage ? [$event->stage->id] : [];
 
+        $startTime = $event->starts_at->format('Y-m-d\TH:i');
+        $endTime = $event->ends_at->format('Y-m-d\TH:i');
+
         return [
             'id'                => $event->id,
             'language'          => 'ru-RU',
             'title'             => $event->title,
             'description'       => $event->description,
-            'startTime'         => $event->starts_at,
-            'endTime'           => $event->ends_at,
+            'startTime'         => $startTime,
+            'endTime'           => $endTime,
             'type'              => 0,
             "locationIds" => $stages,
             'aclGroupsIds'      => [],
             'externalImagePath' => url('placeholder.webp'),
-            'speakerIds'        => $speaker_ids,
+            'speakersIds'        => $speaker_ids,
             'tagIds'            => $tag_ids,
         ];
     }
