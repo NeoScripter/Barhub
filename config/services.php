@@ -43,6 +43,8 @@ return [
         // ID выставки на сайте, данные которой передаются в Eventicious
         // (ключ API привязан к одному мероприятию). Пусто = без фильтра.
         'exhibition_id' => env('EVENTICIOUS_EXHIBITION_ID'),
+        // Часовой пояс мероприятия: БД хранит UTC, Eventicious ждёт локальное время
+        'timezone'      => env('EVENTICIOUS_TIMEZONE', 'Europe/Moscow'),
     ],
 
 ];
