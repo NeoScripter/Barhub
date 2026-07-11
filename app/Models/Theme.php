@@ -29,15 +29,15 @@ final class Theme extends Model
     protected static function booted()
     {
         static::created(function (Theme $theme) {
-            SyncThemeJob::dispatch($theme, 'create');
+            SyncThemeJob::dispatch($theme->id, 'create');
         });
 
         static::updated(function (Theme $theme) {
-            SyncThemeJob::dispatch($theme, 'update');
+            SyncThemeJob::dispatch($theme->id, 'update');
         });
 
         static::deleted(function (Theme $theme) {
-            SyncThemeJob::dispatch($theme, 'delete');
+            SyncThemeJob::dispatch($theme->id, 'delete');
         });
     }
 }

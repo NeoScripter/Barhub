@@ -158,6 +158,10 @@ final class EventController extends Controller
             }
         });
 
+        // Изменение только связей (спикеры/темы) не трогает updated_at события,
+        // поэтому observer не сработает — синхронизируем явно.
+        SyncEventJob::dispatch($event->id, 'update');
+
         return to_route('admin.events.index')
             ->with('success', 'Event updated successfully');
     }

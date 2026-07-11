@@ -73,15 +73,15 @@ final class Company extends Model
             $tag = Tag::firstOrCreate(['name' => 'Экспонент']);
             $company->tags()->attach($tag->id);
 
-            SyncCompanyJob::dispatch($company, 'create');
+            SyncCompanyJob::dispatch($company->id, 'create');
         });
 
         static::updated(function (Company $company) {
-            SyncCompanyJob::dispatch($company, 'update');
+            SyncCompanyJob::dispatch($company->id, 'update');
         });
 
         static::deleted(function (Company $company) {
-            SyncCompanyJob::dispatch($company, 'delete');
+            SyncCompanyJob::dispatch($company->id, 'delete');
         });
     }
 }

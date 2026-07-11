@@ -11,31 +11,62 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Queue\SerializesModels;
 
 class SyncCompanyJob implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable, InteractsWithQueue, Queueable;
 
     public int $tries = 3;
     public int $backoff = 30;
 
+    // Не отправлять в API раньше, чем закоммитится транзакция со связями
+    public bool $afterCommit = true;
+
     public function __construct(
-        private readonly Company $company,
-        private readonly string $action, // 'create' | 'update' | 'destroy'
+        private readonly int $companyId,
+        private readonly string $action, // 'create' | 'update' | 'delete'
     ) {}
 
     public function handle(CompanyIntegrationService $service): void
     {
-        $integration = Integration::firstOrCreate();
-
-        if ((bool) $integration->status === true) {
-            match ($this->action) {
-                'create' => $service->create($this->company),
-                'update' => $service->update($this->company),
-                'delete' => $service->destroy($this->company),
-                default  => throw new \InvalidArgumentException("Unknown action: {$this->action}"),
-            };
+        if (!(bool) Integration::firstOrCreate()->status) {
+            return;
         }
+
+        if ($this->action === 'delete') {
+            $service->destroy($this->companyId);
+
+            return;
+        }
+
+        $company = Company::find($this->companyId);
+
+        if (!$company || !self::inScope($company)) {
+            return;
+        }
+
+        // Компанию, скрытую с сайта, убираем и из приложения
+        if (!$company->show_on_site) {
+            $service->destroy($company->id);
+
+            return;
+        }
+
+        match ($this->action) {
+            'create' => $service->create($company),
+            'update' => $service->sync($company),
+            default  => throw new \InvalidArgumentException("Unknown action: {$this->action}"),
+        };
+    }
+
+    /**
+     * В приложение передаётся только выставка из EVENTICIOUS_EXHIBITION_ID
+     * (ключ Eventicious привязан к одному мероприятию).
+     */
+    public static function inScope(Company $company): bool
+    {
+        $exhibitionId = config('services.eventicious.exhibition_id');
+
+        return !$exhibitionId || $company->exhibition_id === (int) $exhibitionId;
     }
 }

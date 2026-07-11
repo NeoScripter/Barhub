@@ -11,31 +11,53 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Queue\SerializesModels;
 
 class SyncStageJob implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable, InteractsWithQueue, Queueable;
 
     public int $tries = 3;
     public int $backoff = 30;
 
+    public bool $afterCommit = true;
+
     public function __construct(
-        private readonly Stage $stage,
-        private readonly string $action, // 'create' | 'update' | 'destroy'
+        private readonly int $stageId,
+        private readonly string $action, // 'create' | 'update' | 'delete'
     ) {}
 
     public function handle(StageIntegrationService $service): void
     {
-        $integration = Integration::firstOrCreate();
-
-        if ((bool) $integration->status === true) {
-            match ($this->action) {
-                'create' => $service->create($this->stage),
-                'update' => $service->update($this->stage),
-                'delete' => $service->destroy($this->stage),
-                default  => throw new \InvalidArgumentException("Unknown action: {$this->action}"),
-            };
+        if (!(bool) Integration::firstOrCreate()->status) {
+            return;
         }
+
+        if ($this->action === 'delete') {
+            $service->destroy($this->stageId);
+
+            return;
+        }
+
+        $stage = Stage::find($this->stageId);
+
+        if (!$stage || !self::inScope($stage)) {
+            return;
+        }
+
+        match ($this->action) {
+            'create' => $service->create($stage),
+            'update' => $service->sync($stage),
+            default  => throw new \InvalidArgumentException("Unknown action: {$this->action}"),
+        };
+    }
+
+    /**
+     * В приложение передаётся только выставка из EVENTICIOUS_EXHIBITION_ID.
+     */
+    public static function inScope(Stage $stage): bool
+    {
+        $exhibitionId = config('services.eventicious.exhibition_id');
+
+        return !$exhibitionId || $stage->exhibition_id === (int) $exhibitionId;
     }
 }

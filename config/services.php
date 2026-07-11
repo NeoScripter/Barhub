@@ -40,6 +40,9 @@ return [
     'eventicious' => [
         'client_id'     => env('EVENTICIOUS_CLIENT_ID'),
         'client_secret' => env('EVENTICIOUS_CLIENT_SECRET'),
+        // ID выставки на сайте, данные которой передаются в Eventicious
+        // (ключ API привязан к одному мероприятию). Пусто = без фильтра.
+        'exhibition_id' => env('EVENTICIOUS_EXHIBITION_ID'),
     ],
 
 ];

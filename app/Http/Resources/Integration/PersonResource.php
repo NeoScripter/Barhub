@@ -5,29 +5,29 @@ declare(strict_types=1);
 namespace App\Http\Resources\Integration;
 
 use App\Models\Person;
-use Illuminate\Support\Facades\DB;
+use App\Services\Integration\HtmlSanitizer;
 
 class PersonResource
 {
     public static function make(Person $person): array
     {
-        $full_name = trim($person->name);
-        $full_name = preg_replace('/\s+/', ' ', $full_name);
-        $name = explode(' ', $full_name);
+        // На сайте имя хранится одной строкой в формате «Имя Фамилия».
+        $fullName = preg_replace('/\s+/', ' ', trim((string) $person->name));
+        $parts = explode(' ', $fullName, 2);
 
-        if (count($name) < 2) {
-            $name[] = 'Неизвестно';
+        $payload = [
+            'id'          => $person->id,
+            'firstName'   => $parts[0] !== '' ? $parts[0] : '—',
+            'lastName'    => $parts[1] ?? '—',
+            'description' => HtmlSanitizer::clean($person->regalia),
+            'isSpeaker'   => true,
+        ];
+
+        // Без фото поле не отправляем — карточка остаётся без изображения.
+        if ($person->avatar) {
+            $payload['externalImagePath'] = route('integration.image', $person->avatar);
         }
 
-        return [
-            'id'                => $person->id,
-            'firstName'          => $name[0],
-            'lastName'          => $name[1],
-            'description'          => $person->relalia,
-            'isSpeaker'          => true,
-            'position'          => 'Неизвестно',
-            'company'             =>  'Неизвестно',
-            'externalImagePath' => $person?->avatar->webp ?? url('placeholder.webp'),
-        ];
+        return $payload;
     }
 }

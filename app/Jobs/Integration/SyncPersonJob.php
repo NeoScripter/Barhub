@@ -11,31 +11,55 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Queue\SerializesModels;
 
 class SyncPersonJob implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable, InteractsWithQueue, Queueable;
 
     public int $tries = 3;
     public int $backoff = 30;
 
+    // Не отправлять в API раньше, чем закоммитится транзакция со связями
+    public bool $afterCommit = true;
+
     public function __construct(
-        private readonly Person $person,
-        private readonly string $action, // 'create' | 'update' | 'destroy'
+        private readonly int $personId,
+        private readonly string $action, // 'create' | 'update' | 'delete'
     ) {}
 
     public function handle(PersonIntegrationService $service): void
     {
-        $integration = Integration::firstOrCreate();
-
-        if ((bool) $integration->status === true) {
-            match ($this->action) {
-                'create' => $service->create($this->person),
-                'update' => $service->update($this->person),
-                'delete' => $service->destroy($this->person),
-                default  => throw new \InvalidArgumentException("Unknown action: {$this->action}"),
-            };
+        if (!(bool) Integration::firstOrCreate()->status) {
+            return;
         }
+
+        if ($this->action === 'delete') {
+            $service->destroy($this->personId);
+
+            return;
+        }
+
+        $person = Person::find($this->personId);
+
+        if (!$person || !self::inScope($person)) {
+            return;
+        }
+
+        match ($this->action) {
+            'create' => $service->create($person),
+            'update' => $service->sync($person),
+            default  => throw new \InvalidArgumentException("Unknown action: {$this->action}"),
+        };
+    }
+
+    /**
+     * В приложение передаётся только выставка из EVENTICIOUS_EXHIBITION_ID.
+     */
+    public static function inScope(Person $person): bool
+    {
+        $exhibitionId = config('services.eventicious.exhibition_id');
+
+        return !$exhibitionId
+            || $person->exhibitions()->whereKey((int) $exhibitionId)->exists();
     }
 }
