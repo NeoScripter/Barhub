@@ -46,7 +46,7 @@ class SyncPersonJob implements ShouldQueue
         }
 
         match ($this->action) {
-            'create' => $service->create($person),
+            'create' => $service->create($person) || $service->update($person),
             'update' => $service->sync($person),
             default  => throw new \InvalidArgumentException("Unknown action: {$this->action}"),
         };

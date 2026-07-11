@@ -53,7 +53,7 @@ class SyncCompanyJob implements ShouldQueue
         }
 
         match ($this->action) {
-            'create' => $service->create($company),
+            'create' => $service->create($company) || $service->update($company),
             'update' => $service->sync($company),
             default  => throw new \InvalidArgumentException("Unknown action: {$this->action}"),
         };

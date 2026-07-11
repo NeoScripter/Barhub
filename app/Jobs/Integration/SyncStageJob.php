@@ -46,7 +46,7 @@ class SyncStageJob implements ShouldQueue
         }
 
         match ($this->action) {
-            'create' => $service->create($stage),
+            'create' => $service->create($stage) || $service->update($stage),
             'update' => $service->sync($stage),
             default  => throw new \InvalidArgumentException("Unknown action: {$this->action}"),
         };

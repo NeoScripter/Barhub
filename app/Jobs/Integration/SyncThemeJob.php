@@ -46,7 +46,7 @@ class SyncThemeJob implements ShouldQueue
         }
 
         match ($this->action) {
-            'create' => $service->create($theme),
+            'create' => $service->create($theme) || $service->update($theme),
             'update' => $service->sync($theme),
             default  => throw new \InvalidArgumentException("Unknown action: {$this->action}"),
         };

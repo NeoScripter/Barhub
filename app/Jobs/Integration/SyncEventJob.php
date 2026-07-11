@@ -47,7 +47,7 @@ class SyncEventJob implements ShouldQueue
         }
 
         match ($this->action) {
-            'create' => $service->create($event),
+            'create' => $service->create($event) || $service->update($event),
             'update' => $service->sync($event),
             default  => throw new \InvalidArgumentException("Unknown action: {$this->action}"),
         };
