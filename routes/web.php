@@ -32,17 +32,14 @@ use App\Http\Controllers\User\PersonController as UserPersonController;
 use App\Http\Controllers\User\CompanyController as UserCompanyController;
 use App\Http\Controllers\User\ExhibitionController as UserExhibitionController;
 use App\Http\Controllers\User\HomeController;
+use App\Http\Controllers\IntegrationImageController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', HomeController::class)->name('home');
 
-// Route::get('/integration', function () {
-
-//     $model = Event::where('title', 'Test 200')->first();
-//     // (new PersonIntegrationService)->destroy($model);
-//     (new EventIntegrationService)->create($model);
-//     echo 'hello world';
-// });
+// Публичная отдача картинок в JPEG для Eventicious (их API не принимает webp/avif)
+Route::get('/integration-images/{image}.jpg', [IntegrationImageController::class, 'show'])
+    ->name('integration.image');
 
 Route::get('/exhibitions', UserExhibitionController::class)->name('exhibitions.index');
 

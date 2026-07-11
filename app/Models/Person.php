@@ -65,16 +65,16 @@ final class Person extends Model
 
     protected static function booted(): void
     {
-        self::created(function ($person): void {
-            SyncPersonJob::dispatch($person, 'create');
+        self::created(function (Person $person): void {
+            SyncPersonJob::dispatch($person->id, 'create');
         });
 
-        static::updated(function ($person) {
-            SyncPersonJob::dispatch($person, 'update');
+        static::updated(function (Person $person) {
+            SyncPersonJob::dispatch($person->id, 'update');
         });
 
-        static::deleted(function ($person) {
-            SyncPersonJob::dispatch($person, 'delete');
+        static::deleted(function (Person $person) {
+            SyncPersonJob::dispatch($person->id, 'delete');
         });
     }
 }

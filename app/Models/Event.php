@@ -47,16 +47,16 @@ final class Event extends Model
 
     protected static function booted()
     {
-        static::created(function ($event) {
-            SyncEventJob::dispatch($event, 'create');
+        static::created(function (Event $event) {
+            SyncEventJob::dispatch($event->id, 'create');
         });
 
-        static::updated(function ($event) {
-            SyncEventJob::dispatch($event, 'update');
+        static::updated(function (Event $event) {
+            SyncEventJob::dispatch($event->id, 'update');
         });
 
-        static::deleted(function ($event) {
-            SyncEventJob::dispatch($event, 'delete');
+        static::deleted(function (Event $event) {
+            SyncEventJob::dispatch($event->id, 'delete');
         });
     }
 }

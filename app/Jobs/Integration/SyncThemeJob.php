@@ -11,31 +11,53 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Queue\SerializesModels;
 
 class SyncThemeJob implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable, InteractsWithQueue, Queueable;
 
     public int $tries = 3;
     public int $backoff = 30;
 
+    public bool $afterCommit = true;
+
     public function __construct(
-        private readonly Theme $theme,
-        private readonly string $action, // 'create' | 'update' | 'destroy'
+        private readonly int $themeId,
+        private readonly string $action, // 'create' | 'update' | 'delete'
     ) {}
 
     public function handle(ThemeIntegrationService $service): void
     {
-        $integration = Integration::firstOrCreate();
-
-        if ((bool) $integration->status === true) {
-            match ($this->action) {
-                'create' => $service->create($this->theme),
-                'update' => $service->update($this->theme),
-                'delete' => $service->destroy($this->theme),
-                default  => throw new \InvalidArgumentException("Unknown action: {$this->action}"),
-            };
+        if (!(bool) Integration::firstOrCreate()->status) {
+            return;
         }
+
+        if ($this->action === 'delete') {
+            $service->destroy($this->themeId);
+
+            return;
+        }
+
+        $theme = Theme::find($this->themeId);
+
+        if (!$theme || !self::inScope($theme)) {
+            return;
+        }
+
+        match ($this->action) {
+            'create' => $service->create($theme),
+            'update' => $service->sync($theme),
+            default  => throw new \InvalidArgumentException("Unknown action: {$this->action}"),
+        };
+    }
+
+    /**
+     * В приложение передаётся только выставка из EVENTICIOUS_EXHIBITION_ID.
+     */
+    public static function inScope(Theme $theme): bool
+    {
+        $exhibitionId = config('services.eventicious.exhibition_id');
+
+        return !$exhibitionId || $theme->exhibition_id === (int) $exhibitionId;
     }
 }

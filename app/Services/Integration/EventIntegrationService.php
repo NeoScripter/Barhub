@@ -4,54 +4,71 @@ declare(strict_types=1);
 
 namespace App\Services\Integration;
 
-use App\Models\Event;
 use App\Http\Resources\Integration\EventResource;
-use App\Services\Integration\BaseIntegrationService;
+use App\Models\Event;
 
 class EventIntegrationService extends BaseIntegrationService
 {
-    public function create(Event $event): void
+    public function create(Event $event): bool
     {
         $response = $this->post('/api/external/v2/sessions/create', EventResource::make($event));
 
         if (!$response->successful()) {
             $this->log_error('Не удалось создать мероприятие', [
                 'event_id' => $event->id,
-                'error'      => $this->parse_error($response),
+                'error'    => $this->parse_error($response),
             ]);
-            return;
+
+            return false;
         }
 
         $this->log_info('Мероприятие создано', ['event_id' => $event->id]);
+
+        return true;
     }
 
-    public function update(Event $event): void
+    public function update(Event $event): bool
     {
         $response = $this->put('/api/external/v2/sessions/update/' . $event->id, EventResource::make($event));
 
         if (!$response->successful()) {
             $this->log_error('Не удалось отредактировать мероприятие', [
                 'event_id' => $event->id,
-                'error'      => $this->parse_error($response),
+                'error'    => $this->parse_error($response),
             ]);
-            return;
+
+            return false;
         }
 
         $this->log_info('Мероприятие отредактировано', ['event_id' => $event->id]);
+
+        return true;
     }
 
-    public function destroy(Event $event): void
+    /**
+     * Обновить, а если записи в Eventicious ещё нет — создать.
+     */
+    public function sync(Event $event): bool
     {
-        $response = $this->delete('/api/external/v2/sessions/delete/' . $event->id, []);
+        return $this->update($event) || $this->create($event);
+    }
 
-        if (!$response->successful()) {
+    public function destroy(int $eventId): bool
+    {
+        $response = $this->delete('/api/external/v2/sessions/delete/' . $eventId, []);
+
+        // 404 = в Eventicious его и так нет, считаем удаление успешным.
+        if (!$response->successful() && $response->status() !== 404) {
             $this->log_error('Не удалось удалить мероприятие', [
-                'event_id' => $event->id,
-                'error'      => $this->parse_error($response),
+                'event_id' => $eventId,
+                'error'    => $this->parse_error($response),
             ]);
-            return;
+
+            return false;
         }
 
-        $this->log_info('Мероприятие удалено', ['event_id' => $event->id]);
+        $this->log_info('Мероприятие удалено', ['event_id' => $eventId]);
+
+        return true;
     }
 }

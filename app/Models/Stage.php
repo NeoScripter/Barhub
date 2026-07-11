@@ -29,15 +29,15 @@ final class Stage extends Model
     protected static function booted()
     {
         static::created(function (Stage $stage) {
-            SyncStageJob::dispatch($stage, 'create');
+            SyncStageJob::dispatch($stage->id, 'create');
         });
 
         static::updated(function (Stage $stage) {
-            SyncStageJob::dispatch($stage, 'update');
+            SyncStageJob::dispatch($stage->id, 'update');
         });
 
         static::deleted(function (Stage $stage) {
-            SyncStageJob::dispatch($stage, 'delete');
+            SyncStageJob::dispatch($stage->id, 'delete');
         });
     }
 }

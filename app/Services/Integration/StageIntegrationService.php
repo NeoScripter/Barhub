@@ -4,54 +4,71 @@ declare(strict_types=1);
 
 namespace App\Services\Integration;
 
-use App\Models\Stage;
 use App\Http\Resources\Integration\StageResource;
-use App\Services\Integration\BaseIntegrationService;
+use App\Models\Stage;
 
 class StageIntegrationService extends BaseIntegrationService
 {
-    public function create(Stage $stage): void
+    public function create(Stage $stage): bool
     {
         $response = $this->post('/api/external/v2/locations/create', StageResource::make($stage));
 
         if (!$response->successful()) {
             $this->log_error('Не удалось создать локацию', [
                 'stage_id' => $stage->id,
-                'error'      => $this->parse_error($response),
+                'error'    => $this->parse_error($response),
             ]);
-            return;
+
+            return false;
         }
 
         $this->log_info('Локация создана', ['stage_id' => $stage->id]);
+
+        return true;
     }
 
-    public function update(Stage $stage): void
+    public function update(Stage $stage): bool
     {
         $response = $this->put('/api/external/v2/locations/update/' . $stage->id, StageResource::make($stage));
 
         if (!$response->successful()) {
             $this->log_error('Не удалось отредактировать локацию', [
                 'stage_id' => $stage->id,
-                'error'      => $this->parse_error($response),
+                'error'    => $this->parse_error($response),
             ]);
-            return;
+
+            return false;
         }
 
         $this->log_info('Локация отредактирована', ['stage_id' => $stage->id]);
+
+        return true;
     }
 
-    public function destroy(Stage $stage): void
+    /**
+     * Обновить, а если записи в Eventicious ещё нет — создать.
+     */
+    public function sync(Stage $stage): bool
     {
-        $response = $this->delete('/api/external/v2/locations/delete/' . $stage->id);
+        return $this->update($stage) || $this->create($stage);
+    }
 
-        if (!$response->successful()) {
+    public function destroy(int $stageId): bool
+    {
+        $response = $this->delete('/api/external/v2/locations/delete/' . $stageId);
+
+        // 404 = в Eventicious её и так нет, считаем удаление успешным.
+        if (!$response->successful() && $response->status() !== 404) {
             $this->log_error('Не удалось удалить локацию', [
-                'stage_id' => $stage->id,
-                'error'      => $this->parse_error($response),
+                'stage_id' => $stageId,
+                'error'    => $this->parse_error($response),
             ]);
-            return;
+
+            return false;
         }
 
-        $this->log_info('Локация удалена', ['stage_id' => $stage->id]);
+        $this->log_info('Локация удалена', ['stage_id' => $stageId]);
+
+        return true;
     }
 }

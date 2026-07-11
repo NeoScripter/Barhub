@@ -6,17 +6,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Enums\UserRole;
 use App\Http\Controllers\Controller;
-use App\Jobs\Integration\SyncCompanyJob;
-use App\Jobs\Integration\SyncEventJob;
-use App\Jobs\Integration\SyncPersonJob;
-use App\Jobs\Integration\SyncStageJob;
-use App\Jobs\Integration\SyncThemeJob;
-use App\Models\Company;
-use App\Models\Event;
+use App\Jobs\Integration\FullSyncJob;
 use App\Models\Integration;
-use App\Models\Person;
-use App\Models\Stage;
-use App\Models\Theme;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -24,8 +15,12 @@ final class IntergrationController extends Controller
 {
     public function index()
     {
-        $path = storage_path() . '/logs/integration.log';
-        exec("tail -n 15 {$path}", $output);
+        $path = storage_path('logs/integration.log');
+        $output = [];
+
+        if (is_file($path)) {
+            exec('tail -n 15 ' . escapeshellarg($path), $output);
+        }
 
         $integration = Integration::firstOrCreate();
 
@@ -41,13 +36,12 @@ final class IntergrationController extends Controller
             abort(403, 'You must be a super admin to run synchronization');
         }
 
-        Theme::all()->each(fn($theme) => SyncThemeJob::dispatch($theme, 'create'));
-        Stage::all()->each(fn($stage) => SyncStageJob::dispatch($stage, 'create'));
-        Company::all()->each(fn($company) => SyncCompanyJob::dispatch($company, 'create'));
-        Person::all()->each(fn($person) => SyncPersonJob::dispatch($person, 'create'));
-        Event::all()->each(fn($event) => SyncEventJob::dispatch($event, 'create'));
+        // Одна джоба синхронизирует всё в правильном порядке:
+        // темы → залы → экспоненты → спикеры → расписание
+        FullSyncJob::dispatch();
 
-        return redirect()->back();
+        return redirect()->back()
+            ->with('success', 'Синхронизация запущена, результат появится в логе ниже');
     }
 
     public function update(Request $request)
