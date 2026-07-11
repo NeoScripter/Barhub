@@ -19,13 +19,13 @@ class SyncPersonJob implements ShouldQueue
     public int $tries = 3;
     public int $backoff = 30;
 
-    // Не отправлять в API раньше, чем закоммитится транзакция со связями
-    public bool $afterCommit = true;
-
     public function __construct(
         private readonly int $personId,
         private readonly string $action, // 'create' | 'update' | 'delete'
-    ) {}
+    ) {
+        // Не отправлять в API раньше, чем закоммитится транзакция со связями
+        $this->afterCommit();
+    }
 
     public function handle(PersonIntegrationService $service): void
     {

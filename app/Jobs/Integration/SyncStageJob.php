@@ -19,12 +19,13 @@ class SyncStageJob implements ShouldQueue
     public int $tries = 3;
     public int $backoff = 30;
 
-    public bool $afterCommit = true;
-
     public function __construct(
         private readonly int $stageId,
         private readonly string $action, // 'create' | 'update' | 'delete'
-    ) {}
+    ) {
+        // Не отправлять в API раньше, чем закоммитится транзакция
+        $this->afterCommit();
+    }
 
     public function handle(StageIntegrationService $service): void
     {

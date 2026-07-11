@@ -19,14 +19,14 @@ class SyncEventJob implements ShouldQueue
     public int $tries = 3;
     public int $backoff = 30;
 
-    // Джоба диспатчится из транзакции, где связи (спикеры, темы) ещё не
-    // закоммичены — без afterCommit сессия улетела бы в API пустой.
-    public bool $afterCommit = true;
-
     public function __construct(
         private readonly int $eventId,
         private readonly string $action, // 'create' | 'update' | 'delete'
-    ) {}
+    ) {
+        // Джоба диспатчится из транзакции, где связи (спикеры, темы) ещё не
+        // закоммичены — без afterCommit сессия улетела бы в API пустой.
+        $this->afterCommit();
+    }
 
     public function handle(EventIntegrationService $service): void
     {
