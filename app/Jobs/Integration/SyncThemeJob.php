@@ -19,12 +19,13 @@ class SyncThemeJob implements ShouldQueue
     public int $tries = 3;
     public int $backoff = 30;
 
-    public bool $afterCommit = true;
-
     public function __construct(
         private readonly int $themeId,
         private readonly string $action, // 'create' | 'update' | 'delete'
-    ) {}
+    ) {
+        // Не отправлять в API раньше, чем закоммитится транзакция
+        $this->afterCommit();
+    }
 
     public function handle(ThemeIntegrationService $service): void
     {
@@ -45,7 +46,7 @@ class SyncThemeJob implements ShouldQueue
         }
 
         match ($this->action) {
-            'create' => $service->create($theme),
+            'create' => $service->create($theme) || $service->update($theme),
             'update' => $service->sync($theme),
             default  => throw new \InvalidArgumentException("Unknown action: {$this->action}"),
         };

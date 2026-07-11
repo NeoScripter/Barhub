@@ -19,13 +19,13 @@ class SyncCompanyJob implements ShouldQueue
     public int $tries = 3;
     public int $backoff = 30;
 
-    // Не отправлять в API раньше, чем закоммитится транзакция со связями
-    public bool $afterCommit = true;
-
     public function __construct(
         private readonly int $companyId,
         private readonly string $action, // 'create' | 'update' | 'delete'
-    ) {}
+    ) {
+        // Не отправлять в API раньше, чем закоммитится транзакция со связями
+        $this->afterCommit();
+    }
 
     public function handle(CompanyIntegrationService $service): void
     {
@@ -53,7 +53,7 @@ class SyncCompanyJob implements ShouldQueue
         }
 
         match ($this->action) {
-            'create' => $service->create($company),
+            'create' => $service->create($company) || $service->update($company),
             'update' => $service->sync($company),
             default  => throw new \InvalidArgumentException("Unknown action: {$this->action}"),
         };

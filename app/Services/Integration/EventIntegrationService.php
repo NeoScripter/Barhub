@@ -16,7 +16,7 @@ class EventIntegrationService extends BaseIntegrationService
         if (!$response->successful()) {
             $this->log_error('Не удалось создать мероприятие', [
                 'event_id' => $event->id,
-                'error'    => $this->parse_error($response),
+                'error'    => $this->explainSessionError($response->status()) ?? $this->parse_error($response),
             ]);
 
             return false;
@@ -34,7 +34,7 @@ class EventIntegrationService extends BaseIntegrationService
         if (!$response->successful()) {
             $this->log_error('Не удалось отредактировать мероприятие', [
                 'event_id' => $event->id,
-                'error'    => $this->parse_error($response),
+                'error'    => $this->explainSessionError($response->status()) ?? $this->parse_error($response),
             ]);
 
             return false;
@@ -70,5 +70,16 @@ class EventIntegrationService extends BaseIntegrationService
         $this->log_info('Мероприятие удалено', ['event_id' => $eventId]);
 
         return true;
+    }
+
+    /**
+     * API отвечает на конфликт расписания голым 409 без тела — переводим
+     * в понятное сообщение (проверено на тестовом событии).
+     */
+    private function explainSessionError(int $status): ?string
+    {
+        return $status === 409
+            ? 'HTTP 409: дата сессии вне дней проведения события в Eventicious (проверьте даты события в админке Eventicious)'
+            : null;
     }
 }
